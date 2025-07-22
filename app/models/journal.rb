@@ -51,6 +51,7 @@ class Journal < ApplicationRecord
   register_journal_formatter OpenProject::JournalFormatter::AgendaItemTitle
   register_journal_formatter OpenProject::JournalFormatter::Attachment
   register_journal_formatter OpenProject::JournalFormatter::Cause
+  register_journal_formatter OpenProject::JournalFormatter::Comment
   register_journal_formatter OpenProject::JournalFormatter::CustomField
   register_journal_formatter OpenProject::JournalFormatter::Diff
   register_journal_formatter OpenProject::JournalFormatter::FileLink
@@ -111,6 +112,7 @@ class Journal < ApplicationRecord
   has_many :customizable_journals, class_name: "Journal::CustomizableJournal", dependent: :delete_all
   has_many :project_phase_journals, class_name: "Journal::ProjectPhaseJournal", dependent: :delete_all
   has_many :storable_journals, class_name: "Journal::StorableJournal", dependent: :delete_all
+  has_many :commentable_journals, class_name: "Journal::CommentableJournal", dependent: :delete_all
 
   has_many :notifications, dependent: :destroy
 
@@ -202,7 +204,7 @@ class Journal < ApplicationRecord
   end
 
   def noop?
-    (!notes || notes&.empty?) && get_changes.empty?
+    !has_notes_or_comments? && get_changes.empty?
   end
 
   def has_cause?
@@ -223,6 +225,18 @@ class Journal < ApplicationRecord
 
   def has_file_links?
     journable.respond_to?(:file_links)
+  end
+
+  def has_comments?
+    journable.respond_to?(:comments) && journable.comments.any?
+  end
+
+  def has_notes?
+    notes && !notes&.empty?
+  end
+
+  def has_notes_or_comments?
+    has_notes? || has_comments?
   end
 
   def predecessor

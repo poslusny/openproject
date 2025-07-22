@@ -28,18 +28,12 @@
 # See COPYRIGHT and LICENSE files for more details.
 #++
 
-module Comments
-  class DeleteService < ::BaseServices::Delete
-    private
+class Journal::CommentableJournal < Journal::AssociatedJournal
+  self.table_name = "comments_journals"
 
-    def after_perform(service_result)
-      commented = service_result.result.commented
+  belongs_to :comment, class_name: "Comment"
 
-      return service_result unless commented&.class&.journaled?
-
-      commented.save_journals
-
-      service_result
-    end
+  def text
+    comment&.text
   end
 end
