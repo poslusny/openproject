@@ -56,7 +56,7 @@ module Projects
                tag: :a,
                tooltip_direction: :e,
                href: helpers.build_favorite_path(project, format: :html),
-               data: { "turbo-method": currently_favored? ? :delete : :post },
+               data: { turbo_method: currently_favored? ? :delete : :post },
                classes: currently_favored? ? "op-primer--star-icon " : "op-project-row-component--favorite",
                label: currently_favored? ? I18n.t(:button_unfavorite) : I18n.t(:button_favorite),
                aria: { label: currently_favored? ? I18n.t(:button_unfavorite) : I18n.t(:button_favorite) },
@@ -337,8 +337,8 @@ module Projects
           label: I18n.t(:button_archive),
           href: project_archive_path(project, status: params[:status]),
           data: {
-            confirm: t("project.archive.are_you_sure", name: project.name),
-            method: :post
+            turbo_method: :post,
+            turbo_confirm: t("project.archive.are_you_sure", name: project.name)
           }
         }
       end
@@ -351,7 +351,7 @@ module Projects
           icon: :unlock,
           label: I18n.t(:button_unarchive),
           href: project_archive_path(project, status: params[:status]),
-          data: { method: :delete }
+          data: { turbo_method: :delete }
         }
       end
     end
