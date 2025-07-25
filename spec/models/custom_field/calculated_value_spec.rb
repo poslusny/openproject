@@ -175,6 +175,26 @@ RSpec.describe CustomField::CalculatedValue, with_flag: { calculated_value_proje
     end
   end
 
+  describe "#formula_str_without_patterns" do
+    it "returns an empty string if no formula is set" do
+      subject.formula = nil
+
+      expect(subject.formula_str_without_patterns).to eq("")
+    end
+
+    it "returns the formula as is if formula doesn't reference custom fields" do
+      subject.formula = "2 + 2"
+
+      expect(subject.formula_str_without_patterns).to eq("2 + 2")
+    end
+
+    it "returns ids if formula references custom fields" do
+      subject.formula = "1 * {{cf_7}} + {{cf_42}}"
+
+      expect(subject.formula_str_without_patterns).to eq("1 * cf_7 + cf_42")
+    end
+  end
+
   describe "#formula_referenced_custom_field_ids" do
     it "returns an empty array if no formula is set" do
       subject.formula = nil
