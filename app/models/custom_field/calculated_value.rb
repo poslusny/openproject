@@ -39,6 +39,10 @@ module CustomField::CalculatedValue
   # Field formats that can be used within a formula.
   FIELD_FORMATS_FOR_FORMULA = %w[int float calculated_value].freeze
 
+  def self.calculator_instance
+    Dentaku::Calculator.new(case_sensitive: true)
+  end
+
   included do
     validate :validate_formula, if: :field_format_calculated_value?
 
@@ -122,13 +126,9 @@ module CustomField::CalculatedValue
 
     private
 
-    def calculator
-      Dentaku::Calculator.new(case_sensitive: true)
-    end
-
     def valid_formula_syntax?
       # Attempt to parse the formula. If no error is returned, the formula is syntactically valid.
-      calculator.ast(formula_str_without_patterns)
+      CustomField::CalculatedValue.calculator_instance.ast(formula_str_without_patterns)
       true
     rescue Dentaku::ParseError, Dentaku::TokenizerError
       false
