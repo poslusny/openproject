@@ -33,9 +33,13 @@ module Primer
     module Forms
       # :nodoc:
       class BlockNoteEditor < Primer::Forms::BaseComponent
+        include ::OpenProject::StaticRouting::UrlHelpers
+        include ::AvatarHelper
+
         attr_reader :input,
                     :value,
-                    :user_name,
+                    :users,
+                    :active_user,
                     :hocuspocus_url,
                     :hocuspocus_access_token,
                     :document_id
@@ -46,7 +50,18 @@ module Primer
           super()
           @input = input
           @value = value
-          @user_name = User.current.name
+          @users = User.active.map do |user|
+            {
+              id: user.id,
+              username: user.name,
+              avatarUrl: avatar_url(user)
+            }
+          end
+          @active_user = {
+            id: User.current.id,
+            username: User.current.name,
+            avatarUrl: avatar_url(User.current)
+          }
           @document_id = document_id
           @hocuspocus_url = Setting.collaborative_editing_hocuspocus_url
           @hocuspocus_access_token = ::CollaborativeEditing::DocumentAccessTokenGenerator.call(document_id, value)

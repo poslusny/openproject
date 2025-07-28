@@ -32,6 +32,7 @@ import { Controller } from '@hotwired/stimulus';
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import OpBlockNoteContainer from '../../../react/OpBlockNoteContainer';
+import { User } from "@blocknote/core/comments";
 
 export default class extends Controller {
   static targets = [
@@ -41,7 +42,8 @@ export default class extends Controller {
 
   static values = {
     inputText: String,
-    userName: String,
+    users: Array,
+    activeUser: Object,
     hocuspocusUrl: String,
     hocuspocusAccessToken: String,
     documentId: String,
@@ -50,7 +52,8 @@ export default class extends Controller {
   declare readonly blockNoteEditorTarget:HTMLElement;
   declare readonly blockNoteInputFieldTarget:HTMLInputElement;
   declare readonly inputTextValue:string;
-  declare readonly userNameValue:string;
+  declare readonly usersValue:Array<User>;
+  declare readonly activeUserValue:User;
   declare readonly hocuspocusUrlValue:string;
   declare readonly hocuspocusAccessTokenValue:string;
   declare readonly documentIdValue:string;
@@ -64,7 +67,8 @@ export default class extends Controller {
     return React.createElement(OpBlockNoteContainer, {
       inputField: this.blockNoteInputFieldTarget,
       inputText: this.inputTextValue,
-      userName: this.userNameValue,
+      users: this.usersValue,
+      activeUser: this.activeUserValue,
       hocuspocusUrl: this.hocuspocusUrlValue,
       hocuspocusAccessToken: this.hocuspocusAccessTokenValue,
       documentId: this.documentIdValue,
