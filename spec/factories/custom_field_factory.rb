@@ -83,6 +83,7 @@ FactoryBot.define do
 
     trait :calculated_value do
       field_format { "calculated_value" }
+      formula { "2 + 2" }
     end
 
     trait :float do
