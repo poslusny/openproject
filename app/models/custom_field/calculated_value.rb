@@ -43,6 +43,30 @@ module CustomField::CalculatedValue
     Dentaku::Calculator.new(case_sensitive: true)
   end
 
+  class_methods do
+    # Select custom fields of type calculated_value that are listed in
+    # changed_cf_ids, or are referencing custom fields in changed_cf_ids either
+    # directly or through other calculated fields
+    def affected_calculated_fields(changed_cf_ids)
+      return [] if changed_cf_ids.empty?
+
+      to_check = select(&:field_format_calculated_value?)
+
+      # include calculated value fields themselves
+      all_affected, to_check = to_check.partition { it.id.in?(changed_cf_ids) }
+
+      loop do
+        affected, to_check = to_check.partition { it.formula_referenced_custom_field_ids.intersect?(changed_cf_ids) }
+        break if affected.empty?
+
+        all_affected += affected
+        changed_cf_ids = affected.map(&:id)
+      end
+
+      all_affected
+    end
+  end
+
   included do
     validate :validate_formula, if: :field_format_calculated_value?
 
