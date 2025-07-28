@@ -90,6 +90,7 @@ class CategoriesController < ApplicationController
       return
     end
     @categories = @project.categories - [@category]
+    render status: :unprocessable_entity
   end
 
   private
