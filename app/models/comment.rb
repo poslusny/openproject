@@ -29,6 +29,14 @@
 #++
 
 class Comment < ApplicationRecord
+  include Reactable
+
+  # inline attachments for comments
+  acts_as_attachable view_permission: :view_work_packages,
+                     add_on_new_permission: :add_work_package_comments,
+                     add_on_persisted_permission: :edit_own_work_package_comments,
+                     delete_permission: :edit_own_work_package_comments
+
   belongs_to :commented, polymorphic: true, counter_cache: true
   belongs_to :author, class_name: "User"
 

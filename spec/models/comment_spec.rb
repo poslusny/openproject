@@ -41,6 +41,8 @@ RSpec.describe Comment do
   describe "associations" do
     it { is_expected.to belong_to(:author).class_name("User") }
     it { is_expected.to belong_to(:commented) }
+    it { is_expected.to have_many(:emoji_reactions) }
+    it { is_expected.to have_many(:attachments) }
   end
 
   describe "validations" do
