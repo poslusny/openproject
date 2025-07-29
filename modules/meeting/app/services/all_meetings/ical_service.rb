@@ -55,7 +55,7 @@ module AllMeetings
         ServiceResult.success(result: calendar.to_ical)
       end
     rescue StandardError => e
-      Rails.logger.error("Failed to generate ICS for meeting #{@meeting.id}: #{e.message}")
+      Rails.logger.error("Failed to generate ICS for all meetings: #{e.message}")
       ServiceResult.failure(message: e.message)
     end
 
