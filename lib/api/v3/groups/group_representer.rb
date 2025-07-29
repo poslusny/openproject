@@ -31,6 +31,7 @@ module API
     module Groups
       class GroupRepresenter < ::API::V3::Principals::PrincipalRepresenter
         include API::Decorators::LinkedResource
+        extend ::API::V3::Utilities::CustomFieldInjector::RepresenterClass
 
         def _type
           "Group"
