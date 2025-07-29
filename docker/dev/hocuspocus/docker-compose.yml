@@ -1,8 +1,11 @@
 services:
   hocuspocus:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    command: sh -c "npm install && node index.js"
+    image: node:20
+    working_dir: /app
+    volumes:
+      - ./app:/app
+      - node_modules:/app/node_modules
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.hocuspocus.rule=Host(`hocuspocus.local`)"
@@ -18,3 +21,5 @@ networks:
   gateway:
     external: true
     name: gateway
+volumes:
+  node_modules:

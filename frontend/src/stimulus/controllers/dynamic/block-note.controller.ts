@@ -32,6 +32,7 @@ import { Controller } from '@hotwired/stimulus';
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import OpBlockNoteContainer from '../../../react/OpBlockNoteContainer';
+// import OpBlockNoteContainer from 'react/OpBlockNoteContainer';
 import { User } from "@blocknote/core/comments";
 
 export default class extends Controller {

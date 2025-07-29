@@ -8,15 +8,22 @@ import {
   defaultStyleSpecs,
 } from "@blocknote/core";
 import * as Y from "yjs";
+import { SQLite } from "@hocuspocus/extension-sqlite";
 
 const secret = "secret12345"
 const verifyToken = createVerifier({
   key: async () => secret,
   algorithms: ['HS256'],
 })
+
 const server = new Server({
   port: 1234,
   quite: false,
+  extensions: [
+    new SQLite({
+      database: "db.sqlite",
+    }),
+  ],
   onConnect(data) {
     console.log('CONNECTED: documentName: %0, socketId %0', data.documentName, data.socketId);
   },

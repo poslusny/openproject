@@ -54,7 +54,7 @@ module DynamicContentSecurityPolicy
     end
   end
 
-  private
+ private
 
   def add_hocuspocus_host_to_csp
     hocuspocus_url = Setting.collaborative_editing_hocuspocus_url
