@@ -44,38 +44,11 @@ RSpec.describe AllMeetings::ICalService, type: :model do # rubocop:disable RSpec
 
   let(:relevant_time) { Time.current.utc.change(hour: 10, minute: 0, second: 0) }
 
-  let!(:meeting) do
-    create(:meeting,
-           author: user,
-           project:,
-           title: "Important meeting",
-           participants: [
-             MeetingParticipant.new(user:),
-             MeetingParticipant.new(user: user2)
-           ],
-           location: "https://example.com/meet/important-meeting",
-           start_time: relevant_time + 1.week,
-           duration: 1.0)
-  end
-
-  let!(:past_meeting) do
-    create(:meeting,
-           author: user,
-           project:,
-           title: "Important meeting",
-           participants: [
-             MeetingParticipant.new(user:),
-             MeetingParticipant.new(user: user2)
-           ],
-           location: "https://example.com/meet/important-meeting",
-           start_time: relevant_time - 1.week,
-           duration: 1.0)
-  end
-
-  let(:service) { described_class.new(user:) }
+  let(:service) { described_class.new(user:, include_historic:) }
   let(:result) { service.call.result }
+  let(:include_historic) { false }
 
-  let(:entry) { Icalendar::Event.parse(result).first }
+  let(:ical) { Icalendar::Calendar.parse(result).first }
 
   describe "#call" do
     it "returns a success" do
@@ -94,19 +67,71 @@ RSpec.describe AllMeetings::ICalService, type: :model do # rubocop:disable RSpec
         expect(subject.message).to eq("Oh noes")
       end
     end
+  end
 
-    it "renders the ICS file", :aggregate_failures do
-      expect(result).to be_a String
+  context "with only single meetings" do
+    let!(:meeting) do
+      create(:meeting,
+             author: user,
+             project:,
+             title: "Important meeting",
+             participants: [
+               MeetingParticipant.new(user:),
+               MeetingParticipant.new(user: user2)
+             ],
+             location: "https://example.com/meet/important-meeting",
+             start_time: relevant_time + 1.week,
+             duration: 1.0)
+    end
 
-      expect(entry.organizer.to_s).to eq("mailto:#{Setting.mail_from}")
-      expect(entry.attendee.map(&:to_s)).to contain_exactly("mailto:foo@example.com", "mailto:bob@example.com")
-      expect(entry.dtstart.utc).to eq meeting.start_time
-      expect(entry.dtend.utc).to eq meeting.start_time + 1.hour
-      expect(entry.summary).to eq "[My Project] Important meeting"
-      expect(entry.description).to eq "[My Project] Meeting: Important meeting"
-      expect(entry.location).to eq(meeting.location.presence)
-      expect(entry.dtstart).to eq (relevant_time + 1.week).in_time_zone("Europe/Berlin")
-      expect(entry.dtend).to eq (relevant_time + 1.week + 1.hour).in_time_zone("Europe/Berlin")
+    let!(:past_meeting) do
+      create(:meeting,
+             author: user,
+             project:,
+             title: "Important meeting",
+             participants: [
+               MeetingParticipant.new(user:),
+               MeetingParticipant.new(user: user2)
+             ],
+             location: "https://example.com/meet/important-meeting",
+             start_time: relevant_time - 1.week,
+             duration: 1.0)
+    end
+
+    context "without historic meetings" do
+      let(:include_historic) { false }
+
+      it "renders the ICS file with only the upcoming meeting", :aggregate_failures do
+        expect(result).to be_a String
+
+        expect(ical.events.size).to eq(1)
+
+        entry = ical.events.first
+
+        expect(entry.uid).to eq(meeting.uid)
+        expect(entry.organizer.to_s).to eq("mailto:#{Setting.mail_from}")
+        expect(entry.attendee.map(&:to_s)).to contain_exactly("mailto:foo@example.com", "mailto:bob@example.com")
+        expect(entry.dtstart.utc).to eq meeting.start_time
+        expect(entry.dtend.utc).to eq meeting.start_time + 1.hour
+        expect(entry.summary).to eq "[My Project] Important meeting"
+        expect(entry.description).to eq "[My Project] Meeting: Important meeting"
+        expect(entry.location).to eq(meeting.location.presence)
+        expect(entry.dtstart).to eq (relevant_time + 1.week).in_time_zone("Europe/Berlin")
+        expect(entry.dtend).to eq (relevant_time + 1.week + 1.hour).in_time_zone("Europe/Berlin")
+      end
+    end
+
+    context "with historic meetings" do
+      let(:include_historic) { true }
+
+      it "renders the ICS file with both meetings", :aggregate_failures do
+        expect(result).to be_a String
+
+        expect(ical.events.size).to eq(2)
+        uids = ical.events.map(&:uid)
+
+        expect(uids).to contain_exactly(meeting.uid, past_meeting.uid)
+      end
     end
   end
 end
