@@ -150,6 +150,9 @@ RSpec.describe AllMeetings::ICalService, type: :model do # rubocop:disable RSpec
       create(:recurring_meeting,
              author: user,
              title: "Recurring meeting",
+             start_time: relevant_time,
+             end_date: relevant_time.advance(week: 52).to_date,
+             iterations: 52,
              project:,
              time_zone: user.time_zone).tap do |rm|
         rm.template.participants = [
@@ -170,13 +173,20 @@ RSpec.describe AllMeetings::ICalService, type: :model do # rubocop:disable RSpec
         expect(entry.uid).to eq(recurring_meeting.uid)
         expect(entry.organizer.to_s).to eq("mailto:#{Setting.mail_from}")
         expect(entry.attendee.map(&:to_s)).to match_array([user, user2].map { |u| "mailto:#{u.mail}" })
-        # expect(entry.dtstart.utc).to eq meeting.start_time
-        # expect(entry.dtend.utc).to eq meeting.start_time + 1.hour
-        # expect(entry.summary).to eq "[My Project] Important meeting"
-        # expect(entry.description).to eq "[My Project] Meeting: Important meeting"
-        # expect(entry.location).to eq(meeting.location.presence)
-        # expect(entry.dtstart).to eq (relevant_time + 1.week).in_time_zone("Europe/Berlin")
-        # expect(entry.dtend).to eq (relevant_time + 1.week + 1.hour).in_time_zone("Europe/Berlin")
+        expect(entry.summary).to eq "[My Project] Recurring meeting"
+        expect(entry.description).to eq "[My Project] Meeting series: Recurring meeting"
+        expect(entry.location).to eq(recurring_meeting.template.location.presence)
+
+        expect(entry.exdate).to be_empty
+
+        expect(entry.rrule.size).to eq(1)
+        expect(entry.rrule.first.frequency).to eq("WEEKLY")
+
+        expect(entry.dtstart.utc).to eq(relevant_time)
+        expect(entry.dtstart).to eq relevant_time.in_time_zone(user.time_zone)
+
+        expect(entry.dtend.utc).to eq(relevant_time.advance(week: 52) + 1.hour)
+        expect(entry.dtend).to eq (relevant_time.advance(week: 52) + 1.hour).in_time_zone(user.time_zone)
       end
     end
   end
