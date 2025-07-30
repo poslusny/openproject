@@ -68,7 +68,7 @@ RSpec.describe Meetings::ICalService, type: :model do # rubocop:disable RSpec/Sp
       subject { service.call }
 
       before do
-        allow(Meetings::CalendarWrapper).to receive(:new).and_raise StandardError.new("Oh noes")
+        allow(Meetings::IcalendarBuilder).to receive(:new).and_raise StandardError.new("Oh noes")
       end
 
       it "returns a failure" do

@@ -42,7 +42,7 @@ module RecurringMeetings
 
     def generate_series(cancelled: false) # rubocop:disable Metrics/AbcSize
       User.execute_as(user) do
-        calendar = Meetings::CalendarWrapper.new(timezone: Time.zone || Time.zone_default)
+        calendar = Meetings::IcalendarBuilder.new(timezone: Time.zone || Time.zone_default)
         calendar.add_series_event(recurring_meeting: series, cancelled:)
 
         calendar.update_calendar_status(cancelled:)
@@ -56,7 +56,7 @@ module RecurringMeetings
 
     def generate_single_occurence(meeting:, cancelled: false)
       User.execute_as(user) do
-        calendar = Meetings::CalendarWrapper.new(timezone: Time.zone || Time.zone_default)
+        calendar = Meetings::IcalendarBuilder.new(timezone: Time.zone || Time.zone_default)
         calendar.add_single_recurring_occurence(scheduled_meeting: meeting.scheduled_meeting)
         calendar.update_calendar_status(cancelled:)
 

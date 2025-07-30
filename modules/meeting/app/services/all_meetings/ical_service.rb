@@ -40,7 +40,7 @@ module AllMeetings
 
     def call # rubocop:disable Metrics/AbcSize
       User.execute_as(user) do
-        calendar = Meetings::CalendarWrapper.new(timezone: Time.zone || Time.zone_default)
+        calendar = Meetings::IcalendarBuilder.new(timezone: Time.zone || Time.zone_default)
 
         single_meetings.each do |meeting|
           calendar.add_single_meeting_event(meeting:, cancelled: false)

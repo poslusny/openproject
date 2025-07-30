@@ -31,7 +31,7 @@ require "icalendar"
 require "icalendar/tzinfo"
 
 module Meetings
-  class CalendarWrapper
+  class IcalendarBuilder
     attr_reader :timezone, :calendar, :calendar_timezones
 
     def initialize(timezone:)

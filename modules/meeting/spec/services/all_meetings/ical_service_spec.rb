@@ -59,7 +59,7 @@ RSpec.describe AllMeetings::ICalService, type: :model do # rubocop:disable RSpec
       subject { service.call }
 
       before do
-        allow(Meetings::CalendarWrapper).to receive(:new).and_raise StandardError.new("Oh noes")
+        allow(Meetings::IcalendarBuilder).to receive(:new).and_raise StandardError.new("Oh noes")
       end
 
       it "returns a failure" do
@@ -120,7 +120,7 @@ RSpec.describe AllMeetings::ICalService, type: :model do # rubocop:disable RSpec
 
         expect(entry.uid).to eq(meeting.uid)
         expect(entry.organizer.to_s).to eq("mailto:#{Setting.mail_from}")
-        expect(entry.attendee.map(&:to_s)).to contain_exactly("mailto:foo@example.com", "mailto:bob@example.com")
+        expect(entry.attendee.map(&:to_s)).to match_array([user, user2].map { |u| "mailto:#{u.mail}" })
         expect(entry.dtstart.utc).to eq meeting.start_time
         expect(entry.dtend.utc).to eq meeting.start_time + 1.hour
         expect(entry.summary).to eq "[My Project] Important meeting"
@@ -149,8 +149,14 @@ RSpec.describe AllMeetings::ICalService, type: :model do # rubocop:disable RSpec
     let!(:recurring_meeting) do
       create(:recurring_meeting,
              author: user,
+             title: "Recurring meeting",
              project:,
-             time_zone: user.time_zone)
+             time_zone: user.time_zone).tap do |rm|
+        rm.template.participants = [
+          MeetingParticipant.new(user:),
+          MeetingParticipant.new(user: user2)
+        ]
+      end
     end
 
     context "with a recurring meeting that has no derived meetings yet" do
@@ -163,7 +169,7 @@ RSpec.describe AllMeetings::ICalService, type: :model do # rubocop:disable RSpec
 
         expect(entry.uid).to eq(recurring_meeting.uid)
         expect(entry.organizer.to_s).to eq("mailto:#{Setting.mail_from}")
-        # expect(entry.attendee.map(&:to_s)).to contain_exactly("mailto:foo@example.com", "mailto:bob@example.com")
+        expect(entry.attendee.map(&:to_s)).to match_array([user, user2].map { |u| "mailto:#{u.mail}" })
         # expect(entry.dtstart.utc).to eq meeting.start_time
         # expect(entry.dtend.utc).to eq meeting.start_time + 1.hour
         # expect(entry.summary).to eq "[My Project] Important meeting"
