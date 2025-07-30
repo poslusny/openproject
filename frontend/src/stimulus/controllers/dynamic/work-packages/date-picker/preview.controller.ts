@@ -30,10 +30,9 @@
 
 import { DialogPreviewController } from '../dialog/preview.controller';
 import { TimezoneService } from 'core-app/core/datetime/timezone.service';
-import {
-  debounce,
-  DebouncedFunc,
-} from 'lodash';
+import compact from 'lodash-es/compact';
+import debounce, { DebouncedFunc } from 'lodash-es/debounce';
+import difference from 'lodash-es/difference';
 
 export default class PreviewController extends DialogPreviewController {
   static values = {
@@ -250,7 +249,7 @@ export default class PreviewController extends DialogPreviewController {
   }
 
   private updateFlatpickrCalendar() {
-    const dates:Date[] = _.compact([this.currentStartDate, this.currentDueDate]);
+    const dates:Date[] = compact([this.currentStartDate, this.currentDueDate]);
     const ignoreNonWorkingDays = this.currentIgnoreNonWorkingDays;
     const mode = this.mode();
 
@@ -271,9 +270,9 @@ export default class PreviewController extends DialogPreviewController {
       return this.toDate(flatPickrDates[0]);
     }
 
-    const fieldDates = _.compact([this.currentStartDate, this.currentDueDate])
+    const fieldDates = compact([this.currentStartDate, this.currentDueDate])
                         .map((date) => this.timezoneService.utcDateToISODateString(date));
-    const diff = _.difference(flatPickrDates, fieldDates);
+    const diff = difference(flatPickrDates, fieldDates);
     return this.toDate(diff[0]);
   }
 

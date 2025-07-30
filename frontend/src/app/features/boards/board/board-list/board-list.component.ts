@@ -78,6 +78,7 @@ import { firstValueFrom } from 'rxjs';
 import {
   WorkPackageIsolatedQuerySpaceDirective,
 } from 'core-app/features/work-packages/directives/query-space/wp-isolated-query-space.directive';
+import pickBy from 'lodash-es/pickBy';
 
 export interface DisabledButtonPlaceholder {
   text:string;
@@ -209,7 +210,7 @@ export class BoardListComponent extends AbstractWidgetComponent implements OnIni
         this.untilDestroyed(),
       )
       .subscribe((selectionState) => {
-        const selected = Object.keys(_.pickBy(selectionState.selected, (option, _) => option === true));
+        const selected = Object.keys(pickBy(selectionState.selected, (option, _) => option === true));
 
         const focused = this.wpViewFocusService.focusedWorkPackage;
 

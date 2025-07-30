@@ -57,6 +57,8 @@ import { EditFormRoutingService } from 'core-app/shared/components/fields/edit/e
 import { ResourceChangesetCommit } from 'core-app/shared/components/fields/edit/services/hal-resource-editing.service';
 import { GlobalEditFormChangesTrackerService } from 'core-app/shared/components/fields/edit/services/global-edit-form-changes-tracker/global-edit-form-changes-tracker.service';
 import { firstValueFrom } from 'rxjs';
+import each from 'lodash-es/each';
+import keys from 'lodash-es/keys';
 
 @Component({
   selector: 'edit-form,[edit-form]',
@@ -179,7 +181,7 @@ export class EditFormComponent extends EditForm<HalResource> implements OnInit, 
 
   public register(field:EditableAttributeFieldComponent) {
     this.fields[field.fieldName] = field;
-    this.registeredFields.putValue(_.keys(this.fields));
+    this.registeredFields.putValue(keys(this.fields));
 
     const shouldActivate = (this.editMode && !this.skipField(field) || this.activeFields[field.fieldName]);
 
@@ -199,7 +201,7 @@ export class EditFormComponent extends EditForm<HalResource> implements OnInit, 
   }
 
   public start() {
-    _.each(this.fields, (ctrl) => this.activate(ctrl.fieldName));
+    each(this.fields, (ctrl) => this.activate(ctrl.fieldName));
   }
 
   protected focusOnFirstError():void {

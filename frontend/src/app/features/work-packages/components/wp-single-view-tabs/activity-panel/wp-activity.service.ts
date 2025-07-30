@@ -32,6 +32,8 @@ import { Injectable } from '@angular/core';
 import { ConfigurationService } from 'core-app/core/config/configuration.service';
 import { WorkPackageLinkedResourceCache } from 'core-app/features/work-packages/components/wp-single-view-tabs/wp-linked-resource-cache.service';
 import { TimezoneService } from 'core-app/core/datetime/timezone.service';
+import flatten from 'lodash-es/flatten';
+import sortBy from 'lodash-es/sortBy';
 
 @Injectable()
 export class WorkPackagesActivityService extends WorkPackageLinkedResourceCache<HalResource[]> {
@@ -70,7 +72,7 @@ export class WorkPackagesActivityService extends WorkPackageLinkedResourceCache<
   }
 
   protected sortedActivityList(activities:HalResource[], attr = 'createdAt'):HalResource[] {
-    const sorted = _.sortBy(_.flatten(activities), attr);
+    const sorted = sortBy(flatten(activities), attr);
 
     if (this.isReversed) {
       return sorted.reverse();

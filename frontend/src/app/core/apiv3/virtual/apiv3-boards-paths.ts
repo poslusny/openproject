@@ -40,6 +40,7 @@ import { PathHelperService } from 'core-app/core/path-helper/path-helper.service
 import { ApiV3BoardPath } from 'core-app/core/apiv3/virtual/apiv3-board-path';
 import { StateCacheService } from 'core-app/core/apiv3/cache/state-cache.service';
 import { MAGIC_PAGE_NUMBER } from 'core-app/core/apiv3/helpers/get-paginated-results';
+import set from 'lodash-es/set';
 
 export class ApiV3BoardsPaths extends ApiV3Collection<Board, ApiV3BoardPath> {
   @InjectField() private authorisationService:AuthorisationService;
@@ -111,7 +112,7 @@ export class ApiV3BoardsPaths extends ApiV3Collection<Board, ApiV3BoardPath> {
   }
 
   private createGrid(type:BoardType, name:string, scope:string, actionAttribute?:string):Observable<GridResource> {
-    const payload:any = _.set({ name }, '_links.scope.href', scope);
+    const payload:any = set({ name }, '_links.scope.href', scope);
     payload.options = {
       type,
     };

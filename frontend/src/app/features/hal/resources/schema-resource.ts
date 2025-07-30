@@ -28,6 +28,7 @@
 
 import { HalResource } from 'core-app/features/hal/resources/hal-resource';
 import { InputState } from '@openproject/reactivestates';
+import keys from 'lodash-es/keys';
 
 export class SchemaResource extends HalResource {
   public get state():InputState<this> {
@@ -35,7 +36,7 @@ export class SchemaResource extends HalResource {
   }
 
   public get availableAttributes():string[] {
-    return _.keys(this.$source).filter((name) => name.indexOf('_') !== 0);
+    return keys(this.$source).filter((name) => name.indexOf('_') !== 0);
   }
 
   // Find the attribute name with a matching (localized) name;

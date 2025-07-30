@@ -6,6 +6,7 @@ import { WorkPackageChangeset } from 'core-app/features/work-packages/components
 import { EditForm } from 'core-app/shared/components/fields/edit/edit-form/edit-form';
 import { TableEditForm } from 'core-app/features/work-packages/components/wp-edit-form/table-edit-form';
 import { InjectField } from 'core-app/shared/helpers/angular/inject-field.decorator';
+import each from 'lodash-es/each';
 
 export class WorkPackageTableEditingContext {
   @InjectField() public halEditing:HalResourceEditingService;
@@ -17,7 +18,7 @@ export class WorkPackageTableEditingContext {
   public forms:{ [wpId:string]:TableEditForm } = {};
 
   public reset() {
-    _.each(this.forms, (form) => form.destroy());
+    each(this.forms, (form) => form.destroy());
     this.forms = {};
   }
 

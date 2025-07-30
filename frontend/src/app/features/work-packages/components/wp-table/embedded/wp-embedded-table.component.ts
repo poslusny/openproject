@@ -26,6 +26,7 @@ import {
 import { ApiV3Service } from 'core-app/core/apiv3/api-v3.service';
 import { firstValueFrom } from 'rxjs';
 import { QueryRequestParams } from 'core-app/features/work-packages/components/wp-query/url-params-helper';
+import get from 'lodash-es/get';
 
 @Component({
   selector: 'wp-embedded-table',
@@ -167,7 +168,7 @@ export class WorkPackageEmbeddedTableComponent extends WorkPackageEmbeddedBaseCo
       .catch((error) => {
         this.error = this.I18n.t(
           'js.error.embedded_table_loading',
-          { message: _.get(error, 'message', error) },
+          { message: get(error, 'message', error) },
         );
         this.onError.emit(error);
       });

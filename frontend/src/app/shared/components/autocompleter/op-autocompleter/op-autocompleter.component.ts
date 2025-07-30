@@ -58,6 +58,7 @@ import {
 } from 'core-app/shared/components/autocompleter/op-autocompleter/typings';
 import { UserResource } from 'core-app/features/hal/resources/user-resource';
 import { PathHelperService } from 'core-app/core/path-helper/path-helper.service';
+import isObject from 'lodash-es/isObject';
 
 export interface IAutocompleteItem {
   id:ID;
@@ -372,7 +373,7 @@ export class OpAutocompleterComponent<T extends IAutocompleteItem = IAutocomplet
     }
 
     if (Array.isArray(this.model)) {
-      return this.model.map((el) => (_.isObject(el) ? el[this.inputBindValue as 'id'] : el) as string);
+      return this.model.map((el) => (isObject(el) ? el[this.inputBindValue as 'id'] : el) as string);
     }
 
     return this.model[this.inputBindValue as 'id'] as string;
@@ -583,7 +584,7 @@ export class OpAutocompleterComponent<T extends IAutocompleteItem = IAutocomplet
 
   protected defaultCompareWithFunction():null|((a:unknown, b:unknown) => boolean) {
     return (a, b) => {
-      if (this.bindValue && !_.isObject(b)) {
+      if (this.bindValue && !isObject(b)) {
         return (a as Record<string, unknown>)[this.bindValue] === b;
       }
 

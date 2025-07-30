@@ -26,6 +26,7 @@ import { WorkPackageCollectionResource } from 'core-app/features/hal/resources/w
 import { SchemaResource } from 'core-app/features/hal/resources/schema-resource';
 import { WorkPackagesListChecksumService } from './wp-list-checksum.service';
 import { WorkPackageViewBaselineService } from 'core-app/features/work-packages/routing/wp-view-base/view-services/wp-view-baseline.service';
+import each from 'lodash-es/each';
 
 @Injectable()
 export class WorkPackageStatesInitializationService {
@@ -89,7 +90,7 @@ export class WorkPackageStatesInitializationService {
   public updateStatesFromForm(query:QueryResource, form:QueryFormResource) {
     const schema:QuerySchemaResource = form.schema as any;
 
-    _.each(schema.filtersSchemas.elements, (schema) => {
+    each(schema.filtersSchemas.elements, (schema) => {
       this.states.schemas.get(schema.href as string).putValue(schema as any);
     });
 
@@ -108,7 +109,7 @@ export class WorkPackageStatesInitializationService {
     this.querySpace.tableRendered.clear('Clearing rendered data before upgrading query space');
 
     if (results.schemas) {
-      _.each(results.schemas.elements, (schema:SchemaResource) => {
+      each(results.schemas.elements, (schema:SchemaResource) => {
         this.states.schemas.get(schema.href as string).putValue(schema);
       });
     }

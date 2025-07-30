@@ -35,6 +35,9 @@ import { HalLinkInterface } from 'core-app/features/hal/hal-link/hal-link';
 import { ICKEditorContext } from 'core-app/shared/components/editor/components/ckeditor/ckeditor.types';
 import idFromLink from 'core-app/features/hal/helpers/id-from-link';
 import isNewResource from 'core-app/features/hal/helpers/is-new-resource';
+import cloneDeep from 'lodash-es/cloneDeep';
+import merge from 'lodash-es/merge';
+import without from 'lodash-es/without';
 
 export interface HalResourceClass<T extends HalResource = HalResource> {
   new(injector:Injector,
@@ -180,11 +183,11 @@ export class HalResource {
   public $copy<T extends HalResource = HalResource>(source:Object = {}):T {
     const clone:HalResourceClass<T> = this.constructor as any;
 
-    return new clone(this.injector, _.merge(this.$plain(), source), this.$loaded, this.halInitializer, this.$halType);
+    return new clone(this.injector, merge(this.$plain(), source), this.$loaded, this.halInitializer, this.$halType);
   }
 
   public $plain():any {
-    return _.cloneDeep(this.$source);
+    return cloneDeep(this.$source);
   }
 
   public get $isHal():boolean {
@@ -294,7 +297,7 @@ export class HalResource {
    */
   public $embeddableKeys():string[] {
     const properties = Object.keys(this.$source);
-    return _.without(properties, '_links', '_embedded', 'id');
+    return without(properties, '_links', '_embedded', 'id');
   }
 
   /**
@@ -303,6 +306,6 @@ export class HalResource {
    */
   public $linkableKeys():string[] {
     const properties = Object.keys(this.$links);
-    return _.without(properties, 'self');
+    return without(properties, 'self');
   }
 }

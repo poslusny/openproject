@@ -6,6 +6,7 @@ import idFromLink from 'core-app/features/hal/helpers/id-from-link';
 import { IPrincipal } from 'core-app/core/state/principals/principal.model';
 import { PrincipalLike } from './principal-types';
 import { hrefFromPrincipal, PrincipalType, typeFromHref } from './principal-helper';
+import take from 'lodash-es/take';
 
 export type AvatarSize = 'default'|'medium'|'mini';
 
@@ -49,7 +50,7 @@ export class PrincipalRendererService {
     wrapper.appendChild(principals);
     container.appendChild(wrapper);
 
-    const valueForDisplay = _.take(users, maxCount);
+    const valueForDisplay = take(users, maxCount);
     this.renderMultiple(
       principals,
       valueForDisplay,

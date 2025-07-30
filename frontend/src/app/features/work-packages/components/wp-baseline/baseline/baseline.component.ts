@@ -60,6 +60,8 @@ import moment from 'moment-timezone';
 import { BannersService } from 'core-app/core/enterprise/banners.service';
 import { enterpriseDocsUrl } from 'core-app/core/setup/globals/constants.const';
 import { DayElement } from 'flatpickr/dist/types/instance';
+import every from 'lodash-es/every';
+import isEqual from 'lodash-es/isEqual';
 
 const DEFAULT_SELECTED_TIME = '08:00';
 
@@ -195,7 +197,7 @@ export class OpBaselineComponent extends UntilDestroyedMixin implements OnInit {
     this.wpTableBaseline
       .pristine$()
       .subscribe((timestamps) => {
-        if (_.isEqual(timestamps, [DEFAULT_TIMESTAMP])) {
+        if (isEqual(timestamps, [DEFAULT_TIMESTAMP])) {
           this.resetSelection();
           this.wpTableBaseline.disable();
         }
@@ -238,7 +240,7 @@ export class OpBaselineComponent extends UntilDestroyedMixin implements OnInit {
   }
 
   public dateChange(values:string[]):void {
-    if (_.every(values, validDate)) {
+    if (every(values, validDate)) {
       this.selectedDates = values;
     }
   }

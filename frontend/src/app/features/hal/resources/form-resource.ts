@@ -29,6 +29,7 @@
 import { HalResource } from 'core-app/features/hal/resources/hal-resource';
 import { ErrorResource, v3ErrorIdentifierMultipleErrors } from 'core-app/features/hal/resources/error-resource';
 import { SchemaResource } from 'core-app/features/hal/resources/schema-resource';
+import values from 'lodash-es/values';
 
 export interface FormResourceLinks<T = HalResource> {
   commit(payload:any):Promise<T>;
@@ -45,7 +46,7 @@ export class FormResource<T = HalResource> extends HalResource {
   public validationErrors:{ [attribute:string]:ErrorResource };
 
   public getErrors():ErrorResource|null {
-    const errors = _.values(this.validationErrors);
+    const errors = values(this.validationErrors);
     const count = errors.length;
 
     if (count === 0) {

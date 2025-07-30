@@ -6,6 +6,7 @@ import { WorkPackageStatesInitializationService } from 'core-app/features/work-p
 import { TabComponent } from 'core-app/features/work-packages/components/wp-table/configuration-modal/tab-portal-outlet';
 import { QuerySpacedTabComponent } from 'core-app/shared/components/work-package-graphs/configuration-modal/tabs/abstract-query-spaced-tab.component';
 import { QueryGroupByResource } from 'core-app/features/hal/resources/query-group-by-resource';
+import sortBy from 'lodash-es/sortBy';
 
 interface OpChartType {
   identifier:string;
@@ -77,11 +78,11 @@ export class WpGraphConfigurationSettingsTabInnerComponent extends QuerySpacedTa
       available = available.concat(current);
     }
 
-    this.availableGroups = _.sortBy(available, 'name');
+    this.availableGroups = sortBy(available, 'name');
   }
 
   private initializeAvailableChartType() {
-    this.availableChartTypes = _.sortBy([
+    this.availableChartTypes = sortBy([
       { identifier: 'horizontalBar', label: this.I18n.t('js.chart.types.horizontal_bar') },
       { identifier: 'bar', label: this.I18n.t('js.chart.types.bar') },
       { identifier: 'line', label: this.I18n.t('js.chart.types.line') },

@@ -28,6 +28,7 @@
 
 import { Injectable } from '@angular/core';
 import { HalResource } from 'core-app/features/hal/resources/hal-resource';
+import sortBy from 'lodash-es/sortBy';
 
 @Injectable({ providedIn: 'root' })
 export class HalResourceSortingService {
@@ -62,7 +63,7 @@ export class HalResourceSortingService {
 
     const property = this.sortingProperty(halType);
     if (property) {
-      return _.sortBy<T>(elements, (v) => v[property].toLowerCase());
+      return sortBy<T>(elements, (v) => v[property].toLowerCase());
     }
     return elements;
   }

@@ -3,6 +3,7 @@ import { DeviceService } from 'core-app/core/browser/device.service';
 import { I18nService } from 'core-app/core/i18n/i18n.service';
 import { INotification } from 'core-app/core/state/in-app-notifications/in-app-notification.model';
 import { PrincipalLike } from 'core-app/shared/components/principal/principal-types';
+import uniqBy from 'lodash-es/uniqBy';
 
 @Component({
   selector: 'op-in-app-notification-actors-line',
@@ -71,6 +72,6 @@ export class InAppNotificationActorsLineComponent implements OnInit {
       })
       .filter((actor) => actor !== null) as PrincipalLike[];
 
-    this.actors = _.uniqBy(actors, (item) => item.href);
+    this.actors = uniqBy(actors, (item) => item.href);
   }
 }

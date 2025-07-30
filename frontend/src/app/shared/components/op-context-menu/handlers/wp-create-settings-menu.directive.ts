@@ -32,6 +32,7 @@ import { OpContextMenuTrigger } from 'core-app/shared/components/op-context-menu
 import { HalResourceEditingService } from 'core-app/shared/components/fields/edit/services/hal-resource-editing.service';
 import { States } from 'core-app/core/states/states.service';
 import { FormResource } from 'core-app/features/hal/resources/form-resource';
+import assign from 'lodash-es/assign';
 
 @Directive({
   selector: '[wpCreateSettingsMenu]',
@@ -71,7 +72,7 @@ export class WorkPackageCreateSettingsMenuDirective extends OpContextMenuTrigger
     };
 
     const position = super.positionArgs(evt);
-    _.assign(position, additionalPositionArgs);
+    assign(position, additionalPositionArgs);
 
     return position;
   }

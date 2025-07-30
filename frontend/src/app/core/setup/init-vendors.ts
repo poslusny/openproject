@@ -30,9 +30,6 @@
 //
 // dependencies required by classic (Rails) and Angular application.
 
-// Lodash
-import lodash from 'lodash';
-
 // jQuery
 import 'jquery-ujs';
 
@@ -58,12 +55,5 @@ import '@openproject/primer-view-components/app/assets/javascripts/primer_view_c
 import URI from 'urijs';
 import 'urijs/src/URITemplate';
 
-declare global {
-  interface Window {
-    _:typeof lodash;
-  }
-}
-
-window._ = lodash;
 window.moment = moment;
 window.URI = URI;

@@ -28,6 +28,8 @@
 
 import { ChangeDetectionStrategy, Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import debounce from 'lodash-es/debounce';
+import each from 'lodash-es/each';
 
 export const remoteFieldUpdaterSelector = 'remote-field-updater';
 
@@ -62,7 +64,7 @@ export class RemoteFieldUpdaterComponent implements OnInit, OnDestroy {
 
     this.url = element.dataset.url as string;
 
-    this.debouncedUpdaterBound = _.debounce(this.updater.bind(this), 500);
+    this.debouncedUpdaterBound = debounce(this.updater.bind(this), 500);
 
     this.addListeners();
   }
@@ -134,7 +136,7 @@ export class RemoteFieldUpdaterComponent implements OnInit, OnDestroy {
     this
       .request(params)
       .subscribe((response:object) => {
-        _.each(response, (val:string, selector:string) => {
+        each(response, (val:string, selector:string) => {
           const element = document.getElementById(selector) as HTMLElement|HTMLInputElement;
 
           if (element instanceof HTMLInputElement) {

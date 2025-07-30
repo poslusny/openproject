@@ -34,6 +34,9 @@ import { HookService } from 'core-app/features/plugins/hook-service';
 import { WorkPackageViewTimelineService } from 'core-app/features/work-packages/routing/wp-view-base/view-services/wp-view-timeline.service';
 import { WorkPackageViewHierarchyIdentationService } from 'core-app/features/work-packages/routing/wp-view-base/view-services/wp-view-hierarchy-indentation.service';
 import { WorkPackageViewDisplayRepresentationService } from 'core-app/features/work-packages/routing/wp-view-base/view-services/wp-view-display-representation.service';
+import each from 'lodash-es/each';
+import every from 'lodash-es/every';
+import filter from 'lodash-es/filter';
 
 export type WorkPackageAction = {
   text?:string;
@@ -98,7 +101,7 @@ export class WorkPackageContextMenuHelperService {
 
     allowedActions = allowedActions.concat(this.getAllowedRelationActions(workPackage, allowSplitScreenActions));
 
-    _.each(allowedActions, (allowedAction) => {
+    each(allowedActions, (allowedAction) => {
       singularPermittedActions.push({
         key: allowedAction.key,
         text: allowedAction.text,
@@ -126,9 +129,9 @@ export class WorkPackageContextMenuHelperService {
   public getIntersectOfPermittedActions(workPackages:any) {
     const bulkPermittedActions:any = [];
     const possibleActions = this.BULK_ACTIONS.concat(this.HookService.call('workPackageBulkContextMenu'));
-    const permittedActions = _.filter(possibleActions, (action:any) => _.every(workPackages, (workPackage:WorkPackageResource) => this.isActionAllowed(workPackage, action)));
+    const permittedActions = filter(possibleActions, (action:any) => every(workPackages, (workPackage:WorkPackageResource) => this.isActionAllowed(workPackage, action)));
 
-    _.each(permittedActions, (permittedAction:any) => {
+    each(permittedActions, (permittedAction:any) => {
       bulkPermittedActions.push({
         key: permittedAction.key,
         text: permittedAction.text,
@@ -154,20 +157,20 @@ export class WorkPackageContextMenuHelperService {
   }
 
   private isActionAllowed(workPackage:WorkPackageResource, action:WorkPackageAction):boolean {
-    return _.filter(this.getAllowedActions(workPackage, [action]), (a) => a === action).length >= 1;
+    return filter(this.getAllowedActions(workPackage, [action]), (a) => a === action).length >= 1;
   }
 
   private getAllowedActions(workPackage:WorkPackageResource, actions:WorkPackageAction[]):WorkPackageAction[] {
     const allowedActions:WorkPackageAction[] = [];
 
-    _.each(actions, (action) => {
+    each(actions, (action) => {
       if (action.link && workPackage[action.link] !== undefined) {
         action.text = action.text || I18n.t(`js.button_${action.key}`);
         allowedActions.push(action);
       }
     });
 
-    _.each(this.HookService.call('workPackageTableContextMenu'), (action:WorkPackageAction) => {
+    each(this.HookService.call('workPackageTableContextMenu'), (action:WorkPackageAction) => {
       if (workPackage[action.link as string] !== undefined) {
         const index = action.indexBy ? action.indexBy(allowedActions) : allowedActions.length;
         allowedActions.splice(index, 0, action);

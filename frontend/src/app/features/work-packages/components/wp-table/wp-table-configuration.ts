@@ -26,6 +26,8 @@
 // See COPYRIGHT and LICENSE files for more details.
 //++
 
+import each from 'lodash-es/each';
+
 export type WorkPackageTableConfigurationObject = Partial<{ [field in keyof WorkPackageTableConfiguration]:string|boolean }>;
 
 export class WorkPackageTableConfiguration {
@@ -78,7 +80,7 @@ export class WorkPackageTableConfiguration {
   public filterButtonText:string = I18n.t('js.button_filter');
 
   constructor(providedConfig:WorkPackageTableConfigurationObject) {
-    _.each(providedConfig, (value, k) => {
+    each(providedConfig, (value, k) => {
       const key = (k as keyof WorkPackageTableConfiguration);
       (this as any)[key] = value;
     });

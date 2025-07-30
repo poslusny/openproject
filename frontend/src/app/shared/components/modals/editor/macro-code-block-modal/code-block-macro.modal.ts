@@ -33,6 +33,7 @@ import { OpModalLocalsMap } from 'core-app/shared/components/modal/modal.types';
 import { OpModalComponent } from 'core-app/shared/components/modal/modal.component';
 import { OpModalLocalsToken } from 'core-app/shared/components/modal/modal.service';
 import { I18nService } from 'core-app/core/i18n/i18n.service';
+import debounce from 'lodash-es/debounce';
 
 @Component({
   templateUrl: './code-block-macro.modal.html',
@@ -54,7 +55,7 @@ export class CodeBlockMacroModalComponent extends OpModalComponent implements Af
   // Codemirror instance
   public codeMirrorInstance:undefined|any;
 
-  public debouncedLanguageLoader = _.debounce(() => this.loadLanguageAsMode(this.language), 300);
+  public debouncedLanguageLoader = debounce(() => this.loadLanguageAsMode(this.language), 300);
 
   @ViewChild('codeMirrorPane', { static: true }) codeMirrorPane:ElementRef;
 

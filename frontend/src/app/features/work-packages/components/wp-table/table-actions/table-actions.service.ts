@@ -5,6 +5,7 @@ import {
 import { OpDetailsTableAction } from 'core-app/features/work-packages/components/wp-table/table-actions/actions/details-table-action';
 import { OpContextMenuTableAction } from 'core-app/features/work-packages/components/wp-table/table-actions/actions/context-menu-table-action';
 import { WorkPackageResource } from 'core-app/features/hal/resources/work-package-resource';
+import compact from 'lodash-es/compact';
 
 @Injectable()
 export class OpTableActionsService {
@@ -32,6 +33,6 @@ export class OpTableActionsService {
    */
   public render(workPackage:WorkPackageResource):HTMLElement[] {
     const built = this.actions.map((factory) => factory(this.injector, workPackage).buildElement());
-    return _.compact(built);
+    return compact(built);
   }
 }

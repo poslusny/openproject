@@ -51,6 +51,7 @@ import {
 import { IsolatedQuerySpace } from 'core-app/features/work-packages/directives/query-space/isolated-query-space';
 import { IAPIFilter } from 'core-app/shared/components/autocompleter/op-autocompleter/typings';
 import { FilterOperator } from 'core-app/shared/helpers/api-v3/api-v3-filter-builder';
+import isNil from 'lodash-es/isNil';
 
 @Component({
   templateUrl: './wp-relation-inline-add-existing.component.html',
@@ -80,7 +81,7 @@ export class WpRelationInlineAddExistingComponent {
   ) {}
 
   public addExisting() {
-    if (_.isNil(this.selectedWpId)) {
+    if (isNil(this.selectedWpId)) {
       return;
     }
 

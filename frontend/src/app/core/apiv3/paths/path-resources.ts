@@ -1,4 +1,5 @@
 import { Constructor } from 'core-app/core/util-types';
+import isNil from 'lodash-es/isNil';
 
 /**
  * Simple resource collection to construct paths for RESTful resources.
@@ -26,7 +27,7 @@ export class SimpleResourceCollection<T = SimpleResource> {
    * @param id
    */
   public withOptionalId(id?:string|number):this|T {
-    if (_.isNil(id)) {
+    if (isNil(id)) {
       return this;
     }
     return this.id(id);

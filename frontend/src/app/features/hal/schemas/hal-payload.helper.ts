@@ -28,6 +28,8 @@
 
 import { HalResource } from 'core-app/features/hal/resources/hal-resource';
 import { SchemaResource } from 'core-app/features/hal/resources/schema-resource';
+import each from 'lodash-es/each';
+import map from 'lodash-es/map';
 
 export class HalPayloadHelper {
   /**
@@ -66,7 +68,7 @@ export class HalPayloadHelper {
       if (schema.hasOwnProperty(key) && schema[key] && schema[key].writable) {
         if (resource.$links[key]) {
           if (Array.isArray(resource[key])) {
-            payload._links[key] = _.map(resource[key], (element) => ({ href: (element as HalResource).href }));
+            payload._links[key] = map(resource[key], (element) => ({ href: (element as HalResource).href }));
           } else {
             payload._links[key] = {
               href: (resource[key] && resource[key].href),
@@ -78,10 +80,10 @@ export class HalPayloadHelper {
       }
     }
 
-    _.each(nonLinkProperties, (property) => {
+    each(nonLinkProperties, (property) => {
       if (resource.hasOwnProperty(property) || resource[property]) {
         if (Array.isArray(resource[property])) {
-          payload[property] = _.map(resource[property], (element:any) => {
+          payload[property] = map(resource[property], (element:any) => {
             if (element instanceof HalResource) {
               return this.extractPayloadFromSchema(element, element.currentSchema || element.schema);
             }

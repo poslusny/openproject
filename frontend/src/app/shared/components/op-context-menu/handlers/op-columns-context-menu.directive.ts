@@ -43,6 +43,7 @@ import { QueryColumn } from 'core-app/features/work-packages/components/wp-query
 import { WpTableConfigurationModalComponent } from 'core-app/features/work-packages/components/wp-table/configuration-modal/wp-table-configuration.modal';
 import { QUERY_SORT_BY_ASC, QUERY_SORT_BY_DESC } from 'core-app/features/hal/resources/query-sort-by-resource';
 import { ConfirmDialogService } from 'core-app/shared/components/modals/confirm-dialog/confirm-dialog.service';
+import assign from 'lodash-es/assign';
 
 @Directive({
   selector: '[opColumnsContextMenu]',
@@ -100,7 +101,7 @@ export class OpColumnsContextMenu extends OpContextMenuTrigger {
     };
 
     const position = super.positionArgs(evt);
-    _.assign(position, additionalPositionArgs);
+    assign(position, additionalPositionArgs);
 
     return position;
   }

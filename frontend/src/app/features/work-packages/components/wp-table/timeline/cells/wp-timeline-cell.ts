@@ -41,6 +41,7 @@ import { TimelineCellRenderer } from './timeline-cell-renderer';
 import { WorkPackageCellLabels } from './wp-timeline-cell-labels';
 import { RenderInfo } from '../wp-timeline';
 import { WorkPackageTimelineTableController } from '../container/wp-timeline-container.directive';
+import isNil from 'lodash-es/isNil';
 
 export class WorkPackageTimelineCell {
   @InjectField() halEditing:HalResourceEditingService;
@@ -92,10 +93,10 @@ export class WorkPackageTimelineCell {
   canConnectRelations():boolean {
     const wp = this.latestRenderInfo.workPackage;
     if (this.schemaCache.of(wp).isMilestone) {
-      return !_.isNil(wp.date);
+      return !isNil(wp.date);
     }
 
-    return !_.isNil(wp.startDate) || !_.isNil(wp.dueDate);
+    return !isNil(wp.startDate) || !isNil(wp.dueDate);
   }
 
   public clear() {

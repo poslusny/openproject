@@ -26,6 +26,9 @@
 // See COPYRIGHT and LICENSE files for more details.
 //++
 
+import each from 'lodash-es/each';
+import pickBy from 'lodash-es/pickBy';
+
 export type FilterOperator = '='|'!*'|'!'|'~'|'o'|'>t-'|'<>d'|'**'|'ow';
 export const FalseValue = ['f'];
 export const TrueValue = ['t'];
@@ -85,7 +88,7 @@ export class ApiV3FilterBuilder {
     const map:ApiV3FilterObject = {};
 
     filters.forEach((item:ApiV3Filter) => {
-      _.each(item, (val:ApiV3FilterValue, filter:string) => {
+      each(item, (val:ApiV3FilterValue, filter:string) => {
         map[filter] = val;
       });
     });
@@ -118,7 +121,7 @@ export class ApiV3FilterBuilder {
    * @param only Only apply the given filters
    */
   public merge(filters:ApiV3Filter[], ...only:string[]):void {
-    const toAdd:ApiV3FilterObject = _.pickBy(
+    const toAdd:ApiV3FilterObject = pickBy(
       ApiV3FilterBuilder.toFilterObject(filters),
       (_, filter:string) => only.includes(filter),
     );
@@ -131,7 +134,7 @@ export class ApiV3FilterBuilder {
 
   public get filters():ApiV3Filter[] {
     const filters:ApiV3Filter[] = [];
-    _.each(this.filterMap, (val:ApiV3FilterValue, filter:string) => {
+    each(this.filterMap, (val:ApiV3FilterValue, filter:string) => {
       filters.push({ [filter]: val });
     });
 

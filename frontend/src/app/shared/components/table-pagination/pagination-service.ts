@@ -28,6 +28,7 @@
 
 import { Injectable } from '@angular/core';
 import { ConfigurationService } from 'core-app/core/config/configuration.service';
+import get from 'lodash-es/get';
 
 export const DEFAULT_PAGINATION_OPTIONS = {
   maxVisiblePageOptions: 6,
@@ -87,11 +88,11 @@ export class PaginationService {
   }
 
   public getMaxVisiblePageOptions() {
-    return _.get(this.paginationOptions, 'maxVisiblePageOptions', DEFAULT_PAGINATION_OPTIONS.maxVisiblePageOptions);
+    return get(this.paginationOptions, 'maxVisiblePageOptions', DEFAULT_PAGINATION_OPTIONS.maxVisiblePageOptions);
   }
 
   public getOptionsTruncationSize() {
-    return _.get(this.paginationOptions, 'optionsTruncationSize', DEFAULT_PAGINATION_OPTIONS.optionsTruncationSize);
+    return get(this.paginationOptions, 'optionsTruncationSize', DEFAULT_PAGINATION_OPTIONS.optionsTruncationSize);
   }
 
   public setPerPage(perPage:number) {

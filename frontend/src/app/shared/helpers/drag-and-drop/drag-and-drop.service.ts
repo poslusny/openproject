@@ -4,6 +4,7 @@ import {
 import { DomAutoscrollService } from 'core-app/shared/helpers/drag-and-drop/dom-autoscroll.service';
 import { findIndex, reinsert } from 'core-app/shared/helpers/drag-and-drop/drag-and-drop.helpers';
 import dragula, { Drake } from 'dragula';
+import find from 'lodash-es/find';
 
 export interface DragMember {
   dragContainer:HTMLElement;
@@ -69,7 +70,7 @@ export class DragAndDropService implements OnDestroy {
   }
 
   public member(container:HTMLElement):DragMember|undefined {
-    return _.find(this.members, (el) => el.dragContainer === container);
+    return find(this.members, (el) => el.dragContainer === container);
   }
 
   public get initialized() {

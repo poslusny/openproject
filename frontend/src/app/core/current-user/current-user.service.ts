@@ -35,6 +35,8 @@ import { Observable, combineLatest } from 'rxjs';
 import { distinctUntilChanged, map, switchMap, take } from 'rxjs/operators';
 import { CurrentUserQuery } from './current-user.query';
 import { CurrentUser, CurrentUserStore } from './current-user.store';
+import castArray from 'lodash-es/castArray';
+import compact from 'lodash-es/compact';
 
 @Injectable({ providedIn: 'root' })
 export class CurrentUserService {
@@ -80,7 +82,7 @@ export class CurrentUserService {
       .principalFilter$()
       .pipe(
         map((userFilter) => {
-          const filters:ApiV3ListFilter[] = _.compact([userFilter]);
+          const filters:ApiV3ListFilter[] = compact([userFilter]);
 
           if (projectContext) {
             filters.push(['context', '=', [projectContext === 'global' || projectContext === 'projects' ? 'g' : `p${projectContext}`]]);
@@ -101,7 +103,7 @@ export class CurrentUserService {
    * in the provided context.
    */
   public hasCapabilities$(action:string|string[], projectContext:string|null):Observable<boolean> {
-    const actions = _.castArray(action);
+    const actions = castArray(action);
     return this
       .capabilities$(actions, projectContext)
       .pipe(
@@ -118,7 +120,7 @@ export class CurrentUserService {
    * has any of the required capabilities in the provided context.
    */
   public hasAnyCapabilityOf$(actions:string|string[], projectContext:string|null):Observable<boolean> {
-    const actionsToFilter = _.castArray(actions);
+    const actionsToFilter = castArray(actions);
     return this
       .capabilities$(actionsToFilter, projectContext)
       .pipe(

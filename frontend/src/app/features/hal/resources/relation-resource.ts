@@ -29,6 +29,7 @@
 import { HalResource } from 'core-app/features/hal/resources/hal-resource';
 import { WorkPackageResource } from 'core-app/features/hal/resources/work-package-resource';
 import idFromLink from 'core-app/features/hal/helpers/id-from-link';
+import values from 'lodash-es/values';
 
 export interface RelationResourceLinks {
   delete():Promise<any>;
@@ -110,7 +111,7 @@ export class RelationResource extends HalResource {
    * @return {boolean}
    */
   public isInvolved(wpId:string) {
-    return _.values(this.ids).indexOf(wpId.toString()) >= 0;
+    return values(this.ids).indexOf(wpId.toString()) >= 0;
   }
 
   /**

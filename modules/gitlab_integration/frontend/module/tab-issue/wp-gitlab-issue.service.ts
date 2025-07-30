@@ -32,6 +32,8 @@ import { HalResource } from "core-app/features/hal/resources/hal-resource";
 import { Injectable } from '@angular/core';
 import { ConfigurationService } from "core-app/core/config/configuration.service";
 import { WorkPackageLinkedResourceCache } from 'core-app/features/work-packages/components/wp-single-view-tabs/wp-linked-resource-cache.service';
+import flatten from 'lodash-es/flatten';
+import sortBy from 'lodash-es/sortBy';
 
 @Injectable()
 export class WorkPackagesGitlabIssueService extends WorkPackageLinkedResourceCache<HalResource[]> {
@@ -47,6 +49,6 @@ export class WorkPackagesGitlabIssueService extends WorkPackageLinkedResourceCac
   }
 
   protected sortList(gitlabIssue:HalResource[], attr = 'createdAt'):HalResource[] {
-    return _.sortBy(_.flatten(gitlabIssue), attr);
+    return sortBy(flatten(gitlabIssue), attr);
   }
 }

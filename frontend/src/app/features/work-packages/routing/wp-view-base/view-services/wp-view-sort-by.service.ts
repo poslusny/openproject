@@ -37,6 +37,9 @@ import { QuerySortByResource } from 'core-app/features/hal/resources/query-sort-
 import { PathHelperService } from 'core-app/core/path-helper/path-helper.service';
 import { QueryColumn } from 'core-app/features/work-packages/components/wp-query/query-column';
 import { WorkPackageQueryStateService } from './wp-view-base.service';
+import find from 'lodash-es/find';
+import isEqual from 'lodash-es/isEqual';
+import uniqBy from 'lodash-es/uniqBy';
 
 @Injectable()
 export class WorkPackageViewSortByService extends WorkPackageQueryStateService<QuerySortByResource[]> {
@@ -61,7 +64,7 @@ export class WorkPackageViewSortByService extends WorkPackageQueryStateService<Q
   public hasChanged(query:QueryResource) {
     const comparer = (sortBy:QuerySortByResource[]) => sortBy.map((el) => el.href);
 
-    return !_.isEqual(
+    return !isEqual(
       comparer(query.sortBy),
       comparer(this.current),
     );
@@ -77,7 +80,7 @@ export class WorkPackageViewSortByService extends WorkPackageQueryStateService<Q
   }
 
   public isSortable(column:QueryColumn):boolean {
-    return !!_.find(
+    return !!find(
       this.available,
       (candidate) => candidate.column.href === column.href,
     );
@@ -100,7 +103,7 @@ export class WorkPackageViewSortByService extends WorkPackageQueryStateService<Q
   }
 
   public findAvailableDirection(column:QueryColumn, direction:string):QuerySortByResource | undefined {
-    return _.find(
+    return find(
       this.available,
       (candidate) => (candidate.column.href === column.href
         && candidate.direction.href === direction),
@@ -108,9 +111,7 @@ export class WorkPackageViewSortByService extends WorkPackageQueryStateService<Q
   }
 
   public add(sortBy:QuerySortByResource) {
-    const newValue = _
-      .uniqBy([sortBy, ...this.current], (sortBy) => sortBy.column.href)
-      .slice(0, 3);
+    const newValue = uniqBy([sortBy, ...this.current], (sortBy) => sortBy.column.href).slice(0, 3);
 
     this.update(newValue);
   }
@@ -150,6 +151,6 @@ export class WorkPackageViewSortByService extends WorkPackageQueryStateService<Q
   }
 
   private get manualSortObject() {
-    return _.find(this.available, (sort) => sort.column.href!.endsWith('/manualSorting'));
+    return find(this.available, (sort) => sort.column.href!.endsWith('/manualSorting'));
   }
 }

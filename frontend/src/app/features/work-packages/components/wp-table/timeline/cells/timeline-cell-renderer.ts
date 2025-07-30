@@ -20,6 +20,8 @@ import {
   timelineElementCssClass,
   timelineMarkerSelectionStartClass,
 } from '../wp-timeline';
+import _isNaN from 'lodash-es/isNaN';
+import max from 'lodash-es/max';
 
 export interface CellDateMovement {
   // Target values to move work package to
@@ -85,7 +87,7 @@ export class TimelineCellRenderer {
   public isEmpty(wp:WorkPackageResource) {
     const start = moment(wp.startDate as any);
     const due = moment(wp.dueDate as any);
-    const noStartAndDueValues = _.isNaN(start.valueOf()) && _.isNaN(due.valueOf());
+    const noStartAndDueValues = _isNaN(start.valueOf()) && _isNaN(due.valueOf());
     return noStartAndDueValues;
   }
 
@@ -242,21 +244,21 @@ export class TimelineCellRenderer {
     let start = moment(change.projectedResource.startDate);
     let due = moment(change.projectedResource.dueDate);
 
-    if (_.isNaN(start.valueOf()) && _.isNaN(due.valueOf())) {
+    if (_isNaN(start.valueOf()) && _isNaN(due.valueOf())) {
       element.style.visibility = 'hidden';
     } else {
       element.style.visibility = 'visible';
     }
 
     // only start date, fade out bar to the right
-    if (_.isNaN(due.valueOf()) && !_.isNaN(start.valueOf())) {
+    if (_isNaN(due.valueOf()) && !_isNaN(start.valueOf())) {
       // Set due date to today
       due = moment();
       bar.setAttribute('style', 'background-image: linear-gradient(90deg, rgba(255,255,255,0) 0%, #F1F1F1 100%) !important');
     }
 
     // only finish date, fade out bar to the left
-    if (_.isNaN(start.valueOf()) && !_.isNaN(due.valueOf())) {
+    if (_isNaN(start.valueOf()) && !_isNaN(due.valueOf())) {
       start = due.clone();
       bar.setAttribute('style', 'background-image: linear-gradient(90deg, #F1F1F1 0%, rgba(255,255,255,0) 80%) !important');
     }
@@ -332,7 +334,7 @@ export class TimelineCellRenderer {
 
     let start = moment(projection.startDate);
     const due = moment(projection.dueDate);
-    start = _.isNaN(start.valueOf()) ? due.clone() : start;
+    start = _isNaN(start.valueOf()) ? due.clone() : start;
 
     const offsetStart = start.diff(renderInfo.viewParams.dateDisplayStart, 'days');
 
@@ -345,8 +347,8 @@ export class TimelineCellRenderer {
     let start = moment(projection.startDate);
     let due = moment(projection.dueDate);
 
-    start = _.isNaN(start.valueOf()) ? due.clone() : start;
-    due = _.isNaN(due.valueOf()) ? start.clone() : due;
+    start = _isNaN(start.valueOf()) ? due.clone() : start;
+    due = _isNaN(due.valueOf()) ? start.clone() : due;
 
     const offsetStart = start.diff(renderInfo.viewParams.dateDisplayStart, 'days');
     const duration = due.diff(start, 'days') + 1;
@@ -457,8 +459,8 @@ export class TimelineCellRenderer {
     element.style.width = calculatePositionValueForDayCount(viewParams, duration);
 
     // ensure minimum width
-    if (!_.isNaN(start.valueOf()) || !_.isNaN(due.valueOf())) {
-      const minWidth = _.max([renderInfo.viewParams.pixelPerDay, 2]);
+    if (!_isNaN(start.valueOf()) || !_isNaN(due.valueOf())) {
+      const minWidth = max([renderInfo.viewParams.pixelPerDay, 2]);
       element.style.minWidth = `${minWidth}px`;
     }
   }

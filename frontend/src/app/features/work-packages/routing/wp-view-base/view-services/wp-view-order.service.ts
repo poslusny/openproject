@@ -44,6 +44,8 @@ import { ApiV3Service } from 'core-app/core/apiv3/api-v3.service';
 import { QueryOrder } from 'core-app/core/apiv3/endpoints/queries/apiv3-query-order';
 import { WorkPackageQueryStateService } from './wp-view-base.service';
 import { firstValueFrom } from 'rxjs';
+import isEmpty from 'lodash-es/isEmpty';
+import sortBy from 'lodash-es/sortBy';
 
 @Injectable()
 export class WorkPackageViewOrderService extends WorkPackageQueryStateService<QueryOrder> {
@@ -172,7 +174,7 @@ export class WorkPackageViewOrderService extends WorkPackageQueryStateService<Qu
       const { value } = this.positions;
 
       // Remove empty or stale values given we can reload them
-      if ((_.isEmpty(value) || this.positions.isValueOlderThan(60000))) {
+      if ((isEmpty(value) || this.positions.isValueOlderThan(60000))) {
         this.positions.clear('Clearing old positions value');
       }
 
@@ -210,7 +212,7 @@ export class WorkPackageViewOrderService extends WorkPackageQueryStateService<Qu
       return upstreamOrder;
     }
     const positions = this.positions.value!;
-    return _.sortBy(upstreamOrder, (wp) => {
+    return sortBy(upstreamOrder, (wp) => {
       const pos = positions[wp.id!];
       return pos !== undefined ? pos : MAX_ORDER;
     });

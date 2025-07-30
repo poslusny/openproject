@@ -19,6 +19,7 @@ import { isInsideCollapsedGroup } from 'core-app/features/work-packages/componen
 import { collapsedGroupClass } from 'core-app/features/work-packages/components/wp-fast-table/helpers/wp-table-hierarchy-helpers';
 import { WorkPackageTable } from '../../wp-fast-table';
 import { firstValueFrom } from 'rxjs';
+import uniq from 'lodash-es/uniq';
 
 export class DragAndDropTransformer {
   @InjectField() private readonly states:States;
@@ -168,7 +169,7 @@ export class DragAndDropTransformer {
    * Update current rendered order
    */
   private async updateRenderedOrder(order:string[]) {
-    order = _.uniq(order);
+    order = uniq(order);
 
     const mappedOrder = await Promise.all(
       order.map(

@@ -62,6 +62,8 @@ import { FrameElement } from '@hotwired/turbo';
 import { PathHelperService } from 'core-app/core/path-helper/path-helper.service';
 import { UrlParamsService } from 'core-app/core/navigation/url-params.service';
 import { IanBellService } from 'core-app/features/in-app-notifications/bell/state/ian-bell.service';
+import compact from 'lodash-es/compact';
+import groupBy from 'lodash-es/groupBy';
 
 export interface INotificationPageQueryParameters {
   filter?:string|null;
@@ -101,7 +103,7 @@ export class IanCenterService extends UntilDestroyedMixin {
     .selectNotifications$
     .pipe(
       map((notifications) => (
-        _.groupBy(notifications, (notification) => notification._links.resource?.href || 'none')
+        groupBy(notifications, (notification) => notification._links.resource?.href || 'none')
       )),
       distinctUntilChanged(),
     );
@@ -322,7 +324,7 @@ export class IanCenterService extends UntilDestroyedMixin {
     const promise = this
       .apiV3Service
       .work_packages
-      .requireAll(_.compact(wpIds));
+      .requireAll(compact(wpIds));
 
     wpIds.forEach((id) => {
       cache.clearAndLoad(

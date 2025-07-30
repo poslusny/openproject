@@ -47,6 +47,7 @@ import { CurrentUserService } from 'core-app/core/current-user/current-user.serv
 import { QueryFilterInstanceResource } from 'core-app/features/hal/resources/query-filter-instance-resource';
 import { HalResourceService } from 'core-app/features/hal/services/hal-resource.service';
 import { compareByHref } from 'core-app/shared/helpers/angular/tracking-functions';
+import castArray from 'lodash-es/castArray';
 
 @Component({
   selector: 'op-filter-toggled-multiselect-value',
@@ -101,7 +102,7 @@ export class FilterToggledMultiselectValueComponent implements OnInit, AfterView
   }
 
   public setValues(val:HalResource[]|string[]|string|HalResource):void {
-    this.filter.values = _.castArray(val) as HalResource[]|string[];
+    this.filter.values = castArray(val) as HalResource[]|string[];
     this.filterChanged.emit(this.filter);
     this.cdRef.detectChanges();
   }

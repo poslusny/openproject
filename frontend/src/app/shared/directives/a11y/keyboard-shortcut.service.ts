@@ -32,6 +32,7 @@ import { PathHelperService } from 'core-app/core/path-helper/path-helper.service
 import { CurrentProjectService } from 'core-app/core/current-project/current-project.service';
 import { ConfigurationService } from 'core-app/core/config/configuration.service';
 import Mousetrap from 'mousetrap';
+import each from 'lodash-es/each';
 
 const accessKeys = {
   preview: 1,
@@ -88,7 +89,7 @@ export class KeyboardShortcutService {
   public register():void {
     void this.configurationService.initialize().then(() => {
       if (!this.configurationService.disableKeyboardShortcuts()) {
-        _.each(this.shortcuts, (action:() => void, key:string) => Mousetrap.bind(key, action));
+        each(this.shortcuts, (action:() => void, key:string) => Mousetrap.bind(key, action));
       }
     });
   }

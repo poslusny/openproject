@@ -16,6 +16,7 @@ import { HalResource } from 'core-app/features/hal/resources/hal-resource';
 import { CollectionResource } from 'core-app/features/hal/resources/collection-resource';
 import { getPaginatedResults } from 'core-app/core/apiv3/helpers/get-paginated-results';
 import { addFiltersToPath } from 'core-app/core/apiv3/helpers/add-filters-to-path';
+import isNil from 'lodash-es/isNil';
 
 export class ApiV3ResourcePath<T = HalResource> extends SimpleResource {
   readonly injector = this.apiRoot.injector;
@@ -104,7 +105,7 @@ export class ApiV3ResourceCollection<V, T extends ApiV3GettableResource<V>> exte
   }
 
   public withOptionalId(id?:string|number|null):this|T {
-    if (_.isNil(id)) {
+    if (isNil(id)) {
       return this;
     }
     return this.id(id);

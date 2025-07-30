@@ -28,6 +28,8 @@
 
 import { HalResource } from 'core-app/features/hal/resources/hal-resource';
 import { HttpErrorResponse } from '@angular/common/http';
+import flatten from 'lodash-es/flatten';
+import forEach from 'lodash-es/forEach';
 
 export const v3ErrorIdentifierQueryInvalid = 'urn:openproject-org:api:v3:errors:InvalidQuery';
 export const v3ErrorIdentifierMultipleErrors = 'urn:openproject-org:api:v3:errors:MultipleErrors';
@@ -103,7 +105,7 @@ export class ErrorResource extends HalResource {
       columns = this.errors;
     }
 
-    return _.flatten(columns.map((resource:ErrorResource) => {
+    return flatten(columns.map((resource:ErrorResource) => {
       if (resource.errorIdentifier === v3ErrorIdentifierMultipleErrors) {
         return this.extractMultiError(resource)[0];
       }
@@ -117,7 +119,7 @@ export class ErrorResource extends HalResource {
     if (this.details) {
       perAttribute[this.details.attribute] = [this.message];
     } else {
-      _.forEach(this.errors, (error:any) => {
+      forEach(this.errors, (error:any) => {
         if (error.errorIdentifier === v3ErrorIdentifierMultipleErrors) {
           const [attribute, messages] = this.extractMultiError(error);
           const current = perAttribute[attribute] || [];

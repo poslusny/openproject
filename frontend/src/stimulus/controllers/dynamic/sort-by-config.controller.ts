@@ -29,7 +29,7 @@
  */
 
 import { Controller } from '@hotwired/stimulus';
-import { compact } from 'lodash';
+import compact from 'lodash-es/compact';
 
 export default class SortByConfigController extends Controller {
   static targets = [

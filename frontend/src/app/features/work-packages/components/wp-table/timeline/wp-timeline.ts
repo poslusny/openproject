@@ -30,6 +30,8 @@ import { InputState, MultiInputState } from '@openproject/reactivestates';
 import { WorkPackageChangeset } from 'core-app/features/work-packages/components/wp-edit/work-package-changeset';
 import { WorkPackageResource } from 'core-app/features/hal/resources/work-package-resource';
 import { TimelineZoomLevel } from 'core-app/features/hal/resources/query-resource';
+import concat from 'lodash-es/concat';
+import isNil from 'lodash-es/isNil';
 
 export const timelineElementCssClass = 'timeline-element';
 export const timelineBackgroundElementClass = 'timeline-element--bg';
@@ -163,10 +165,10 @@ export function getTimeSlicesForHeader(vp:TimelineViewParameters,
 
   const firstRest:[Moment, Moment] = rest.splice(0, 1)[0];
   const lastRest:[Moment, Moment] = rest.pop()!;
-  const inViewportAndBoundaries = _.concat(
-    [firstRest].filter((e) => !_.isNil(e)),
+  const inViewportAndBoundaries = concat(
+    [firstRest].filter((e) => !isNil(e)),
     inViewport,
-    [lastRest].filter((e) => !_.isNil(e)),
+    [lastRest].filter((e) => !isNil(e)),
   );
 
   return {

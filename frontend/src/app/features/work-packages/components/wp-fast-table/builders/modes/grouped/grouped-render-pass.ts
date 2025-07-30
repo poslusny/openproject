@@ -16,6 +16,10 @@ import {
   groupByProperty,
   groupedRowClassName,
 } from './grouped-rows-helpers';
+import find from 'lodash-es/find';
+import isArray from 'lodash-es/isArray';
+import isEqualWith from 'lodash-es/isEqualWith';
+import map from 'lodash-es/map';
 
 export const groupRowClass = '-group-row';
 
@@ -70,7 +74,7 @@ export class GroupedRenderPass extends PlainRenderPass {
    * The API sadly doesn't provide us with the information which group a WP belongs to.
    */
   private matchingGroup(workPackage:WorkPackageResource) {
-    return _.find(this.groups, (group:GroupObject) => {
+    return find(this.groups, (group:GroupObject) => {
       let property = workPackage[groupByProperty(group)];
       // explicitly check for undefined as `false` (bool) is a valid value.
       if (property === undefined) {
@@ -79,14 +83,14 @@ export class GroupedRenderPass extends PlainRenderPass {
 
       // If the property is a multi-value
       // Compare the href's of all resources with the ones in valueLink
-      if (_.isArray(property)) {
+      if (isArray(property)) {
         return this.matchesMultiValue(property as HalResource[], group);
       }
 
       /// / If it's a linked resource, compare the href,
       /// / which is an array of links the resource offers
       if (property && property.href) {
-        return !!_.find(group._links.valueLink, (l:any):any => property.href === l.href);
+        return !!find(group._links.valueLink, (l:any):any => property.href === l.href);
       }
 
       // Otherwise, fall back to simple value comparison.
@@ -109,9 +113,9 @@ export class GroupedRenderPass extends PlainRenderPass {
       return false;
     }
 
-    const joinedOrderedHrefs = (objects:any[]) => _.map(objects, (object) => object.href).sort().join(', ');
+    const joinedOrderedHrefs = (objects:any[]) => map(objects, (object) => object.href).sort().join(', ');
 
-    return _.isEqualWith(
+    return isEqualWith(
       property,
       group.href,
       (a, b) => joinedOrderedHrefs(a) === joinedOrderedHrefs(b),

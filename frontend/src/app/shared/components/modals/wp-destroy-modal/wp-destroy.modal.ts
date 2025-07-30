@@ -46,6 +46,7 @@ import {
 } from 'core-app/features/work-packages/services/notifications/work-package-notification.service';
 import { WorkPackageService } from 'core-app/features/work-packages/services/work-package.service';
 import isNotNull from 'core-app/core/state/is-not-null';
+import find from 'lodash-es/find';
 
 @Component({
   templateUrl: './wp-destroy.modal.html',
@@ -138,7 +139,7 @@ export class WpDestroyModalComponent extends OpModalComponent implements OnInit 
       result = this.singleWorkPackageChildren.length > 0;
     }
 
-    return result || !!_.find(this.workPackages, (wp) => wp.children && wp.children.length > 0);
+    return result || !!find(this.workPackages, (wp) => wp.children && wp.children.length > 0);
   }
 
   public confirmDeletion($event:Event):boolean {

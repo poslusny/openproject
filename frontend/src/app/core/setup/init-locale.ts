@@ -28,6 +28,7 @@
 
 import moment from 'moment';
 import { I18n } from 'i18n-js';
+import chain from 'lodash-es/chain';
 
 export function initializeLocale() {
   const meta = document.querySelector<HTMLMetaElement>('meta[name=openproject_initializer]');
@@ -77,8 +78,7 @@ export function initializeLocale() {
     },
   );
 
-  const localeImports = _
-    .chain([userLocale, instanceLocale])
+  const localeImports = chain([userLocale, instanceLocale])
     .uniq()
     .map(
       (locale) => import(/* webpackChunkName: "locale" */ `../../../locales/${locale}.json`)

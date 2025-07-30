@@ -12,6 +12,7 @@ import { tableRowClassName } from '../../builders/rows/single-row-builder';
 import { checkedClassName } from '../../builders/ui-state-link-builder';
 import { locateTableRow, scrollTableRowIntoView } from '../../helpers/wp-table-row-helpers';
 import { WorkPackageTable } from '../../wp-fast-table';
+import each from 'lodash-es/each';
 
 export class SelectionTransformer {
   @InjectField() public wpTableSelection:WorkPackageViewSelectionService;
@@ -60,7 +61,7 @@ export class SelectionTransformer {
 
     context.find(`.${tableRowClassName}.${checkedClassName}`).removeClass(checkedClassName);
 
-    _.each(state.selected, (selected:boolean, workPackageId:any) => {
+    each(state.selected, (selected:boolean, workPackageId:any) => {
       context.find(`.${tableRowClassName}[data-work-package-id="${workPackageId}"]`).toggleClass(checkedClassName, selected);
     });
   }

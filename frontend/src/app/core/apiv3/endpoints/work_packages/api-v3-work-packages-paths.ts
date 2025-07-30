@@ -42,6 +42,8 @@ import {
   ApiV3FilterValueType,
   ApiV3Filter,
 } from 'core-app/shared/helpers/api-v3/api-v3-filter-builder';
+import each from 'lodash-es/each';
+import uniq from 'lodash-es/uniq';
 
 export class ApiV3WorkPackagesPaths extends ApiV3Collection<WorkPackageResource, ApiV3WorkPackagePaths, WorkPackageCache> {
   // Base path
@@ -70,11 +72,11 @@ export class ApiV3WorkPackagesPaths extends ApiV3Collection<WorkPackageResource,
 
     return new Promise<undefined>((resolve, reject) => {
       this
-        .loadCollectionsFor(_.uniq(ids))
+        .loadCollectionsFor(uniq(ids))
         .then((pagedResults:WorkPackageCollectionResource[]) => {
-          _.each(pagedResults, (results) => {
+          each(pagedResults, (results) => {
             if (results.schemas) {
-              _.each(results.schemas.elements, (schema:SchemaResource) => {
+              each(results.schemas.elements, (schema:SchemaResource) => {
                 this.states.schemas.get(schema.href as string).putValue(schema);
               });
             }

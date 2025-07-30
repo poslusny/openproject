@@ -7,6 +7,8 @@ import { WorkPackageViewBaseService } from 'core-app/features/work-packages/rout
 import { QueryResource } from 'core-app/features/hal/resources/query-resource';
 import { WorkPackageCollectionResource } from 'core-app/features/hal/resources/wp-collection-resource';
 import Mousetrap from 'mousetrap';
+import each from 'lodash-es/each';
+import size from 'lodash-es/size';
 
 export interface WorkPackageViewSelectionState {
   // Map of selected rows
@@ -72,7 +74,7 @@ export class WorkPackageViewSelectionService extends WorkPackageViewBaseService<
   public getSelectedWorkPackageIds():string[] {
     const selected:string[] = [];
 
-    _.each(this.current?.selected, (isSelected:boolean, wpId:string) => {
+    each(this.current?.selected, (isSelected:boolean, wpId:string) => {
       if (isSelected) {
         selected.push(wpId);
       }
@@ -96,7 +98,7 @@ export class WorkPackageViewSelectionService extends WorkPackageViewBaseService<
    * Return the number of selected rows.
    */
   public get selectionCount():number {
-    return _.size(this.current?.selected);
+    return size(this.current?.selected);
   }
 
   /**

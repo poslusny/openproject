@@ -9,6 +9,7 @@ import { ResourceChangeset } from 'core-app/shared/components/fields/changeset/r
 import { SchemaCacheService } from 'core-app/core/schemas/schema-cache.service';
 import { ICKEditorContext } from 'core-app/shared/components/editor/components/ckeditor/ckeditor.types';
 import { GridResource } from 'core-app/features/hal/resources/grid-resource';
+import get from 'lodash-es/get';
 
 @Injectable()
 export class CustomTextEditFieldService extends EditFieldHandler {
@@ -74,11 +75,11 @@ export class CustomTextEditFieldService extends EditFieldHandler {
   }
 
   public get rawText() {
-    return _.get(this.textValue, 'raw', '');
+    return get(this.textValue, 'raw', '');
   }
 
   public get htmlText() {
-    return _.get(this.textValue, 'html', '');
+    return get(this.textValue, 'html', '');
   }
 
   public get textValue() {

@@ -13,6 +13,7 @@ import { CurrentProjectService } from 'core-app/core/current-project/current-pro
 import { WorkPackageNotificationService } from 'core-app/features/work-packages/services/notifications/work-package-notification.service';
 import isNewResource from 'core-app/features/hal/helpers/is-new-resource';
 import { firstValueFrom } from 'rxjs';
+import uniq from 'lodash-es/uniq';
 
 @Injectable()
 export class WorkPackageCardDragAndDropService {
@@ -135,7 +136,7 @@ export class WorkPackageCardDragAndDropService {
    * Update current order
    */
   private updateOrder(newOrder:string[]) {
-    newOrder = _.uniq(newOrder);
+    newOrder = uniq(newOrder);
 
     Promise
       .all(newOrder.map((id) => this

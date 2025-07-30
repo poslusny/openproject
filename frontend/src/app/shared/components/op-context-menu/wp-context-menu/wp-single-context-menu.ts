@@ -16,6 +16,8 @@ import { WpDestroyModalComponent } from 'core-app/shared/components/modals/wp-de
 import { WorkPackageAuthorization } from 'core-app/features/work-packages/services/work-package-authorization.service';
 import { TurboRequestsService } from 'core-app/core/turbo/turbo-requests.service';
 import { ApiV3Service } from 'core-app/core/apiv3/api-v3.service';
+import assign from 'lodash-es/assign';
+import each from 'lodash-es/each';
 
 @Directive({
   selector: '[wpSingleContextMenu]',
@@ -106,7 +108,7 @@ export class WorkPackageSingleContextMenuDirective extends OpContextMenuTrigger 
     };
 
     const position = super.positionArgs(evt);
-    _.assign(position, additionalPositionArgs);
+    assign(position, additionalPositionArgs);
 
     return position;
   }
@@ -115,7 +117,7 @@ export class WorkPackageSingleContextMenuDirective extends OpContextMenuTrigger 
     const actions:WorkPackageAction[] = authorization.permittedActionsWithLinks(PERMITTED_CONTEXT_MENU_ACTIONS);
 
     // Splice plugin actions onto the core actions
-    _.each(this.getPermittedPluginActions(authorization), (action:WorkPackageAction) => {
+    each(this.getPermittedPluginActions(authorization), (action:WorkPackageAction) => {
       const index = action.indexBy ? action.indexBy(actions) : actions.length;
       actions.splice(index, 0, action);
     });

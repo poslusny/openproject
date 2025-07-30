@@ -23,6 +23,7 @@ import {
   MouseDirection,
 } from './timeline-cell-renderer';
 import { WorkPackageCellLabels } from './wp-timeline-cell-labels';
+import _isNaN from 'lodash-es/isNaN';
 
 export class TimelineMilestoneCellRenderer extends TimelineCellRenderer {
   public get type():string {
@@ -31,7 +32,7 @@ export class TimelineMilestoneCellRenderer extends TimelineCellRenderer {
 
   public isEmpty(wp:WorkPackageResource) {
     const date = moment(wp.date as any);
-    return _.isNaN(date.valueOf());
+    return _isNaN(date.valueOf());
   }
 
   public canMoveDates(wp:WorkPackageResource) {
@@ -120,7 +121,7 @@ export class TimelineMilestoneCellRenderer extends TimelineCellRenderer {
     const date = moment(renderInfo.change.projectedResource.date);
 
     // abort if no date
-    if (_.isNaN(date.valueOf())) {
+    if (_isNaN(date.valueOf())) {
       return false;
     }
 

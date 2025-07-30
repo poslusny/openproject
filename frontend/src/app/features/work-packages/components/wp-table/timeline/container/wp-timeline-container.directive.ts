@@ -89,6 +89,8 @@ import { WeekdayService } from 'core-app/core/days/weekday.service';
 import Mousetrap from 'mousetrap';
 import { DayResourceService } from 'core-app/core/state/days/day.service';
 import { IDay } from 'core-app/core/state/days/day.model';
+import each from 'lodash-es/each';
+import last from 'lodash-es/last';
 
 @Component({
   selector: 'wp-timeline-container',
@@ -268,7 +270,7 @@ export class WorkPackageTimelineTableController extends UntilDestroyedMixin impl
       // Update all cells
       this.cellsRenderer.refreshAllCells();
 
-      _.each(this.renderers, (cb, key) => {
+      each(this.renderers, (cb, key) => {
         debugLog(`Refreshing timeline member ${key}`);
         cb(this._viewParameters);
       });
@@ -490,7 +492,7 @@ export class WorkPackageTimelineTableController extends UntilDestroyedMixin impl
       const pixelPerDay = getPixelPerDayForZoomLevel(zoomLevel);
       const visibleDays = timelineWidthInPx / pixelPerDay;
 
-      if (visibleDays >= daysSpan || zoomLevel === _.last(zoomLevelOrder)) {
+      if (visibleDays >= daysSpan || zoomLevel === last(zoomLevelOrder)) {
         // Zoom level is enough
         const previousZoomLevel = this._viewParameters.settings.zoomLevel;
 

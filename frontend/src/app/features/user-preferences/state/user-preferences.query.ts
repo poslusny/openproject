@@ -9,6 +9,7 @@ import { Observable } from 'rxjs';
 import { UserPreferencesStore } from 'core-app/features/user-preferences/state/user-preferences.store';
 import { IUserPreference } from 'core-app/features/user-preferences/state/user-preferences.model';
 import { INotificationSetting } from 'core-app/features/user-preferences/state/notification-setting.model';
+import groupBy from 'lodash-es/groupBy';
 
 export class UserPreferencesQuery extends Query<IUserPreference> {
   notificationSettings$ = this.select('notifications');
@@ -17,7 +18,7 @@ export class UserPreferencesQuery extends Query<IUserPreference> {
     .notificationSettings$
     .pipe(
       map((settings) => settings.filter((setting) => setting._links.project.href)),
-      map((settings) => _.groupBy(settings, (setting) => setting._links.project.title)),
+      map((settings) => groupBy(settings, (setting) => setting._links.project.title)),
     );
 
   /** Notification settings grouped by Project */

@@ -31,7 +31,9 @@
 
 import { Controller } from '@hotwired/stimulus';
 import { renderStreamMessage } from '@hotwired/turbo';
-import { debounce } from 'lodash';
+import debounce from 'lodash-es/debounce';
+import flatten from 'lodash-es/flatten';
+import without from 'lodash-es/without';
 
 interface PrimerTextFieldElement extends HTMLElement {
   inputElement:HTMLInputElement;
@@ -469,7 +471,7 @@ export default class FiltersFormController extends Controller {
       selectFields = this.filterValueSelectTargets.filter((selectField) => !selectField.multiple && selectField.getAttribute('data-filter-name') === filterName);
     }
 
-    const selectedValues = _.flatten(Array.from(selectFields).map((selectField) => Array.from(selectField.selectedOptions).map((option) => option.value)));
+    const selectedValues = flatten(Array.from(selectFields).map((selectField) => Array.from(selectField.selectedOptions).map((option) => option.value)));
 
     if (selectedValues.length > 0) {
       return selectedValues;
@@ -484,11 +486,11 @@ export default class FiltersFormController extends Controller {
     if (valueContainer.classList.contains('days')) {
       const dateValue = this.findTargetByName(filterName, this.daysTargets)?.value;
 
-      value = _.without([dateValue], '');
+      value = without([dateValue], '');
     } else if (valueContainer.classList.contains('on-date')) {
       const dateValue = this.findTargetById(`on-date-value-${filterName}`, this.singleDayTargets)?.value;
 
-      value = _.without([dateValue], '');
+      value = without([dateValue], '');
     } else if (valueContainer.classList.contains('between-dates')) {
       const fromValue = this.findTargetById(`between-dates-from-value-${filterName}`, this.singleDayTargets)?.value;
       const toValue = this.findTargetById(`between-dates-to-value-${filterName}`, this.singleDayTargets)?.value;

@@ -50,6 +50,10 @@ import { Attachable } from 'core-app/features/hal/resources/mixins/attachable-mi
 import { ICKEditorContext } from 'core-app/shared/components/editor/components/ckeditor/ckeditor.types';
 import isNewResource from 'core-app/features/hal/helpers/is-new-resource';
 import { IWorkPackageTimestamp } from 'core-app/features/hal/resources/work-package-timestamp-resource';
+import get from 'lodash-es/get';
+import truncate from 'lodash-es/truncate';
+import values from 'lodash-es/values';
+import without from 'lodash-es/without';
 
 export interface WorkPackageResourceEmbedded {
   activities:CollectionResource;
@@ -187,7 +191,7 @@ export class WorkPackageBaseResource extends HalResource {
    */
   public subjectWithId(truncateSubject = 40):string {
     const id = isNewResource(this) ? '' : ` (#${this.id || ''})`;
-    const subject = truncateSubject <= 0 ? this.subject : _.truncate(this.subject, { length: truncateSubject });
+    const subject = truncateSubject <= 0 ? this.subject : truncate(this.subject, { length: truncateSubject });
 
     return `${subject}${id}`;
   }
@@ -231,7 +235,7 @@ export class WorkPackageBaseResource extends HalResource {
       resources[name] = linked ? linked.$update() : Promise.reject(undefined);
     });
 
-    const promise = Promise.all(_.values(resources));
+    const promise = Promise.all(values(resources));
     promise.then(() => {
       this.wpCacheService.touch(this.id!);
     });
@@ -246,7 +250,7 @@ export class WorkPackageBaseResource extends HalResource {
     this.attachments = new AttachmentCollectionResource(
       this.injector,
       // Attachments MAY be an array if we're building from a form
-      _.get(attachments, '$source', attachments),
+      get(attachments, '$source', attachments),
       false,
       this.halInitializer,
       'HalResource',
@@ -257,7 +261,7 @@ export class WorkPackageBaseResource extends HalResource {
    * Exclude the schema _link from the linkable Resources.
    */
   public $linkableKeys():string[] {
-    return _.without(super.$linkableKeys(), 'schema');
+    return without(super.$linkableKeys(), 'schema');
   }
 
   /**

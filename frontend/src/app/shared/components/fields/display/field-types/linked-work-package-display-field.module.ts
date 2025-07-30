@@ -31,6 +31,7 @@ import { KeepTabService } from 'core-app/features/work-packages/components/wp-si
 import { UiStateLinkBuilder } from 'core-app/features/work-packages/components/wp-fast-table/builders/ui-state-link-builder';
 import { WorkPackageDisplayField } from 'core-app/shared/components/fields/display/field-types/work-package-display-field.module';
 import { InjectField } from 'core-app/shared/helpers/angular/inject-field.decorator';
+import truncate from 'lodash-es/truncate';
 
 export class LinkedWorkPackageDisplayField extends WorkPackageDisplayField {
   public text = {
@@ -57,7 +58,7 @@ export class LinkedWorkPackageDisplayField extends WorkPackageDisplayField {
     );
 
     const title = document.createElement('span');
-    title.textContent = ` ${_.truncate(this.title, { length: 40 })}`;
+    title.textContent = ` ${truncate(this.title, { length: 40 })}`;
 
     element.innerHTML = '';
     element.appendChild(link);

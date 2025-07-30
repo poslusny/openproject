@@ -35,6 +35,9 @@ import { RenderInfo } from '../wp-timeline';
 import { TimelineCellRenderer } from './timeline-cell-renderer';
 import { TimelineMilestoneCellRenderer } from './timeline-milestone-cell-renderer';
 import { WorkPackageTimelineCell } from './wp-timeline-cell';
+import difference from 'lodash-es/difference';
+import each from 'lodash-es/each';
+import filter from 'lodash-es/filter';
 
 export class WorkPackageTimelineCellsRenderer {
   // Injections
@@ -59,7 +62,7 @@ export class WorkPackageTimelineCellsRenderer {
   }
 
   public getCellsFor(wpId:string):WorkPackageTimelineCell[] {
-    return _.filter(this.cells, (cell) => cell.workPackageId === wpId) || [];
+    return filter(this.cells, (cell) => cell.workPackageId === wpId) || [];
   }
 
   /**
@@ -70,11 +73,11 @@ export class WorkPackageTimelineCellsRenderer {
     this.synchronizeCells();
 
     // Update all cells
-    _.each(this.cells, (cell) => this.refreshSingleCell(cell));
+    each(this.cells, (cell) => this.refreshSingleCell(cell));
   }
 
   public refreshCellsFor(wpId:string) {
-    _.each(this.getCellsFor(wpId), (cell) => this.refreshSingleCell(cell));
+    each(this.getCellsFor(wpId), (cell) => this.refreshSingleCell(cell));
   }
 
   public refreshSingleCell(cell:WorkPackageTimelineCell, isDuplicatedCell?:boolean, withAlternativeLabels?:boolean) {
@@ -95,7 +98,7 @@ export class WorkPackageTimelineCellsRenderer {
     const currentlyActive:string[] = Object.keys(this.cells);
     const newCells:string[] = [];
 
-    _.each(this.wpTimeline.workPackageIdOrder, (renderedRow:RenderedWorkPackage) => {
+    each(this.wpTimeline.workPackageIdOrder, (renderedRow:RenderedWorkPackage) => {
       const wpId = renderedRow.workPackageId;
 
       // Ignore extra rows not tied to a work package
@@ -120,7 +123,7 @@ export class WorkPackageTimelineCellsRenderer {
       newCells.push(identifier);
     });
 
-    _.difference(currentlyActive, newCells).forEach((identifier:string) => {
+    difference(currentlyActive, newCells).forEach((identifier:string) => {
       this.cells[identifier].clear();
       delete this.cells[identifier];
     });

@@ -61,6 +61,7 @@ import {
   UrlParamsHelperService,
 } from 'core-app/features/work-packages/components/wp-query/url-params-helper';
 import { TurboRequestsService } from 'core-app/core/turbo/turbo-requests.service';
+import assign from 'lodash-es/assign';
 
 @Directive({
   selector: '[opSettingsContextMenu]',
@@ -143,7 +144,7 @@ export class OpSettingsMenuDirective extends OpContextMenuTrigger {
     };
 
     const position = super.positionArgs(evt);
-    _.assign(position, additionalPositionArgs);
+    assign(position, additionalPositionArgs);
 
     return position;
   }

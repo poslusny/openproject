@@ -12,6 +12,7 @@ import { BehaviorSubject, firstValueFrom } from 'rxjs';
 import { ApiV3Service } from 'core-app/core/apiv3/api-v3.service';
 import { ApiV3GridForm } from 'core-app/core/apiv3/endpoints/grids/apiv3-grid-form';
 import { map } from 'rxjs/operators';
+import range from 'lodash-es/range';
 
 @Injectable()
 export class GridAreaService {
@@ -68,7 +69,7 @@ export class GridAreaService {
 
   public cleanupUnusedAreas() {
     // array containing Numbers from this.numRows to 1
-    let unusedRows = _.range(this.numRows, 0, -1);
+    let unusedRows = range(this.numRows, 0, -1);
 
     this.widgetAreas.forEach((widget) => {
       unusedRows = unusedRows.filter((item) => item !== widget.startRow);
@@ -80,7 +81,7 @@ export class GridAreaService {
       }
     });
 
-    let unusedColumns = _.range(this.numColumns, 0, -1);
+    let unusedColumns = range(this.numColumns, 0, -1);
 
     this.widgetAreas.forEach((widget) => {
       unusedColumns = unusedColumns.filter((item) => item !== widget.startColumn);

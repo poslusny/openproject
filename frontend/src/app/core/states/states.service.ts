@@ -17,6 +17,7 @@ import { RoleResource } from 'core-app/features/hal/resources/role-resource';
 import { ProjectResource } from 'core-app/features/hal/resources/project-resource';
 import { PostResource } from 'core-app/features/hal/resources/post-resource';
 import { SchemaResource } from 'core-app/features/hal/resources/schema-resource';
+import camelCase from 'lodash-es/camelCase';
 
 export class States extends StatesGroup {
   name = 'MainStore';
@@ -74,7 +75,7 @@ export class States extends StatesGroup {
   }
 
   forResource<T extends HalResource = HalResource>(resource:T):InputState<T>|undefined {
-    const stateName = `${_.camelCase(resource._type)}s`;
+    const stateName = `${camelCase(resource._type)}s`;
     const state = this.forType<T>(stateName);
 
     return state && state.get(resource.id!);

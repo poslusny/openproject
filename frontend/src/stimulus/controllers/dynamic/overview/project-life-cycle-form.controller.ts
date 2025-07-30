@@ -31,10 +31,8 @@
 import { TimezoneService } from 'core-app/core/datetime/timezone.service';
 import { DeviceService } from 'core-app/core/browser/device.service';
 import FormPreviewController from '../../form-preview.controller';
-import {
-  debounce,
-  DebouncedFunc,
-} from 'lodash';
+import debounce, { DebouncedFunc } from 'lodash-es/debounce';
+import compact from 'lodash-es/compact';
 
 export default class ProjectLifeCycleFormController extends FormPreviewController {
   private timezoneService:TimezoneService;
@@ -90,7 +88,7 @@ export default class ProjectLifeCycleFormController extends FormPreviewControlle
   }
 
   private updateFlatpickrCalendar() {
-    const dates:Date[] = _.compact(this.dateInputFields.map((field) => this.toDate(field.value)));
+    const dates:Date[] = compact(this.dateInputFields.map((field) => this.toDate(field.value)));
     const ignoreNonWorkingDays = false;
     const mode = 'range';
 

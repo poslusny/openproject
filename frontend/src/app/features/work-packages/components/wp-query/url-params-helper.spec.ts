@@ -29,6 +29,7 @@
 /* jshint expr: true */
 
 import { UrlParamsHelperService } from 'core-app/features/work-packages/components/wp-query/url-params-helper';
+import isEqual from 'lodash-es/isEqual';
 
 describe('UrlParamsHelper', () => {
   const paginationStub = {
@@ -156,7 +157,7 @@ describe('UrlParamsHelper', () => {
         pageSize: 100,
       };
 
-      expect(_.isEqual(decodedQueryParams, expected)).toBeTruthy();
+      expect(isEqual(decodedQueryParams, expected)).toBeTruthy();
     });
   });
 
@@ -248,7 +249,7 @@ describe('UrlParamsHelper', () => {
         timestamps: 'PT0S',
       };
 
-      expect(_.isEqual(v3Params, expected)).toBeTruthy();
+      expect(isEqual(v3Params, expected)).toBeTruthy();
     });
 
     it('decodes custom options filters', () => {
@@ -308,7 +309,7 @@ describe('UrlParamsHelper', () => {
         timestamps: 'PT0S',
       };
 
-      expect(_.isEqual(v3Params, expected)).toBeTruthy();
+      expect(isEqual(v3Params, expected)).toBeTruthy();
     });
   });
 });

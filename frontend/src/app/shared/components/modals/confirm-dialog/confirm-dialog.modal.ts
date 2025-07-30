@@ -38,6 +38,8 @@ import { OpModalComponent } from 'core-app/shared/components/modal/modal.compone
 import { OpModalLocalsToken } from 'core-app/shared/components/modal/modal.service';
 import { OpModalLocalsMap } from 'core-app/shared/components/modal/modal.types';
 import { I18nService } from 'core-app/core/i18n/i18n.service';
+import defaultTo from 'lodash-es/defaultTo';
+import defaults from 'lodash-es/defaults';
 
 export interface ConfirmDialogOptions {
   text:{
@@ -111,17 +113,17 @@ export class ConfirmDialogModalComponent extends OpModalComponent {
     super(locals, cdRef, elementRef);
     this.options = (locals.options || {}) as ConfirmDialogOptions;
 
-    this.dangerHighlighting = _.defaultTo(this.options.dangerHighlighting, false);
-    this.showListData = _.defaultTo(this.options.showListData, false);
-    this.refreshOnCancel = _.defaultTo(this.options.refreshOnCancel, false);
-    this.listTitle = _.defaultTo(this.options.listTitle, '');
-    this.warningText = _.defaultTo(this.options.warningText, '');
-    this.passedData = _.defaultTo(this.options.passedData, []);
-    this.showClose = _.defaultTo(this.options.showClose, true);
-    this.divideContent = _.defaultTo(this.options.divideContent, false);
+    this.dangerHighlighting = defaultTo(this.options.dangerHighlighting, false);
+    this.showListData = defaultTo(this.options.showListData, false);
+    this.refreshOnCancel = defaultTo(this.options.refreshOnCancel, false);
+    this.listTitle = defaultTo(this.options.listTitle, '');
+    this.warningText = defaultTo(this.options.warningText, '');
+    this.passedData = defaultTo(this.options.passedData, []);
+    this.showClose = defaultTo(this.options.showClose, true);
+    this.divideContent = defaultTo(this.options.divideContent, false);
     // override default texts and icons if any
-    this.text = _.defaults(this.options.text, this.text);
-    this.icon = _.defaults(this.options.icon, this.icon);
+    this.text = defaults(this.options.text, this.text);
+    this.icon = defaults(this.options.icon, this.icon);
   }
 
   public confirmAndClose(evt:Event):void {

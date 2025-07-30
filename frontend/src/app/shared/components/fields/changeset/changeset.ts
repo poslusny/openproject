@@ -1,3 +1,5 @@
+import keys from 'lodash-es/keys';
+
 export type ChangeItem = {
   from:unknown;
   to:unknown;
@@ -21,7 +23,7 @@ export class Changeset {
    * @returns {string[]}
    */
   public get changed():string[] {
-    return _.keys(this.changes);
+    return keys(this.changes);
   }
 
   /**

@@ -27,13 +27,14 @@
 //++
 
 import { HalResource } from 'core-app/features/hal/resources/hal-resource';
+import isObject from 'lodash-es/isObject';
 
 export namespace OpenprojectHalModuleHelpers {
   export function lazy(obj:HalResource,
     property:string,
     getter:{ ():any },
     setter?:{ (value:any):void }):void {
-    if (_.isObject(obj)) {
+    if (isObject(obj)) {
       let done = false;
       let value:any;
       const config:any = {

@@ -10,6 +10,7 @@ import {
 } from 'core-app/features/work-packages/components/wp-fast-table/helpers/wp-table-hierarchy-helpers';
 import { WorkPackageViewHierarchiesService } from 'core-app/features/work-packages/routing/wp-view-base/view-services/wp-view-hierarchy.service';
 import { InjectField } from 'core-app/shared/helpers/angular/inject-field.decorator';
+import isArray from 'lodash-es/isArray';
 
 export const indicatorCollapsedClass = '-hierarchy-collapsed';
 export const hierarchyCellClassName = 'wp-table--hierarchy-span';
@@ -85,7 +86,7 @@ export class SingleHierarchyRowBuilder extends SingleRowBuilder {
     }
 
     const ancestors = workPackage.getAncestors();
-    if (_.isArray(ancestors)) {
+    if (isArray(ancestors)) {
       ancestors.forEach((ancestor) => {
         rowClasses.push(hierarchyGroupClass(ancestor.id!));
 

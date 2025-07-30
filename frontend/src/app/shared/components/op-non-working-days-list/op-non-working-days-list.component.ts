@@ -29,7 +29,8 @@ import { ConfirmDialogOptions } from '../modals/confirm-dialog/confirm-dialog.mo
 import { ToastService } from 'core-app/shared/components/toaster/toast.service';
 import moment from 'moment-timezone';
 import allLocales from '@fullcalendar/core/locales-all';
-
+import difference from 'lodash-es/difference';
+import uniqBy from 'lodash-es/uniqBy';
 
 export interface INonWorkingDay {
   id:string|null;
@@ -201,8 +202,7 @@ export class OpNonWorkingDaysListComponent implements OnInit, AfterViewInit {
     this.dayService.requireNonWorkingYear$(fetchInfo.start)
       .subscribe(
         (days:IDay[]) => {
-          this.nonWorkingDays = _
-            .uniqBy([...this.nonWorkingDays, ...days], (el) => el.date)
+          this.nonWorkingDays = uniqBy([...this.nonWorkingDays, ...days], (el) => el.date)
             .filter((el:INonWorkingDay) => !this.nonWorkingDays.find((existing) => existing.id === el.id && existing._destroy));
           this.originalNonWorkingDays = [...this.nonWorkingDays];
           const events = this.mapToCalendarEvents(this.nonWorkingDays);
@@ -271,7 +271,7 @@ export class OpNonWorkingDaysListComponent implements OnInit, AfterViewInit {
   }
 
   private workingDaysModified():boolean {
-    return _.difference(this.workingDays, this.originalWorkingDays).length > 0
-      || _.difference(this.originalWorkingDays, this.workingDays).length > 0;
+    return difference(this.workingDays, this.originalWorkingDays).length > 0
+      || difference(this.originalWorkingDays, this.workingDays).length > 0;
   }
 }

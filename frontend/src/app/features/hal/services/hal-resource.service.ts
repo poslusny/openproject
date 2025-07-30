@@ -47,6 +47,7 @@ import { HalResource, HalResourceClass } from 'core-app/features/hal/resources/h
 import { initializeHalProperties } from '../helpers/hal-resource-builder';
 import { HalError } from 'core-app/features/hal/services/hal-error';
 import { getPaginatedCollections } from 'core-app/core/apiv3/helpers/get-paginated-results';
+import isNil from 'lodash-es/isNil';
 
 export interface HalResourceFactoryConfigInterface {
   cls?:any;
@@ -219,7 +220,7 @@ export class HalResourceService {
    * @returns {HalResource}
    */
   public createHalResource<T extends HalResource = HalResource>(source:any, loaded = true):T {
-    if (_.isNil(source)) {
+    if (isNil(source)) {
       source = HalResource.getEmptyResource();
     }
 

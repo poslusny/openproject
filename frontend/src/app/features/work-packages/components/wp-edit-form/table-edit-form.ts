@@ -49,6 +49,7 @@ import { InjectField } from 'core-app/shared/helpers/angular/inject-field.decora
 import { ApiV3Service } from 'core-app/core/apiv3/api-v3.service';
 import { editFieldContainerClass } from 'core-app/shared/components/fields/display/display-field-renderer';
 import { WorkPackagesListService } from 'core-app/features/work-packages/components/wp-list/wp-list.service';
+import each from 'lodash-es/each';
 
 export const activeFieldContainerClassName = 'inline-edit--active-field';
 export const activeFieldClassName = 'inline-edit--field';
@@ -87,7 +88,7 @@ export class TableEditForm extends EditForm<WorkPackageResource> {
   }
 
   destroy() {
-    _.each(this.activeFields, (field) => {
+    each(this.activeFields, (field) => {
       field.deactivate(false);
     });
     this.resourceSubscription.unsubscribe();

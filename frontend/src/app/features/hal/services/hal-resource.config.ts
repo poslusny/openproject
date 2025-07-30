@@ -66,6 +66,7 @@ import { QueryFilterResource } from 'core-app/features/hal/resources/query-filte
 import { SchemaResource } from 'core-app/features/hal/resources/schema-resource';
 import { MeetingResource } from 'core-app/features/hal/resources/meeting-resource';
 import { ActivityCommentResource } from '../resources/activity-comment-resource';
+import each from 'lodash-es/each';
 
 const halResourceDefaultConfig:{ [typeName:string]:HalResourceFactoryConfigInterface } = {
   WorkPackage: {
@@ -216,6 +217,6 @@ const halResourceDefaultConfig:{ [typeName:string]:HalResourceFactoryConfigInter
 
 export function initializeHalResourceConfig(halResourceService:HalResourceService) {
   return () => {
-    _.each(halResourceDefaultConfig, (value, key) => halResourceService.registerResource(key, value));
+    each(halResourceDefaultConfig, (value, key) => halResourceService.registerResource(key, value));
   };
 }

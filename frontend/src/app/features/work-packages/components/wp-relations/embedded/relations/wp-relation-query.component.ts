@@ -48,6 +48,7 @@ import { HalEventsService } from 'core-app/features/hal/services/hal-events.serv
 import idFromLink from 'core-app/features/hal/helpers/id-from-link';
 import { WorkPackageNotificationService } from 'core-app/features/work-packages/services/notifications/work-package-notification.service';
 import { GroupDescriptor } from 'core-app/features/work-packages/components/wp-single-view/wp-single-view.component';
+import isEmpty from 'lodash-es/isEmpty';
 
 @Component({
   selector: 'wp-relation-query',
@@ -114,7 +115,7 @@ export class WorkPackageRelationQueryComponent extends WorkPackageRelationQueryB
     // When relations have changed, refresh this table
     this.wpRelations.observe(this.workPackage.id!)
       .pipe(
-        filter((val) => !_.isEmpty(val)),
+        filter((val) => !isEmpty(val)),
         this.untilDestroyed(),
       )
       .subscribe(() => this.refreshTable());

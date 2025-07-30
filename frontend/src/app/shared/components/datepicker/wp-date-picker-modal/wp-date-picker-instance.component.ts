@@ -49,7 +49,10 @@ import { PathHelperService } from 'core-app/core/path-helper/path-helper.service
 import { populateInputsFromDataset } from 'core-app/shared/components/dataset-inputs';
 import { fromEvent } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import _ from 'lodash';
+import compact from 'lodash-es/compact';
+import isEqual from 'lodash-es/isEqual';
+import isNil from 'lodash-es/isNil';
+import omitBy from 'lodash-es/omitBy';
 
 export type DateMode = 'single'|'range';
 
@@ -168,7 +171,7 @@ export class OpWpDatePickerInstanceComponent extends UntilDestroyedMixin impleme
   private isDifferentFromDatePickerSelectedDates(isoDates:string[]):boolean {
     const datePickerSelectedDates = this.datePickerInstance.datepickerInstance.selectedDates;
     const isoDatePickerSelectedDates = datePickerSelectedDates.map((date) => this.timezoneService.formattedISODate(date));
-    return !_.isEqual(isoDates, isoDatePickerSelectedDates);
+    return !isEqual(isoDates, isoDatePickerSelectedDates);
   }
 
   // set dates on flatpickr, trying to avoid jumping to a different month when possible
@@ -211,7 +214,7 @@ export class OpWpDatePickerInstanceComponent extends UntilDestroyedMixin impleme
   }
 
   private currentDates():string[] {
-    const compactedDates = _.compact([this.startDateValue, this.dueDateValue]);
+    const compactedDates = compact([this.startDateValue, this.dueDateValue]);
     return this.timezoneService.utcDatesToISODateStrings(compactedDates);
   }
 
@@ -251,7 +254,7 @@ export class OpWpDatePickerInstanceComponent extends UntilDestroyedMixin impleme
       minDate: this.minDate,
     } as flatpickr.Options.Options;
 
-    return _.omitBy(options, (v) => _.isNil(v));
+    return omitBy(options, (v) => isNil(v));
   }
 
   private onFlatpickrChange(dates:Date[], _datestr:string, _instance:flatpickr.Instance) {

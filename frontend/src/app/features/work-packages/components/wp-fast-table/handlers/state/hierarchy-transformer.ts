@@ -15,6 +15,7 @@ import { indicatorCollapsedClass } from 'core-app/features/work-packages/compone
 import { tableRowClassName } from 'core-app/features/work-packages/components/wp-fast-table/builders/rows/single-row-builder';
 import { WorkPackageViewHierarchies } from 'core-app/features/work-packages/routing/wp-view-base/view-services/wp-table-hierarchies';
 import { InjectField } from 'core-app/shared/helpers/angular/inject-field.decorator';
+import each from 'lodash-es/each';
 
 export class HierarchyTransformer {
   @InjectField() public wpTableHierarchies:WorkPackageViewHierarchiesService;
@@ -68,7 +69,7 @@ export class HierarchyTransformer {
     const collapsed:{ [index:number]:boolean } = {};
 
     // Hide all collapsed hierarchies
-    _.each(state.collapsed, (isCollapsed:boolean, wpId:string) => {
+    each(state.collapsed, (isCollapsed:boolean, wpId:string) => {
       // Toggle the root style
       jQuery(`.${hierarchyRootClass(wpId)} .wp-table--hierarchy-indicator`).toggleClass(indicatorCollapsedClass, isCollapsed);
 

@@ -43,6 +43,10 @@ import { RelationResource } from 'core-app/features/hal/resources/relation-resou
 import { HalResourceService } from 'core-app/features/hal/services/hal-resource.service';
 import { WorkPackageViewBaseService } from './wp-view-base.service';
 import { WorkPackageViewColumnsService } from './wp-view-columns.service';
+import each from 'lodash-es/each';
+import filter from 'lodash-es/filter';
+import get from 'lodash-es/get';
+import isNil from 'lodash-es/isNil';
 
 export type RelationColumnType = 'toType'|'ofType'|'children';
 
@@ -81,7 +85,7 @@ workPackage:WorkPackageResource,
     }
 
     // Only if any relations exist for this work package
-    if (_.isNil(relations)) {
+    if (isNil(relations)) {
       return;
     }
 
@@ -95,7 +99,7 @@ workPackage:WorkPackageResource,
     const type = this.relationColumnType(column);
 
     if (type !== null) {
-      _.each(
+      each(
 this.relationsForColumn(workPackage, relations, column),
         (relation) => eachCallback(relation, column, type),
 );
@@ -111,7 +115,7 @@ this.relationsForColumn(workPackage, relations, column),
    * @return The filtered relations
    */
   public relationsForColumn(workPackage:WorkPackageResource, relations:RelationsStateValue|undefined, column:QueryColumn) {
-    if (_.isNil(relations)) {
+    if (isNil(relations)) {
       return [];
     }
 
@@ -120,11 +124,11 @@ this.relationsForColumn(workPackage, relations, column),
     if (type === 'toType') {
       const typeHref = (column as TypeRelationQueryColumn).type.href;
 
-      return _.filter(relations, (relation:RelationResource) => {
+      return filter(relations, (relation:RelationResource) => {
         const denormalized = relation.denormalized(workPackage);
         const target = this.apiV3Service.work_packages.cache.state(denormalized.targetId).value;
 
-        return _.get(target, 'type.href') === typeHref;
+        return get(target, 'type.href') === typeHref;
       });
     }
 
@@ -132,7 +136,7 @@ this.relationsForColumn(workPackage, relations, column),
     if (type === 'ofType') {
       const { relationType } = column as RelationQueryColumn;
 
-      return _.filter(relations, (relation:RelationResource) => relation.denormalized(workPackage).relationType === relationType);
+      return filter(relations, (relation:RelationResource) => relation.denormalized(workPackage).relationType === relationType);
     }
 
     return [];

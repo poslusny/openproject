@@ -115,6 +115,7 @@ import {
 } from 'core-app/features/team-planner/team-planner/planner/background-events';
 import moment from 'moment-timezone';
 import allLocales from '@fullcalendar/core/locales-all';
+import merge from 'lodash-es/merge';
 
 export type TeamPlannerViewOptionKey = 'resourceTimelineWorkWeek'|'resourceTimelineWeek'|'resourceTimelineTwoWeeks'|'resourceTimelineFourWeeks'|'resourceTimelineEightWeeks';
 export type TeamPlannerViewOptions = { [K in TeamPlannerViewOptionKey]:RawOptionsFromRefiners<Required<ViewOptionRefiners>> };
@@ -497,7 +498,7 @@ export class TeamPlannerComponent extends UntilDestroyedMixin implements OnInit,
               center: 'title',
               right: 'prev,next today',
             },
-            views: _.merge(
+            views: merge(
               {},
               this.viewOptions,
               {

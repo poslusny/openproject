@@ -45,6 +45,7 @@ import {
 } from './timeline-cell-renderer';
 import { RenderInfo } from '../wp-timeline';
 import { WorkPackageTimelineTableController } from '../container/wp-timeline-container.directive';
+import map from 'lodash-es/map';
 
 export function registerWorkPackageMouseHandler(this:void,
   injector:Injector,
@@ -268,7 +269,7 @@ export function registerWorkPackageMouseHandler(this:void,
       .save<WorkPackageResource, WorkPackageChangeset>(change)
       .then((result) => {
         notificationService.showSave(result.resource);
-        const ids = _.map(querySpace.tableRendered.value, (row) => row.workPackageId);
+        const ids = map(querySpace.tableRendered.value, (row) => row.workPackageId);
         return apiv3Service
           .work_packages
           .filterUpdatedSince(ids, updatedAt)

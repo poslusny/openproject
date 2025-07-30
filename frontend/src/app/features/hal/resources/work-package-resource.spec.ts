@@ -50,6 +50,7 @@ import { WeekdayService } from 'core-app/core/days/weekday.service';
 import { of } from 'rxjs';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import noop from 'lodash-es/noop';
 
 describe('WorkPackage', () => {
   let halResourceService:HalResourceService;
@@ -133,7 +134,7 @@ describe('WorkPackage', () => {
     });
 
     it('when the work package has an `addAttachment` link', () => {
-      workPackage.$links.addAttachment = <any> _.noop;
+      workPackage.$links.addAttachment = <any> noop;
       expect(workPackage.canAddAttachments).toEqual(true);
     });
   });

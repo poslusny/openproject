@@ -32,6 +32,7 @@ import { InputState } from '@openproject/reactivestates';
 import { WorkPackageResource } from 'core-app/features/hal/resources/work-package-resource';
 import Formattable = api.v3.Formattable;
 import { MeetingResource } from 'core-app/features/hal/resources/meeting-resource';
+import without from 'lodash-es/without';
 
 export class TimeEntryResource extends HalResource {
   project:ProjectResource;
@@ -54,7 +55,7 @@ export class TimeEntryResource extends HalResource {
    * Exclude the schema _link from the linkable Resources.
    */
   public $linkableKeys():string[] {
-    return _.without(super.$linkableKeys(), 'schema');
+    return without(super.$linkableKeys(), 'schema');
   }
 }
 

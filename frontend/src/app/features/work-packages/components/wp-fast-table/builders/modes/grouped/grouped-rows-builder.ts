@@ -15,6 +15,7 @@ import { RowsBuilder } from '../rows-builder';
 import { GroupHeaderBuilder } from './group-header-builder';
 import { GroupedRenderPass } from './grouped-render-pass';
 import { groupedRowClassName, groupIdentifier } from './grouped-rows-helpers';
+import isEmpty from 'lodash-es/isEmpty';
 
 export class GroupedRowsBuilder extends RowsBuilder {
   // Injections
@@ -34,7 +35,7 @@ export class GroupedRowsBuilder extends RowsBuilder {
    * The hierarchy builder is only applicable if the hierarchy mode is active
    */
   public isApplicable(table:WorkPackageTable) {
-    return !_.isEmpty(this.groups);
+    return !isEmpty(this.groups);
   }
 
   /**

@@ -16,6 +16,9 @@ import { RowsBuilder } from './builders/modes/rows-builder';
 import { PrimaryRenderPass } from './builders/primary-render-pass';
 import { WorkPackageTableEditingContext } from './wp-table-editing';
 import { WorkPackageTableRow } from './wp-table.interfaces';
+import each from 'lodash-es/each';
+import find from 'lodash-es/find';
+import findIndex from 'lodash-es/findIndex';
 
 export class WorkPackageTable {
   @InjectField() querySpace:IsolatedQuerySpace;
@@ -67,13 +70,13 @@ export class WorkPackageTable {
   }
 
   public findRenderedRow(classIdentifier:string):[number, RenderedWorkPackage] {
-    const index = _.findIndex(this.renderedRows, (row) => row.classIdentifier === classIdentifier);
+    const index = findIndex(this.renderedRows, (row) => row.classIdentifier === classIdentifier);
 
     return [index, this.renderedRows[index]];
   }
 
   public get rowBuilder():RowsBuilder {
-    return _.find(this.builders, (builder:RowsBuilder) => builder.isApplicable(this))!;
+    return find(this.builders, (builder:RowsBuilder) => builder.isApplicable(this))!;
   }
 
   /**
@@ -142,7 +145,7 @@ export class WorkPackageTable {
       return;
     }
 
-    _.each(pass.renderedOrder, (row) => {
+    each(pass.renderedOrder, (row) => {
       if (row.workPackage && row.workPackage.id === workPackage.id!) {
         debugLog(`Refreshing rendered row ${row.classIdentifier}`);
         row.workPackage = workPackage;

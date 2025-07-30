@@ -30,6 +30,7 @@ import { DatePicker } from 'core-app/shared/components/datepicker/datepicker';
 import { DateOption } from 'flatpickr/dist/types/options';
 import { DayElement } from 'flatpickr/dist/types/instance';
 import moment from 'moment-timezone';
+import castArray from 'lodash-es/castArray';
 
 /**
  * Map the date to the internal format,
@@ -89,7 +90,7 @@ export function comparableDate(date?:DateOption):number|null {
 export function setDates(dates:DateOption|DateOption[], datePicker:DatePicker, enforceDate?:Date):void {
   const { currentMonth, currentYear, selectedDates } = datePicker.datepickerInstance;
 
-  const [newStart, newEnd] = _.castArray(dates);
+  const [newStart, newEnd] = castArray(dates);
   const [selectedStart, selectedEnd] = selectedDates;
 
   // In case the new times match the current times, do not try to update

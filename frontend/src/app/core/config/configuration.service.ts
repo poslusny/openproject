@@ -31,6 +31,7 @@ import moment from 'moment';
 
 import { ConfigurationResource } from 'core-app/features/hal/resources/configuration-resource';
 import { ApiV3Service } from 'core-app/core/apiv3/api-v3.service';
+import get from 'lodash-es/get';
 
 @Injectable({ providedIn: 'root' })
 export class ConfigurationService {
@@ -80,7 +81,7 @@ export class ConfigurationService {
   }
 
   public get prepareAttachmentURL():string {
-    return _.get(this.configuration, ['prepareAttachment', 'href']) as string;
+    return get(this.configuration, ['prepareAttachment', 'href']) as string;
   }
 
   public get maximumAttachmentFileSize():number {
@@ -170,10 +171,10 @@ export class ConfigurationService {
   }
 
   private userPreference<T>(pref:string):T {
-    return _.get(this.configuration, ['userPreferences', pref]) as T;
+    return get(this.configuration, ['userPreferences', pref]) as T;
   }
 
   private systemPreference<T>(pref:string):T {
-    return _.get(this.configuration, pref) as T;
+    return get(this.configuration, pref) as T;
   }
 }

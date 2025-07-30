@@ -38,6 +38,7 @@ import {
 } from 'core-app/shared/components/fields/display/field-types/hierarchy-query-link-helper.service';
 import { ExcludedIconHelperService } from 'core-app/shared/components/fields/display/field-types/excluded-icon-helper.service';
 import { WorkPackageResource } from 'core-app/features/hal/resources/work-package-resource';
+import upperFirst from 'lodash-es/upperFirst';
 
 export class CompoundProgressDisplayField extends DisplayField {
   @InjectField() PathHelper:PathHelperService;
@@ -112,7 +113,7 @@ export class CompoundProgressDisplayField extends DisplayField {
   }
 
   private get derivedPropertyName():string {
-    return `derived${_.upperFirst(this.name)}`;
+    return `derived${upperFirst(this.name)}`;
   }
 
   private get derivedValue():number|null {

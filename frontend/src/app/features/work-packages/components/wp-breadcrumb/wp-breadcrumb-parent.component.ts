@@ -33,6 +33,7 @@ import { WorkPackageResource } from 'core-app/features/hal/resources/work-packag
 import { WorkPackageRelationsHierarchyService } from 'core-app/features/work-packages/components/wp-relations/wp-relations-hierarchy/wp-relations-hierarchy.service';
 import { I18nService } from 'core-app/core/i18n/i18n.service';
 import { WorkPackageNotificationService } from 'core-app/features/work-packages/services/notifications/work-package-notification.service';
+import get from 'lodash-es/get';
 
 @Component({
   templateUrl: './wp-breadcrumb-parent.html',
@@ -85,7 +86,7 @@ export class WorkPackageBreadcrumbParentComponent {
   public updateParent(newParent:WorkPackageResource|null) {
     this.close();
     const newParentId = newParent ? newParent.id : null;
-    if (_.get(this.parent, 'id', null) === newParentId) {
+    if (get(this.parent, 'id', null) === newParentId) {
       return;
     }
 

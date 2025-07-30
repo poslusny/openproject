@@ -45,6 +45,8 @@ import { HalResourceNotificationService } from 'core-app/features/hal/services/h
 import { HalResourceSortingService } from 'core-app/features/hal/services/hal-resource-sorting.service';
 import { EditFieldComponent } from '../../edit-field.component';
 import { HalLink } from 'core-app/features/hal/hal-link/hal-link';
+import find from 'lodash-es/find';
+import some from 'lodash-es/some';
 
 export interface ValueOption {
   name:string;
@@ -87,11 +89,11 @@ export class SelectEditFieldComponent extends EditFieldComponent implements OnIn
 
   public get selectedOption() {
     const href = this.value ? this.value.href : null;
-    return _.find(this.availableOptions, (o) => o.href === href)!;
+    return find(this.availableOptions, (o) => o.href === href)!;
   }
 
   public set selectedOption(val:ValueOption|HalResource) {
-    const option = _.find(this.availableOptions, (o) => o.href === val.href);
+    const option = find(this.availableOptions, (o) => o.href === val.href);
 
     // Special case 'null' value, which angular
     // only understands in ng-options as an empty string.
@@ -218,7 +220,7 @@ export class SelectEditFieldComponent extends EditFieldComponent implements OnIn
 
   public get currentValueInvalid():boolean {
     return !!(
-      (this.value && !_.some(this.availableOptions, (option:HalResource) => (option.href === this.value.href)))
+      (this.value && !some(this.availableOptions, (option:HalResource) => (option.href === this.value.href)))
       || (!this.value && this.schema.required)
     );
   }
@@ -300,7 +302,7 @@ export class SelectEditFieldComponent extends EditFieldComponent implements OnIn
   }
 
   private getEmptyOption():undefined {
-    return _.find(this.availableOptions, (el) => el.name === this.text.placeholder);
+    return find(this.availableOptions, (el) => el.name === this.text.placeholder);
   }
 
   private _syncUrlParamsOnChangeIfNeeded(fieldName:string, editMode:boolean) {

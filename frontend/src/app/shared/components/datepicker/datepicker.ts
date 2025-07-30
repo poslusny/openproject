@@ -39,6 +39,7 @@ import Options = flatpickr.Options;
 import FlatpickrOptions = flatpickr.Options.Options;
 import DateOption = Options.DateOption;
 import { DayResourceService } from 'core-app/core/state/days/day.service';
+import extend from 'lodash-es/extend';
 
 export class DatePicker {
   private datepickerFormat = 'Y-m-d';
@@ -76,7 +77,7 @@ export class DatePicker {
         }
       });
 
-    const mergedOptions = _.extend({}, this.defaultOptions, options);
+    const mergedOptions = extend({}, this.defaultOptions, options);
 
     let datePickerInstances:Instance|Instance[];
     if (this.datepickerTarget) {

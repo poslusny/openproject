@@ -24,6 +24,7 @@ import { WpDestroyModalComponent } from 'core-app/shared/components/modals/wp-de
 import isNewResource from 'core-app/features/hal/helpers/is-new-resource';
 import { PathHelperService } from 'core-app/core/path-helper/path-helper.service';
 import { TurboRequestsService } from 'core-app/core/turbo/turbo-requests.service';
+import assign from 'lodash-es/assign';
 
 export class WorkPackageViewContextMenu extends OpContextMenuHandler {
   @InjectField() protected states!:States;
@@ -82,7 +83,7 @@ export class WorkPackageViewContextMenu extends OpContextMenuHandler {
 
   public positionArgs(evt:JQuery.TriggeredEvent) {
     const position = super.positionArgs(evt);
-    _.assign(position, this.additionalPositionArgs);
+    assign(position, this.additionalPositionArgs);
 
     return position;
   }

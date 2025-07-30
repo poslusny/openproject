@@ -28,6 +28,7 @@
 
 import { HalResource } from 'core-app/features/hal/resources/hal-resource';
 import { ICKEditorContext } from 'core-app/shared/components/editor/components/ckeditor/ckeditor.types';
+import without from 'lodash-es/without';
 
 export class ProjectResource extends HalResource {
   public get state() {
@@ -46,6 +47,6 @@ export class ProjectResource extends HalResource {
    * Exclude the schema _link from the linkable Resources.
    */
   public $linkableKeys():string[] {
-    return _.without(super.$linkableKeys(), 'schema');
+    return without(super.$linkableKeys(), 'schema');
   }
 }

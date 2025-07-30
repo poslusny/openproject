@@ -38,6 +38,8 @@ import { InjectField } from 'core-app/shared/helpers/angular/inject-field.decora
 import { SchemaCacheService } from 'core-app/core/schemas/schema-cache.service';
 import { ErrorResource } from 'core-app/features/hal/resources/error-resource';
 import { HalError } from 'core-app/features/hal/services/hal-error';
+import get from 'lodash-es/get';
+import has from 'lodash-es/has';
 
 @Injectable()
 export class HalResourceNotificationService {
@@ -131,7 +133,7 @@ export class HalResourceNotificationService {
     }
 
     // Some older response may have a data attribute
-    if (_.get(response, 'data._type') === 'Error') {
+    if (get(response, 'data._type') === 'Error') {
       errorBody = (response as any).data;
     }
 
@@ -165,7 +167,7 @@ export class HalResourceNotificationService {
   public showGeneralError(message?:unknown) {
     let error = this.I18n.t('js.error.internal');
 
-    if (typeof (message) === 'string' || _.has(message, 'toString')) {
+    if (typeof (message) === 'string' || has(message, 'toString')) {
       error += ` ${(message as any).toString()}`;
     }
 

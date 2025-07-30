@@ -34,6 +34,7 @@ import {
 import { OPContextMenuService } from 'core-app/shared/components/op-context-menu/op-context-menu.service';
 import { OpModalService } from 'core-app/shared/components/modal/modal.service';
 import { OpContextMenuItem } from 'core-app/shared/components/op-context-menu/op-context-menu.types';
+import assign from 'lodash-es/assign';
 
 @Component({
   selector: 'icon-triggered-context-menu',
@@ -72,7 +73,7 @@ export class IconTriggeredContextMenuComponent extends OpContextMenuTrigger {
     };
 
     const position = super.positionArgs(evt);
-    _.assign(position, additionalPositionArgs);
+    assign(position, additionalPositionArgs);
 
     return position;
   }

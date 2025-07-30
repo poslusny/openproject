@@ -11,6 +11,8 @@ import {
   Injector,
 } from '@angular/core';
 import { TabDefinition } from 'core-app/shared/components/tabs/tab.interface';
+import each from 'lodash-es/each';
+import values from 'lodash-es/values';
 
 export interface TabInterface extends TabDefinition {
   componentClass:{ new(...args:any[]):TabComponent };
@@ -43,7 +45,7 @@ export class TabPortalOutlet {
   }
 
   public get activeComponents():TabComponent[] {
-    const tabs = _.values(this.activeTabs);
+    const tabs = values(this.activeTabs);
     return tabs.map((tab:ActiveTabInterface) => tab.componentRef.instance);
   }
 
@@ -79,7 +81,7 @@ export class TabPortalOutlet {
    */
   dispose():void {
     // Dispose all active tabs
-    _.each(this.activeTabs, (active) => active.dispose());
+    each(this.activeTabs, (active) => active.dispose());
 
     // Remove outlet element
     if (this.outletElement.parentNode != null) {

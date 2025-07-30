@@ -43,6 +43,7 @@ import {
   startWith,
   take,
 } from 'rxjs/operators';
+import each from 'lodash-es/each';
 
 export interface HasId {
   id:string|null;
@@ -141,7 +142,7 @@ export class StateCacheService<T> {
         auditTime(250),
         map(() => {
           const mapped:T[] = [];
-          _.each(this.multiState.getValueOr({}), (state:State<T>) => {
+          each(this.multiState.getValueOr({}), (state:State<T>) => {
             if (state.value) {
               mapped.push(state.value);
             }

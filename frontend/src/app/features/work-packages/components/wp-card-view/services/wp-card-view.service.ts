@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { WorkPackageResource } from 'core-app/features/hal/resources/work-package-resource';
 import { IsolatedQuerySpace } from 'core-app/features/work-packages/directives/query-space/isolated-query-space';
+import findIndex from 'lodash-es/findIndex';
 
 @Injectable()
 export class WorkPackageCardViewService {
@@ -17,7 +18,7 @@ export class WorkPackageCardViewService {
   }
 
   public findRenderedCard(classIdentifier:string):number {
-    const index = _.findIndex(this.renderedCards, (card) => card.classIdentifier === classIdentifier);
+    const index = findIndex(this.renderedCards, (card) => card.classIdentifier === classIdentifier);
 
     return index;
   }

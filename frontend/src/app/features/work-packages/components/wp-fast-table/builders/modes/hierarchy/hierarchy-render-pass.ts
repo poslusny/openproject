@@ -14,6 +14,9 @@ import { WorkPackageViewHierarchiesService } from 'core-app/features/work-packag
 import { InjectField } from 'core-app/shared/helpers/angular/inject-field.decorator';
 import { ApiV3Service } from 'core-app/core/apiv3/api-v3.service';
 import { additionalHierarchyRowClassName, SingleHierarchyRowBuilder } from './single-hierarchy-row-builder';
+import each from 'lodash-es/each';
+import last from 'lodash-es/last';
+import uniqBy from 'lodash-es/uniqBy';
 
 export class HierarchyRenderPass extends PrimaryRenderPass {
   @InjectField() querySpace:IsolatedQuerySpace;
@@ -51,7 +54,7 @@ export class HierarchyRenderPass extends PrimaryRenderPass {
 
     this.hierarchies = this.wpTableHierarchies.current;
 
-    _.each(this.workPackageTable.originalRowIndex, (row) => {
+    each(this.workPackageTable.originalRowIndex, (row) => {
       row.object.getAncestors().forEach((ancestor:WorkPackageResource) => {
         this.parentsWithVisibleChildren[ancestor.id!] = true;
       });
@@ -132,7 +135,7 @@ export class HierarchyRenderPass extends PrimaryRenderPass {
         // Append all new elements
         elements = elements.concat(newElements);
         // Remove duplicates (Regression #29652)
-        this.deferred[parent.id!] = _.uniqBy(elements, (el) => el.id!);
+        this.deferred[parent.id!] = uniqBy(elements, (el) => el.id!);
         return true;
       }
       // Otherwise, continue the chain upwards
@@ -208,7 +211,7 @@ export class HierarchyRenderPass extends PrimaryRenderPass {
     });
 
     // Insert this row to parent
-    const parent = _.last(ancestors);
+    const parent = last(ancestors);
     this.insertUnderParent(row, parent!);
   }
 

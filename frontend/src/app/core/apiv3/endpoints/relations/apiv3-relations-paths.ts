@@ -33,6 +33,9 @@ import { CollectionResource } from 'core-app/features/hal/resources/collection-r
 import { RelationResource } from 'core-app/features/hal/resources/relation-resource';
 import { map } from 'rxjs/operators';
 import { ApiV3Filter } from 'core-app/shared/helpers/api-v3/api-v3-filter-builder';
+import chunk from 'lodash-es/chunk';
+import filter from 'lodash-es/filter';
+import flatten from 'lodash-es/flatten';
 
 export const MAGIC_RELATION_SIZE = 100;
 
@@ -53,14 +56,14 @@ export class ApiV3RelationsPaths extends ApiV3ResourceCollection<RelationResourc
 
   public loadInvolved(workPackageIds:string[]):Observable<RelationResource[]> {
     if (workPackageIds.length > MAGIC_RELATION_SIZE) {
-      const chunks = _.chunk(workPackageIds, MAGIC_RELATION_SIZE);
+      const chunks = chunk(workPackageIds, MAGIC_RELATION_SIZE);
       return forkJoin(chunks.map((chunk) => this.loadInvolved(chunk)))
         .pipe(
-          map((results) => _.flatten(results)),
+          map((results) => flatten(results)),
         );
     }
 
-    const validIds = _.filter(workPackageIds, (id) => /\d+/.test(id));
+    const validIds = filter(workPackageIds, (id) => /\d+/.test(id));
 
     if (validIds.length === 0) {
       return from([]);

@@ -41,6 +41,7 @@ import {
   WorkPackageStatesInitializationService,
 } from 'core-app/features/work-packages/components/wp-list/wp-states-initialization.service';
 import { enterpriseDocsUrl } from 'core-app/core/setup/globals/constants.const';
+import find from 'lodash-es/find';
 
 @Component({
   templateUrl: './board-list-container.component.html',
@@ -241,7 +242,7 @@ readonly I18n:I18nService,
         const { filterName } = service;
         const idFilterName = `${filterName}_id`;
         const options = widget.options as unknown as BoardWidgetOption;
-        const instance = _.find(options.filters, (f) => !!f[filterName] || !!f[idFilterName]);
+        const instance = find(options.filters, (f) => !!f[filterName] || !!f[idFilterName]);
 
         if (instance) {
           return ((instance[filterName] || instance[idFilterName])?.values[0] || null) as unknown as string|null;

@@ -48,6 +48,9 @@ import { ApiV3FilterBuilder } from 'core-app/shared/helpers/api-v3/api-v3-filter
 import { ShareResource } from 'core-app/features/hal/resources/share-resource';
 import { map } from 'rxjs/operators';
 import { firstValueFrom } from 'rxjs';
+import each from 'lodash-es/each';
+import flatten from 'lodash-es/flatten';
+import uniq from 'lodash-es/uniq';
 
 @Injectable()
 export class WorkPackageViewAdditionalElementsService {
@@ -75,7 +78,7 @@ export class WorkPackageViewAdditionalElementsService {
       this.requireWorkPackageShares(workPackageIds),
       this.requireSumsSchema(results),
     ]).then((wpResults:string[][]) => {
-      this.loadAdditional(_.flatten(wpResults));
+      this.loadAdditional(flatten(wpResults));
     });
   }
 
@@ -105,7 +108,7 @@ export class WorkPackageViewAdditionalElementsService {
       .requireAll(rows)
       .then(() => {
         const ids = this.getInvolvedWorkPackages(rows.map((id) => this.wpRelations.state(id).value!));
-        return _.flatten(ids);
+        return flatten(ids);
       });
   }
 
@@ -118,7 +121,7 @@ export class WorkPackageViewAdditionalElementsService {
       return Promise.resolve([]);
     }
 
-    const ids = _.flatten(
+    const ids = flatten(
       rows.map((el) => el.children?.map((child) => child.id as string) || []),
     );
 
@@ -136,7 +139,7 @@ export class WorkPackageViewAdditionalElementsService {
     }
 
     const resultIds = rows.map((el:WorkPackageResource) => (el.id as string | number).toString());
-    const ids = _.flatten(rows.map((el) => el.ancestorIds))
+    const ids = flatten(rows.map((el) => el.ancestorIds))
       .filter((id) => !resultIds.includes(id));
 
     return Promise.resolve(ids);
@@ -149,8 +152,8 @@ export class WorkPackageViewAdditionalElementsService {
    */
   private getInvolvedWorkPackages(states:RelationsStateValue[]) {
     const ids:string[] = [];
-    _.each(states, (relations:RelationsStateValue) => {
-      _.each(relations, (resource:RelationResource) => {
+    each(states, (relations:RelationsStateValue) => {
+      each(relations, (resource:RelationResource) => {
         ids.push(resource.ids.from, resource.ids.to);
       });
     });
@@ -186,7 +189,7 @@ export class WorkPackageViewAdditionalElementsService {
         map((elements) => {
           const shares = elements as ShareResource[];
 
-          const sharedWpIds = _.uniq(shares.map((share) => share.entity.id as string));
+          const sharedWpIds = uniq(shares.map((share) => share.entity.id as string));
 
           sharedWpIds.forEach((wpId) => {
             this

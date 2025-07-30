@@ -19,6 +19,7 @@ import {
   of,
 } from 'rxjs';
 import { map } from 'rxjs/operators';
+import get from 'lodash-es/get';
 
 @Injectable()
 export class BoardVersionActionService extends CachedBoardActionService {
@@ -45,7 +46,7 @@ export class BoardVersionActionService extends CachedBoardActionService {
   localizedName = this.I18n.t('js.work_packages.properties.version');
 
   public canAddToQuery(query:QueryResource):Promise<boolean> {
-    const formLink = _.get(query, 'results.createWorkPackage.href', null);
+    const formLink = get(query, 'results.createWorkPackage.href', null);
 
     if (!formLink) {
       return Promise.resolve(false);

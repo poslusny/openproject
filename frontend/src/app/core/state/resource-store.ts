@@ -7,7 +7,7 @@ import {
 import { IHALCollection } from 'core-app/core/apiv3/types/hal-collection.type';
 import { IHalResourceLinks } from 'core-app/core/state/hal-resource';
 import idFromLink from 'core-app/features/hal/helpers/id-from-link';
-import { filter } from 'lodash';
+import filter from 'lodash-es/filter';
 
 export interface CollectionResponse {
   ids:ID[];

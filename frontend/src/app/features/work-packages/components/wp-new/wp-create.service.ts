@@ -64,6 +64,7 @@ import { HalResourceService } from 'core-app/features/hal/services/hal-resource.
 import { ResourceChangeset } from 'core-app/shared/components/fields/changeset/resource-changeset';
 import { AttachmentsResourceService } from 'core-app/core/state/attachments/attachments.service';
 import { AttachmentCollectionResource } from 'core-app/features/hal/resources/attachment-collection-resource';
+import merge from 'lodash-es/merge';
 
 export const newWorkPackageHref = '/api/v3/work_packages/new';
 
@@ -263,7 +264,7 @@ export class WorkPackageCreateService extends UntilDestroyedMixin {
     return this
       .withFiltersPayload(projectIdentifier, defaults)
       .then((filterDefaults) => {
-        const mergedPayload = _.merge({ _links: {} }, filterDefaults, defaults);
+        const mergedPayload = merge({ _links: {} }, filterDefaults, defaults);
 
         return this.createNewWorkPackage(projectIdentifier, mergedPayload).then((change:WorkPackageChangeset) => {
           if (!change) {

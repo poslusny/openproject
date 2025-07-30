@@ -62,6 +62,7 @@ import { ApiV3StoragesPaths } from 'core-app/core/apiv3/endpoints/storages/api-v
 import {
   ApiV3ProjectStoragesPaths,
 } from 'core-app/core/apiv3/endpoints/project-storages/api-v3-project-storages-paths';
+import isNil from 'lodash-es/isNil';
 
 @Injectable({ providedIn: 'root' })
 export class ApiV3Service {
@@ -188,7 +189,7 @@ export class ApiV3Service {
    * @param projectIdentifier
    */
   public withOptionalProject(projectIdentifier:string|number|null|undefined):ApiV3ProjectPaths|this {
-    if (_.isNil(projectIdentifier)) {
+    if (isNil(projectIdentifier)) {
       return this;
     }
     return this.projects.id(projectIdentifier);

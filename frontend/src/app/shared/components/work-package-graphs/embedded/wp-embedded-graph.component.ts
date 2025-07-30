@@ -4,6 +4,8 @@ import { ChartOptions, Plugin } from 'chart.js';
 import { I18nService } from 'core-app/core/i18n/i18n.service';
 import { GroupObject } from 'core-app/features/hal/resources/wp-collection-resource';
 import DataLabelsPlugin from 'chartjs-plugin-datalabels';
+import map from 'lodash-es/map';
+import uniq from 'lodash-es/uniq';
 
 export interface WorkPackageEmbeddedGraphDataset {
   label:string;
@@ -65,7 +67,7 @@ export class WorkPackageEmbeddedGraphComponent {
   }
 
   private updateChartData() {
-    let uniqLabels = _.uniq(this.datasets.reduce((array, dataset) => {
+    let uniqLabels = uniq(this.datasets.reduce((array, dataset) => {
       const groups = (dataset.groups || []).map((group) => group.value) as any;
       return array.concat(groups);
     }, [])) as string[];
@@ -175,12 +177,12 @@ export class WorkPackageEmbeddedGraphComponent {
   }
 
   public get chartDescription():string {
-    const chartDataDescriptions = _.map(this.chartLabels, (label, index) => {
+    const chartDataDescriptions = map(this.chartLabels, (label, index) => {
       if (this.chartData.length === 1) {
         const allCount = this.chartData[0].data[index];
         return `${allCount} ${label}`;
       }
-      const labelCounts = _.map(this.chartData, (dataset) => `${dataset.data[index]} ${dataset.label}`);
+      const labelCounts = map(this.chartData, (dataset) => `${dataset.data[index]} ${dataset.label}`);
       return `${label}: ${labelCounts.join(', ')}`;
     });
 

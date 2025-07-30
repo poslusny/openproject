@@ -50,6 +50,8 @@ import { WorkPackageViewBaselineService } from 'core-app/features/work-packages/
 import { combineLatestWith } from 'rxjs';
 import { repositionDropdownBugfix } from 'core-app/shared/components/autocompleter/op-autocompleter/autocompleter.helper';
 import { AlternativeSearchService } from 'core-app/shared/components/work-packages/alternative-search.service';
+import find from 'lodash-es/find';
+import sortBy from 'lodash-es/sortBy';
 
 const ADD_FILTER_SELECT_INDEX = -1;
 
@@ -151,14 +153,14 @@ export class QueryFiltersComponent extends UntilDestroyedMixin implements OnInit
   }
 
   public get isSecondSpacerVisible():boolean {
-    const hasSearch = !!_.find(this.filters, (f) => f.id === 'search');
+    const hasSearch = !!find(this.filters, (f) => f.id === 'search');
     const hasAvailableFilter = !!this.filters.find((f) => f.id !== 'search' && this.isFilterAvailable(f));
 
     return hasSearch && hasAvailableFilter;
   }
 
   private updateRemainingFilters() {
-    this.remainingFilters = _.sortBy(this.wpTableFilters.remainingVisibleFilters(this.filters), 'name');
+    this.remainingFilters = sortBy(this.wpTableFilters.remainingVisibleFilters(this.filters), 'name');
   }
 
   private updateFilterFocus(index:number) {

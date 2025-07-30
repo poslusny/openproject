@@ -11,6 +11,9 @@ import { QueryOperatorResource } from 'core-app/features/hal/resources/query-ope
 import { QueryFilterInstanceResource } from 'core-app/features/hal/resources/query-filter-instance-resource';
 import { HalResource } from 'core-app/features/hal/resources/hal-resource';
 import { SchemaCacheService } from 'core-app/core/schemas/schema-cache.service';
+import filter from 'lodash-es/filter';
+import find from 'lodash-es/find';
+import includes from 'lodash-es/includes';
 
 @Component({
   templateUrl: './wp-table-configuration-relation-selector.html',
@@ -77,7 +80,7 @@ export class WpTableConfigurationRelationSelectorComponent implements OnInit {
   private setSelectedRelationFilter():void {
     const currentRelationFilters:QueryFilterInstanceResource[] = this.relationFiltersOf(this.wpTableFilters.current) as QueryFilterInstanceResource[];
     if (currentRelationFilters.length > 0) {
-      this.selectedRelationFilter = _.find(this.availableRelationFilters, { id: currentRelationFilters[0].id }) as QueryFilterResource;
+      this.selectedRelationFilter = find(this.availableRelationFilters, { id: currentRelationFilters[0].id }) as QueryFilterResource;
     } else {
       this.selectedRelationFilter = this.availableRelationFilters[0];
     }
@@ -97,7 +100,7 @@ export class WpTableConfigurationRelationSelectorComponent implements OnInit {
   }
 
   private relationFiltersOf(filters:QueryFilterResource[]|QueryFilterInstanceResource[]):QueryFilterResource[]|QueryFilterInstanceResource[] {
-    return _.filter(filters, (filter:QueryFilterResource|QueryFilterInstanceResource) => _.includes(this.relationFilterIds, filter.id));
+    return filter(filters, (filter:QueryFilterResource|QueryFilterInstanceResource) => includes(this.relationFilterIds, filter.id));
   }
 
   private addFilterToCurrentState(filter:QueryFilterResource):void {
@@ -110,7 +113,7 @@ export class WpTableConfigurationRelationSelectorComponent implements OnInit {
   }
 
   private getOperatorForId(filter:QueryFilterResource, id:string):QueryOperatorResource {
-    return _.find(this.schemaCache.of(filter).availableOperators, { id }) as QueryOperatorResource;
+    return find(this.schemaCache.of(filter).availableOperators, { id }) as QueryOperatorResource;
   }
 
   public compareRelationFilters(f1:undefined|QueryFilterResource, f2:undefined|QueryFilterResource):boolean {

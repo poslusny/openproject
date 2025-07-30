@@ -8,6 +8,9 @@ import { InjectField } from 'core-app/shared/helpers/angular/inject-field.decora
 import { FilterOperator } from 'core-app/shared/helpers/api-v3/api-v3-filter-builder';
 import { QueryFilterInstanceResource } from 'core-app/features/hal/resources/query-filter-instance-resource';
 import { CurrentProjectService } from 'core-app/core/current-project/current-project.service';
+import castArray from 'lodash-es/castArray';
+import each from 'lodash-es/each';
+import find from 'lodash-es/find';
 
 export class WorkPackageFilterValues {
   @InjectField() currentUser:CurrentUserService;
@@ -28,7 +31,7 @@ export class WorkPackageFilterValues {
   ) {}
 
   applyDefaultsFromFilters(change:WorkPackageChangeset|{ [id:string]:unknown }):void {
-    _.each(this.filters, (filter) => {
+    each(this.filters, (filter) => {
       // Exclude filters specified in constructor
       if (this.excluded.indexOf(filter.id) !== -1) {
         return;
@@ -41,7 +44,7 @@ export class WorkPackageFilterValues {
       if (filter.id === 'project') {
         if (operator !== '=') return;
 
-        const projectFilter = _.find(filter.values, (resource:HalResource|string) => {
+        const projectFilter = find(filter.values, (resource:HalResource|string) => {
           return ((resource instanceof HalResource) ? resource.href : resource) === this.currentProject.apiv3Path;
         });
         this.setValue(change, 'project', projectFilter || filter.values[0]);
@@ -137,7 +140,7 @@ export class WorkPackageFilterValues {
    */
   private filterAlreadyApplied(change:WorkPackageChangeset|{ [id:string]:unknown }, filter:{ id:string, values:unknown[] }):boolean {
     const value:unknown = change instanceof WorkPackageChangeset ? change.projectedResource[filter.id] : change[filter.id];
-    const current = _.castArray(value);
+    const current = castArray(value);
 
     for (let i = 0; i < filter.values.length; i++) {
       for (let j = 0; j < current.length; j++) {

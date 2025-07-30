@@ -56,6 +56,8 @@ import { addFiltersToPath } from 'core-app/core/apiv3/helpers/add-filters-to-pat
 import { UserAutocompleterTemplateComponent } from 'core-app/shared/components/autocompleter/user-autocompleter/user-autocompleter-template.component';
 import { IUser } from 'core-app/core/state/principals/user.model';
 import { compareByAttribute } from 'core-app/shared/helpers/angular/tracking-functions';
+import keyBy from 'lodash-es/keyBy';
+import uniqBy from 'lodash-es/uniqBy';
 
 export const usersAutocompleterSelector = 'op-user-autocompleter';
 
@@ -132,7 +134,7 @@ export class UserAutocompleterComponent extends OpAutocompleterComponent<IUserAu
       .http
       .get<IHALCollection<IUser>>(filteredURL.toString())
       .pipe(
-        map((res) => _.uniqBy(res._embedded.elements, (el) => el._links.self?.href || el.id)),
+        map((res) => uniqBy(res._embedded.elements, (el) => el._links.self?.href || el.id)),
         map((users) => {
           const mapped:IUserAutocompleteItem[] = users.map((user) => {
               return { id: user.id, name: user.name, href: user._links.self?.href, email: user.email };
@@ -148,7 +150,7 @@ export class UserAutocompleterComponent extends OpAutocompleterComponent<IUserAu
   }
 
   protected buildFilteredURL(searchTerm?:string):URL {
-    const filterObject = _.keyBy(this.filters, 'name');
+    const filterObject = keyBy(this.filters, 'name');
     const searchFilters = ApiV3FilterBuilder.fromFilterObject(filterObject);
 
     if (searchTerm?.length) {

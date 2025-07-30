@@ -8,6 +8,7 @@ import { QueryResource } from 'core-app/features/hal/resources/query-resource';
 import { QueryFilterInstanceResource } from 'core-app/features/hal/resources/query-filter-instance-resource';
 import { SchemaCacheService } from 'core-app/core/schemas/schema-cache.service';
 import { CollectionResource } from 'core-app/features/hal/resources/collection-resource';
+import find from 'lodash-es/find';
 
 @Injectable()
 export class QueryFiltersService {
@@ -20,7 +21,7 @@ export class QueryFiltersService {
    */
   private getFilterSchema(filter:QueryFilterInstanceResource, form:QueryFormResource):QueryFilterInstanceSchemaResource|undefined {
     const available = form.$embedded.schema.filtersSchemas.elements;
-    return _.find(available, (schema) => schema.allowedFilterValue.href === filter.filter.href);
+    return find(available, (schema) => schema.allowedFilterValue.href === filter.filter.href);
   }
 
   /**

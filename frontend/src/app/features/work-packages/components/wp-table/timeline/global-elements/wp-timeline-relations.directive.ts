@@ -42,6 +42,10 @@ import { WorkPackageTimelineCell } from '../cells/wp-timeline-cell';
 import { WorkPackageTimelineTableController } from '../container/wp-timeline-container.directive';
 import { timelineElementCssClass, TimelineViewParameters } from '../wp-timeline';
 import { TimelineRelationElement, workPackagePrefix } from './timeline-relation-element';
+import compact from 'lodash-es/compact';
+import isNil from 'lodash-es/isNil';
+import keys from 'lodash-es/keys';
+import values from 'lodash-es/values';
 
 const DEBUG_DRAW_RELATION_LINES_WITH_COLOR = false;
 
@@ -129,7 +133,7 @@ export class WorkPackageTableTimelineRelations extends UntilDestroyedMixin imple
       )
       .subscribe((list) => {
         // ... make sure that the corresponding relations are loaded ...
-        const wps = _.compact(list.map((row) => row.workPackageId) as string[]);
+        const wps = compact(list.map((row) => row.workPackageId) as string[]);
         this.wpRelations.requireAll(wps);
 
         wps.forEach((wpId) => {
@@ -161,13 +165,13 @@ export class WorkPackageTableTimelineRelations extends UntilDestroyedMixin imple
   private renderWorkPackagesRelations(workPackageIds:string[]) {
     workPackageIds.forEach((workPackageId) => {
       const workPackageWithRelation = this.workPackagesWithRelations[workPackageId];
-      if (_.isNil(workPackageWithRelation)) {
+      if (isNil(workPackageWithRelation)) {
         return;
       }
 
       this.removeRelationElementsForWorkPackage(workPackageId);
-      const relations = _.values(workPackageWithRelation.value);
-      const relationsList = _.values(relations);
+      const relations = values(workPackageWithRelation.value);
+      const relationsList = values(relations);
       relationsList.forEach((relation) => {
         if (!(relation.type === 'precedes'
           || relation.type === 'follows')) {
@@ -196,7 +200,7 @@ export class WorkPackageTableTimelineRelations extends UntilDestroyedMixin imple
   }
 
   private renderElements() {
-    const wpIdsWithRelations:string[] = _.keys(this.workPackagesWithRelations);
+    const wpIdsWithRelations:string[] = keys(this.workPackagesWithRelations);
     this.renderWorkPackagesRelations(wpIdsWithRelations);
   }
 

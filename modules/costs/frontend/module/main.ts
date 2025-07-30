@@ -28,6 +28,7 @@ import { Injector, NgModule } from '@angular/core';
 import { OpenProjectPluginContext } from 'core-app/features/plugins/plugin-context';
 import { CostsByTypeDisplayField } from './wp-display/costs-by-type-display-field.module';
 import { CurrencyDisplayField } from './wp-display/currency-display-field.module';
+import findIndex from 'lodash-es/findIndex';
 
 export function initializeCostsPlugin(injector:Injector) {
   window.OpenProject.getPluginContext().then((pluginContext:OpenProjectPluginContext) => {
@@ -39,7 +40,7 @@ export function initializeCostsPlugin(injector:Injector) {
       key: 'log_costs',
       icon: 'icon-projects',
       indexBy(actions:any) {
-        const index = _.findIndex(actions, { key: 'log_time' });
+        const index = findIndex(actions, { key: 'log_time' });
         return index !== -1 ? index + 1 : actions.length;
       },
       resource: 'workPackage',
@@ -51,7 +52,7 @@ export function initializeCostsPlugin(injector:Injector) {
       icon: 'icon-projects',
       link: 'logCosts',
       indexBy(actions:any) {
-        const index = _.findIndex(actions, { link: 'logTime' });
+        const index = findIndex(actions, { link: 'logTime' });
         return index !== -1 ? index + 1 : actions.length;
       },
       text: I18n.t('js.button_log_costs'),
