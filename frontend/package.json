@@ -178,7 +178,7 @@
     "build:fast": "node --max_old_space_size=8192 ./node_modules/@angular/cli/bin/ng build --configuration production",
     "build": "node --max_old_space_size=4096 ./node_modules/@angular/cli/bin/ng build --configuration production --named-chunks --source-map",
     "build:watch": "node --max_old_space_size=4096 ./node_modules/@angular/cli/bin/ng build --watch --named-chunks",
-    "ci:plugins:register_frontend": "node ci-plugins-generator.js",
+    "ci:plugins:register_frontend": "node ci-plugins-generator.mjs",
     "tokens:generate": "theo src/app/spot/styles/tokens/tokens.yml --transform web --format sass,json --dest src/app/spot/styles/tokens/dist",
     "serve": "node --max_old_space_size=8192 ./node_modules/@angular/cli/bin/ng serve --host ${FE_HOST:-localhost} --port ${FE_PORT:-4200}",
     "serve:test": "node --max_old_space_size=8192 ./node_modules/@angular/cli/bin/ng serve --host ${FE_HOST:-localhost} --port ${FE_PORT:-4200} --disable-host-check",
