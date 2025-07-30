@@ -36,6 +36,8 @@ const customConfigPlugin:Plugin = {
     if (options.chunkNames === '[name]-[hash]') { // named chunks
       options.chunkNames = '[dir]/[name]-[hash]';
     }
+    options.alias ||= {};
+    options.alias['lodash'] = 'lodash-es';
   }
 }
 
