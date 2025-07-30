@@ -40,17 +40,26 @@ module ActsAsCustomizable::CalculatedValue
              "Expected array of calculated value custom fields"
       end
 
-      given = calculated_value_fields_referenced_values(custom_fields)
-      to_compute = custom_fields.to_h { [it.column_name, it.formula_str_without_patterns] }
-
-      calculator = CustomField::CalculatedValue.calculator_instance
-      calculator.store(given)
-      result = calculator.solve(to_compute).reject { |_, value| value == :undefined }
+      result = calculate_custom_fields_result(
+        given: calculated_value_fields_referenced_values(custom_fields),
+        to_compute: custom_fields.to_h { [it.column_name, it.formula_str_without_patterns] }
+      )
 
       self.custom_field_values = custom_fields.to_h { [it.id, result[it.column_name]] }
     end
 
     private
+
+    def calculate_custom_fields_result(given:, to_compute:)
+      calculator = CustomField::CalculatedValue.calculator_instance
+      calculator.store(given)
+
+      begin
+        calculator.solve(to_compute).reject { |_, value| value == :undefined }
+      rescue ZeroDivisionError # https://github.com/rubysolo/dentaku/pull/322
+        {}
+      end
+    end
 
     def calculated_value_fields_referenced_values(custom_fields)
       given_cf_ids = custom_fields.flat_map(&:formula_referenced_custom_field_ids).uniq - custom_fields.map(&:id)
