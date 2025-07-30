@@ -189,5 +189,60 @@ RSpec.describe AllMeetings::ICalService, type: :model do # rubocop:disable RSpec
         expect(entry.dtend).to eq (relevant_time.advance(week: 52) + 1.hour).in_time_zone(user.time_zone)
       end
     end
+
+    context "with a recurring meeting that has derived meetings" do
+      let!(:meeting) do
+        RecurringMeetings::InitOccurrenceService
+        .new(user: User.system, recurring_meeting:)
+        .call(start_time: relevant_time + 1.week)
+        .result
+      end
+
+      it "renders the ICS file with the recurring meeting and the derived meeting", :aggregate_failures do
+        expect(result).to be_a String
+
+        expect(ical.events.size).to eq(2)
+
+        # The first entry is the recurring meeting
+        recurring_entry = ical.events.first
+        expect(recurring_entry.uid).to eq(recurring_meeting.uid)
+        expect(recurring_entry.recurrence_id).to be_blank
+
+        # Let's look at the derived meeting
+        entry = ical.events.second
+
+        expect(entry.uid).to eq(recurring_meeting.uid)
+        expect(entry.recurrence_id).to eq(meeting.scheduled_meeting.start_time)
+        expect(entry.organizer.to_s).to eq("mailto:#{Setting.mail_from}")
+        expect(entry.attendee).to be_empty
+        expect(entry.summary).to eq "[My Project] Recurring meeting"
+        expect(entry.description).to eq "[My Project] Meeting series: Recurring meeting"
+        expect(entry.location).to eq(recurring_meeting.template.location.presence)
+        expect(entry.sequence).to eq(meeting.lock_version)
+        expect(entry.status).to eq "CONFIRMED"
+
+        expect(entry.dtstart).to eq(meeting.start_time.in_time_zone(user.time_zone))
+        expect(entry.dtend).to eq(meeting.end_time.in_time_zone(user.time_zone))
+      end
+
+      context "when the single occurence was cancelled" do
+        before do
+          meeting.scheduled_meeting.update!(cancelled: true)
+        end
+
+        it "renders the ICS file with the recurring meeting and the cancelled derived meeting", :aggregate_failures do
+          expect(result).to be_a String
+
+          # Since the single occurrence was cancelled, we expect the recurring entry to have an exdate and not
+          # include the single occurrence entry
+          expect(ical.events.size).to eq(1)
+
+          recurring_entry = ical.events.first
+          expect(recurring_entry.uid).to eq(recurring_meeting.uid)
+          expect(recurring_entry.recurrence_id).to be_blank
+          expect(recurring_entry.exdate).to contain_exactly(meeting.scheduled_meeting.start_time)
+        end
+      end
+    end
   end
 end
