@@ -144,4 +144,34 @@ RSpec.describe AllMeetings::ICalService, type: :model do # rubocop:disable RSpec
       end
     end
   end
+
+  context "with recurring meetings" do
+    let!(:recurring_meeting) do
+      create(:recurring_meeting,
+             author: user,
+             project:,
+             time_zone: user.time_zone)
+    end
+
+    context "with a recurring meeting that has no derived meetings yet" do
+      it "renders the ICS file with the recurring meeting", :aggregate_failures do
+        expect(result).to be_a String
+
+        expect(ical.events.size).to eq(1)
+
+        entry = ical.events.first
+
+        expect(entry.uid).to eq(recurring_meeting.uid)
+        expect(entry.organizer.to_s).to eq("mailto:#{Setting.mail_from}")
+        # expect(entry.attendee.map(&:to_s)).to contain_exactly("mailto:foo@example.com", "mailto:bob@example.com")
+        # expect(entry.dtstart.utc).to eq meeting.start_time
+        # expect(entry.dtend.utc).to eq meeting.start_time + 1.hour
+        # expect(entry.summary).to eq "[My Project] Important meeting"
+        # expect(entry.description).to eq "[My Project] Meeting: Important meeting"
+        # expect(entry.location).to eq(meeting.location.presence)
+        # expect(entry.dtstart).to eq (relevant_time + 1.week).in_time_zone("Europe/Berlin")
+        # expect(entry.dtend).to eq (relevant_time + 1.week + 1.hour).in_time_zone("Europe/Berlin")
+      end
+    end
+  end
 end
