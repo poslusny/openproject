@@ -52,6 +52,11 @@ class Comment < ApplicationRecord
     save!
   end
 
+  # We should properly implement internal behaviour
+  def internal?
+    false
+  end
+
   private
 
   def send_comment_added_event

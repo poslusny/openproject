@@ -29,16 +29,33 @@
 #++
 
 class OpenProject::JournalFormatter::Comment < JournalFormatter::Base
-  def render(key, values, _options = { html: true })
-    _id = key.to_s.sub("comments_", "").to_i
+  def render(key, values, _options)
+    id = key.to_s.sub("comments_", "").to_i
+    old_value, value, comment = format_details(id, values)
 
-    label = label("comment")
-    _old_value, current_value = values
+    render_comment_detail_text(value, old_value, comment)
+  end
 
-    if current_value.blank?
-      I18n.t(:text_journal_comment_deleted, label:)
-    else
-      I18n.t(:text_journal_comment_added, label:, value: current_value)
-    end
+  private
+
+  def format_details(id, values)
+    old_value, current_value = values
+    [
+      old_value,
+      current_value,
+      find_comment(id)
+    ]
+  end
+
+  def render_comment_detail_text(value, old_value, comment)
+    {
+      comment_id: comment.id,
+      value: value,
+      old_value: old_value
+    }.to_json
+  end
+
+  def find_comment(id)
+    Comment.find_by(id: id)
   end
 end

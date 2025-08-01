@@ -49,6 +49,7 @@ en:
         changed: "changed"
         created: "created"
         commented: "commented"
+        comment_not_found: "Comment deleted"
         internal_comment: Internal comment
         internal_journal: Internal comments are visible to a limited group of members.
         unsaved_changes_confirmation_message: You have unsaved changes. Are you sure you want to close the editor?
@@ -4425,8 +4426,6 @@ en:
   text_journal_changed_plain: "%{label} changed from %{old} %{linebreak}to %{new}"
   text_journal_changed_no_detail: "%{label} updated"
   text_journal_changed_with_diff: "%{label} changed (%{link})"
-  text_journal_comment_added: "%{label} '%{value}' added"
-  text_journal_comment_deleted: "%{label} deleted"
   text_journal_deleted: "%{label} deleted (%{old})"
   text_journal_deleted_subproject: "%{label} %{old}"
   text_journal_deleted_with_diff: "%{label} deleted (%{link})"

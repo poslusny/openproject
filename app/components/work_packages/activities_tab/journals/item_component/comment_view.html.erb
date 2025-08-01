@@ -1,0 +1,124 @@
+<%=
+  render(
+    border_box_container(
+      padding: :condensed,
+      "aria-label": I18n.t("activities.work_packages.activity_tab.commented"),
+      data: {
+        "anchor-activity-id": parent_journal.sequence_version,
+        "anchor-comment-id": comment.id
+      },
+      classes: container_classes
+    )
+  ) do |border_box_component|
+    border_box_component.with_header(
+      px: 2, py: 1,
+      data: { test_selector: "op-journal-notes-header" },
+      classes: comment_header_classes
+    ) do
+      flex_layout(align_items: :center, justify_content: :space_between) do |header_container|
+        header_container.with_column(
+          flex_layout: true,
+          classes: "work-packages-activities-tab-journals-item-component--header-start-container ellipsis"
+        ) do |header_start_container|
+          header_start_container.with_column(mr: 2) do
+            render Users::AvatarComponent.new(user: comment.author, show_name: false, size: :mini)
+          end
+          header_start_container.with_column(
+            mr: 1, flex_layout: true,
+            classes: "work-packages-activities-tab-journals-item-component--user-name-container hidden-for-desktop"
+          ) do |user_name_container|
+            user_name_container.with_row(classes: "work-packages-activities-tab-journals-item-component--user-name ellipsis") do
+              truncated_user_name(comment.author)
+            end
+            user_name_container.with_row do
+              render(Primer::Beta::Text.new(font_size: :small, color: :subtle, mt: 1)) { format_time(comment.created_at) }
+            end
+          end
+          header_start_container.with_column(
+            mr: 1,
+            classes: "work-packages-activities-tab-journals-item-component--user-name ellipsis hidden-for-mobile"
+          ) do
+            truncated_user_name(comment.author, hover_card: true)
+          end
+          header_start_container.with_column(mr: 1, classes: "hidden-for-mobile") do
+            activity_anchor_link(parent_journal)
+          end
+        end
+        header_container.with_column(flex_layout: true, align_items: :center) do |header_end_container|
+          if has_unread_notifications?
+            header_end_container.with_column(mr: 2) do
+              render(
+                Primer::Beta::Octicon.new(
+                  :"dot-fill", # color is set via CSS as requested by UI/UX Team
+                  classes: "work-packages-activities-tab-journals-item-component--notification-dot-icon",
+                  size: :small,
+                  data: { test_selector: "op-journal-unread-notification", "op-ian-center-update-immediate": true }
+                )
+              )
+            end
+          end
+
+          if comment.internal?
+            header_end_container.with_column(mr: 2) do
+              render(
+                Primer::Beta::Octicon.new(
+                  :lock,
+                  classes: "work-packages-activities-tab-journals-item-component--internal-icon",
+                  size: :small,
+                  aria: { label: I18n.t("activities.work_packages.activity_tab.internal_journal") },
+                  data: { test_selector: "op-journal-internal-icon" },
+                  color: (comment.internal? ? :attention : :default)
+                )
+              )
+            end
+          end
+
+          header_end_container.with_column(
+            ml: 1,
+            classes: "work-packages-activities-tab-journals-item-component--action-menu"
+          ) do
+            render(Primer::Alpha::ActionMenu.new(data: { test_selector: "op-wp-journal-#{comment.id}-action-menu" })) do |menu|
+              menu.with_show_button(
+                icon: "kebab-horizontal",
+                "aria-label": I18n.t(:button_actions),
+                scheme: :invisible
+              )
+              copy_url_action_item(menu)
+              # edit_action_item(menu) if allowed_to_edit?
+              # quote_action_item(menu) if allowed_to_quote?
+            end
+          end
+        end
+      end
+    end
+    border_box_component.with_body(
+      classes: comment_body_classes,
+      data: { test_selector: "op-journal-notes-body" }
+    ) do
+      case state
+      when :show
+        component_wrapper do
+          flex_layout do |comment_container|
+            comment_container.with_row do
+              render(Primer::Box.new(mt: 1, classes: "op-uc-container")) do
+                format_text(comment, :text)
+              end
+            end
+            comment_container.with_row(flex_layout: true) do |reactions_container|
+              reactions_container.with_column do
+                # render(WorkPackages::ActivitiesTab::Journals::ItemComponent::AddReactions.new(model: comment, grouped_emoji_reactions:))
+                " + "
+              end
+              reactions_container.with_column do
+                # render(WorkPackages::ActivitiesTab::Journals::ItemComponent::Reactions.new(journal:, grouped_emoji_reactions:))
+                "🚀"
+              end
+            end
+          end
+        end
+      when :edit
+        # render(WorkPackages::ActivitiesTab::Journals::ItemComponent::Edit.new(journal:, filter:))
+      end
+    end
+  end
+%>

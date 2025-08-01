@@ -56,7 +56,7 @@ module WorkPackages
         end
 
         def journal_details
-          @journal_details ||= journal.details
+          @journal_details ||= journal.details.reject { |key, _| key.start_with?("comment") }
         end
 
         def has_details?
