@@ -37,19 +37,25 @@ module WorkPackages
         include OpTurbo::Streamable
         include WorkPackages::ActivitiesTab::StimulusControllers
 
-        def initialize(journal:, grouped_emoji_reactions:)
+        def initialize(model:, grouped_emoji_reactions:)
           super
 
-          @journal = journal
+          @model = model
+          @is_comment = model.is_a?(Comment)
           @grouped_emoji_reactions = grouped_emoji_reactions
         end
 
         private
 
-        attr_reader :journal, :grouped_emoji_reactions
+        attr_reader :model, :grouped_emoji_reactions
 
-        def wrapper_uniq_by = journal.id
-        def work_package = journal.journable
+        def wrapper_uniq_by = model.id
+
+        def comment? = @is_comment
+
+        def work_package
+          @work_package ||= model.is_a?(Comment) ? model.commented : model.journable
+        end
 
         def counter_color(users)
           reacted_by_current_user?(users) ? :accent : nil
@@ -87,7 +93,7 @@ module WorkPackages
         def href(reaction:)
           return if current_user_cannot_react?
 
-          toggle_reaction_work_package_activity_path(journal.journable.id, id: journal.id, reaction:)
+          toggle_reaction_work_package_activity_path(work_package.id, id: model.id, reaction:, is_comment: comment?)
         end
 
         def current_user_can_react?

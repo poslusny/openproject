@@ -228,7 +228,10 @@ class Journal < ApplicationRecord
   end
 
   def has_comments?
-    journable.respond_to?(:comments) && journable.comments.any?
+    return false unless journable.respond_to?(:comments)
+
+    comments = journable.comments
+    comments.respond_to?(:any) && comments.any?
   end
 
   def has_notes?

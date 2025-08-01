@@ -147,19 +147,32 @@ class WorkPackages::ActivitiesTabController < ApplicationController
   end
 
   def toggle_reaction # rubocop:disable Metrics/AbcSize
+    is_comment = params[:is_comment] == "true"
+    reactable = is_comment ? Comment.find_by(id: params[:id]) : @journal
+
     emoji_reaction_service = EmojiReactions::ToggleEmojiReactionService
       .call(user: User.current,
-            reactable: @journal,
+            reactable: reactable,
             reaction: params[:reaction])
 
     emoji_reaction_service.on_success do
-      update_via_turbo_stream(
-        component: WorkPackages::ActivitiesTab::Journals::ItemComponent::Show.new(
-          journal: @journal,
-          filter: params[:filter]&.to_sym || :all,
-          grouped_emoji_reactions: grouped_emoji_reactions_for_journal
+      if is_comment
+        update_via_turbo_stream(
+          component: WorkPackages::ActivitiesTab::Journals::ItemComponent::CommentView.new(
+            comment: reactable,
+            parent_journal: @journal,
+            filter: params[:filter]&.to_sym || :all
+          )
         )
-      )
+      else
+        update_via_turbo_stream(
+          component: WorkPackages::ActivitiesTab::Journals::ItemComponent::Show.new(
+            journal: @journal,
+            filter: params[:filter]&.to_sym || :all,
+            grouped_emoji_reactions: grouped_emoji_reactions_for_journal
+          )
+        )
+      end
     end
 
     emoji_reaction_service.on_failure do
@@ -353,7 +366,7 @@ class WorkPackages::ActivitiesTabController < ApplicationController
     @work_package.journals.each do |journal|
       update_via_turbo_stream(
         component: WorkPackages::ActivitiesTab::Journals::ItemComponent::Reactions.new(
-          journal:,
+          model: journal,
           grouped_emoji_reactions: wp_journal_emoji_reactions[journal.id] || {}
         )
       )

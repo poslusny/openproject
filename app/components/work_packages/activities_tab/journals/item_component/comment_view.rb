@@ -51,6 +51,15 @@ module WorkPackages
 
         attr_reader :comment, :parent_journal, :state, :filter
 
+        def wrapper_uniq_by = comment.id
+
+        def grouped_emoji_reactions
+          EmojiReactions::GroupedQueries.grouped_emoji_reactions_by_reactable(
+            reactable_id: [comment.id],
+            reactable_type: "Comment"
+          )[comment.id]
+        end
+
         def container_classes
           [].tap do |classes|
             if comment.internal?

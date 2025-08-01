@@ -32,43 +32,87 @@ require "spec_helper"
 
 RSpec.describe WorkPackages::ActivitiesTab::Journals::ItemComponent::Reactions, type: :component do
   let(:journal) { build_stubbed(:work_package_journal) }
+  let(:comment) { build_stubbed(:comment) }
 
-  context "with reactions" do
-    it "renders the reactions" do
-      render_inline(described_class.new(journal:, grouped_emoji_reactions: mock_detailed_grouped_emoji_reactions))
+  context "when the model is Journal" do
+    context "with reactions" do
+      it "renders the reactions" do
+        render_inline(described_class.new(model: journal, grouped_emoji_reactions: mock_detailed_grouped_emoji_reactions))
 
-      {
-        thumbs_up: {
-          count: 3, tooltip_text: "Bob Bobbit, Bob Bobbit and Bob Bobbit",
-          aria_label: "thumbs up by Bob Bobbit, Bob Bobbit and Bob Bobbit"
-        },
-        thumbs_down: {
-          count: 1, tooltip_text: "Bob Bobbit", aria_label: "thumbs down by Bob Bobbit"
-        },
-        eyes: {
-          count: 20, tooltip_text: "Bob Bobbit, Bob Bobbit, Bob Bobbit, Bob Bobbit, Bob Bobbit and 15 others",
-          aria_label: "eyes by Bob Bobbit, Bob Bobbit, Bob Bobbit, Bob Bobbit, Bob Bobbit and 15 others"
-        },
-        rocket: {
-          count: 5, tooltip_text: "Bob Bobbit, Bob Bobbit, Bob Bobbit, Bob Bobbit and Bob Bobbit",
-          aria_label: "rocket by Bob Bobbit, Bob Bobbit, Bob Bobbit, Bob Bobbit and Bob Bobbit"
-        },
-        confused_face: {
-          count: 6,
-          tooltip_text: "Bob Bobbit, Bob Bobbit, Bob Bobbit, Bob Bobbit, Bob Bobbit and 1 other",
-          aria_label: "confused face by Bob Bobbit, Bob Bobbit, Bob Bobbit, Bob Bobbit, Bob Bobbit and 1 other"
-        }
-      }.each { |reaction, details| expect_emoji_reaction(reaction:, **details) }
+        {
+          thumbs_up: {
+            count: 3, tooltip_text: "Bob Bobbit, Bob Bobbit and Bob Bobbit",
+            aria_label: "thumbs up by Bob Bobbit, Bob Bobbit and Bob Bobbit"
+          },
+          thumbs_down: {
+            count: 1, tooltip_text: "Bob Bobbit", aria_label: "thumbs down by Bob Bobbit"
+          },
+          eyes: {
+            count: 20, tooltip_text: "Bob Bobbit, Bob Bobbit, Bob Bobbit, Bob Bobbit, Bob Bobbit and 15 others",
+            aria_label: "eyes by Bob Bobbit, Bob Bobbit, Bob Bobbit, Bob Bobbit, Bob Bobbit and 15 others"
+          },
+          rocket: {
+            count: 5, tooltip_text: "Bob Bobbit, Bob Bobbit, Bob Bobbit, Bob Bobbit and Bob Bobbit",
+            aria_label: "rocket by Bob Bobbit, Bob Bobbit, Bob Bobbit, Bob Bobbit and Bob Bobbit"
+          },
+          confused_face: {
+            count: 6,
+            tooltip_text: "Bob Bobbit, Bob Bobbit, Bob Bobbit, Bob Bobbit, Bob Bobbit and 1 other",
+            aria_label: "confused face by Bob Bobbit, Bob Bobbit, Bob Bobbit, Bob Bobbit, Bob Bobbit and 1 other"
+          }
+        }.each { |reaction, details| expect_emoji_reaction(reaction:, **details) }
+      end
+    end
+
+    context "with no reactions" do
+      it "renders just the component node" do
+        # NB: This is so that there is always a node to update during WorkPackages::ActivitiesTabController#update_streams polling
+        render_inline(described_class.new(model: journal, grouped_emoji_reactions: {}))
+
+        component = page.find("#work-packages-activities-tab-journals-item-component-reactions-#{journal.id}")
+        expect(component.text).to be_empty
+      end
     end
   end
 
-  context "with no reactions" do
-    it "renders just the component node" do
-      # NB: This is so that there is always a node to update during WorkPackages::ActivitiesTabController#update_streams polling
-      render_inline(described_class.new(journal:, grouped_emoji_reactions: {}))
+  context "when the model is Comment" do
+    context "with reactions" do
+      it "renders the reactions" do
+        render_inline(described_class.new(model: comment, grouped_emoji_reactions: mock_detailed_grouped_emoji_reactions))
 
-      component = page.find("#work-packages-activities-tab-journals-item-component-reactions-#{journal.id}")
-      expect(component.text).to be_empty
+        {
+          thumbs_up: {
+            count: 3, tooltip_text: "Bob Bobbit, Bob Bobbit and Bob Bobbit",
+            aria_label: "thumbs up by Bob Bobbit, Bob Bobbit and Bob Bobbit"
+          },
+          thumbs_down: {
+            count: 1, tooltip_text: "Bob Bobbit", aria_label: "thumbs down by Bob Bobbit"
+          },
+          eyes: {
+            count: 20, tooltip_text: "Bob Bobbit, Bob Bobbit, Bob Bobbit, Bob Bobbit, Bob Bobbit and 15 others",
+            aria_label: "eyes by Bob Bobbit, Bob Bobbit, Bob Bobbit, Bob Bobbit, Bob Bobbit and 15 others"
+          },
+          rocket: {
+            count: 5, tooltip_text: "Bob Bobbit, Bob Bobbit, Bob Bobbit, Bob Bobbit and Bob Bobbit",
+            aria_label: "rocket by Bob Bobbit, Bob Bobbit, Bob Bobbit, Bob Bobbit and Bob Bobbit"
+          },
+          confused_face: {
+            count: 6,
+            tooltip_text: "Bob Bobbit, Bob Bobbit, Bob Bobbit, Bob Bobbit, Bob Bobbit and 1 other",
+            aria_label: "confused face by Bob Bobbit, Bob Bobbit, Bob Bobbit, Bob Bobbit, Bob Bobbit and 1 other"
+          }
+        }.each { |reaction, details| expect_emoji_reaction(reaction:, **details) }
+      end
+    end
+
+    context "with no reactions" do
+      it "renders just the component node" do
+        # NB: This is so that there is always a node to update during WorkPackages::ActivitiesTabController#update_streams polling
+        render_inline(described_class.new(model: comment, grouped_emoji_reactions: {}))
+
+        component = page.find("#work-packages-activities-tab-journals-item-component-reactions-#{comment.id}")
+        expect(component.text).to be_empty
+      end
     end
   end
 

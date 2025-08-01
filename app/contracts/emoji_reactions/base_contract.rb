@@ -68,6 +68,8 @@ module EmojiReactions
         user.allowed_in_work_package?(:add_work_package_comments, model.reactable)
       when Journal
         user.allowed_in_work_package?(:add_work_package_comments, model.reactable.journable)
+      when Comment
+        user.allowed_in_work_package?(:add_work_package_comments, model.reactable.commented)
       else
         false
       end

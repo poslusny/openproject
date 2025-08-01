@@ -9,7 +9,7 @@
                 scheme: button_scheme(data[:users]),
                 color: :default,
                 bg: counter_color(data[:users]),
-                id: "#{journal.id}-#{reaction}",
+                id: "#{model.id}-#{reaction}",
                 test_selector: "reaction-#{reaction}",
                 tag: :a,
                 href: href(reaction:),

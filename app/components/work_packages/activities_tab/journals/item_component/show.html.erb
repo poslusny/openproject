@@ -9,10 +9,10 @@
         end
         journal_container.with_row(flex_layout: true) do |reactions_container|
           reactions_container.with_column do
-            render(WorkPackages::ActivitiesTab::Journals::ItemComponent::AddReactions.new(journal:, grouped_emoji_reactions:))
+            render(WorkPackages::ActivitiesTab::Journals::ItemComponent::AddReactions.new(model: journal, grouped_emoji_reactions:))
           end
           reactions_container.with_column do
-            render(WorkPackages::ActivitiesTab::Journals::ItemComponent::Reactions.new(journal:, grouped_emoji_reactions:))
+            render(WorkPackages::ActivitiesTab::Journals::ItemComponent::Reactions.new(model: journal, grouped_emoji_reactions:))
           end
         end
       end
