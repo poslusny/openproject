@@ -162,6 +162,63 @@ RSpec.describe "Edit project custom fields on project overview page", :js do
         end
       end
 
+      shared_examples "affecting calculated value" do
+        it "calculates value based on referenced value" do
+          overview_page.visit_page
+
+          overview_page.within_custom_field_container(calculated_value_custom_field) do
+            expect(page).to have_content expected_initial_calculated_value
+          end
+
+          overview_page.open_edit_dialog_for_section(section)
+
+          field.fill_in(with: update_value)
+
+          dialog.submit
+          dialog.expect_closed
+
+          overview_page.within_custom_field_container(calculated_value_custom_field) do
+            expect(page).to have_content expected_updated_calculated_value
+          end
+        end
+
+        it "does not recalculate value if referenced value doesn't change" do
+          overview_page.visit_page
+
+          overview_page.within_custom_field_container(calculated_value_custom_field) do
+            expect(page).to have_content expected_initial_calculated_value
+          end
+
+          overview_page.open_edit_dialog_for_section(section)
+
+          # don't touch the input
+
+          dialog.submit
+          dialog.expect_closed
+
+          overview_page.within_custom_field_container(calculated_value_custom_field) do
+            expect(page).to have_content expected_initial_calculated_value
+          end
+        end
+
+        it "blanks the value if referenced value gets removed" do
+          overview_page.within_custom_field_container(calculated_value_custom_field) do
+            expect(page).to have_content expected_initial_calculated_value
+          end
+
+          overview_page.open_edit_dialog_for_section(section)
+
+          field.fill_in(with: "")
+
+          dialog.submit
+          dialog.expect_closed
+
+          overview_page.within_custom_field_container(calculated_value_custom_field) do
+            expect(page).to have_content I18n.t("placeholders.default")
+          end
+        end
+      end
+
       shared_examples "a rich text custom field input" do
         it "saves the value properly" do
           custom_field.custom_values.destroy_all
@@ -246,6 +303,22 @@ RSpec.describe "Edit project custom fields on project overview page", :js do
         let(:expected_updated_value) { update_value }
 
         it_behaves_like "a custom field input"
+
+        describe "affecting calculated value using int" do
+          let(:calculated_value_custom_field) { calculated_from_int_project_custom_field }
+          let(:expected_initial_calculated_value) { 234 }
+          let(:expected_updated_calculated_value) { 912 }
+
+          include_examples "affecting calculated value"
+        end
+
+        describe "affecting calculated value using int and float" do
+          let(:calculated_value_custom_field) { calculated_from_int_and_float_project_custom_field }
+          let(:expected_initial_calculated_value) { "15,185.088" }
+          let(:expected_updated_calculated_value) { "56,295.936" }
+
+          include_examples "affecting calculated value"
+        end
       end
 
       describe "with float CF" do
@@ -256,6 +329,14 @@ RSpec.describe "Edit project custom fields on project overview page", :js do
         let(:expected_updated_value) { update_value }
 
         it_behaves_like "a custom field input"
+
+        describe "affecting calculated value using int and float" do
+          let(:calculated_value_custom_field) { calculated_from_int_and_float_project_custom_field }
+          let(:expected_initial_calculated_value) { "15,185.088" }
+          let(:expected_updated_calculated_value) { "56,185.047" }
+
+          include_examples "affecting calculated value"
+        end
       end
 
       describe "with date CF" do
