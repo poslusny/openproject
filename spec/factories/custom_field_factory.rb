@@ -59,6 +59,10 @@ FactoryBot.define do
       RequestStore.store.delete_if { |key, _| key.to_s.include?("_custom_fields") }
     end
 
+    trait :admin_only do
+      admin_only { true }
+    end
+
     trait :multi_value do
       multi_value { true }
     end
