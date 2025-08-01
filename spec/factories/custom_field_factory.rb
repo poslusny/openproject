@@ -56,7 +56,7 @@ FactoryBot.define do
 
     after(:create) do
       # As the request store keeps track of the created custom fields
-      RequestStore.clear!
+      RequestStore.store.delete_if { |key, _| key.to_s.include?("_custom_fields") }
     end
 
     trait :multi_value do
