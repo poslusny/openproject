@@ -111,11 +111,13 @@ module Storages
         # We need this due to inconsistencies of how we represent the File Path
         target_location_map.transform_keys! { |key| key.starts_with?("/") ? key : "/#{key}" }
 
-        source_files.to_h do |info|
-          target = info.clean_location.gsub(@source.managed_project_folder_path, @target.managed_project_folder_path)
-
-          [info.id.to_s, target_location_map[target]&.id || id]
-        end
+        source_files.filter_map do |info|
+          # in case file has been deleted location is nil
+          if info.location.present?
+            target = info.clean_location.gsub(@source.managed_project_folder_path, @target.managed_project_folder_path)
+            [info.id.to_s, target_location_map[target]&.id || id]
+          end
+        end.to_h
       end
 
       def auth_strategy

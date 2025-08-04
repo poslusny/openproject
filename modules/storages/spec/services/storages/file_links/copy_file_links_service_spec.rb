@@ -74,7 +74,10 @@ RSpec.describe Storages::FileLinks::CopyFileLinksService, :webmock do
 
     let(:remote_source_info) do
       source_links.map do |link|
-        Storages::StorageFileInfo.new(status: "ok", status_code: 200, id: link.origin_id, name: link.origin_name,
+        Storages::StorageFileInfo.new(status: "ok",
+                                      status_code: 200,
+                                      id: link.origin_id,
+                                      name: link.origin_name,
                                       location: File.join(source_storage.managed_project_folder_path, link.origin_name))
       end
     end
@@ -100,12 +103,34 @@ RSpec.describe Storages::FileLinks::CopyFileLinksService, :webmock do
                                               .and_return(Success(path_to_ids))
     end
 
-    it "create links to the newly copied files" do
+    it "creates links to the newly copied files" do
       expect { service.call }.to change(Storages::FileLink, :count).by(5)
 
       Storages::FileLink.last(5).each do |link|
         expect(link.origin_id).to match /_target$/
         expect(link.storage_id).to eq(target.id)
+      end
+    end
+
+    context "when one file_link points to a deleted file" do
+      before do
+        link = source_links[-1]
+        remote_source_info[-1] = Storages::StorageFileInfo.new(status: "Forbidden",
+                                                               status_code: 403,
+                                                               id: link.origin_id,
+                                                               name: nil,
+                                                               location: nil)
+
+        path_to_ids.delete(File.join(target_storage.managed_project_folder_path, link.origin_name))
+      end
+
+      it "creates links for only copied files" do
+        expect { service.call }.to change(Storages::FileLink, :count).by(4)
+
+        Storages::FileLink.last(4).each do |link|
+          expect(link.origin_id).to match /_target$/
+          expect(link.storage_id).to eq(target.id)
+        end
       end
     end
   end
