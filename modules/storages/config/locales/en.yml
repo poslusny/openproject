@@ -435,17 +435,6 @@ en:
     label_status: Status
     label_storage: Storage
     label_uri: URI
-    validators:
-      sp_client_cant_delete_folder: "Could not delete the test folder in SharePoint. Please check permissions."
-      sp_client_write_permission_missing: "Write permission is missing for creating a test folder in SharePoint."
-      sp_existing_test_folder: "A test folder with the validation name already exists in SharePoint."
-      sp_unexpected_content: "Unexpected files or folders were found in the SharePoint group folder."
-      sp_oauth_token_missing: "No OAuth token found for SharePoint connection."
-      sp_client_id_missing: "Client ID is missing for SharePoint connection."
-      sp_client_secret_missing: "Client secret is missing for SharePoint connection."
-      sp_tenant_id_missing: "Tenant ID is missing for SharePoint connection."
-      sp_oauth_request_error: "User-bound request to SharePoint failed."
-      unknown_error: "An unknown error occurred during SharePoint validation."
 
     member_connection_status:
       connected: Connected
