@@ -435,7 +435,6 @@ en:
     label_status: Status
     label_storage: Storage
     label_uri: URI
-
     member_connection_status:
       connected: Connected
       connected_no_permissions: User role has no storages permissions
