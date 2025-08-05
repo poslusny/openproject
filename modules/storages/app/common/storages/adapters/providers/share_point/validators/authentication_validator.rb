@@ -31,7 +31,7 @@
 module Storages
   module Adapters
     module Providers
-      module OneDrive
+      module SharePoint
         module Validators
           class AuthenticationValidator < ConnectionValidators::BaseValidatorGroup
             def self.key = :authentication
@@ -53,18 +53,18 @@ module Storages
               if OAuthClientToken.for_user_and_client(@user, @storage.oauth_client).exists?
                 pass_check(:existing_token)
               else
-                warn_check(:existing_token, :od_oauth_token_missing, halt_validation: true)
+                warn_check(:existing_token, :sp_oauth_token_missing, halt_validation: true)
               end
             end
 
             def user_bound_request
-              Registry["one_drive.queries.user"].call(storage: @storage, auth_strategy:).either(
+              Registry["share_point.queries.user"].call(storage: @storage, auth_strategy:).either(
                 ->(_) { pass_check(:user_bound_request) },
-                -> { fail_check(:user_bound_request, :"od_oauth_request_#{it.code}") }
+                -> { fail_check(:user_bound_request, :"sp_oauth_request_#{it.code}") }
               )
             end
 
-            def auth_strategy = Registry["one_drive.authentication.user_bound"].call(@user, @storage)
+            def auth_strategy = Registry["share_point.authentication.user_bound"].call(@user, @storage)
           end
         end
       end

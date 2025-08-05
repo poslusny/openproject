@@ -34,7 +34,9 @@ module Storages
       module SharePoint
         module Validators
           class ConnectionValidator < ConnectionValidators::BaseConnectionValidator
-            # TODO: #64183 Implement the connection validation logic for SharePoint
+            register_group StorageConfigurationValidator
+            register_group AuthenticationValidator,
+                           precondition: ->(_, result) { result.group(:base_configuration).non_failure? }
           end
         end
       end
