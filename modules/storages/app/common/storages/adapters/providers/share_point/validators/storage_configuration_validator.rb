@@ -47,23 +47,11 @@ module Storages
                               :client_id
 
               storage_configuration_status
-              diagnostic_request
+              # diagnostic_request - commented out as it is not implemented yet
               check_host
               check_tenant_id
               check_client_secret
               check_client_id
-            end
-
-            # Skip diagnostic request for now, as it is not implemented yet
-            def diagnostic_request
-              return pass_check(:diagnostic_request)
-
-              response = Registry["share_point.queries.diagnostic"].call(storage: @storage)
-              if response.success?
-                pass_check(:diagnostic_request)
-              else
-                fail_check(:diagnostic_request, :unknown_error)
-              end
             end
 
             def storage_configuration_status

@@ -43,27 +43,6 @@ module Storages
                 end
               end
 
-              context "when diagnostic request fails with an unhandled error" do
-                let(:error_code) { :error }
-                let(:result) { Failure(error) }
-
-                before { Registry.stub("share_point.queries.files", files_double) }
-
-                it "the check fails", pending: "this is not implemented yet" do
-                  results = validator.call
-
-                  expect(results[:diagnostic_request]).to be_a_failure
-                  expect(results[:diagnostic_request].code).to eq(:unknown_error)
-                end
-
-                it "logs an error", pending: "this is not implemented yet" do
-                  allow(Rails.logger).to receive(:error)
-                  validator.call
-
-                  expect(Rails.logger).to have_received(:error).with(/Connection validation failed with unknown/)
-                end
-              end
-
               context "when the tenant id is wrong" do
                 it "but looks like an actual valid value", vcr: "share_point/validation_wrong_tenant_id" do
                   storage.tenant_id = "itdoesnotexists9000.sharepoint.com"
