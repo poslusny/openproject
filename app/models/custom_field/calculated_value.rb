@@ -131,10 +131,12 @@ module CustomField::CalculatedValue
         cache[id] = if field_format_calculated_value?
                       referenced_custom_fields = formula_referenced_custom_field_ids
 
-                      next true if referenced_custom_fields.include?(original_id) || referenced_custom_fields.include?(id)
-
-                      ProjectCustomField.where(id: referenced_custom_fields).any? do |referenced_field|
-                        referenced_field.formula_references_id?(original_id, cache)
+                      if referenced_custom_fields.include?(original_id) || referenced_custom_fields.include?(id)
+                        true
+                      else
+                        ProjectCustomField.where(id: referenced_custom_fields).any? do |referenced_field|
+                          referenced_field.formula_references_id?(original_id, cache)
+                        end
                       end
                     else
                       false
