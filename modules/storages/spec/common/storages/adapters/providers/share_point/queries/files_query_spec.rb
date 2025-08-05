@@ -38,7 +38,7 @@ module Storages
         module Queries
           RSpec.describe FilesQuery, :webmock do
             let(:user) { create(:admin) }
-            let(:storage) { create(:share_point_dev_storage, oauth_client_token_user: user) }
+            let(:storage) { create(:share_point_storage, :sandbox, oauth_client_token_user: user) }
 
             let(:auth_strategy) { Registry["share_point.authentication.userless"].call(false) }
             let(:input_data) { Input::Files.build(folder:).value! }

@@ -9,7 +9,7 @@ module Storages
       module SharePoint
         module Validators
           RSpec.describe StorageConfigurationValidator, :webmock do
-            let(:storage) { create(:share_point_dev_storage, :as_automatically_managed) }
+            let(:storage) { create(:share_point_storage, :sandbox, :as_automatically_managed) }
             let(:error) { Results::Error.new(code: error_code, source: self) }
 
             subject(:validator) { described_class.new(storage) }

@@ -8,7 +8,7 @@ RSpec.describe Storages::Adapters::Providers::SharePoint::Validators::Authentica
 
   context "when using OAuth2" do
     let(:user) { create(:user) }
-    let(:storage) { create(:share_point_dev_storage, oauth_client_token_user: user) }
+    let(:storage) { create(:share_point_storage, :sandbox, oauth_client_token_user: user) }
     let(:error) { Storages::Adapters::Results::Error.new(code: :unauthorized, source: self) }
 
     before { User.current = user }
