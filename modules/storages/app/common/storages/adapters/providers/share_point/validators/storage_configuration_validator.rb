@@ -40,14 +40,12 @@ module Storages
 
             def validate
               register_checks :storage_configured,
-                              :diagnostic_request,
                               :host,
                               :tenant_id,
                               :client_secret,
                               :client_id
 
               storage_configuration_status
-              # diagnostic_request - commented out as it is not implemented yet
               check_host
               check_tenant_id
               check_client_secret

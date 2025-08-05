@@ -320,6 +320,15 @@ en:
         oidc_token_acquisition_failed: Your OpenID Connect setup doesn't provide the necessary audience, nor does it provide token exchange capabilities. Please check out our documentation for more information.
         oidc_token_exchange_failed: There seems to be a problem with the Token Exchange setup on your OpenID Connect Provider. Please check its configuration and try again.
         oidc_token_refresh_failed: There was an error while trying to check your access to the storage. Please check the server logs for further information.
+        sp_client_cant_delete_folder: The client is having trouble deleting folders in SharePoint. Please check the setup documentation for your storage.
+        sp_client_id_missing: The configured OAuth 2 client id is missing for SharePoint. Please check the configuration.
+        sp_client_secret_missing: The configured OAuth 2 client secret is missing for SharePoint. Please check the configuration.
+        sp_client_write_permission_missing: The client seems to have write permissions missing in SharePoint. Please check the setup documentation for your storage.
+        sp_existing_test_folder: The folder %{folder_name} needed for testing already exists in SharePoint. Please delete it and try again.
+        sp_oauth_request_error: The user-bound request to SharePoint failed. Please check the server logs for further information.
+        sp_oauth_token_missing: OpenProject cannot test the user level communication with SharePoint as the user did not yet link their SharePoint account.
+        sp_tenant_id_missing: The configured directory (tenant) id is missing for SharePoint. Please check the configuration.
+        sp_unexpected_content: Unexpected content found in the SharePoint drive.
         unknown_error: The connection could not be validated. An unknown error occurred. Please check the server logs for further information.
       label_error: Error
       label_failed: Failed
@@ -426,6 +435,18 @@ en:
     label_status: Status
     label_storage: Storage
     label_uri: URI
+    validators:
+      sp_client_cant_delete_folder: "Could not delete the test folder in SharePoint. Please check permissions."
+      sp_client_write_permission_missing: "Write permission is missing for creating a test folder in SharePoint."
+      sp_existing_test_folder: "A test folder with the validation name already exists in SharePoint."
+      sp_unexpected_content: "Unexpected files or folders were found in the SharePoint group folder."
+      sp_oauth_token_missing: "No OAuth token found for SharePoint connection."
+      sp_client_id_missing: "Client ID is missing for SharePoint connection."
+      sp_client_secret_missing: "Client secret is missing for SharePoint connection."
+      sp_tenant_id_missing: "Tenant ID is missing for SharePoint connection."
+      sp_oauth_request_error: "User-bound request to SharePoint failed."
+      unknown_error: "An unknown error occurred during SharePoint validation."
+
     member_connection_status:
       connected: Connected
       connected_no_permissions: User role has no storages permissions
@@ -518,26 +539,3 @@ en:
         Integrate your OneDrive as a file storage with OpenProject. Upload files and link them directly to
         work packages in a project.
       title: OneDrive integration
-  storages:
-    validators:
-      sp_client_cant_delete_folder: "Could not delete the test folder in SharePoint. Please check permissions."
-      sp_client_write_permission_missing: "Write permission is missing for creating a test folder in SharePoint."
-      sp_existing_test_folder: "A test folder with the validation name already exists in SharePoint."
-      sp_unexpected_content: "Unexpected files or folders were found in the SharePoint group folder."
-      sp_oauth_token_missing: "No OAuth token found for SharePoint connection."
-      sp_client_id_missing: "Client ID is missing for SharePoint connection."
-      sp_client_secret_missing: "Client secret is missing for SharePoint connection."
-      sp_tenant_id_missing: "Tenant ID is missing for SharePoint connection."
-      sp_oauth_request_error: "User-bound request to SharePoint failed."
-      unknown_error: "An unknown error occurred during SharePoint validation."
-    health:
-      connection_validation:
-        sp_client_cant_delete_folder: The client is having trouble deleting folders in SharePoint. Please check the setup documentation for your storage.
-        sp_client_write_permission_missing: The client seems to have write permissions missing in SharePoint. Please check the setup documentation for your storage.
-        sp_existing_test_folder: The folder %{folder_name} needed for testing already exists in SharePoint. Please delete it and try again.
-        sp_unexpected_content: Unexpected content found in the SharePoint drive.
-        sp_oauth_token_missing: OpenProject cannot test the user level communication with SharePoint as the user did not yet link their SharePoint account.
-        sp_client_id_missing: The configured OAuth 2 client id is missing for SharePoint. Please check the configuration.
-        sp_client_secret_missing: The configured OAuth 2 client secret is missing for SharePoint. Please check the configuration.
-        sp_tenant_id_missing: The configured directory (tenant) id is missing for SharePoint. Please check the configuration.
-        sp_oauth_request_error: The user-bound request to SharePoint failed. Please check the server logs for further information.
