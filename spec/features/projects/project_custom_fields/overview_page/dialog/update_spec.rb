@@ -38,7 +38,6 @@ RSpec.describe "Edit project custom fields on project overview page", :js do
 
   before do
     login_as member_with_project_attributes_edit_permissions
-    overview_page.visit_page
   end
 
   describe "with correct updating behaviour" do
@@ -48,7 +47,7 @@ RSpec.describe "Edit project custom fields on project overview page", :js do
 
       shared_examples "a custom field checkbox" do
         it "sets the value to true if checked" do
-          custom_field.custom_values.destroy_all
+          custom_field.custom_values.delete_all
 
           overview_page.visit_page
 
@@ -69,6 +68,8 @@ RSpec.describe "Edit project custom fields on project overview page", :js do
         end
 
         it "sets the value to false if unchecked" do
+          overview_page.visit_page
+
           overview_page.within_custom_field_container(custom_field) do
             expect(page).to have_content "Yes"
           end
@@ -86,6 +87,8 @@ RSpec.describe "Edit project custom fields on project overview page", :js do
         end
 
         it "does not change the value if untouched" do
+          overview_page.visit_page
+
           overview_page.within_custom_field_container(custom_field) do
             expect(page).to have_content "Yes"
           end
@@ -105,7 +108,7 @@ RSpec.describe "Edit project custom fields on project overview page", :js do
 
       shared_examples "a custom field input" do
         it "saves the value properly" do
-          custom_field.custom_values.destroy_all
+          custom_field.custom_values.delete_all
 
           overview_page.visit_page
 
@@ -145,6 +148,8 @@ RSpec.describe "Edit project custom fields on project overview page", :js do
         end
 
         it "removes the value properly" do
+          overview_page.visit_page
+
           overview_page.within_custom_field_container(custom_field) do
             expect(page).to have_content expected_initial_value
           end
@@ -202,6 +207,8 @@ RSpec.describe "Edit project custom fields on project overview page", :js do
         end
 
         it "blanks the value if referenced value gets removed" do
+          overview_page.visit_page
+
           overview_page.within_custom_field_container(calculated_value_custom_field) do
             expect(page).to have_content expected_initial_calculated_value
           end
@@ -221,7 +228,7 @@ RSpec.describe "Edit project custom fields on project overview page", :js do
 
       shared_examples "a rich text custom field input" do
         it "saves the value properly" do
-          custom_field.custom_values.destroy_all
+          custom_field.custom_values.delete_all
 
           overview_page.visit_page
 
@@ -261,6 +268,8 @@ RSpec.describe "Edit project custom fields on project overview page", :js do
         end
 
         it "removes the value properly" do
+          overview_page.visit_page
+
           overview_page.within_custom_field_container(custom_field) do
             expect(page).to have_text(expected_initial_value)
           end
@@ -366,7 +375,7 @@ RSpec.describe "Edit project custom fields on project overview page", :js do
 
       shared_examples "a select field" do
         it "saves the value properly" do
-          custom_field.custom_values.destroy_all
+          custom_field.custom_values.delete_all
 
           overview_page.visit_page
 
@@ -407,6 +416,8 @@ RSpec.describe "Edit project custom fields on project overview page", :js do
         end
 
         it "removes the value properly" do
+          overview_page.visit_page
+
           overview_page.within_custom_field_container(custom_field) do
             expect(page).to have_text first_option
           end
@@ -457,7 +468,7 @@ RSpec.describe "Edit project custom fields on project overview page", :js do
           end
 
           it "saves selected user group properly" do
-            custom_field.custom_values.destroy_all
+            custom_field.custom_values.delete_all
 
             overview_page.visit_page
 
@@ -481,7 +492,7 @@ RSpec.describe "Edit project custom fields on project overview page", :js do
           end
 
           it "saves selected placeholer user properly" do
-            custom_field.custom_values.destroy_all
+            custom_field.custom_values.delete_all
 
             overview_page.visit_page
 
@@ -506,7 +517,7 @@ RSpec.describe "Edit project custom fields on project overview page", :js do
 
       shared_examples "a autocomplete multi select field" do
         it "saves single selected values properly" do
-          custom_field.custom_values.destroy_all
+          custom_field.custom_values.delete_all
 
           overview_page.visit_page
 
@@ -527,7 +538,7 @@ RSpec.describe "Edit project custom fields on project overview page", :js do
         end
 
         it "saves multi selected values properly" do
-          custom_field.custom_values.destroy_all
+          custom_field.custom_values.delete_all
 
           overview_page.visit_page
 
@@ -551,6 +562,8 @@ RSpec.describe "Edit project custom fields on project overview page", :js do
         end
 
         it "removes deselected values properly" do
+          overview_page.visit_page
+
           overview_page.within_custom_field_container(custom_field) do
             expect(page).to have_text first_option
             expect(page).to have_text second_option
@@ -570,6 +583,8 @@ RSpec.describe "Edit project custom fields on project overview page", :js do
         end
 
         it "does not remove values when not touching the init values" do
+          overview_page.visit_page
+
           overview_page.within_custom_field_container(custom_field) do
             expect(page).to have_text first_option
             expect(page).to have_text second_option
@@ -590,6 +605,8 @@ RSpec.describe "Edit project custom fields on project overview page", :js do
         end
 
         it "removes all values when clearing the input" do
+          overview_page.visit_page
+
           overview_page.within_custom_field_container(custom_field) do
             expect(page).to have_text first_option
             expect(page).to have_text second_option
@@ -609,7 +626,7 @@ RSpec.describe "Edit project custom fields on project overview page", :js do
         end
 
         it "adds values properly to init values" do
-          custom_field.custom_values.destroy_all
+          custom_field.custom_values.delete_all
 
           overview_page.visit_page
 
@@ -684,7 +701,7 @@ RSpec.describe "Edit project custom fields on project overview page", :js do
           end
 
           it "saves selected user groups properly" do
-            custom_field.custom_values.destroy_all
+            custom_field.custom_values.delete_all
 
             overview_page.visit_page
 
@@ -714,7 +731,7 @@ RSpec.describe "Edit project custom fields on project overview page", :js do
           end
 
           it "shows only placeholder users from this project" do
-            custom_field.custom_values.destroy_all
+            custom_field.custom_values.delete_all
 
             overview_page.visit_page
 
