@@ -740,6 +740,7 @@ en:
 
   themes:
     dark: "Dark"
+    dark_high_contrast: "Dark high contrast"
     light: "Light"
     light_high_contrast: "Light high contrast"
     sync_with_os: "Automatic (match OS colour mode)"

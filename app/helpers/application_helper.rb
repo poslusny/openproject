@@ -295,6 +295,7 @@ module ApplicationHelper
       [I18n.t("themes.light"), "light"],
       [I18n.t("themes.light_high_contrast"), "light_high_contrast"],
       [I18n.t("themes.dark"), "dark"],
+      [I18n.t("themes.dark_high_contrast"), "dark_high_contrast"],
       [I18n.t("themes.sync_with_os"), "sync_with_os"]
     ]
   end

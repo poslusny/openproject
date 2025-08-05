@@ -26,7 +26,8 @@
 
   /* Generic color mapping for content variables */
   [data-light-theme=light_high_contrast],
-  [data-dark-theme=dark] {
+  [data-dark-theme=dark],
+  [data-dark-theme=dark_high_contrast] {
     --avatar-border-color: var(--avatar-borderColor);
     --list-item-hover--border-color: var(--control-transparent-borderColor-hover);
     --list-item-hover--color: var(--fgColor-default);
@@ -62,19 +63,21 @@
   }
 
   /* For accessibility themes we are also overriding the header and the sidebar */
-  [data-light-theme=light_high_contrast] {
+  [data-light-theme=light_high_contrast],
+  [data-dark-theme=dark_high_contrast] {
     --main-menu-hover-border-color: var(--fgColor-default) !important;
     --main-menu-bg-selected-border: var(--fgColor-default);
     --accent-color: var(--fgColor-accent);
     --link-text-decoration: underline;
-    --button--primary-font-color:  var(--button-primary-fgColor-rest);
+    --button--primary-font-color: var(--button-primary-fgColor-rest);
     --button--primary-background-hover-color: var(--button-primary-bgColor-hover);
     --button--primary-background-color: var(--button-primary-bgColor-rest);
     --primary-button-color: var(--button-primary-bgColor-rest);
   }
 
   /* For dark themes we are using a lighter version of the accent and primary color. Otherwise they will not be seen */
-  [data-dark-theme=dark] {
+  [data-dark-theme=dark],
+  [data-dark-theme=dark_high_contrast] {
       --accent-color: var(--accent-color--dark-mode);
       --content-icon-color: var(--accent-color--dark-mode);
       --primary-button-color: var(--primary-button-color--dark-mode);
@@ -90,5 +93,12 @@
       --ck-color-button-on-disabled-background: var(--button-default-bgColor-disabled);
       --ck-color-labeled-field-label-background: var(--overlay-bgColor);
       --ck-color-input-disabled-background: var(--bgColor-disabled);
+  }
+
+  [data-dark-theme=dark_high_contrast] {
+    --avatar-borderColor: var(--borderColor-emphasis);
+    --content-icon-color: var(--fgColor-accent);
+    --button--primary-background-disabled-color: var(--button-primary-bgColor-disabled);
+    --button--primary-border-disabled-color: var(--button-primary-bgColor-disabled);
   }
 </style>
