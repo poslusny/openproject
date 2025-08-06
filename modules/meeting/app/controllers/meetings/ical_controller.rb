@@ -53,7 +53,7 @@ module Meetings
         format.ics do
           send_data(
             ics_body,
-            filename: "mycal.ics",
+            filename: "openproject-meetings.ics",
             disposition: "inline; filename=openproject-meetings.ics",
             type: "text/calendar"
           )
