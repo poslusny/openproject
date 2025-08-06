@@ -187,7 +187,7 @@ en:
   label_version: "Version"
   label_time_zone: "Time zone"
   label_start_date: "Start date"
-
+  label_subscribe_icalendar: "Subscribe to calendar"
 
   meeting:
     participants:
@@ -322,15 +322,13 @@ en:
             All participants will receive updated calendar invites informing them of your changes to this template or to individual occurrences.
           disabled: >
             Email calendar updates are disabled for the meeting series.
-            Participants will not receive an email informing them of your changes to this template or to individual occurrences. 
-
+            Participants will not receive an email informing them of your changes to this template or to individual occurrences.
 
   meeting_section:
     untitled_title: "Untitled section"
     delete_confirmation: "Deleting the section will also delete all of its agenda items. Are you sure you want to do this?"
     placeholder_title: "New section"
     empty_text: "Drag items here or create a new one"
-
 
   recurring_meeting:
     time_zone_difference_banner:
@@ -339,14 +337,14 @@ en:
         The dates below are referencing the time zone of the meeting series (%{actual_zone}),
         not your local time zone (%{user_zone}).
     ended_blankslate:
-        title: "Meeting series ended"
-        message: "This meeting series has come to an end. There are no upcoming meetings. "
-        action: "You can still view past occurrences or edit the meeting series to extend it."
+      title: "Meeting series ended"
+      message: "This meeting series has come to an end. There are no upcoming meetings. "
+      action: "You can still view past occurrences or edit the meeting series to extend it."
     occurrence:
       infoline: "This meeting is part of a recurring meeting series."
       error_no_next: "There is no next occurrence for this meeting."
       first_already_exists: "The first occurrence of this meeting series is already instantiated."
-      first_created: > 
+      first_created: >
         The first meeting has been successfuly created from template.
         All future meetings will be created automatically at the time of the previous occurrence.
     template:
@@ -356,7 +354,7 @@ en:
         This template will be used whenever new meetings in the series get created.
         You can add agenda items, participants, and attachments to this template.
       blankslate_finalize: >
-        When you're done preparing this template, 
+        When you're done preparing this template,
         click the '%{button_title}' button above to finish the setup and schedule the first meeting of the series.
       label_view_template: "View template"
       label_edit_template: "Edit template"
@@ -398,8 +396,8 @@ en:
     planned:
       title: "Planned"
       subtitle: >
-        The following meetings are planned in the recurring meeting schedule but are not open yet. 
-        Every time a planned meeting starts, the next one will automatically be opened for you. 
+        The following meetings are planned in the recurring meeting schedule but are not open yet.
+        Every time a planned meeting starts, the next one will automatically be opened for you.
         You can also open planned meetings manually to import the template and start editing the agenda.
       blankslate:
         title: "No more planned meetings"
@@ -515,7 +513,7 @@ en:
   text_agenda_backlog_clear_description: >
     Are you sure you want to remove all items currently in the agenda backlog? This action is not reversible.
   label_series_backlog: "Series backlog"
-  text_series_backlog: > 
+  text_series_backlog: >
     The backlog is shared with all occurrences of this series.
     You can drag items in and out to add or remove them from a particular meeting.
   label_series_backlog_clear_title: "Clear series backlog?"
@@ -524,8 +522,8 @@ en:
     Are you sure you want to continue? This action is not reversible.
 
   text_agenda_item_title: 'Agenda item "%{title}"'
-  text_agenda_work_package_deleted: 'Agenda item for deleted work package'
-  text_deleted_agenda_item: 'Deleted agenda item'
+  text_agenda_work_package_deleted: "Agenda item for deleted work package"
+  text_deleted_agenda_item: "Deleted agenda item"
 
   label_initial_meeting_details: "Meeting"
   label_meeting_details: "Meeting details"
@@ -575,4 +573,3 @@ en:
 
   text_email_updates_muted: "Email calendar updates are muted. Participants will not receive updated invites via email when you make changes."
   text_email_updates_enabled: "Email calendar updates are enabled. All participants will receive updated invites via email when you make changes."
-
