@@ -47,6 +47,8 @@ const TOKEN_REGEX = /{{([0-9A-Za-z_]+)}}/g;
 // A zero-width space character, which is used
 // to have a caret position after tokens
 const CONTROL_SPACE = '\u200B';
+// A non-breaking space inserted by some browsers to preserve multiple consecutive spaces
+const NON_BREAKING_SPACE = '\u00A0';
 
 export default class PatternInputController extends Controller {
   static targets = [
@@ -565,9 +567,11 @@ export default class PatternInputController extends Controller {
       }
     });
 
-    // remove any padding whitespaces and control spaces,
-    // which were used for usability
-    return result.trim().replace(new RegExp(CONTROL_SPACE, 'g'), '');
+    // remove any padding whitespaces and control spaces, which were used for
+    // usability, and non-breaking spaces inserted by some browsers
+    return result.trim()
+      .replace(new RegExp(CONTROL_SPACE, 'g'), '')
+      .replace(new RegExp(NON_BREAKING_SPACE, 'g'), ' ');
   }
 
   private containsCursor(node:Node):boolean {
