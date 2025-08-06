@@ -32,16 +32,31 @@ module Meetings
     skip_before_action :check_if_login_required
     authorization_checked! :index
 
+    EMPTY_ICS = "BEGIN:VCALENDAR\nVERSION:2.0\nEND:VCALENDAR"
+
     def index
-      token = Token::ICalMeeting.find_by_plaintext_value(params[:token]) # rubocop:disable Rails/DynamicFindBy
+      token = Token::ICalMeeting.find_by_plaintext_value!(params[:token]) # rubocop:disable Rails/DynamicFindBy
 
       user = token.user
 
       service = AllMeetings::ICalService.new(user:)
+      s_call = service.call
+
+      ics_body = if s_call.success?
+                   s_call.result
+                 else
+                   Rails.logger.error "Could not generate ICS feed: #{s_call.message}"
+                   EMPTY_ICS
+                 end
 
       respond_to do |format|
         format.ics do
-          send_data(service.call.result, filename: "mycal.ics", disposition: "inline; filename=mycal.ics", type: "text/calendar")
+          send_data(
+            ics_body,
+            filename: "mycal.ics",
+            disposition: "inline; filename=openproject-meetings.ics",
+            type: "text/calendar"
+          )
         end
       end
     end

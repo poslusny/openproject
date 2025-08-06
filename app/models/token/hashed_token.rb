@@ -61,6 +61,10 @@ module Token
       def find_by_plaintext_value(input)
         find_by(value: hash_function(input))
       end
+
+      def find_by_plaintext_value!(input)
+        find_by!(value: hash_function(input))
+      end
     end
 
     ##

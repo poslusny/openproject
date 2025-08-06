@@ -85,4 +85,9 @@ FactoryBot.define do
                                                 ical_token: token)
     end
   end
+
+  factory :ical_meeting_token, class: "::Token::ICalMeeting" do
+    user
+    token_name { "My Meetings Calendar" }
+  end
 end
