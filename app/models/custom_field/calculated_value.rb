@@ -70,6 +70,10 @@ module CustomField::CalculatedValue
   included do
     validate :validate_formula, if: :field_format_calculated_value?
 
+    def field_format_for_formula?
+      FIELD_FORMATS_FOR_FORMULA.include?(field_format)
+    end
+
     def validate_formula
       if formula_string.blank?
         errors.add(:formula, :blank)

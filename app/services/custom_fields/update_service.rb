@@ -30,5 +30,34 @@
 
 module CustomFields
   class UpdateService < ::BaseServices::Update
+    protected
+
+    def after_perform(service_call)
+      super.tap do
+        recalculate_values
+      end
+    end
+
+    private
+
+    def recalculate_values
+      return unless recalculate_values?
+
+      affected_cfs = model.class.affected_calculated_fields([model.id])
+      return if affected_cfs.empty?
+
+      model.class.customized_class.find_each do |customized|
+        customized.calculate_custom_fields(affected_cfs)
+        customized.save if customized.changed_for_autosave?
+      end
+    end
+
+    # TODO: should this be moved to CustomField?
+    def recalculate_values?
+      (model.field_format_calculated_value? && model.formula_previously_changed?) ||
+      # not needed if admin only calculated values are properly calculated
+      # from non admin only dependencies changed by non admins
+      (model.field_format_for_formula? && model.admin_only_previously_changed?)
+    end
   end
 end
