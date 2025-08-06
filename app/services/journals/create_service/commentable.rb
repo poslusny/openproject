@@ -36,7 +36,7 @@ class Journals::CreateService
 
     def cleanup_predecessor(predecessor)
       cleanup_predecessor_for(predecessor,
-                              "comments_journals",
+                              "commentable_journals",
                               :journal_id,
                               :id)
     end
@@ -44,7 +44,7 @@ class Journals::CreateService
     def insert_sql
       sanitize(<<~SQL.squish, journable_id:, journable_class_name:)
         INSERT INTO
-          comments_journals (
+          commentable_journals (
             journal_id,
             comment_id
           )
@@ -65,18 +65,18 @@ class Journals::CreateService
         FROM
           max_journals
         LEFT OUTER JOIN
-          comments_journals
+          commentable_journals
         ON
-          comments_journals.journal_id = max_journals.id
+          commentable_journals.journal_id = max_journals.id
         FULL JOIN
           (SELECT *
            FROM comments
            WHERE comments.commented_id = :journable_id) comments
         ON
-          comments.id = comments_journals.comment_id
+          comments.id = commentable_journals.comment_id
         WHERE
-          (comments.id IS NULL AND comments_journals.comment_id IS NOT NULL)
-          OR (comments_journals.comment_id IS NULL AND comments.id IS NOT NULL)
+          (comments.id IS NULL AND commentable_journals.comment_id IS NOT NULL)
+          OR (commentable_journals.comment_id IS NULL AND comments.id IS NOT NULL)
       SQL
     end
   end

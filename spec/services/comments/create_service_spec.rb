@@ -42,5 +42,25 @@ RSpec.describe Comments::CreateService do
     it_behaves_like "BaseServices create service" do
       let(:model_instance) { build_stubbed(:comment, :commented_work_package) }
     end
+
+    context "when creating associated journals" do
+      # Tap as the changes would otherwise mess with the journal creation i.e. the updated_at timestamp
+      let!(:work_package) { create(:work_package).tap(&:clear_changes_information) }
+      let!(:user) { create(:admin) }
+      let!(:service) { described_class.new(user:, contract_class: Comments::CreateContract) }
+      let!(:params) { { author: user, comments: "hi from test", commented: work_package } }
+
+      it "creates a journal entry for its container", with_settings: { journal_aggregation_time_minutes: 0 } do
+        expect do
+          result = service.call(params)
+          expect(result).to be_success
+        end.to change(Journal, :count).by(1)
+      end
+
+      it "includes the commentable journal" do
+        service.call(params)
+        expect(work_package.journals.last.commentable_journals.length).to be > 0
+      end
+    end
   end
 end

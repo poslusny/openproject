@@ -418,6 +418,36 @@ RSpec.describe WorkPackage do
       end
     end
 
+    describe "comments", with_settings: { journal_aggregation_time_minutes: 0 } do
+      let(:comment) { build(:comment) }
+      let(:comment_id) { "comments_#{comment.id}" }
+
+      before do
+        work_package.comments << comment
+        work_package.save!
+      end
+
+      context "for the new comment" do
+        subject(:journal_details) { work_package.last_journal.details }
+
+        it { is_expected.to have_key comment_id }
+
+        it {
+          expect(journal_details[comment_id])
+            .to eq([nil, comment.text])
+        }
+      end
+
+      context "when comment saved w/o change" do
+        it {
+          expect do
+            comment.save
+            work_package.save_journals
+          end.not_to change(Journal, :count)
+        }
+      end
+    end
+
     context "for only journal notes adding" do
       subject do
         work_package.add_journal(user: User.current, notes: "some notes")
@@ -842,6 +872,7 @@ RSpec.describe WorkPackage do
     let!(:customizable_journals) { journal.customizable_journals }
     let!(:attachable_journals) { journal.attachable_journals }
     let!(:storable_journals) { journal.storable_journals }
+    let!(:commentable_journals) { journal.commentable_journals }
 
     before do
       work_package.destroy
@@ -869,6 +900,11 @@ RSpec.describe WorkPackage do
 
     it "removes the storable journals" do
       expect(Journal::StorableJournal.find_by(id: attachable_journals.map(&:id)))
+        .to be_nil
+    end
+
+    it "removes the commentable journals" do
+      expect(Journal::CommentableJournal.find_by(id: attachable_journals.map(&:id)))
         .to be_nil
     end
   end

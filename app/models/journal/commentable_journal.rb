@@ -29,11 +29,9 @@
 #++
 
 class Journal::CommentableJournal < Journal::AssociatedJournal
-  self.table_name = "comments_journals"
+  self.table_name = "commentable_journals"
 
   belongs_to :comment, class_name: "Comment"
 
-  def text
-    comment&.text
-  end
+  delegate :text, to: :comment, allow_nil: true
 end

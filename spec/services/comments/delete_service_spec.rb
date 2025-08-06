@@ -42,5 +42,29 @@ RSpec.describe Comments::DeleteService do
     it_behaves_like "BaseServices delete service" do
       let(:model_instance) { build_stubbed(:comment, :commented_work_package) }
     end
+
+    context "when creating associated journals" do
+      # Tap as the changes would otherwise mess with the journal creation i.e. the updated_at timestamp
+      let!(:work_package) { create(:work_package).tap(&:clear_changes_information) }
+      let!(:comment) { create(:comment, commented: work_package) }
+      let!(:service) { described_class.new(model: comment, user: create(:admin), contract_class: Comments::DeleteContract) }
+      let!(:params) { { id: comment.id } }
+
+      before do
+        work_package.save_journals
+      end
+
+      it "creates a journal entry for its container", with_settings: { journal_aggregation_time_minutes: 0 } do
+        expect do
+          result = service.call(params)
+          expect(result).to be_success
+        end.to change(Journal, :count).by(1)
+      end
+
+      it "does not include the comment since it was deleted" do
+        service.call(params)
+        expect(work_package.journals.last.commentable_journals.length).to eq 0
+      end
+    end
   end
 end

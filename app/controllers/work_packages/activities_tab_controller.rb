@@ -160,7 +160,6 @@ class WorkPackages::ActivitiesTabController < ApplicationController
         update_via_turbo_stream(
           component: WorkPackages::ActivitiesTab::Journals::ItemComponent::CommentView.new(
             comment: reactable,
-            parent_journal: @journal,
             filter: params[:filter]&.to_sym || :all
           )
         )

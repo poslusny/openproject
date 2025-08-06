@@ -29,11 +29,17 @@
 #++
 
 class OpenProject::JournalFormatter::Comment < JournalFormatter::Base
-  def render(key, values, _options)
+  def render(key, values, options = {})
     id = key.to_s.sub("comments_", "").to_i
+
     old_value, value, comment = format_details(id, values)
 
-    render_comment_detail_text(value, old_value, comment)
+    if options[:html]
+      label, old_value, value = format_html_details(label("comment"), old_value, value)
+      render_ternary_detail_text(label, value, old_value, options)
+    else
+      render_comment_detail_json(value, old_value, comment)
+    end
   end
 
   private
@@ -47,7 +53,7 @@ class OpenProject::JournalFormatter::Comment < JournalFormatter::Base
     ]
   end
 
-  def render_comment_detail_text(value, old_value, comment)
+  def render_comment_detail_json(value, old_value, comment)
     {
       comment_id: comment.id,
       value: value,

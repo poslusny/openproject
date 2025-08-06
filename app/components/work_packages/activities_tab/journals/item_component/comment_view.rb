@@ -38,18 +38,17 @@ module WorkPackages
         include WorkPackages::ActivitiesTab::SharedHelpers
         include WorkPackages::ActivitiesTab::StimulusControllers
 
-        def initialize(comment:, parent_journal:, filter:, state: :show)
+        def initialize(comment:, filter:, state: :show)
           super
 
           @comment = comment
-          @parent_journal = parent_journal
           @filter = filter
           @state = state
         end
 
         private
 
-        attr_reader :comment, :parent_journal, :state, :filter
+        attr_reader :comment, :state, :filter
 
         def wrapper_uniq_by = comment.id
 
@@ -84,9 +83,9 @@ module WorkPackages
           end
         end
 
-        def has_unread_notifications?
-          parent_journal.has_unread_notifications_for_user?(User.current)
-        end
+        # def has_unread_notifications?
+        #   parent_journal.has_unread_notifications_for_user?(User.current)
+        # end
 
         # def allowed_to_edit?
         #   journal.editable_by?(User.current)

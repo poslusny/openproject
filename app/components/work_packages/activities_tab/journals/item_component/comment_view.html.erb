@@ -5,7 +5,6 @@
         padding: :condensed,
         "aria-label": I18n.t("activities.work_packages.activity_tab.commented"),
         data: {
-          "anchor-activity-id": parent_journal.sequence_version,
           "anchor-comment-id": comment.id
         },
         classes: container_classes
@@ -41,23 +40,23 @@
             ) do
               truncated_user_name(comment.author, hover_card: true)
             end
-            header_start_container.with_column(mr: 1, classes: "hidden-for-mobile") do
-              activity_anchor_link(parent_journal)
-            end
+            # header_start_container.with_column(mr: 1, classes: "hidden-for-mobile") do
+            #   activity_anchor_link(parent_journal)
+            # end
           end
           header_container.with_column(flex_layout: true, align_items: :center) do |header_end_container|
-            if has_unread_notifications?
-              header_end_container.with_column(mr: 2) do
-                render(
-                  Primer::Beta::Octicon.new(
-                    :"dot-fill", # color is set via CSS as requested by UI/UX Team
-                    classes: "work-packages-activities-tab-journals-item-component--notification-dot-icon",
-                    size: :small,
-                    data: { test_selector: "op-journal-unread-notification", "op-ian-center-update-immediate": true }
-                  )
-                )
-              end
-            end
+            # if has_unread_notifications?
+            #   header_end_container.with_column(mr: 2) do
+            #     render(
+            #       Primer::Beta::Octicon.new(
+            #         :"dot-fill", # color is set via CSS as requested by UI/UX Team
+            #         classes: "work-packages-activities-tab-journals-item-component--notification-dot-icon",
+            #         size: :small,
+            #         data: { test_selector: "op-journal-unread-notification", "op-ian-center-update-immediate": true }
+            #       )
+            #     )
+            #   end
+            # end
 
             if comment.internal?
               header_end_container.with_column(mr: 2) do
