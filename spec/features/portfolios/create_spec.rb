@@ -42,9 +42,7 @@ RSpec.describe "Portfolios",
 
   current_user { user_with_permissions }
 
-  let(:projects_page) { Pages::Projects::Index.new }
-
-  it "can create a project", with_flag: { portfolio_models: true } do
+  it "can create a portfolio", with_flag: { portfolio_models: true } do
     # TODO: trigger this from a button
     # e.g. on the project index page
     visit new_portfolio_path
@@ -58,5 +56,11 @@ RSpec.describe "Portfolios",
 
     expect(page).to have_current_path /\/projects\/foo-bar\/?/
     expect(page).to have_content "Foo bar"
+  end
+
+  it "cannot create the portfolio without the feature flag being active", with_flag: { portfolio_models: false } do
+    visit new_portfolio_path
+
+    expect(page).to have_content "[Error 403] You are not authorized to access this page."
   end
 end
