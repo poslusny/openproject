@@ -94,7 +94,7 @@ RSpec.describe "Work package activity", :js, :with_cuprite do
     end
 
     let(:work_package) { create(:work_package, project:, author: admin) }
-    let(:first_comment) do
+    let(:first_notes_comment) do
       create(:work_package_journal,
              user: admin,
              notes: "First comment by admin",
@@ -110,7 +110,7 @@ RSpec.describe "Work package activity", :js, :with_cuprite do
 
       context "when visited by an anonymous visitor" do
         before do
-          first_comment
+          first_notes_comment
 
           login_as User.anonymous
 
@@ -121,11 +121,11 @@ RSpec.describe "Work package activity", :js, :with_cuprite do
         it "does show comments but does not enable adding, editing or quoting comments" do
           activity_tab.expect_journal_notes(text: "First comment by admin")
 
-          activity_tab.within_journal_entry(first_comment) do
-            page.find_test_selector("op-wp-journal-#{first_comment.id}-action-menu").click
+          activity_tab.within_journal_entry(first_notes_comment) do
+            page.find_test_selector("op-wp-journal-#{first_notes_comment.id}-action-menu").click
 
-            expect(page).not_to have_test_selector("op-wp-journal-#{first_comment.id}-edit")
-            expect(page).not_to have_test_selector("op-wp-journal-#{first_comment.id}-quote")
+            expect(page).not_to have_test_selector("op-wp-journal-#{first_notes_comment.id}-edit")
+            expect(page).not_to have_test_selector("op-wp-journal-#{first_notes_comment.id}-quote")
           end
 
           activity_tab.expect_no_input_field
@@ -137,7 +137,7 @@ RSpec.describe "Work package activity", :js, :with_cuprite do
       current_user { viewer }
 
       before do
-        first_comment
+        first_notes_comment
 
         wp_page.visit!
         wp_page.wait_for_activity_tab
@@ -146,11 +146,11 @@ RSpec.describe "Work package activity", :js, :with_cuprite do
       it "does show comments but does not enable adding comments" do
         activity_tab.expect_journal_notes(text: "First comment by admin")
 
-        activity_tab.within_journal_entry(first_comment) do
-          page.find_test_selector("op-wp-journal-#{first_comment.id}-action-menu").click
+        activity_tab.within_journal_entry(first_notes_comment) do
+          page.find_test_selector("op-wp-journal-#{first_notes_comment.id}-action-menu").click
 
-          expect(page).not_to have_test_selector("op-wp-journal-#{first_comment.id}-edit")
-          expect(page).not_to have_test_selector("op-wp-journal-#{first_comment.id}-quote")
+          expect(page).not_to have_test_selector("op-wp-journal-#{first_notes_comment.id}-edit")
+          expect(page).not_to have_test_selector("op-wp-journal-#{first_notes_comment.id}-quote")
         end
 
         activity_tab.expect_no_input_field
@@ -161,7 +161,7 @@ RSpec.describe "Work package activity", :js, :with_cuprite do
       current_user { viewer_with_commenting_permission }
 
       before do
-        first_comment
+        first_notes_comment
 
         wp_page.visit!
         wp_page.wait_for_activity_tab
@@ -170,13 +170,13 @@ RSpec.describe "Work package activity", :js, :with_cuprite do
       it "does show comments but does NOT enable editing other users comments" do
         activity_tab.expect_journal_notes(text: "First comment by admin")
 
-        activity_tab.within_journal_entry(first_comment) do
-          page.find_test_selector("op-wp-journal-#{first_comment.id}-action-menu").click
+        activity_tab.within_journal_entry(first_notes_comment) do
+          page.find_test_selector("op-wp-journal-#{first_notes_comment.id}-action-menu").click
 
           # not allowed to edit other user's comments
-          expect(page).not_to have_test_selector("op-wp-journal-#{first_comment.id}-edit")
+          expect(page).not_to have_test_selector("op-wp-journal-#{first_notes_comment.id}-edit")
           # allowed to quote other user's comments
-          expect(page).to have_test_selector("op-wp-journal-#{first_comment.id}-quote")
+          expect(page).to have_test_selector("op-wp-journal-#{first_notes_comment.id}-quote")
         end
       end
 
@@ -200,7 +200,7 @@ RSpec.describe "Work package activity", :js, :with_cuprite do
       current_user { user_with_editing_permission }
 
       before do
-        first_comment
+        first_notes_comment
 
         wp_page.visit!
         wp_page.wait_for_activity_tab
@@ -209,13 +209,13 @@ RSpec.describe "Work package activity", :js, :with_cuprite do
       it "does show comments and enable adding and quoting comments and editing of other users comments" do
         activity_tab.expect_journal_notes(text: "First comment by admin")
 
-        activity_tab.within_journal_entry(first_comment) do
-          page.find_test_selector("op-wp-journal-#{first_comment.id}-action-menu").click
+        activity_tab.within_journal_entry(first_notes_comment) do
+          page.find_test_selector("op-wp-journal-#{first_notes_comment.id}-action-menu").click
 
           # allowed to edit other user's comments
-          expect(page).to have_test_selector("op-wp-journal-#{first_comment.id}-edit")
+          expect(page).to have_test_selector("op-wp-journal-#{first_notes_comment.id}-edit")
           # allowed to quote other user's comments
-          expect(page).to have_test_selector("op-wp-journal-#{first_comment.id}-quote")
+          expect(page).to have_test_selector("op-wp-journal-#{first_notes_comment.id}-quote")
         end
       end
     end
@@ -532,6 +532,24 @@ RSpec.describe "Work package activity", :js, :with_cuprite do
     end
   end
 
+  describe "timeline including new extracted comments" do
+    current_user { admin }
+    let(:comment) { Comments::CreateService.new(user: admin).call(comment_params) }
+    let(:comment_params) { { comments: "Comment on the Comment model", commented: work_package, author: admin } }
+    let(:work_package) { create(:work_package, project:, author: admin) }
+
+    before do
+      comment
+    end
+
+    it "shows the comment in the timeline" do
+      wp_page.visit!
+      wp_page.wait_for_activity_tab
+
+      activity_tab.expect_journal_notes(text: "Comment on the Comment model")
+    end
+  end
+
   describe "filtering" do
     current_user { admin }
     let(:work_package) { create(:work_package, project:, author: admin) }
@@ -777,7 +795,7 @@ RSpec.describe "Work package activity", :js, :with_cuprite do
 
   describe "notification bubble" do
     let(:work_package) { create(:work_package, project:, author: admin) }
-    let!(:first_comment_by_admin) do
+    let!(:first_notes_comment_by_admin) do
       create(:work_package_journal, user: admin, notes: "First comment by admin", journable: work_package, version: 2)
     end
     let!(:journal_mentioning_admin) do
@@ -835,10 +853,10 @@ RSpec.describe "Work package activity", :js, :with_cuprite do
 
   describe "edit comments" do
     let(:work_package) { create(:work_package, project:, author: admin) }
-    let!(:first_comment_by_admin) do
+    let!(:first_notes_comment_by_admin) do
       create(:work_package_journal, user: admin, notes: "First comment by admin", journable: work_package, version: 2)
     end
-    let!(:first_comment_by_member) do
+    let!(:first_notes_comment_by_member) do
       create(:work_package_journal, user: member, notes: "First comment by member", journable: work_package, version: 3)
     end
 
@@ -852,17 +870,17 @@ RSpec.describe "Work package activity", :js, :with_cuprite do
     context "when admin is visiting the work package" do
       it "can edit own comments" do
         # edit own comment
-        activity_tab.edit_comment(first_comment_by_admin, text: "First comment by admin edited")
+        activity_tab.edit_comment(first_notes_comment_by_admin, text: "First comment by admin edited")
 
         # expect the edited comment to be shown
-        activity_tab.within_journal_entry(first_comment_by_admin) do
+        activity_tab.within_journal_entry(first_notes_comment_by_admin) do
           activity_tab.expect_journal_notes(text: "First comment by admin edited")
         end
 
         # can edit other user's comments due to the permission
-        activity_tab.edit_comment(first_comment_by_member, text: "First comment by member edited")
+        activity_tab.edit_comment(first_notes_comment_by_member, text: "First comment by member edited")
 
-        activity_tab.within_journal_entry(first_comment_by_member) do
+        activity_tab.within_journal_entry(first_notes_comment_by_member) do
           activity_tab.expect_journal_notes(text: "First comment by member edited")
         end
       end
@@ -870,12 +888,12 @@ RSpec.describe "Work package activity", :js, :with_cuprite do
 
     context "when editing a comment included in the polling update" do
       it "preserves the edit state" do
-        activity_tab.type_comment_in_edit(first_comment_by_admin, "Editing comment")
-        first_comment_by_admin.update_column(:updated_at, Time.current)
+        activity_tab.type_comment_in_edit(first_notes_comment_by_admin, "Editing comment")
+        first_notes_comment_by_admin.update_column(:updated_at, Time.current)
 
         activity_tab.trigger_update_streams_poll
 
-        activity_tab.within_journal_entry(first_comment_by_admin) do
+        activity_tab.within_journal_entry(first_notes_comment_by_admin) do
           activity_tab.expect_journal_notes(text: "Editing comment")
         end
       end
@@ -884,10 +902,10 @@ RSpec.describe "Work package activity", :js, :with_cuprite do
 
   describe "quote comments" do
     let(:work_package) { create(:work_package, project:, author: admin) }
-    let!(:first_comment_by_admin) do
+    let!(:first_notes_comment_by_admin) do
       create(:work_package_journal, user: admin, notes: "First comment by admin", journable: work_package, version: 2)
     end
-    let!(:first_comment_by_member) do
+    let!(:first_notes_comment_by_member) do
       create(:work_package_journal, user: member, notes: "First comment by member", journable: work_package, version: 3)
     end
 
@@ -901,7 +919,7 @@ RSpec.describe "Work package activity", :js, :with_cuprite do
 
       it "can quote other user's comments" do
         # quote other user's comment
-        activity_tab.quote_comment(first_comment_by_member)
+        activity_tab.quote_comment(first_notes_comment_by_member)
 
         # expect the quoted comment to be shown
         activity_tab.ckeditor.expect_include_value("@A Member wrote:\nFirst comment by member")
@@ -921,7 +939,7 @@ RSpec.describe "Work package activity", :js, :with_cuprite do
         activity_tab.type_comment("Partial message:")
 
         # quote other user's comment
-        activity_tab.quote_comment(first_comment_by_member)
+        activity_tab.quote_comment(first_notes_comment_by_member)
 
         # expect the original comment and quote are shown
         activity_tab.ckeditor.expect_include_value("Partial message:\n@A Member wrote:\nFirst comment by member")
@@ -1222,24 +1240,24 @@ RSpec.describe "Work package activity", :js, :with_cuprite do
 
   describe "retracted journal entries" do
     let(:work_package) { create(:work_package, project:, author: admin) }
-    let!(:first_comment_by_admin) do
+    let!(:first_notes_comment_by_admin) do
       create(:work_package_journal, user: admin, notes: "First comment by admin", journable: work_package, version: 2)
     end
-    let!(:second_comment_by_admin) do
+    let!(:second_notes_comment_by_admin) do
       create(:work_package_journal, user: admin, notes: "Second comment by admin", journable: work_package, version: 3)
     end
 
     current_user { admin }
 
     before do
-      second_comment_by_admin.update!(notes: "")
+      second_notes_comment_by_admin.update!(notes: "")
 
       wp_page.visit!
       wp_page.wait_for_activity_tab
     end
 
     it "shows rectracted journal entries" do
-      activity_tab.within_journal_entry(second_comment_by_admin) do
+      activity_tab.within_journal_entry(second_notes_comment_by_admin) do
         expect(page).to have_text(I18n.t(:"journals.changes_retracted"))
       end
     end
@@ -1248,7 +1266,7 @@ RSpec.describe "Work package activity", :js, :with_cuprite do
   describe "work package attribute updates" do
     let(:work_package) { create(:work_package, project:, author: admin) }
 
-    let!(:first_comment_by_member) do
+    let!(:first_notes_comment_by_member) do
       create(:work_package_journal, user: member, notes: "First comment by member", journable: work_package, version: 2)
     end
 
@@ -1588,7 +1606,7 @@ RSpec.describe "Work package activity", :js, :with_cuprite do
     end
 
     context "when editing a comment" do
-      let!(:first_comment_by_admin) do
+      let!(:first_notes_comment_by_admin) do
         create(:work_package_journal, user: admin, notes: "First comment by admin", journable: work_package, version: 2)
       end
 
@@ -1600,7 +1618,7 @@ RSpec.describe "Work package activity", :js, :with_cuprite do
         end
 
         it "shows an error banner" do
-          activity_tab.edit_comment(first_comment_by_admin, text: "First comment by admin edited", save: false)
+          activity_tab.edit_comment(first_notes_comment_by_admin, text: "First comment by admin edited", save: false)
 
           page.within_test_selector("op-work-package-journal-form-element") do
             page.find_test_selector("op-submit-work-package-journal-form").click
@@ -1622,7 +1640,7 @@ RSpec.describe "Work package activity", :js, :with_cuprite do
         end
 
         it "shows a validation error banner" do
-          activity_tab.edit_comment(first_comment_by_admin, text: "First comment by admin edited", save: false)
+          activity_tab.edit_comment(first_notes_comment_by_admin, text: "First comment by admin edited", save: false)
 
           page.within_test_selector("op-work-package-journal-form-element") do
             page.find_test_selector("op-submit-work-package-journal-form").click

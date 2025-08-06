@@ -38,7 +38,7 @@ RSpec.describe "Emoji reactions on work package activity", :js, :with_cuprite do
   let(:viewer_with_commenting_permission) { create_user_with_view_and_commenting_permission }
 
   let(:work_package) { create(:work_package, project:, author: admin) }
-  let(:first_comment) do
+  let(:first_notes_comment) do
     create(:work_package_journal, user: admin, notes: "First comment by admin", journable: work_package,
                                   version: 2)
   end
@@ -49,48 +49,68 @@ RSpec.describe "Emoji reactions on work package activity", :js, :with_cuprite do
   context "when user is the work package author" do
     current_user { member }
 
+    let(:comment) { Comments::CreateService.new(user: member).call(comment_params).result }
+    let(:comment_params) { { comments: "Comment on the Comment model", commented: work_package, author: member } }
+
     let(:work_package) do
       create(:work_package, project:, author: member, subject: "Test work package")
     end
 
     before do
-      first_comment.emoji_reactions.destroy_all
+      work_package.reload # Ensure timestamps are set and persisted for journals
+      first_notes_comment.emoji_reactions.destroy_all
+      comment.reload
 
-      create(:emoji_reaction, user: admin, reactable: first_comment, reaction: :thumbs_down)
+      create(:emoji_reaction, user: admin, reactable: first_notes_comment, reaction: :thumbs_down)
 
       wp_page.visit!
       wp_page.wait_for_activity_tab
     end
 
     it "can add emoji reactions and remove own reactions" do
-      activity_tab.add_first_emoji_reaction_for_journal(first_comment, "👍")
-      activity_tab.add_emoji_reaction_for_journal(first_comment, "👎")
-      activity_tab.expect_emoji_reactions_for_journal(first_comment, "👍" => 1, "👎" => 2)
+      activity_tab.add_first_emoji_reaction_for_journal(first_notes_comment, "👍")
+      activity_tab.add_emoji_reaction_for_journal(first_notes_comment, "👎")
+      activity_tab.expect_emoji_reactions_for_journal(first_notes_comment, "👍" => 1, "👎" => 2)
 
-      activity_tab.remove_emoji_reaction_for_journal(first_comment, "👎")
-      activity_tab.expect_emoji_reactions_for_journal(first_comment, "👍" => 1, "👎" => 1)
+      activity_tab.remove_emoji_reaction_for_journal(first_notes_comment, "👎")
+      activity_tab.expect_emoji_reactions_for_journal(first_notes_comment, "👍" => 1, "👎" => 1)
     end
 
     it "can add or remove emoji reactions from overlay" do
-      activity_tab.add_emoji_reaction_in_overlay(first_comment, "🚀")
-      activity_tab.expect_emoji_reactions_for_journal(first_comment, "👎" => 1, "🚀" => 1)
-      activity_tab.expect_emoji_reactions_highlited_in_overlay(first_comment, "🚀") do
+      activity_tab.add_emoji_reaction_in_overlay(first_notes_comment, "🚀")
+      activity_tab.expect_emoji_reactions_for_journal(first_notes_comment, "👎" => 1, "🚀" => 1)
+      activity_tab.expect_emoji_reactions_highlited_in_overlay(first_notes_comment, "🚀") do
         thumbs_down = page.find_test_selector("overlay-reaction-thumbs_down")
         expect(thumbs_down).to have_no_css(".color-bg-accent")
       end
 
       activity_tab.within_emoji_reactions_overlay { click_on "🚀" }
-      activity_tab.expect_emoji_reactions_for_journal(first_comment, "👎" => 1)
+      activity_tab.expect_emoji_reactions_for_journal(first_notes_comment, "👎" => 1)
+    end
+
+    it "can add or remove emoji reactions from new comments" do
+      activity_tab.add_emoji_reaction_for_comment(comment, "👍")
+      activity_tab.expect_emoji_reactions_for_comment(comment, "👍" => 1)
+      activity_tab.add_emoji_reaction_for_comment(comment, "👎")
+      activity_tab.expect_emoji_reactions_for_comment(comment, "👍" => 1, "👎" => 1)
+
+      activity_tab.remove_emoji_reaction_for_comment(comment, "👎")
+      activity_tab.expect_emoji_reactions_for_comment(comment, "👍" => 1)
     end
   end
 
   context "when user only has `view_work_packages` permissions" do
     current_user { viewer }
 
-    before do
-      first_comment
+    let(:comment) { Comments::CreateService.new(user: admin).call(comment_params).result }
+    let(:comment_params) { { comments: "Comment on the Comment model", commented: work_package, author: admin } }
 
-      create(:emoji_reaction, user: admin, reactable: first_comment, reaction: :thumbs_down)
+    before do
+      work_package.reload # Ensure timestamps are set and persisted for journals
+      first_notes_comment
+
+      create(:emoji_reaction, user: admin, reactable: first_notes_comment, reaction: :thumbs_down)
+      create(:emoji_reaction, user: admin, reactable: comment, reaction: :thumbs_down)
 
       wp_page.visit!
       wp_page.wait_for_activity_tab
@@ -99,29 +119,52 @@ RSpec.describe "Emoji reactions on work package activity", :js, :with_cuprite do
     it "cannot add an emoji reactions but can view emoji reactions by other users" do
       activity_tab.expect_no_add_reactions_button
 
-      activity_tab.expect_emoji_reactions_for_journal(first_comment, "👎" => { count: 1, disabled: true })
+      activity_tab.expect_emoji_reactions_for_journal(first_notes_comment, "👎" => { count: 1, disabled: true })
+    end
+
+    it "cannot add an emoji reactions but can view emoji reactions by other users in new comments" do
+      activity_tab.expect_no_add_reactions_button
+
+      activity_tab.expect_emoji_reactions_for_comment(comment, "👎" => { count: 1, disabled: true })
     end
   end
 
   context "when a user has `add_work_package_comments` permission" do
     current_user { viewer_with_commenting_permission }
 
-    before do
-      first_comment
+    let(:comment) { Comments::CreateService.new(user: viewer_with_commenting_permission).call(comment_params).result }
+    let(:comment_params) do
+      { comments: "Comment on the Comment model", commented: work_package, author: viewer_with_commenting_permission }
+    end
 
-      create(:emoji_reaction, user: admin, reactable: first_comment, reaction: :rocket)
+    before do
+      work_package.reload # Ensure timestamps are set and persisted for journals
+      first_notes_comment
+      comment
+
+      create(:emoji_reaction, user: admin, reactable: first_notes_comment, reaction: :rocket)
+      create(:emoji_reaction, user: admin, reactable: comment, reaction: :rocket)
 
       wp_page.visit!
       wp_page.wait_for_activity_tab
     end
 
     it "can add emoji reactions and remove own reactions" do
-      activity_tab.add_first_emoji_reaction_for_journal(first_comment, "😄")
-      activity_tab.add_emoji_reaction_for_journal(first_comment, "🚀")
-      activity_tab.expect_emoji_reactions_for_journal(first_comment, "😄" => 1, "🚀" => 2)
+      activity_tab.add_first_emoji_reaction_for_journal(first_notes_comment, "😄")
+      activity_tab.add_emoji_reaction_for_journal(first_notes_comment, "🚀")
+      activity_tab.expect_emoji_reactions_for_journal(first_notes_comment, "😄" => 1, "🚀" => 2)
 
-      activity_tab.remove_emoji_reaction_for_journal(first_comment, "🚀")
-      activity_tab.expect_emoji_reactions_for_journal(first_comment, "😄" => 1, "🚀" => 1)
+      activity_tab.remove_emoji_reaction_for_journal(first_notes_comment, "🚀")
+      activity_tab.expect_emoji_reactions_for_journal(first_notes_comment, "😄" => 1, "🚀" => 1)
+    end
+
+    it "can add emoji reactions and remove own reactions to new comments" do
+      activity_tab.add_emoji_reaction_for_comment(comment, "😄")
+      activity_tab.add_emoji_reaction_for_comment(comment, "🚀")
+      activity_tab.expect_emoji_reactions_for_comment(comment, "😄" => 1, "🚀" => 2)
+
+      activity_tab.remove_emoji_reaction_for_comment(comment, "🚀")
+      activity_tab.expect_emoji_reactions_for_comment(comment, "😄" => 1, "🚀" => 1)
     end
   end
 
@@ -130,11 +173,14 @@ RSpec.describe "Emoji reactions on work package activity", :js, :with_cuprite do
     let!(:anonymous_role) do
       create(:anonymous_role, permissions: %i[view_project view_work_packages])
     end
+    let(:comment) { Comments::CreateService.new(user: admin).call(comment_params).result }
+    let(:comment_params) { { comments: "Comment on the Comment model", commented: work_package, author: admin } }
 
     context "when visited by an anonymous visitor" do
       before do
-        first_comment
-        create(:emoji_reaction, user: admin, reactable: first_comment, reaction: :party_popper)
+        first_notes_comment
+        create(:emoji_reaction, user: admin, reactable: first_notes_comment, reaction: :party_popper)
+        create(:emoji_reaction, user: admin, reactable: comment, reaction: :party_popper)
 
         login_as User.anonymous
 
@@ -145,14 +191,20 @@ RSpec.describe "Emoji reactions on work package activity", :js, :with_cuprite do
       it "cannot add an emoji reactions but can view emoji reactions by other users" do
         activity_tab.expect_no_add_reactions_button
 
-        activity_tab.expect_emoji_reactions_for_journal(first_comment, "🎉" => { count: 1, disabled: true })
+        activity_tab.expect_emoji_reactions_for_journal(first_notes_comment, "🎉" => { count: 1, disabled: true })
+      end
+
+      it "cannot add an emoji reactions but can view emoji reactions by other users on new comments" do
+        activity_tab.expect_no_add_reactions_button
+
+        activity_tab.expect_emoji_reactions_for_comment(comment, "🎉" => { count: 1, disabled: true })
       end
     end
   end
 
   describe "reactions updates" do
     let(:work_package) { create(:work_package, project:, author: admin) }
-    let(:first_comment_by_member) do
+    let(:first_notes_comment_by_member) do
       create(:work_package_journal, user: member, notes: "Second comment by member", journable: work_package,
                                     version: 2)
     end
@@ -173,31 +225,31 @@ RSpec.describe "Emoji reactions on work package activity", :js, :with_cuprite do
     end
 
     it "shows the updated reactions without reload" do
-      activity_tab.expect_journal_notes(text: first_comment_by_member.notes)
+      activity_tab.expect_journal_notes(text: first_notes_comment_by_member.notes)
 
       # Simulate another user adding a reaction
       EmojiReactions::CreateService
          .new(user: admin)
-         .call(user: admin, reactable: first_comment_by_member, reaction: :confused_face)
+         .call(user: admin, reactable: first_notes_comment_by_member, reaction: :confused_face)
 
-      activity_tab.expect_emoji_reactions_for_journal(first_comment_by_member, "😕" => { count: 1, wait: 3 })
+      activity_tab.expect_emoji_reactions_for_journal(first_notes_comment_by_member, "😕" => { count: 1, wait: 3 })
 
       # Current user adds several reactions
-      activity_tab.add_first_emoji_reaction_for_journal(first_comment_by_member, "👍")
-      activity_tab.add_emoji_reaction_for_journal(first_comment_by_member, "😕")
+      activity_tab.add_first_emoji_reaction_for_journal(first_notes_comment_by_member, "👍")
+      activity_tab.add_emoji_reaction_for_journal(first_notes_comment_by_member, "😕")
 
-      activity_tab.expect_emoji_reactions_for_journal(first_comment_by_member, "👍" => 1, "😕" => 2)
+      activity_tab.expect_emoji_reactions_for_journal(first_notes_comment_by_member, "👍" => 1, "😕" => 2)
 
       # Current user removes reaction and other user removes as well
-      activity_tab.remove_emoji_reaction_for_journal(first_comment_by_member, "👍")
-      activity_tab.remove_emoji_reaction_for_journal(first_comment_by_member, "😕")
+      activity_tab.remove_emoji_reaction_for_journal(first_notes_comment_by_member, "👍")
+      activity_tab.remove_emoji_reaction_for_journal(first_notes_comment_by_member, "😕")
 
       EmojiReactions::DeleteService
          .new(user: admin,
-              model: first_comment_by_member.emoji_reactions.find_by(user: admin, reaction: :confused_face))
+              model: first_notes_comment_by_member.emoji_reactions.find_by(user: admin, reaction: :confused_face))
          .call
 
-      activity_tab.expect_no_emoji_reactions_for_journal(first_comment_by_member)
+      activity_tab.expect_no_emoji_reactions_for_journal(first_notes_comment_by_member)
     end
   end
 

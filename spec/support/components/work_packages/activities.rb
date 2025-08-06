@@ -91,6 +91,14 @@ module Components
         page.within_test_selector("op-wp-journal-entry-#{journal.id}", &)
       end
 
+      def within_comment_entry(comment, &)
+        retry_block(screenshot: true) do
+          expect(page).to have_test_selector("op-wp-comment-entry-#{comment.id}")
+        end
+
+        page.within_test_selector("op-wp-comment-entry-#{comment.id}", &)
+      end
+
       def expect_internal_comment_confirmation_dialog
         page.within_test_selector("op-work-package-internal-comment-confirmation-dialog") do
           expect(page).to have_text("Make this comment public?")

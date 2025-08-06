@@ -48,6 +48,20 @@ module Components
       alias add_emoji_reaction_for_journal toggle_emoji_reaction_for_journal
       alias remove_emoji_reaction_for_journal toggle_emoji_reaction_for_journal
 
+      def add_emoji_reaction_for_comment(comment, emoji)
+        within_comment_entry(comment) do
+          click_on "Add reaction"
+          click_on emoji
+        end
+      end
+
+      def remove_emoji_reaction_for_comment(comment, emoji)
+        within_comment_entry(comment) do
+          expect(page).to have_selector(:link_or_button, text: emoji)
+          click_on emoji
+        end
+      end
+
       def can_remove_emoji_reaction_for_journal(journal, emoji)
         within_journal_entry(journal) do
           page.within_test_selector("emoji-reactions") do
@@ -76,8 +90,33 @@ module Components
         end
       end
 
+      def expect_emoji_reactions_for_comment(comment, emojis_with_expected_options)
+        within_comment_entry(comment) do
+          page.within_test_selector("emoji-reactions") do
+            emojis_with_expected_options.each do |emoji, expected_emoji_options|
+              case expected_emoji_options
+              when Integer
+                expected_emoji_count = expected_emoji_options
+                capybara_options = {}
+              when Hash
+                expected_emoji_count = expected_emoji_options[:count]
+                capybara_options = expected_emoji_options.except(:count)
+              end
+
+              expect(page).to have_selector(:link_or_button, text: "#{emoji} #{expected_emoji_count}", **capybara_options)
+            end
+          end
+        end
+      end
+
       def expect_no_emoji_reactions_for_journal(journal)
         within_journal_entry(journal) do
+          wait(3.seconds).for { page }.not_to have_test_selector("emoji-reactions")
+        end
+      end
+
+      def expect_no_emoji_reactions_for_comment(comment)
+        within_comment_entry(comment) do
           wait(3.seconds).for { page }.not_to have_test_selector("emoji-reactions")
         end
       end
@@ -92,11 +131,11 @@ module Components
         end
       end
 
-      def open_emoji_reactions_overlay_for_journal(journal, &block)
+      def open_emoji_reactions_overlay_for_journal(journal, &)
         within_journal_entry(journal) do
           click_on "Add reaction"
           wait_for { page }.to have_test_selector("emoji-reactions-overlay")
-          within_emoji_reactions_overlay(&block)
+          within_emoji_reactions_overlay(&)
         end
       end
 

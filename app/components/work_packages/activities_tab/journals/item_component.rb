@@ -65,7 +65,7 @@ module WorkPackages
         def comment_details
           journal.details.filter_map do |detail|
             if detail.first.start_with?("comment")
-              journal.render_detail(detail)
+              journal.render_detail(detail, { html: false })
             end
           end
         end
