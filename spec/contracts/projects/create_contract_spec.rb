@@ -44,7 +44,7 @@ RSpec.describe Projects::CreateContract do
                   status_explanation: project_status_explanation,
                   workspace_type: project_workspace_type)
     end
-    let(:global_permissions) { [:add_project] }
+    let(:global_permissions) { %i[add_project add_portfolios] }
     let(:validated_contract) do
       contract.tap(&:validate)
     end
@@ -55,6 +55,26 @@ RSpec.describe Projects::CreateContract do
       let(:project_identifier) { nil }
 
       it_behaves_like "contract is valid"
+    end
+
+    context "when having the 'project' workspace_type and lacking the add_project permission" do
+      let(:global_permissions) { [] }
+
+      it_behaves_like "contract is invalid", base: %i(error_unauthorized)
+    end
+
+    context "when having the 'portfolio' workspace_type and having the add_portfolios permission" do
+      let(:project_workspace_type) { "portfolio" }
+      let(:global_permissions) { [:add_portfolios] }
+
+      it_behaves_like "contract is valid"
+    end
+
+    context "when having the 'portfolio' workspace_type and lacking the add_portfolios permission" do
+      let(:project_workspace_type) { "portfolio" }
+      let(:global_permissions) { [] }
+
+      it_behaves_like "contract is invalid", base: %i(error_unauthorized)
     end
 
     context "if workspace_type is nil" do

@@ -184,7 +184,7 @@ class ProjectsController < ApplicationController
   def from_template? = @template.present?
 
   def new_blank
-    @new_project = @parent&.children&.build || Project.new
+    @new_project = @parent&.children&.build(permitted_params.new_project) || Project.new(permitted_params.new_project)
 
     render layout: "no_menu"
   end

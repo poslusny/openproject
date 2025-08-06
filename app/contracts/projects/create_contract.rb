@@ -76,9 +76,22 @@ module Projects
     def without_custom_fields(changes) = changes.grep_v(/^custom_field_/)
 
     def validate_user_allowed_to_manage
+      if model.project?
+        validate_user_allowed_to_manage_projects
+      elsif model.portfolio?
+        validate_user_allowed_to_manage_portfolios
+      end
+    end
+
+    def validate_user_allowed_to_manage_portfolios
+      unless user.allowed_globally?(:add_portfolios)
+        errors.add :base, :error_unauthorized
+      end
+    end
+
+    def validate_user_allowed_to_manage_projects
       unless user.allowed_globally?(:add_project) ||
              (model.parent && user.allowed_in_project?(:add_subprojects, model.parent))
-
         errors.add :base, :error_unauthorized
       end
     end

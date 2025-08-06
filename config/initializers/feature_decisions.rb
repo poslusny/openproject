@@ -56,3 +56,6 @@ OpenProject::FeatureDecisions.add :scim_api,
 
 OpenProject::FeatureDecisions.add :block_note_editor,
                                   description: "Enables the block note editor for rich text fields where available."
+
+OpenProject::FeatureDecisions.add :portfolio_models,
+                                  description: "Enables the creation and management of portfolio and program work spaces."

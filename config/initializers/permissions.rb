@@ -35,6 +35,11 @@ Rails.application.reloader.to_prepare do
                      require: :loggedin,
                      contract_actions: { projects: %i[create] }
 
+      map.permission :add_portfolios,
+                     { projects: %i[new create] },
+                     permissible_on: :global,
+                     require: :loggedin
+
       map.permission :archive_project,
                      {
                        "projects/archive": %i[create]

@@ -257,7 +257,13 @@ Rails.application.routes.draw do
     resource :menu, only: %i[show]
   end
 
-  resources :projects, except: %i[show edit update] do
+  # Extracted from the resources definition right below so that the
+  # default parameters can be defined.
+  resources :projects,
+            only: %i[new],
+            defaults: { project: { workspace_type: "project" } }
+
+  resources :projects, except: %i[new show edit update] do
     scope module: "projects" do
       namespace "settings" do
         resource :general, only: %i[show update], controller: "general" do
@@ -462,6 +468,11 @@ Rails.application.routes.draw do
           as: "show_revisions_path"
     end
   end
+
+  resources :portfolios,
+            only: %i[new],
+            defaults: { project: { workspace_type: "portfolio" } },
+            controller: "projects"
 
   resources :project_phases, only: [] do
     member do

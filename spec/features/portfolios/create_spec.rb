@@ -37,17 +37,19 @@ RSpec.describe "Portfolios",
     create(:user,
            global_permissions: :add_portfolios)
   end
+  # Role granted to creator on portfolio creation to be able to access the portfolio.
+  shared_let(:default_project_role) { create(:project_role) }
 
   current_user { user_with_permissions }
 
   let(:projects_page) { Pages::Projects::Index.new }
 
-  it "can create a project", with_flags: { portfolio_models: true } do
+  it "can create a project", with_flag: { portfolio_models: true } do
     # TODO: trigger this from a button
     # e.g. on the project index page
-    visit new_portfolio_page_path
+    visit new_portfolio_path
 
-    expect(page).to have_heading "New project"
+    expect(page).to have_heading "New portfolio"
 
     fill_in "Name", with: "Foo bar"
     click_on "Create"
