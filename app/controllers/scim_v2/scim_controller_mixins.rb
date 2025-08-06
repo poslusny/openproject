@@ -41,11 +41,20 @@ module ScimV2
           return handle_scim_error(Scimitar::AuthenticationError.new)
         end
 
-        User.current = warden.authenticate!(scope: :scim_v2)
-
-        # Only a ServiceAccount associated with a ScimClient can use SCIM Server API
-        unless User.current.respond_to?(:service) && User.current.service.is_a?(ScimClient)
-          handle_scim_error(Scimitar::AuthenticationError.new)
+        user = warden.authenticate(scope: :scim_v2)
+        if user == nil
+          if controller_path == "scimitar/service_provider_configurations" &&
+             warden.winning_strategy.blank? # it means authorization header was absent. So, there is no appropriate strategy
+            render json: ScimitarSchemaExtension::LimitedServiceProviderConfiguration.new
+          else
+            throw(:warden)
+          end
+        else
+          User.current = user
+          # Only a ServiceAccount associated with a ScimClient can use SCIM Server API
+          unless User.current.respond_to?(:service) && User.current.service.is_a?(ScimClient)
+            handle_scim_error(Scimitar::AuthenticationError.new)
+          end
         end
       end
 

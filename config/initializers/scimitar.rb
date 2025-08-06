@@ -31,7 +31,7 @@
 Rails.application.config.to_prepare do
   Scimitar.service_provider_configuration = Scimitar::ServiceProviderConfiguration.new(
     patch: Scimitar::Supportable.supported,
-    authenticationSchemes: [Scimitar::AuthenticationScheme.bearer]
+    authenticationSchemes:  ScimitarSchemaExtension::AUTHENTICATION_SCHEMES
   )
   Scimitar.engine_configuration = Scimitar::EngineConfiguration.new(
     application_controller_mixin: ScimV2::ScimControllerMixins

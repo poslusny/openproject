@@ -48,6 +48,49 @@ class OpenProjectNameComplexType < Scimitar::ComplexTypes::Base
 end
 
 module ScimitarSchemaExtension
+  AUTHENTICATION_SCHEMES = [
+    Scimitar::AuthenticationScheme.new(
+      type: 'oauth2',
+      name: 'OAuth2',
+      description: OpenProject::Static::Links.links[:sysadmin_docs][:scim_static_access_token_authentication_method][:href]
+    ),
+    Scimitar::AuthenticationScheme.new(
+      type: 'oauthbearertoken',
+      name: 'OAuth Bearer Token',
+      description: OpenProject::Static::Links.links[:sysadmin_docs][:scim_oauth2_client_credentials_authentication_method][:href]
+    ),
+    Scimitar::AuthenticationScheme.new(
+      type: 'oidcjwt',
+      name: 'OpenID Provider JWT',
+      description: OpenProject::Static::Links.links[:sysadmin_docs][:scim_jwt_authetication_method][:href]
+    )
+  ]
+
+  class LimitedServiceProviderConfiguration
+    include ActiveModel::Model
+
+    attr_accessor(
+      :authenticationSchemes,
+      :meta,
+      :schemas
+    )
+
+    def initialize(attributes = {})
+      defaults = {
+        meta: Scimitar::Meta.new(
+          resourceType: 'ServiceProviderConfig',
+          created:      Time.now,
+          lastModified: Time.now,
+          version:      '1'
+        ),
+        schemas: ["urn:ietf:params:scim:schemas:core:2.0:ServiceProviderConfig"],
+        authenticationSchemes: AUTHENTICATION_SCHEMES
+      }
+
+      super(defaults.merge(attributes))
+    end
+  end
+
   module Group
     def scim_attributes
       [
