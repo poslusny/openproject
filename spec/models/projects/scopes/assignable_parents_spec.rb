@@ -36,12 +36,27 @@ RSpec.describe Projects::Scopes::AssignableParents do
   shared_let(:user) { create(:user) }
   shared_let(:project_with_permission) { create(:project, members: { user => add_subprojects_role }) }
   shared_let(:parent_project) { create(:project, members: { user => add_subprojects_role }) }
-  shared_let(:subject_project) { create(:project, parent: parent_project, members: { user => add_subprojects_role }) }
+  shared_let(:subject_project, reload: true) do
+    create(:project, parent: parent_project, members: { user => add_subprojects_role })
+  end
   shared_let(:child_project) { create(:project, parent: subject_project, members: { user => add_subprojects_role }) }
   shared_let(:project_without_permission) { create(:project, members: { user => view_role }) }
 
-  it "returns all projects the user has the add_subprojects permission in but without self or descendants" do
-    expect(Project.assignable_parents(user, subject_project))
-      .to contain_exactly(project_with_permission, parent_project)
+  context "for a project" do
+    it "returns all projects the user has the add_subprojects permission in but without self or descendants" do
+      expect(Project.assignable_parents(user, subject_project))
+        .to contain_exactly(project_with_permission, parent_project)
+    end
+  end
+
+  context "for a portfolio" do
+    before do
+      subject_project.portfolio!
+    end
+
+    it "is empty" do
+      expect(Project.assignable_parents(user, subject_project))
+        .to be_empty
+    end
   end
 end

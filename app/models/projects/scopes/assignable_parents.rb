@@ -34,9 +34,13 @@ module Projects::Scopes
 
     class_methods do
       def assignable_parents(user, project)
-        Project
-          .allowed_to(user, :add_subprojects)
-          .where.not(id: project.self_and_descendants)
+        if project.portfolio?
+          Project.none
+        else
+          Project
+            .allowed_to(user, :add_subprojects)
+            .where.not(id: project.self_and_descendants)
+        end
       end
     end
   end
