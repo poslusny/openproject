@@ -261,7 +261,7 @@ Rails.application.routes.draw do
   # default parameters can be defined.
   resources :projects,
             only: %i[new],
-            defaults: { project: { workspace_type: "project" } }
+            defaults: { workspace_type: "project" }
 
   resources :projects, except: %i[new show edit update] do
     scope module: "projects" do
@@ -471,7 +471,7 @@ Rails.application.routes.draw do
 
   resources :portfolios,
             only: %i[new],
-            defaults: { project: { workspace_type: "portfolio" } },
+            defaults: { workspace_type: "portfolio" },
             controller: "projects"
 
   resources :project_phases, only: [] do

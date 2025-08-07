@@ -42,7 +42,7 @@ class ProjectsController < ApplicationController
   before_action :not_authorized_on_feature_flag_inactive,
                 only: %i[new create],
                 if: -> {
-                  params.dig(:project, :workspace_type) == Project.workspace_types[:portfolio]
+                  params[:workspace_type] == Project.workspace_types[:portfolio]
                 }
   before_action :find_optional_template, only: %i[new create]
   before_action :find_optional_parent, only: :new
@@ -189,7 +189,7 @@ class ProjectsController < ApplicationController
   def from_template? = @template.present?
 
   def new_blank
-    @new_project = @parent&.children&.build(permitted_params.new_project) || Project.new(permitted_params.new_project)
+    @new_project = @parent&.children&.build(params.permit(:workspace_type)) || Project.new(params.permit(:workspace_type))
 
     render layout: "no_menu"
   end
@@ -275,8 +275,8 @@ class ProjectsController < ApplicationController
     ::Exports::Register.list_formats(Project).map(&:to_s)
   end
 
-  def not_authorized_on_feature_flag_inactive(flag)
-    render_403 unless OpenProject::FeatureDecisions.active.include?(flag)
+  def not_authorized_on_feature_flag_inactive
+    render_403 unless OpenProject::FeatureDecisions.portfolio_models_active?
   end
 
   helper_method :supported_export_formats
