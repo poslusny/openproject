@@ -222,18 +222,18 @@ RSpec.shared_examples_for "project contract" do
     it_behaves_like "contract is invalid", base: %i(error_unauthorized)
   end
 
-  describe "assignable_values" do
-    context "for project" do
-      before do
-        assignable_parents
-      end
-
-      it "returns all projects the user has the add_subprojects permissions for" do
-        expect(contract.assignable_parents)
-          .to eql assignable_parents
-      end
+  describe "assignable_parents" do
+    before do
+      assignable_parents
     end
 
+    it "returns all projects the user has the add_subprojects permissions for" do
+      expect(contract.assignable_parents)
+        .to eql assignable_parents
+    end
+  end
+
+  describe "assignable_custom_field_values" do
     context "for a list custom field" do
       let(:custom_field) { build_stubbed(:list_project_custom_field) }
 
