@@ -41,6 +41,19 @@ RSpec.shared_examples_for "project contract" do
       mock.allow_in_project(*project_permissions, project:)
       mock.allow_globally(*global_permissions)
     end
+
+    assignable_parents_scope = instance_double(ActiveRecord::Relation,
+                                               empty?: assignable_parents.empty?,
+                                               to_a: assignable_parents)
+
+    allow(Project)
+      .to receive(:assignable_parents)
+            .and_return(assignable_parents_scope)
+
+    allow(assignable_parents_scope)
+      .to receive(:exists?) do |id:|
+        assignable_parents.map(&:id).include?(id)
+      end
   end
 
   let(:project_permissions) { [] }
@@ -57,42 +70,7 @@ RSpec.shared_examples_for "project contract" do
   let(:project_parent) do
     build_stubbed(:project)
   end
-  let(:parent_assignable) { true }
-  let!(:assignable_parents) do
-    assignable_parents_scope = double("assignable parents scope")
-    assignable_parents = double("assignable parents")
-
-    allow(Project)
-      .to receive(:allowed_to)
-      .and_call_original
-
-    allow(Project)
-      .to receive(:allowed_to)
-      .with(current_user, :add_subprojects)
-      .and_return assignable_parents_scope
-
-    allow(assignable_parents_scope)
-      .to receive(:where)
-      .and_return(assignable_parents_scope)
-
-    allow(assignable_parents_scope)
-      .to receive(:not)
-      .with(id: project.self_and_descendants)
-      .and_return(assignable_parents)
-
-    if project_parent
-      allow(assignable_parents)
-        .to receive(:where)
-        .with(id: project_parent.id)
-        .and_return(assignable_parents_scope)
-
-      allow(assignable_parents_scope)
-        .to receive(:exists?)
-        .and_return(parent_assignable)
-    end
-
-    assignable_parents
-  end
+  let(:assignable_parents) { [project_parent] }
 
   it_behaves_like "contract is valid"
 
@@ -115,7 +93,7 @@ RSpec.shared_examples_for "project contract" do
   end
 
   context "if the parent is not in the set of assignable_parents" do
-    let(:parent_assignable) { false }
+    let(:assignable_parents) { [] }
 
     it_behaves_like "contract is invalid", parent: %i(does_not_exist)
   end
@@ -227,8 +205,8 @@ RSpec.shared_examples_for "project contract" do
       assignable_parents
     end
 
-    it "returns all projects the user has the add_subprojects permissions for" do
-      expect(contract.assignable_parents)
+    it "returns the projects Project.assignable_parents returns" do
+      expect(contract.assignable_parents.to_a)
         .to eql assignable_parents
     end
   end
