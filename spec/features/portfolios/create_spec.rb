@@ -48,6 +48,11 @@ RSpec.describe "Portfolios",
     visit new_portfolio_path
 
     expect(page).to have_heading "New portfolio"
+    # This should be an
+    #   expect(page).to have_no_field "Subproject of"
+    # But this leads to a false negative. Even with the field being there, is the
+    # expectation passed.
+    expect(page).to have_no_content "Subproject of"
 
     fill_in "Name", with: "Foo bar"
     click_on "Create"
@@ -58,9 +63,21 @@ RSpec.describe "Portfolios",
     expect(page).to have_content "Foo bar"
   end
 
-  it "cannot create the portfolio without the feature flag being active", with_flag: { portfolio_models: false } do
-    visit new_portfolio_path
+  context "without the necessary permissions to create portfolios", with_flag: { portfolio_models: true } do
+    current_user { create(:user) }
 
-    expect(page).to have_content "[Error 403] You are not authorized to access this page."
+    it "cannot create the portfolio" do
+      visit new_portfolio_path
+
+      expect(page).to have_content "[Error 403] You are not authorized to access this page."
+    end
+  end
+
+  context "without the feature flag being active", with_flag: { portfolio_models: false } do
+    it "cannot create the portfolio" do
+      visit new_portfolio_path
+
+      expect(page).to have_content "[Error 403] You are not authorized to access this page."
+    end
   end
 end
