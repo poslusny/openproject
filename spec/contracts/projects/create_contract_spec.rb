@@ -42,6 +42,7 @@ RSpec.describe Projects::CreateContract do
                   parent: project_parent,
                   status_code: project_status_code,
                   status_explanation: project_status_explanation,
+                  templated: project_templated,
                   workspace_type: project_workspace_type)
     end
     let(:global_permissions) { %i[add_project add_portfolios] }

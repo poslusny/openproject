@@ -53,6 +53,7 @@ RSpec.shared_examples_for "project contract" do
   let(:project_status_code) { "on_track" }
   let(:project_status_explanation) { "some explanation" }
   let(:project_workspace_type) { "project" }
+  let(:project_templated) { false }
   let(:project_parent) do
     build_stubbed(:project)
   end
@@ -199,6 +200,19 @@ RSpec.shared_examples_for "project contract" do
     let(:project_identifier) { "new" }
 
     it_behaves_like "contract is invalid", identifier: %i(exclusion)
+  end
+
+  context "when changing templated as an admin" do
+    let(:current_user) { build_stubbed(:admin) }
+    let(:project_templated) { true }
+
+    it_behaves_like "contract is valid"
+  end
+
+  context "when changing templated as a user" do
+    let(:project_templated) { true }
+
+    it_behaves_like "contract is invalid", templated: %i(error_unauthorized)
   end
 
   context "if the user lacks permission" do
