@@ -42,7 +42,7 @@ module Projects::Concerns
       custom_field_value_params = params[:custom_field_values]
       return params unless custom_field_value_params
 
-      calculated_field_ids = model.all_available_custom_fields.select(&:field_format_calculated_value?).map(&:id)
+      calculated_field_ids = model.all_available_custom_fields.field_format_calculated_value.pluck(:id)
       custom_field_value_params = custom_field_value_params.reject { |id, _| id.to_s.to_i.in?(calculated_field_ids) }
 
       params.merge(custom_field_values: custom_field_value_params)

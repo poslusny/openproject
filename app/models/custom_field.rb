@@ -52,6 +52,8 @@ class CustomField < ApplicationRecord
   scope :hierarchy_root_and_children, -> { includes(hierarchy_root: { children: :children }) }
   scope :required, -> { where(is_required: true) }
 
+  scope :field_format_calculated_value, -> { where(field_format: "calculated_value") }
+
   acts_as_list scope: [:type]
 
   validates :field_format, presence: true

@@ -50,7 +50,7 @@ module CustomField::CalculatedValue
     def affected_calculated_fields(changed_cf_ids)
       return [] if changed_cf_ids.empty?
 
-      to_check = select(&:field_format_calculated_value?)
+      to_check = field_format_calculated_value
 
       # include calculated value fields themselves
       all_affected, to_check = to_check.partition { it.id.in?(changed_cf_ids) }
