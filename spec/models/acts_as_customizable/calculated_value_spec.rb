@@ -129,24 +129,11 @@ RSpec.describe ActsAsCustomizable::CalculatedValue, with_flag: { calculated_valu
       it "blanks field with modulo zero, but calculates other field" do
         instance.calculate_custom_fields([cf_mod, cf_add])
 
-        # https://github.com/rubysolo/dentaku/pull/322
-        begin
-          Dentaku::Calculator.new.evaluate("1 % 0")
-
-          expect(instance).to have_received(:custom_field_values=)
-            .with(
-              cf_mod.id => nil,
-              cf_add.id => 3
-            )
-
-          fail "TODO: remove alternative check"
-        rescue ZeroDivisionError
-          expect(instance).to have_received(:custom_field_values=)
-            .with(
-              cf_mod.id => nil,
-              cf_add.id => nil
-            )
-        end
+        expect(instance).to have_received(:custom_field_values=)
+          .with(
+            cf_mod.id => nil,
+            cf_add.id => 3
+          )
       end
     end
 

@@ -54,11 +54,7 @@ module ActsAsCustomizable::CalculatedValue
       calculator = CustomField::CalculatedValue.calculator_instance
       calculator.store(given)
 
-      begin
-        calculator.solve(to_compute).reject { |_, value| value == :undefined }
-      rescue ZeroDivisionError # https://github.com/rubysolo/dentaku/pull/322
-        {}
-      end
+      calculator.solve(to_compute).reject { |_, value| value == :undefined }
     end
 
     def calculated_value_fields_referenced_values(custom_fields)
