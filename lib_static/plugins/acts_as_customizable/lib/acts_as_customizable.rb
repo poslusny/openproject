@@ -126,7 +126,7 @@ module Redmine
         end
 
         def custom_field_values(all: false)
-          custom_field_values_cache[custom_field_cache_key] ||= begin
+          custom_field_values_cache[[custom_field_cache_key, !!all]] ||= begin
             current_custom_fields = all ? all_available_custom_fields : available_custom_fields
             current_custom_fields.flat_map do |custom_field|
               existing_cvs = custom_values.select { |v| v.custom_field_id == custom_field.id }
