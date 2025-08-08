@@ -29,7 +29,13 @@
 #++
 
 module OpenProject
-  # Utility class to expand hash keys that are arrays into multiple keys
+  # Utility class to expand hash keys that are arrays into multiple keys.
+  #
+  # Example usage:
+  #   MultiKeyHash.expand(
+  #     %w[key1 key2] => "value for both key1 and key2",
+  #     "key3"        => "value for key3"
+  #   )
   module MultiKeyHash
     def self.expand(**hash)
       hash.each_with_object({}) do |(keys, value), expanded|
