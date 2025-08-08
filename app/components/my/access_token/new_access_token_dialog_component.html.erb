@@ -30,17 +30,14 @@ See COPYRIGHT and LICENSE files for more details.
 <%=
     render(
       Primer::Alpha::Dialog.new(
-        id: "new-access-token-dialog",
+        id: DIALOG_ID,
         title: I18n.t("my.access_token.new_access_token_dialog_title"),
-        test_selector: "new-access-token-dialog",
+        test_selector: DIALOG_ID,
         size: :large
       )
     ) do |dialog|
-      dialog.with_header(
-        show_divider: false,
-        visually_hide_title: false
-      )
+      dialog.with_header(show_divider: false, visually_hide_title: false)
 
-      render(My::AccessToken::NewAccessTokenFormComponent.new(token: Token::API.new))
+      render(My::AccessToken::NewAccessTokenFormComponent.new(token: new_token))
     end
 %>

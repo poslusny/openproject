@@ -59,9 +59,8 @@ module My
         def delete_link
           link_to "",
                   {
-                    controller: :my,
-                    action: "revoke_api_key",
-                    token_id: api_token.id
+                    action: :revoke_api_key,
+                    access_token_id: api_token.id
                   },
                   method: :delete,
                   data: { confirm: t("my_account.access_tokens.simple_revoke_confirmation"), test_selector: "api-token-revoke" },

@@ -30,7 +30,26 @@
 
 module My
   module AccessToken
-    class NewAccessTokenComponent < ApplicationComponent
+    class NewAccessTokenDialogComponent < ApplicationComponent
+      include OpTurbo::Streamable
+
+      attr_reader :token_type
+
+      def initialize(token_type: "api")
+        super
+        @token_type = token_type
+      end
+
+      DIALOG_ID = "new-access-token-dialog"
+
+      private
+
+      def new_token
+        case token_type
+        when "api" then Token::API.new
+        when "ical-meeting" then Token::ICalMeeting.new
+        end
+      end
     end
   end
 end

@@ -30,6 +30,8 @@
 
 module My
   class AccessTokensController < ::ApplicationController
+    include OpTurbo::ComponentStream
+
     before_action :require_login
 
     before_action :set_current_user
@@ -49,6 +51,10 @@ module My
                                :revoke_api_key,
                                :revoke_ical_token,
                                :delete_storage_token
+
+    def dialog
+      @token_type = params[:token_type] || "api"
+    end
 
     def index
       @ical_meeting_tokens = current_user.ical_meeting_tokens
