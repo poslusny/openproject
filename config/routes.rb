@@ -846,13 +846,27 @@ Rails.application.routes.draw do
   scope "my" do
     get "/deletion_info" => "users#deletion_info", as: "delete_my_account_info"
     post "/oauth/revoke_application/:application_id" => "oauth/grants#revoke_application", as: "revoke_my_oauth_application"
-    delete "/storage_token/:id" => "my#delete_storage_token", as: "storage_token_delete"
 
     resources :sessions, controller: "my/sessions", as: "my_sessions", only: %i[index show destroy]
     resources :auto_login_tokens, controller: "my/auto_login_tokens", as: "my_auto_login_tokens", only: %i[destroy]
 
     get "/banner" => "my/enterprise_banners#show", as: "show_enterprise_banner"
     post "/dismiss_banner" => "my/enterprise_banners#dismiss", as: "dismiss_enterprise_banner"
+  end
+
+  namespace :my do
+    resources :access_tokens, only: %i[index] do
+      collection do
+        post "generate_rss_key", action: "generate_rss_key"
+        delete "revoke_rss_key", action: "revoke_rss_key"
+
+        post "generate_api_key", action: "generate_api_key"
+      end
+
+      delete "revoke_api_key", action: "revoke_api_key"
+      delete "revoke_ical_token", action: "revoke_ical_token"
+      delete "revoke_storage_token", action: "revoke_storage_token"
+    end
   end
 
   scope controller: "my" do
@@ -867,13 +881,6 @@ Rails.application.routes.draw do
 
     patch "/my/account", action: "update_account"
     patch "/my/settings", action: "update_settings"
-
-    post "/my/generate_rss_key", action: "generate_rss_key"
-    delete "/my/revoke_rss_key", action: "revoke_rss_key"
-    post "/my/generate_api_key", action: "generate_api_key"
-    delete "/my/revoke_api_key", action: "revoke_api_key"
-    delete "/my/revoke_ical_token", action: "revoke_ical_token"
-    get "/my/access_token", action: "access_token"
   end
 
   scope controller: "onboarding" do

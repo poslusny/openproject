@@ -40,16 +40,11 @@ See COPYRIGHT and LICENSE files for more details.
 %>
 
 <%= render ::My::AccessToken::APITokensSectionComponent.new(api_tokens: @user.api_tokens) %>
-<%= render partial: "my/access_token_partials/icalendar_tokens_section",
-           locals: { ical_tokens_grouped_by_query: @ical_tokens_grouped_by_query } %>
-<%= render partial: "my/access_token_partials/icalendar_meeting_tokens_section",
-           locals: { ical_tokens: @ical_meeting_tokens } %>
-<%= render partial: "my/access_token_partials/oauth_tokens_section",
-           locals: { granted_applications: granted_applications } %>
-<%= render partial: "my/access_token_partials/rss_tokens_section",
-           locals: { rss_token: @user.rss_token } %>
-<%= render partial: "my/access_token_partials/storage_tokens_section",
-           locals: { storage_tokens: @storage_tokens } %>
+<%= render partial: "icalendar_tokens_section", locals: { ical_tokens_grouped_by_query: @ical_tokens_grouped_by_query } %>
+<%= render partial: "icalendar_meeting_tokens_section", locals: { ical_tokens: @ical_meeting_tokens } %>
+<%= render partial: "oauth_tokens_section", locals: { granted_applications: granted_applications } %>
+<%= render partial: "rss_tokens_section", locals: { rss_token: @user.rss_token } %>
+<%= render partial: "storage_tokens_section", locals: { storage_tokens: @storage_tokens } %>
 <div class="generic-table--container">
   <div class="generic-table--results-container">
     <table class="generic-table" data-controller="table-highlighting">

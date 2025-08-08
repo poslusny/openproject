@@ -240,8 +240,8 @@ Redmine::MenuManager.map :my_menu do |menu|
             caption: :button_change_password,
             if: ->(_) { User.current.change_password_allowed? },
             icon: "lock"
-  menu.push :access_token,
-            { controller: "/my", action: "access_token" },
+  menu.push :access_tokens,
+            { controller: "/my/access_tokens", action: "index" },
             caption: I18n.t("my_account.access_tokens.access_tokens"),
             icon: "key"
   menu.push :sessions,

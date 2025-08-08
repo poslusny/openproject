@@ -41,7 +41,7 @@ See COPYRIGHT and LICENSE files for more details.
         <div class="generic-table--container">
           <div class="generic-table--results-container">
             <table class="generic-table" data-controller="table-highlighting">
-              <%= render  partial: "my/access_token_partials/token_table_header",
+              <%= render  partial: "token_table_header",
                           locals: {
                             column_headers: [
                               t("attributes.name"),
@@ -74,7 +74,7 @@ See COPYRIGHT and LICENSE files for more details.
                       <td><%= t("my_account.access_tokens.indefinite_expiration") %></td>
                       <td class="buttons">
                         <%= link_to "",
-                                    { action: "revoke_ical_token", id: token.id },
+                                    { action: "revoke_ical_token", access_token_id: token.id },
                                     data: { confirm: t("my_account.access_tokens.simple_revoke_confirmation"), test_selector: "ical-token-row-#{token.id}-revoke" },
                                     method: :delete,
                                     class: "icon icon-delete" %>
