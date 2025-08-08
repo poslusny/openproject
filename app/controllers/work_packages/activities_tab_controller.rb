@@ -206,7 +206,7 @@ class WorkPackages::ActivitiesTabController < ApplicationController
   end
 
   def find_work_package
-    @work_package = WorkPackage.find(params[:work_package_id])
+    @work_package = WorkPackage.includes(:comments).find(params[:work_package_id])
   rescue ActiveRecord::RecordNotFound
     respond_with_error(I18n.t("label_not_found"))
   end
@@ -429,7 +429,10 @@ class WorkPackages::ActivitiesTabController < ApplicationController
     )
 
     component = WorkPackages::ActivitiesTab::Journals::ItemComponent.new(
-      journal:, filter: @filter, grouped_emoji_reactions:
+      work_package: @work_package,
+      journal:,
+      filter: @filter,
+      grouped_emoji_reactions:
     )
 
     stream_config = {
@@ -463,6 +466,7 @@ class WorkPackages::ActivitiesTabController < ApplicationController
   def update_item_component(journal:, grouped_emoji_reactions:, state:, filter: @filter)
     update_via_turbo_stream(
       component: WorkPackages::ActivitiesTab::Journals::ItemComponent.new(
+        work_package: @work_package,
         journal:,
         state:,
         filter:,

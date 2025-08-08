@@ -38,9 +38,10 @@ module WorkPackages
         include WorkPackages::ActivitiesTab::SharedHelpers
         include WorkPackages::ActivitiesTab::StimulusControllers
 
-        def initialize(journal:, filter:, grouped_emoji_reactions:, state: :show)
+        def initialize(work_package:, journal:, filter:, grouped_emoji_reactions:, state: :show)
           super
 
+          @work_package = work_package
           @journal = journal
           @filter = filter
           @grouped_emoji_reactions = grouped_emoji_reactions
@@ -49,7 +50,7 @@ module WorkPackages
 
         private
 
-        attr_reader :journal, :state, :filter, :grouped_emoji_reactions
+        attr_reader :work_package, :journal, :state, :filter, :grouped_emoji_reactions
 
         def wrapper_uniq_by
           journal.id
@@ -72,8 +73,7 @@ module WorkPackages
 
         def comment_for(detail)
           detail = JSON.parse(detail)
-          # we probably don't want a query here, so think of a way of preloading these
-          comment = Comment.find_by(id: detail["comment_id"])
+          comment = work_package.comments.find_by(id: detail["comment_id"]) # comments are preloaded on the controller
 
           if comment.nil?
             I18n.t("activities.work_packages.activity_tab.comment_not_found")

@@ -9,7 +9,9 @@
             else
               render(
                 WorkPackages::ActivitiesTab::Journals::ItemComponent.new(
-                  journal: record, filter:,
+                  work_package: work_package,
+                  journal: record,
+                  filter:,
                   grouped_emoji_reactions: wp_journals_grouped_emoji_reactions[record.id]
                 )
               )
@@ -50,7 +52,9 @@
                 else
                   render(
                     WorkPackages::ActivitiesTab::Journals::ItemComponent.new(
-                      journal: record, filter:,
+                      work_package: work_package,
+                      journal: record,
+                      filter:,
                       grouped_emoji_reactions: wp_journals_grouped_emoji_reactions[record.id]
                     )
                   )

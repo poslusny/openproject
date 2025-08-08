@@ -1,7 +1,7 @@
 <%=
   if deferred
     render(
-      WorkPackages::ActivitiesTab::Journals::IndexComponent.new(work_package:, filter:, deferred:)
+      WorkPackages::ActivitiesTab::Journals::IndexComponent.new(work_package:, preloaded_comments:, filter:, deferred:)
     )
   else
     component_wrapper(tag: "turbo-frame") do
