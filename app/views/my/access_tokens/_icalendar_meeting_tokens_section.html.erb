@@ -73,9 +73,23 @@ See COPYRIGHT and LICENSE files for more details.
           </div>
         </div>
       <% else %>
-        <span class="spot-icon spot-icon_inline spot-icon_info1"></span>
-        <i><%= t("my_account.access_tokens.ical_meeting.empty_text_hint", path: meetings_path).html_safe %></i>
       <% end %>
+              <%= render(
+                    Primer::Beta::Button.new(
+                      tag: :a,
+                      mt: 3,
+                      scheme: :primary,
+                      test_selector: "ical-meeting-token-add",
+                      href: dialog_my_access_tokens_path(token_type: "ical-meeting"),
+                      data: { turbo_stream: true },
+                      aria: { label: I18n.t("my.access_token.new_ical_meeting_token_dialog_show_button_text") },
+                      role: "button",
+                      title: I18n.t("my.access_token.new_ical_meeting_token_dialog_show_button_text")
+                    )
+                  ) do |button|
+                    button.with_leading_visual_icon(icon: :rss)
+                    I18n.t("my.access_token.new_ical_meeting_token_dialog_show_button_text")
+                  end %>
     <% else %>
       <div tabindex="0" class="-info op-toast">
         <div role="alert" aria-atomic="true" class="op-toast--content">
