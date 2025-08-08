@@ -857,15 +857,16 @@ Rails.application.routes.draw do
   namespace :my do
     resources :access_tokens, only: %i[index] do
       collection do
-        post "generate_rss_key", action: "generate_rss_key"
-        delete "revoke_rss_key", action: "revoke_rss_key"
+        get :dialog
+        post :generate_rss_key
+        delete :revoke_rss_key
 
-        post "generate_api_key", action: "generate_api_key"
+        post :generate_api_key
       end
 
-      delete "revoke_api_key", action: "revoke_api_key"
-      delete "revoke_ical_token", action: "revoke_ical_token"
-      delete "revoke_storage_token", action: "revoke_storage_token"
+      delete :revoke_api_key
+      delete :revoke_ical_token
+      delete :revoke_storage_token
     end
   end
 

@@ -42,6 +42,7 @@ module My
     layout "my"
 
     no_authorization_required! :index,
+                               :dialog,
                                :generate_rss_key,
                                :revoke_rss_key,
                                :generate_api_key,

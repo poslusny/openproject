@@ -42,7 +42,21 @@ See COPYRIGHT and LICENSE files for more details.
         <% if @api_tokens.any? %>
           <%= render My::AccessToken::API::TableComponent.new(rows: @api_tokens) %>
         <% end %>
-        <%= render My::AccessToken::NewAccessTokenComponent.new %>
+        <%= render(
+              Primer::Beta::Button.new(
+                tag: :a,
+                scheme: :primary,
+                test_selector: "api-token-add",
+                href: dialog_my_access_tokens_path(token_type: "api"),
+                data: { turbo_stream: true },
+                aria: { label: I18n.t("my.access_token.new_access_token_dialog_show_button_text") },
+                role: "button",
+                title: I18n.t("my.access_token.new_access_token_dialog_show_button_text")
+              )
+            ) do |button|
+              button.with_leading_visual_icon(icon: :plus)
+              I18n.t("my.access_token.new_access_token_dialog_show_button_text")
+            end %>
       <% else %>
         <div tabindex="0" class="-info op-toast">
           <div role="alert" aria-atomic="true" class="op-toast--content">
