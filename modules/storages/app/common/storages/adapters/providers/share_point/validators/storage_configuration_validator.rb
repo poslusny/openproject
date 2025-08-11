@@ -40,12 +40,14 @@ module Storages
 
             def validate
               register_checks :storage_configured,
+                              :diagnostic_request,
                               :host,
                               :tenant_id,
                               :client_secret,
                               :client_id
 
               storage_configuration_status
+              diagnostic_request
               check_host
               check_tenant_id
               check_client_secret
@@ -57,6 +59,19 @@ module Storages
                 pass_check(:storage_configured)
               else
                 fail_check(:storage_configured, :not_configured)
+              end
+            end
+
+            def diagnostic_request
+              if query_result.failure? && query_result.failure.code == :error
+                error "Connection validation failed with unknown error:\n" \
+                      "\tstorage: ##{@storage.id} #{@storage.name}\n" \
+                      "\tstatus: #{query_result.failure}\n" \
+                      "\tresponse: #{query_result.failure.payload}"
+
+                fail_check(:diagnostic_request, :unknown_error)
+              else
+                pass_check :diagnostic_request
               end
             end
 
