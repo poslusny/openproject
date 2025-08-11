@@ -37,7 +37,7 @@ module Storages
       module SharePoint
         module Commands
           RSpec.describe DeleteFolderCommand, :vcr, :webmock do
-            let(:storage) { create(:share_point_dev_storage) }
+            let(:storage) { create(:share_point_storage, :sandbox) }
             let(:auth_strategy) { Registry["share_point.authentication.userless"].call }
             let(:base_drive) { "b!FeOZEMfQx0eGQKqVBLcP__BG8mq-4-9FuRqOyk3MXY9jo6leJDqrT7muzvmiWjFW" }
 
