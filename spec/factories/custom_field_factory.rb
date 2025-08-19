@@ -165,6 +165,19 @@ FactoryBot.define do
       field_format { "link" }
     end
 
+    trait :hierarchy do
+      field_format { "hierarchy" }
+      hierarchy_root do
+        service = CustomFields::Hierarchy::HierarchicalItemService.new
+        service.generate_root(instance).value!
+      end
+    end
+
+    trait :multi_hierarchy do
+      hierarchy
+      multi_value
+    end
+
     factory :project_custom_field, class: "ProjectCustomField" do
       project_custom_field_section
 
@@ -227,6 +240,7 @@ FactoryBot.define do
       factory :user_wp_custom_field, traits: [:user]
       factory :multi_user_wp_custom_field, traits: [:multi_user]
       factory :link_wp_custom_field, traits: [:link]
+      factory :hierarchy_wp_custom_field, traits: [:hierarchy]
     end
 
     factory :issue_custom_field, class: "WorkPackageCustomField" do

@@ -34,6 +34,15 @@ hi:
           name: धूसर (डार्क)
         item_13:
           name: काला
+      project_phase_colors:
+        item_0:
+          name: PM2 Orange
+        item_1:
+          name: PM2 Red
+        item_2:
+          name: PM2 Magenta
+        item_3:
+          name: PM2 Green Yellow
       document_categories:
         item_0:
           name: Documentation
@@ -67,7 +76,21 @@ hi:
       global_roles:
         item_0:
           name: Staff and projects manager
+        item_1:
+          name: Standard global role
     standard:
+      project_phases:
+        item_0:
+          name: Initiating
+        item_1:
+          name: विनियोजन
+          start_gate: Ready for Planning
+        item_2:
+          name: Executing
+          start_gate: Ready for Executing
+        item_3:
+          name: Closing
+          start_gate: Ready for Closing
       priorities:
         item_0:
           name: निम्न
@@ -462,7 +485,7 @@ hi:
         item_1:
           name: मील का पत्थर
         item_2:
-          name: चरण
+          name: Summary task
         item_3:
           name: विशेषता
         item_4:

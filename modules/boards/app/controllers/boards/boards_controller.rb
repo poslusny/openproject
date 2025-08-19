@@ -23,6 +23,12 @@ module ::Boards
       render layout: "angular/angular"
     end
 
+    def default_breadcrumb; end
+
+    def show_local_breadcrumb
+      false
+    end
+
     def new; end
 
     def create
@@ -34,7 +40,7 @@ module ::Boards
         flash[:notice] = I18n.t(:notice_successful_create)
         redirect_to project_work_package_board_path(@project, @board_grid)
       else
-        render action: :new
+        render action: :new, status: :unprocessable_entity
       end
     end
 

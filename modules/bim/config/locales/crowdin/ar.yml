@@ -9,6 +9,7 @@ ar:
     label_bcf: 'BCF'
     label_imported_failed: 'فشل استيراد مواضيع BCF'
     label_imported_successfully: 'تم استيراد موضوعات BCF بنجاح'
+    label_bcf_issue_associated: "BCF issue associated"
     issues: "مشاكل"
     recommended: 'موصى بها'
     not_recommended: 'غير موصى بها'
@@ -83,6 +84,12 @@ ar:
         ifc_attachment: "IFC file"
         is_default: "النموذج الافتراضي"
         attachments: "IFC file"
+      bim/bcf/issue:
+        bcf_comment: "BCF comment"
+        bim_snippet: "BIM snippet"
+        reference_links: "Reference links"
+        stage: "Stage"
+        viewpoint: "Viewpoint"
     errors:
       models:
         bim/ifc_models/ifc_model:

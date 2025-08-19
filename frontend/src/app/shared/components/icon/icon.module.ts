@@ -4,8 +4,11 @@ import { OpIconComponent } from './icon.component';
 import {
   ChevronLeftIconComponent,
   ChevronRightIconComponent,
+  ClockIconComponent,
   HomeIconComponent,
   InfoIconComponent,
+  OpAlarmIconComponent,
+  OpAlarmSetIconComponent,
   OpCursorRectangleSelectIconComponent,
   OpCursorSelectIconComponent,
   OpEnterpriseAddonsIconComponent,
@@ -49,6 +52,10 @@ import {
   OpGitlabPipelineStatusSuccessIconComponent,
   OpGitlabPipelineStatusWaitingIconComponent,
   XCircleIconComponent,
+  OpKebabVerticalIconComponent,
+  ReadIconComponent,
+  EyeIconComponent,
+  EyeClosedIconComponent,
 } from '@openproject/octicons-angular';
 
 @NgModule({
@@ -57,8 +64,11 @@ import {
 
     ChevronLeftIconComponent,
     ChevronRightIconComponent,
+    ClockIconComponent,
     HomeIconComponent,
     InfoIconComponent,
+    OpAlarmIconComponent,
+    OpAlarmSetIconComponent,
     OpCursorRectangleSelectIconComponent,
     OpCursorSelectIconComponent,
     OpEnterpriseAddonsIconComponent,
@@ -102,7 +112,13 @@ import {
     OpGitlabPipelineStatusSkippedIconComponent,
     OpGitlabPipelineStatusSuccessIconComponent,
     OpGitlabPipelineStatusWaitingIconComponent,
+
     XCircleIconComponent,
+
+    OpKebabVerticalIconComponent,
+    ReadIconComponent,
+    EyeIconComponent,
+    EyeClosedIconComponent,
   ],
   declarations: [
     OpIconComponent,
@@ -113,8 +129,11 @@ import {
 
     ChevronLeftIconComponent,
     ChevronRightIconComponent,
+    ClockIconComponent,
     HomeIconComponent,
     InfoIconComponent,
+    OpAlarmIconComponent,
+    OpAlarmSetIconComponent,
     OpCursorRectangleSelectIconComponent,
     OpCursorSelectIconComponent,
     OpEnterpriseAddonsIconComponent,
@@ -159,6 +178,11 @@ import {
     OpGitlabPipelineStatusSuccessIconComponent,
     OpGitlabPipelineStatusWaitingIconComponent,
     XCircleIconComponent,
+
+    OpKebabVerticalIconComponent,
+    ReadIconComponent,
+    EyeIconComponent,
+    EyeClosedIconComponent,
   ],
 })
 export class IconModule {}

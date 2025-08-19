@@ -28,22 +28,15 @@
 
 // Re-apply the primer styles with higher specificity
 // as the OpenProject form styles override them.
-
-.Box
-  > ul:not(.op-uc-list)
-    margin-left: 0
-
-
 .FormControl
-  label
-    margin-bottom: 0
   input
     border-radius: var(--borderRadius-medium)
 
-action-menu
-  anchored-position
-    ul
-      margin-left: 0
+  // Currently we cannot morph the angular datepicker input field, and we have no way to set the
+  // validation error border on the input. However we can morph the input's wrapper element, thus
+  // adding this parent wrapper rule we can display the red border on the input.
+  &-input-wrap[invalid='true'] input:not(:focus)
+    border-color: var(--control-borderColor-danger)
 
 .UnderlineNav
   @include no-visible-scroll-bar
@@ -57,9 +50,16 @@ action-menu
 page-header,
 sub-header,
 .op-work-package-details-tab-component,
-.tabnav
+.UnderlineNav,
+.tabnav,
+.Box-header,
+action-menu anchored-position
   ol, ul
     margin-left: 0
+
+ul.SegmentedControl,
+.Box > ul:not(.op-uc-list)
+  margin-left: 0
 
 #breadcrumb
   .breadcrumb-item.breadcrumb-item-selected
@@ -91,7 +91,28 @@ sub-header,
   &:hover
     background: var(--header-item-bg-hover-color)
     color: var(--header-item-font-hover-color)
-  
-// Todo: Remove once https://github.com/primer/view_components/pull/3087 is merged
-.FormControl-spacingWrapper
-  row-gap: var(--stack-gap-normal)
+
+// Prototypical CKEditor adjustments to better match Primer styles
+.ck-editor-primer-adjusted
+  .ck-toolbar
+    border-radius: var(--borderRadius-medium) var(--borderRadius-medium) 0px 0px!important
+  .document-editor__editable-container
+    background: var(--bgColor-default)
+    border-radius: 0px 0px var(--borderRadius-medium) var(--borderRadius-medium)
+  .ck-content
+    background: var(--bgColor-default)
+    overflow-y: auto
+    border-radius: var(--borderRadius-medium)!important
+    margin: 5px
+  .CodeMirror
+    border-radius: 0px 0px var(--borderRadius-medium) var(--borderRadius-medium)
+  .ck-editor__preview
+    border-radius: 0px 0px var(--borderRadius-medium) var(--borderRadius-medium)
+  .op-ckeditor--wrapper
+    margin-bottom: 0px
+
+// When our generic table uses the quick action menu, column headers are cut off and no longer fully readable.
+// This fix ensures that column headers are always displayed. An example for such a table is the project list.
+.generic-table
+  .generic-table--action-menu-button
+    min-width: max-content !important

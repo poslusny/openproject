@@ -40,10 +40,7 @@ import { PathHelperService } from 'core-app/core/path-helper/path-helper.service
 import { ApiV3Service } from 'core-app/core/apiv3/api-v3.service';
 
 import { TimezoneService } from 'core-app/core/datetime/timezone.service';
-import {
-  AvatarSize,
-  PrincipalRendererService,
-} from './principal-renderer.service';
+import { AvatarOptions, AvatarSize, HoverCardOptions, PrincipalRendererService } from './principal-renderer.service';
 import { PrincipalLike } from './principal-types';
 import { populateInputsFromDataset } from 'core-app/shared/components/dataset-inputs';
 import { PrincipalType } from 'core-app/shared/components/principal/principal-helper';
@@ -76,6 +73,11 @@ export class OpPrincipalComponent implements OnInit {
 
   @Input() size:AvatarSize = 'default';
 
+  @Input() avatarClasses? = '';
+
+  @Input() hoverCard= true;
+  @Input() hoverCardUrl= '';
+
   @Input() title = '';
 
   public constructor(
@@ -93,6 +95,16 @@ export class OpPrincipalComponent implements OnInit {
 
   ngOnInit() {
     if (this.principal.name) {
+      const avatarOptions:AvatarOptions = {
+        hide: this.hideAvatar,
+        size: this.size,
+      };
+
+      const hoverCardOptions:HoverCardOptions = {
+        isActivated: this.hoverCard,
+        url: this.hoverCardUrl,
+      };
+
       this.principalRenderer.render(
         this.elementRef.nativeElement as HTMLElement,
         this.principal,
@@ -101,10 +113,8 @@ export class OpPrincipalComponent implements OnInit {
           link: this.link,
           classes: this.nameClasses,
         },
-        {
-          hide: this.hideAvatar,
-          size: this.size,
-        },
+        avatarOptions,
+        hoverCardOptions,
         this.title === '' ? null : this.title,
       );
     }

@@ -26,7 +26,7 @@
 # See COPYRIGHT and LICENSE files for more details.
 #++
 
-require File.expand_path(File.dirname(__FILE__) + "/../spec_helper.rb")
+require_relative "../spec_helper"
 
 RSpec.describe CostlogController do
   include Cost::PluginSpecHelper
@@ -303,7 +303,7 @@ RSpec.describe CostlogController do
         post :create, params:
       end
 
-      it { expect(response).to be_successful }
+      it { expect(response).to have_http_status(:unprocessable_entity) }
 
       it_behaves_like "assigns"
       it { expect(flash[:notice]).to be_nil }

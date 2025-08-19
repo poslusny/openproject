@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -40,16 +42,19 @@
 require "open3"
 
 class WorkPackage::PDFExport::WorkPackageListToPdf < WorkPackage::Exports::QueryExporter
-  include WorkPackage::PDFExport::Common
-  include WorkPackage::PDFExport::Attachments
-  include WorkPackage::PDFExport::OverviewTable
-  include WorkPackage::PDFExport::SumsTable
-  include WorkPackage::PDFExport::WorkPackageDetail
-  include WorkPackage::PDFExport::TableOfContents
-  include WorkPackage::PDFExport::Page
-  include WorkPackage::PDFExport::Gantt
-  include WorkPackage::PDFExport::Style
-  include WorkPackage::PDFExport::Cover
+  include WorkPackage::PDFExport::Common::Common
+  include WorkPackage::PDFExport::Common::Logo
+  include WorkPackage::PDFExport::Common::Attachments
+  include WorkPackage::PDFExport::Export::Page
+  include WorkPackage::PDFExport::Export::MarkdownField
+  include WorkPackage::PDFExport::Export::Report::Detail
+  include WorkPackage::PDFExport::Export::Report::Styles
+  include WorkPackage::PDFExport::Export::Report::SumsTable
+  include WorkPackage::PDFExport::Export::Report::TableOfContents
+  include WorkPackage::PDFExport::Export::Report::Attributes
+  include WorkPackage::PDFExport::Export::WpTable
+  include WorkPackage::PDFExport::Export::Cover
+  include WorkPackage::PDFExport::Export::Gantt
 
   attr_accessor :pdf,
                 :options
@@ -67,20 +72,30 @@ class WorkPackage::PDFExport::WorkPackageListToPdf < WorkPackage::Exports::Query
     setup_page!
   end
 
+  def get_columns
+    return [] if wants_report? && without_columns?
+
+    super
+  end
+
+  def without_columns?
+    ActiveModel::Type::Boolean.new.cast(options[:no_columns])
+  end
+
   def export!
     file = render_work_packages query.results.work_packages
     success(file)
   rescue Prawn::Errors::CannotFit
     error(I18n.t(:error_pdf_export_too_many_columns))
   rescue StandardError => e
-    Rails.logger.error { "Failed to generate PDF export: #{e}." }
-    error(I18n.t(:error_pdf_failed_to_export, error: e.message[0..300]))
+    Rails.logger.error "Failed to generate PDF export:  #{e.message}:\n#{e.backtrace.join("\n")}"
+    error(I18n.t(:error_pdf_failed_to_export, error: e.message))
   end
 
   private
 
   def setup_page!
-    self.pdf = get_pdf(current_language)
+    self.pdf = get_pdf
 
     configure_page_size!(wants_report? ? :portrait : :landscape)
   end
@@ -97,12 +112,40 @@ class WorkPackage::PDFExport::WorkPackageListToPdf < WorkPackage::Exports::Query
     file
   end
 
+  def with_sums_table?
+    query.display_sums?
+  end
+
   def wants_total_page_nrs?
     true
   end
 
+  def wants_report?
+    options[:pdf_export_type] == "report"
+  end
+
+  def wants_gantt?
+    options[:pdf_export_type] == "gantt"
+  end
+
   def with_cover?
     wants_report?
+  end
+
+  def cover_page_title
+    project&.name
+  end
+
+  def cover_page_heading
+    heading
+  end
+
+  def cover_page_subheading
+    User.current&.name
+  end
+
+  def cover_page_dates
+    nil
   end
 
   def render_work_packages_pdfs(work_packages, filename)
@@ -110,16 +153,20 @@ class WorkPackage::PDFExport::WorkPackageListToPdf < WorkPackage::Exports::Query
     if wants_gantt?
       write_work_packages_gantt! work_packages, @id_wp_meta_map
     else
-      write_title!
-      write_work_packages_toc! work_packages, @id_wp_meta_map if wants_report?
-      write_work_packages_overview! work_packages unless wants_report?
-      write_work_packages_sums! work_packages if with_sums_table? && wants_report?
+      write_report! work_packages
     end
     if should_be_batched?(work_packages)
       render_batched(work_packages, filename)
     else
       render_pdf(work_packages, filename)
     end
+  end
+
+  def write_report!(work_packages)
+    write_title!
+    write_work_packages_toc! work_packages, @id_wp_meta_map if wants_report?
+    write_work_packages_table!(work_packages, query) unless wants_report?
+    write_work_packages_sums! work_packages if with_sums_table? && wants_report?
   end
 
   def render_batched(work_packages, filename)
@@ -249,5 +296,17 @@ class WorkPackage::PDFExport::WorkPackageListToPdf < WorkPackage::Exports::Query
 
   def with_images?
     @with_images ||= ActiveModel::Type::Boolean.new.cast(options[:show_images])
+  end
+
+  def get_total_sums
+    query.display_sums? ? (query.results.all_total_sums || {}) : {}
+  end
+
+  def get_column_value_cell(work_package, column_name)
+    value = get_column_value(work_package, column_name)
+    return get_id_column_cell(work_package, value) if column_name == :id
+    return get_subject_column_cell(work_package, value) if wants_report? && column_name == :subject
+
+    escape_tags(value)
   end
 end

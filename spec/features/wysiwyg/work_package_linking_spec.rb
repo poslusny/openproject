@@ -28,7 +28,7 @@
 
 require "spec_helper"
 
-RSpec.describe "Wysiwyg work package linking", :js do
+RSpec.describe "Wysiwyg work package linking", :js, :selenium do
   let(:user) { create(:admin) }
   let(:project) { create(:project, enabled_module_names: %w[wiki work_package_tracking]) }
   let(:work_package) { create(:work_package, subject: "Foobar", project:) }
@@ -53,7 +53,7 @@ RSpec.describe "Wysiwyg work package linking", :js do
       # Save wiki page
       click_on "Save"
 
-      expect(page).to have_css(".op-toast.-success")
+      expect_flash(message: "Successful creation.")
 
       within("#content") do
         expect(page).to have_css("a.issue", count: 1)

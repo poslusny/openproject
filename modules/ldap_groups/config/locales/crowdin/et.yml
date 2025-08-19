@@ -6,11 +6,13 @@ et:
     attributes:
       ldap_groups/synchronized_group:
         dn: 'DN'
-        ldap_auth_source: 'LDAP connection'
+        auth_source: 'Auth source'
+        ldap_auth_source: 'LDAP ühendus'
         sync_users: 'Sync users'
       ldap_groups/synchronized_filter:
         filter_string: 'LDAP filter'
-        ldap_auth_source: 'LDAP connection'
+        auth_source: 'Auth source'
+        ldap_auth_source: 'LDAP ühendus'
         group_name_attribute: "Group name attribute"
         sync_users: 'Sync users'
         base_dn: "Search base DN"
@@ -24,7 +26,7 @@ et:
   ldap_groups:
     label_menu_item: 'LDAP group synchronization'
     label_group_key: 'LDAP group filter key'
-    label_synchronize: 'Synchronize'
+    label_synchronize: 'Sünkrooni'
     settings:
       name_attribute: 'LDAP groups name attribute'
       name_attribute_text: 'The LDAP attribute used for naming the OpenProject group when created by a filter'

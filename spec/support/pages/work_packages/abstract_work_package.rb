@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -33,6 +35,8 @@ module Pages
     attr_reader :project, :work_package
 
     def initialize(work_package, project = nil)
+      super()
+
       @work_package = work_package
       @project = project
     end
@@ -41,8 +45,16 @@ module Pages
       is_a?(AbstractWorkPackageCreate)
     end
 
+    def visit_query(query)
+      visit("#{path}?query_id=#{query.id}")
+    end
+
     def visit_tab!(tab)
       visit path(tab)
+    end
+
+    def relations_tab
+      Components::WorkPackages::Relations.new(work_package)
     end
 
     def switch_to_tab(tab:)
@@ -77,14 +89,18 @@ module Pages
       raise NotImplementedError
     end
 
-    def expect_comment(**args)
-      subselector = args.delete(:subselector)
+    def wait_for_activity_tab
+      wait_for { page }.to have_test_selector("op-wp-activity-tab")
+      # ensure stimulus controller is mounted
+      expect(page).to have_css('[data-stimulus-controller-connected="true"]')
+    end
 
-      retry_block do
-        unless page.has_selector?(".user-comment .message #{subselector}".strip, **args)
-          raise "Failed to find comment with #{args.inspect}. Retrying."
-        end
-      end
+    def expect_any_active_inline_edit_field
+      expect(page).to have_css(".inline-edit--active-field")
+    end
+
+    def expect_no_active_inline_edit_field
+      expect(page).to have_no_css(".inline-edit--active-field")
     end
 
     def expect_hidden_field(attribute)
@@ -105,10 +121,6 @@ module Pages
 
     def ensure_page_loaded
       expect_angular_frontend_initialized
-      expect(page).to have_css(".op-user-activity--user-name",
-                               text: work_package.journals.last.user.name,
-                               minimum: 1,
-                               wait: 10)
     end
 
     def disable_ajax_requests
@@ -144,18 +156,6 @@ module Pages
     end
 
     alias :expect_attribute_hidden :expect_no_attribute
-
-    def expect_activity(user, number: nil)
-      container = "#work-package-activites-container"
-      container += " #activity-#{number}" if number
-
-      expect(page).to have_css("#{container} .op-user-activity--user-line", text: user.name)
-    end
-
-    def expect_activity_message(message)
-      expect(page).to have_css(".work-package-details-activities-messages .message",
-                               text: message)
-    end
 
     def expect_no_parent
       visit_tab!("relations")
@@ -285,26 +285,8 @@ module Pages
       page.click_button(I18n.t("js.button_edit"))
     end
 
-    def trigger_edit_comment
-      add_comment_container.find(".work-package-comment").click
-    end
-
-    def update_comment(comment)
-      editor = ::Components::WysiwygEditor.new ".work-packages--activity--add-comment"
-      editor.click_and_type_slowly comment
-    end
-
-    def save_comment
-      label = "Comment: Save"
-      add_comment_container.find(:xpath, "//button[@title='#{label}']").click
-    end
-
     def save!
       page.click_button(I18n.t("js.button_save"))
-    end
-
-    def add_comment_container
-      find(".work-packages--activity--add-comment")
     end
 
     def click_add_wp_button
@@ -328,6 +310,34 @@ module Pages
 
     def mark_notifications_as_read
       find('[data-test-selector="mark-notification-read-button"]').click
+    end
+
+    def expect_conflict_warning_banner
+      expect(page).to have_test_selector("op-primer-flash-message",
+                                         text: I18n.t("notice_locking_conflict_warning"),
+                                         visible: true) do |element|
+        expect(element["data-banner-scheme"]).to eq("warning")
+      end
+    end
+
+    def expect_conflict_error_banner
+      expect(page).to have_test_selector("op-primer-flash-message",
+                                         text: I18n.t("notice_locking_conflict_danger"),
+                                         visible: true) do |element|
+        expect(element["data-banner-scheme"]).to eq("danger")
+      end
+    end
+
+    def expect_no_conflict_warning_banner
+      expect(page).not_to have_test_selector("op-primer-flash-message",
+                                             text: I18n.t("notice_locking_conflict_warning"),
+                                             visible: true)
+    end
+
+    def expect_no_conflict_error_banner
+      expect(page).not_to have_test_selector("op-primer-flash-message",
+                                             text: I18n.t("notice_locking_conflict_danger"),
+                                             visible: true)
     end
 
     private

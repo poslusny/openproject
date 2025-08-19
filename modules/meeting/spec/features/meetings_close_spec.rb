@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -39,28 +40,31 @@ RSpec.describe "Meetings close" do
            member_with_permissions: { project => permissions })
   end
 
-  let!(:meeting) { create(:meeting, project:, title: "Own awesome meeting!", author: user) }
+  let!(:meeting) { create(:meeting, :author_participates, project:, title: "Own awesome meeting!", author: user) }
   let!(:meeting_agenda) { create(:meeting_agenda, meeting:, text: "asdf") }
 
   before do
     login_as(user)
   end
 
-  context "with permission to close meetings", :js do
+  context "with permission to close meetings",
+          :js do
     let(:permissions) { %i[view_meetings close_meeting_agendas] }
 
     it "can delete own and other`s meetings" do
-      visit meetings_path(project)
+      visit project_meetings_path(project)
 
       click_on meeting.title
 
       # Go to minutes, expect uneditable
       find(".op-tab-row--link", text: "MINUTES").click
-
+      wait_for_network_idle
       expect(page).to have_css(".button", text: "Close the agenda to begin the Minutes")
 
       # Close the meeting
       find(".op-tab-row--link", text: "AGENDA").click
+      wait_for_network_idle
+
       accept_confirm do
         find(".button", text: "Close").click
       end
@@ -84,7 +88,7 @@ RSpec.describe "Meetings close" do
     let(:permissions) { %i[view_meetings] }
 
     it "cannot delete own and other`s meetings" do
-      visit meetings_path(project)
+      visit project_meetings_path(project)
 
       expect(page)
         .to have_no_link "Close"

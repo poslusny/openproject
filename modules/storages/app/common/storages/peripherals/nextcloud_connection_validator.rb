@@ -31,30 +31,84 @@
 module Storages
   module Peripherals
     class NextcloudConnectionValidator
+      include TaggedLogging
       include Dry::Monads[:maybe]
 
       using ServiceResultRefinements
 
       def initialize(storage:)
         @storage = storage
+        @user = User.current
       end
 
       def validate
-        maybe_is_not_configured
-          .or { has_base_configuration_error? }
-          .or { has_ampf_configuration_error? }
-          .value_or(ConnectionValidation.new(type: :healthy,
-                                             error_code: :none,
-                                             timestamp: Time.current,
-                                             description: nil))
+        with_tagged_logger do
+          maybe_is_not_configured
+            .or { has_base_configuration_error? }
+            .or { has_ampf_configuration_error? }
+            .value_or(ConnectionValidation.new(type: :healthy,
+                                               error_code: :none,
+                                               timestamp: Time.current,
+                                               description: nil))
+        end
       end
 
       private
+
+      def sso_misconfigured
+        return None() unless @storage.authenticate_via_idp?
+
+        non_provisioned_user
+          .or { non_oidc_provisioned_user }
+          .or { token_usability }
+      end
+
+      def non_provisioned_user
+        return None() if @user.identity_url.present?
+
+        Some(ConnectionValidation.new(type: :warning,
+                                      error_code: :oidc_non_provisioned_user,
+                                      timestamp: Time.current,
+                                      description: I18n.t("storages.health.connection_validation.oidc_non_provisioned_user")))
+      end
+
+      def non_oidc_provisioned_user
+        return None() if @user.authentication_provider.is_a?(OpenIDConnect::Provider)
+
+        Some(ConnectionValidation.new(type: :warning,
+                                      error_code: :oidc_non_oidc_user,
+                                      timestamp: Time.current,
+                                      description: I18n.t("storages.health.connection_validation.oidc_non_oidc_user")))
+      end
+
+      def token_usability
+        service = OpenIDConnect::UserTokens::FetchService.new(user: @user)
+
+        result = service.access_token_for(audience: @storage.audience)
+        return None() if result.success?
+
+        error_code = case result.failure
+                     in { code: /token_exchange/ | :unable_to_exchange_token }
+                       :oidc_cant_exchange_token
+                     in { code: /token_refresh/ }
+                       :oidc_cant_refresh_token
+                     in { code: :no_token_for_audience }
+                       :oidc_cant_acquire_token
+                     else
+                       :unknown_error
+                     end
+
+        Some(ConnectionValidation.new(type: :error,
+                                      error_code:,
+                                      timestamp: Time.current,
+                                      description: I18n.t("storages.health.connection_validation.#{error_code}")))
+      end
 
       def has_base_configuration_error?
         host_url_not_found
           .or { missing_dependencies }
           .or { version_mismatch }
+          .or { sso_misconfigured }
           .or { with_unexpected_content }
           .or { capabilities_request_failed_with_unknown_error }
       end
@@ -69,14 +123,14 @@ module Storages
 
       def capabilities
         @capabilities ||= Peripherals::Registry
-                            .resolve("#{@storage}.queries.capabilities")
-                            .call(storage: @storage, auth_strategy: noop)
+                          .resolve("#{@storage}.queries.capabilities")
+                          .call(storage: @storage, auth_strategy: noop)
       end
 
       def files
         @files ||= Peripherals::Registry
-                     .resolve("#{@storage}.queries.files")
-                     .call(storage: @storage, auth_strategy: userless, folder: ParentFolder.new(@storage.group_folder))
+                   .resolve("#{@storage}.queries.files")
+                   .call(storage: @storage, auth_strategy: userless, folder: ParentFolder.new(@storage.group_folder))
       end
 
       def maybe_is_not_configured
@@ -103,7 +157,8 @@ module Storages
 
         capabilities_result = capabilities.result
 
-        if !capabilities_result.app_enabled? || (@storage.automatically_managed? && !capabilities_result.group_folder_enabled?)
+        if !capabilities_result.app_enabled? ||
+           (@storage.automatic_management_enabled? && !capabilities_result.group_folder_enabled?)
           app_name = if capabilities_result.app_enabled?
                        I18n.t("storages.dependencies.nextcloud.group_folders_app")
                      else
@@ -146,7 +201,8 @@ module Storages
                                   expected: min_app_version.to_s)
             )
           )
-        elsif @storage.automatically_managed? && capabilities_result.group_folder_version < min_group_folder_version
+        elsif @storage.automatic_management_enabled? &&
+              capabilities_result.group_folder_version < min_group_folder_version
           Some(
             ConnectionValidation.new(
               type: :error,
@@ -194,6 +250,11 @@ module Storages
         unexpected_files = files.result.files.reject { |file| expected_folder_ids.include?(file.id) }
         return None() if unexpected_files.empty?
 
+        file_representation = unexpected_files.map do |file|
+          "Name: #{file.name}, ID: #{file.id}, Location: #{file.location}"
+        end
+        warn "Unexpected files/folder found in group folder:\n\t#{file_representation.join("\n\t")}"
+
         Some(
           ConnectionValidation.new(
             type: :warning,
@@ -209,13 +270,11 @@ module Storages
       def capabilities_request_failed_with_unknown_error
         return None() if capabilities.success?
 
-        Rails.logger.error(
-          "Connection validation failed with unknown error:\n\t" \
-          "storage: ##{@storage.id} #{@storage.name}\n\t" \
-          "request: Nextcloud capabilities\n\t" \
-          "status: #{capabilities.result}\n\t" \
-          "response: #{capabilities.error_payload}"
-        )
+        error "Connection validation failed with unknown error:\n\t" \
+              "storage: ##{@storage.id} #{@storage.name}\n\t" \
+              "request: Nextcloud capabilities\n\t" \
+              "status: #{capabilities.result}\n\t" \
+              "response: #{capabilities.error_payload}"
 
         Some(ConnectionValidation.new(type: :error,
                                       error_code: :err_unknown,
@@ -226,13 +285,11 @@ module Storages
       def files_request_failed_with_unknown_error
         return None() if files.success?
 
-        Rails.logger.error(
-          "Connection validation failed with unknown error:\n\t" \
-          "storage: ##{@storage.id} #{@storage.name}\n\t" \
-          "request: Group folder content\n\t" \
-          "status: #{files.result}\n\t" \
-          "response: #{files.error_payload}"
-        )
+        error "Connection validation failed with unknown error:\n\t" \
+              "storage: ##{@storage.id} #{@storage.name}\n\t" \
+              "request: Group folder content\n\t" \
+              "status: #{files.result}\n\t" \
+              "response: #{files.error_payload}"
 
         Some(ConnectionValidation.new(type: :error,
                                       error_code: :err_unknown,

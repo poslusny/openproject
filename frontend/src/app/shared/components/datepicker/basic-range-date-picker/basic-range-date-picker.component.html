@@ -2,17 +2,21 @@
   *ngIf="!mobile"
   #input
   type="text"
+  autocomplete="off"
   class="spot-input op-basic-range-datepicker--input"
   data-test-selector="op-basic-range-date-picker"
   [ngClass]="inputClassNames"
   [attr.data-value]="value"
-  [id]="id"
+  [attr.data-action]="dataAction"
+  [id]="inputId"
   [name]="name"
+  [attr.name]="name"
   [required]="required"
   [disabled]="disabled"
   [ngModel]="stringValue"
   (ngModelChange)="changeValueFromInputDebounced($event)"
   (focus)="showDatePicker()"
+  (click)="sentCalendarToTopLayer()"
 />
 <ng-container *ngIf="mobile">
   <input
@@ -20,7 +24,7 @@
     class="spot-input"
     data-test-selector="op-basic-range-date-picker-start"
     [ngClass]="inputClassNames"
-    id="{{ id }}-start"
+    id="{{ inputId }}-start"
     name="{{ name }}-start"
     [required]="required"
     [disabled]="disabled"
@@ -33,7 +37,7 @@
     class="spot-input"
     data-test-selector="op-basic-range-date-picker-end"
     [ngClass]="inputClassNames"
-    id="{{ id }}-end"
+    id="{{ inputId }}-end"
     name="{{ name }}-end"
     [required]="required"
     [disabled]="disabled"
@@ -44,8 +48,10 @@
     type="hidden"
     data-test-selector="op-basic-range-date-picker--value"
     [attr.data-value]="stringValue"
-    [id]="id"
+    [id]="inputId"
     [name]="name"
+    [attr.name]="name"
+    [attr.data-action]="dataAction"
     [ngModel]="stringValue"
   />
 </ng-container>

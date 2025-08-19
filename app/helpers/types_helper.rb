@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -27,28 +29,50 @@
 #++
 
 module ::TypesHelper
+  # rubocop:disable Rails/HelperInstanceVariable
   def types_tabs
-    [
+    tabs = [
       {
         name: "settings",
-        partial: "types/form/settings",
-        path: edit_type_tab_path(id: @type.id, tab: :settings),
-        label: "types.edit.settings"
+        path: edit_tab_type_path(id: @type.id, tab: :settings),
+        label: "types.edit.settings.tab",
+        view_component: WorkPackages::Types::SettingsComponent
       },
       {
         name: "form_configuration",
         partial: "types/form/form_configuration",
-        path: edit_type_tab_path(id: @type.id, tab: :form_configuration),
-        label: "types.edit.form_configuration"
+        path: edit_tab_type_path(id: @type.id, tab: :form_configuration),
+        label: "types.edit.form_configuration.tab"
       },
       {
         name: "projects",
         partial: "types/form/projects",
-        path: edit_type_tab_path(id: @type.id, tab: :projects),
-        label: "types.edit.projects"
+        path: edit_tab_type_path(id: @type.id, tab: :projects),
+        label: "types.edit.projects.tab"
+      },
+      {
+        name: "export_configuration",
+        path: edit_tab_type_path(id: @type.id, tab: :export_configuration),
+        label: "types.edit.export_configuration.tab",
+        view_component: WorkPackages::Types::ExportConfigurationComponent
       }
     ]
+
+    if OpenProject::FeatureDecisions.generate_work_package_subjects_active?
+      subject_configuration_tab = {
+        name: "subject_configuration",
+        path: edit_tab_type_path(id: @type.id, tab: :subject_configuration),
+        label: "types.edit.subject_configuration.tab",
+        view_component: WorkPackages::Types::SubjectConfigurationComponent
+      }
+
+      tabs.insert(2, subject_configuration_tab)
+    end
+
+    tabs
   end
+
+  # rubocop:enable Rails/HelperInstanceVariable
 
   def icon_for_type(type)
     return unless type
@@ -95,8 +119,8 @@ module ::TypesHelper
     return nil unless group.group_type == :attribute
 
     group.attributes
-      .select { |key| inactive.delete(key) }
-      .map! { |key| attr_form_map(key, available[key]) }
+         .select { |key| inactive.delete(key) }
+         .map! { |key| attr_form_map(key, available[key]) }
   end
 
   def query_to_query_props(group)

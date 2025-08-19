@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -28,23 +30,25 @@
 
 class CustomFields::Inputs::MultiVersionSelectList < CustomFields::Inputs::Base::Autocomplete::MultiValueInput
   include AssignableCustomFieldValues
-
-  delegate :assignable_versions, to: :@object
+  include CustomFields::Inputs::VersionSelect
 
   form do |custom_value_form|
     # autocompleter does not set key with blank value if nothing is selected or input is cleared
     # in order to let acts_as_customizable handle the clearing of the value, we need to set the value to blank via a hidden field
     # which sends blank if autocompleter is cleared
-    custom_value_form.hidden(**input_attributes.merge(
+    custom_value_form.hidden(
+      **input_attributes,
       scope_name_to_model: false,
-      name: "#{@object.class.name.downcase}[custom_field_values][#{input_attributes[:name]}][]",
+      name: "#{@object.model_name.element}[custom_field_values][#{input_attributes[:name]}][]",
       value:
-    ))
+    )
 
-    custom_value_form.autocompleter(**input_attributes) do |list|
+    custom_value_form.autocompleter(**version_input_attributes) do |list|
       assignable_custom_field_values(@custom_field).each do |version|
         list.option(
-          label: version.name, value: version.id,
+          label: version.name,
+          value: version.id,
+          group_by: group_key(version.project),
           selected: selected?(version)
         )
       end
@@ -59,5 +63,9 @@ class CustomFields::Inputs::MultiVersionSelectList < CustomFields::Inputs::Base:
 
   def selected?(version)
     @custom_values.pluck(:value).map { |value| value&.to_i }.include?(version.id)
+  end
+
+  def group_key(project)
+    project.visible?(User.current) ? project.name : I18n.t(:"project.not_available")
   end
 end

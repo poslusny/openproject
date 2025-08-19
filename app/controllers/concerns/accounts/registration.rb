@@ -101,6 +101,14 @@ module Accounts::Registration
     end
   end
 
+  def redirect_omniauth_register_modal(user, auth_hash)
+    # Store a timestamp so we can later make sure that authentication information can
+    # only be reused for a short time.
+    session[:auth_source_registration] = auth_hash.merge(omniauth: true, timestamp: Time.current)
+    @user = user
+    render template: "/account/register"
+  end
+
   def respond_for_registered_user(user)
     call = ::Users::RegisterUserService.new(user).call
 
@@ -118,7 +126,7 @@ module Accounts::Registration
   def onthefly_creation_failed(user, auth_source_options = {})
     @user = user
     session[:auth_source_registration] = auth_source_options unless auth_source_options.empty?
-    render action: "register"
+    render action: "register", status: :unprocessable_entity
   end
 
   def self_registration_disabled

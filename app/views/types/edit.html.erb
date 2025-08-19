@@ -31,14 +31,22 @@ See COPYRIGHT and LICENSE files for more details.
 
 <% tabs = types_tabs %>
 
-<%= render ::Types::EditPageHeaderComponent.new(type: @type, tabs: tabs) %>
+<%= render ::Types::EditPageHeaderComponent.new(type: @type, tabs:) %>
 
-<%= form_for @type,
-             url: update_type_tab_path(id: @type.id, tab: @tab),
+<%=
+  selected_tab = selected_tab(tabs)
+  form_data = {
+    subject_configuration_form_data: params[:types_forms_subject_configuration_form_model]
+  }
+
+  if selected_tab.key?(:view_component)
+    render selected_tab[:view_component].new(@type, **form_data)
+  else
+    form_for @type,
+             url: update_tab_type_path(id: @type.id, tab: @tab),
              builder: TabularFormBuilder,
-             lang: current_language do |f| %>
-
-  <%= render_tabs tabs, f, with_tab_nav: false %>
-<% end %>
-
-<%= error_messages_for 'type' %>
+             lang: current_language do |f|
+      render partial: "common/tabs", locals: { f:, tabs:, selected_tab:, with_tab_nav: false }
+    end
+  end
+%>

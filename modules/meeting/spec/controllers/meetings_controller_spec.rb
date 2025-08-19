@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -44,26 +45,6 @@ RSpec.describe MeetingsController do
           create(:meeting, author: user, project: other_project)
         ]
       end
-
-      describe "html" do
-        context "when requesting meetings globally" do
-          before do
-            get "index"
-          end
-
-          it { expect(response).to be_successful }
-          it { expect(assigns(:meetings)).to match_array meetings[1..2] }
-        end
-
-        context "when requesting meetings scoped to a project ID" do
-          before do
-            get "index", params: { project_id: project.id }
-          end
-
-          it { expect(response).to be_successful }
-          it { expect(assigns(:meetings)).to match_array meetings[1] }
-        end
-      end
     end
 
     describe "show" do
@@ -74,7 +55,7 @@ RSpec.describe MeetingsController do
           get "show", params: { id: meeting.id }
         end
 
-        it { expect(response).to be_successful }
+        it { expect(response).to redirect_to(project_meeting_path(project, meeting)) }
         it { expect(assigns(:meeting)).to eql meeting }
       end
     end
@@ -120,7 +101,7 @@ RSpec.describe MeetingsController do
 
       describe "html" do
         before do
-          get "edit", params: { id: meeting.id }
+          get "edit", params: { project_id: meeting.project_id, id: meeting.id }
         end
 
         it { expect(response).to be_successful }
@@ -164,11 +145,10 @@ RSpec.describe MeetingsController do
           end
 
           it "renders an error" do
-            expect(response).to have_http_status :ok
+            expect(response).to have_http_status :unprocessable_entity
             expect(response).to render_template :new
             expect(response.body)
-              .to have_css "#errorExplanation li",
-                           text: "Date #{I18n.t('activerecord.errors.messages.not_an_iso_date')}"
+              .to have_text("Date #{I18n.t('activerecord.errors.messages.not_an_iso_date')}")
           end
         end
 
@@ -178,11 +158,10 @@ RSpec.describe MeetingsController do
           end
 
           it "renders an error" do
-            expect(response).to have_http_status :ok
+            expect(response).to have_http_status :unprocessable_entity
             expect(response).to render_template :new
             expect(response.body)
-              .to have_css "#errorExplanation li",
-                           text: "Start time #{I18n.t('activerecord.errors.messages.invalid_time_format')}"
+              .to have_text("Start time #{I18n.t('activerecord.errors.messages.invalid_time_format')}")
           end
         end
       end
@@ -191,11 +170,10 @@ RSpec.describe MeetingsController do
         let(:project) { nil }
 
         it "renders an error" do
-          expect(response).to have_http_status :ok
+          expect(response).to have_http_status :unprocessable_entity
           expect(response).to render_template :new
           expect(response.body)
-            .to have_css "#errorExplanation li",
-                         text: "Project #{I18n.t('activerecord.errors.messages.blank')}"
+            .to have_text("Project #{I18n.t('activerecord.errors.messages.blank')}")
         end
       end
 
@@ -204,11 +182,10 @@ RSpec.describe MeetingsController do
         let(:project) { nil }
 
         it "renders an error" do
-          expect(response).to have_http_status :ok
+          expect(response).to have_http_status :unprocessable_entity
           expect(response).to render_template :new
           expect(response.body)
-            .to have_css "#errorExplanation li",
-                         text: "Project #{I18n.t('activerecord.errors.messages.blank')}"
+            .to have_text("Project #{I18n.t('activerecord.errors.messages.blank')}")
         end
       end
     end
@@ -219,7 +196,7 @@ RSpec.describe MeetingsController do
     let!(:participant) { create(:meeting_participant, meeting:, attended: true) }
 
     it "produces a background job for notification" do
-      post :notify, params: { id: meeting.id }
+      post :notify, params: { project_id: meeting.project_id, id: meeting.id }
 
       perform_enqueued_jobs
       expect(ActionMailer::Base.deliveries.count).to eq(1)
@@ -231,7 +208,7 @@ RSpec.describe MeetingsController do
       end
 
       it "produces a flash message containing the mail addresses raising the error" do
-        expect { post :notify, params: { id: meeting.id } }.not_to raise_error
+        expect { post :notify, params: { project_id: meeting.project_id, id: meeting.id } }.not_to raise_error
         meeting.participants.each do |participant|
           expect(flash[:error]).to include(participant.name)
         end

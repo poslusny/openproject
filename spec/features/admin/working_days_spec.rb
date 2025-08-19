@@ -28,18 +28,18 @@
 
 require "spec_helper"
 
-RSpec.describe "Working Days", :js, :with_cuprite do
+RSpec.describe "Working Days", :js do
   create_shared_association_defaults_for_work_package_factory
 
   shared_let(:week_days) { week_with_saturday_and_sunday_as_weekend }
   shared_let(:admin) { create(:admin) }
 
-  let_schedule(<<~CHART)
-    days                  | MTWTFSSmtwtfss |
-    earliest_work_package | XXXXX          |
-    second_work_package   |    XX..XX      |
-    follower              |          XXX   | follows earliest_work_package, follows second_work_package
-  CHART
+  let_work_packages(<<~TABLE)
+    subject               | MTWTFSSmtwtfss | scheduling mode | predecessors
+    earliest_work_package | XXXXX          | manual          |
+    second_work_package   |    XX..XX      | manual          |
+    follower              |          XXX   | automatic       | follows earliest_work_package, follows second_work_package
+  TABLE
 
   let(:dialog) { Components::ConfirmationDialog.new }
   let(:datepicker) { Components::DatepickerModal.new }
@@ -48,6 +48,8 @@ RSpec.describe "Working Days", :js, :with_cuprite do
 
   before do
     visit admin_settings_working_days_and_hours_path
+    # wait for "holidays and closures" calendar to load
+    find(".fc-next-button")
   end
 
   describe "week days" do
@@ -81,12 +83,12 @@ RSpec.describe "Working Days", :js, :with_cuprite do
 
       expect(working_days_setting).to eq([1, 2, 3, 4, 5])
 
-      expect_schedule(WorkPackage.all, <<~CHART)
-        days                  | MTWTFSSmtwtfss |
+      expect_work_packages(WorkPackage.all, <<~TABLE)
+        subject               | MTWTFSSmtwtfss |
         earliest_work_package | XXXXX          |
         second_work_package   |    XX..XX      |
         follower              |          XXX   |
-      CHART
+      TABLE
     end
 
     it "updates the values and saves the settings" do
@@ -101,7 +103,7 @@ RSpec.describe "Working Days", :js, :with_cuprite do
         dialog.confirm
       end
 
-      expect(page).to have_css(".op-toast.-success", text: "Successful update.")
+      expect_flash(message: "Successful update.")
       expect(page).to have_unchecked_field "Monday"
       expect(page).to have_unchecked_field "Friday"
       expect(page).to have_unchecked_field "Saturday"
@@ -112,19 +114,20 @@ RSpec.describe "Working Days", :js, :with_cuprite do
 
       expect(working_days_setting).to eq([2, 3, 4])
 
-      expect_schedule(WorkPackage.all, <<~CHART)
-        days                  | MTWTFSSmtwtfssmtwt  |
+      expect_work_packages(WorkPackage.all, <<~TABLE)
+        subject               | MTWTFSSmtwtfssmtwt  |
         earliest_work_package |  XXX....XX          |
         second_work_package   |    X....XXX         |
         follower              |                XXX  |
-      CHART
+      TABLE
 
       # The updated work packages will have a journal entry informing about the change
       wp_page = Pages::FullWorkPackage.new(earliest_work_package)
+      activity_tab = Components::WorkPackages::Activities.new(earliest_work_package)
       wp_page.visit!
 
-      wp_page.expect_activity_message(
-        "Dates changed by changes to working days (Monday is now non-working, Friday is now non-working)"
+      activity_tab.expect_journal_changed_attribute(
+        text: "Dates changed by changes to working days (Monday is now non-working, Friday is now non-working)"
       )
     end
 
@@ -141,8 +144,7 @@ RSpec.describe "Working Days", :js, :with_cuprite do
         dialog.confirm
       end
 
-      expect(page).to have_css(".op-toast.-error",
-                               text: "At least one day of the week must be defined as a working day.")
+      expect_flash(type: :error, message: "At least one day of the week must be defined as a working day.")
       # Restore the checkboxes to their valid state
       expect(page).to have_checked_field "Monday"
       expect(page).to have_checked_field "Tuesday"
@@ -153,17 +155,17 @@ RSpec.describe "Working Days", :js, :with_cuprite do
       expect(page).to have_unchecked_field "Sunday"
       expect(working_days_setting).to eq([1, 2, 3, 4, 5])
 
-      expect_schedule(WorkPackage.all, <<~CHART)
-        days                  | MTWTFSSmtwtfss |
+      expect_work_packages(WorkPackage.all, <<~TABLE)
+        subject               | MTWTFSSmtwtfss |
         earliest_work_package | XXXXX          |
         second_work_package   |    XX..XX      |
         follower              |          XXX   |
-      CHART
+      TABLE
     end
 
-    it "shows an error when a previous change to the working days configuration isn't processed yet" do
+    it "shows an error when a previous change to the working days configuration isn't processed yet",
+       with_good_job_batches: [WorkPackages::ApplyWorkingDaysChangeJob] do
       # Have a job already scheduled
-      ActiveJob::Base.disable_test_adapter
       WorkPackages::ApplyWorkingDaysChangeJob.perform_later(user_id: 5)
 
       uncheck "Tuesday"
@@ -172,8 +174,8 @@ RSpec.describe "Working Days", :js, :with_cuprite do
       # Not executing the background jobs
       dialog.confirm
 
-      expect(page).to have_css(".op-toast.-error",
-                               text: "The previous changes to the working days configuration have not been applied yet.")
+      expect_flash(type: :error,
+                   message: "The previous changes to the working days configuration have not been applied yet.")
     end
   end
 
@@ -230,7 +232,7 @@ RSpec.describe "Working Days", :js, :with_cuprite do
       click_on "Apply changes"
       click_on "Save and reschedule"
 
-      expect(page).to have_css(".op-toast.-success", text: "Successful update.")
+      expect_flash(message: "Successful update.")
 
       nwd1 = NonWorkingDay.find_by(name: "My holiday")
       expect(nwd1.date).to eq date1
@@ -310,6 +312,6 @@ RSpec.describe "Working Days", :js, :with_cuprite do
     click_on "Apply changes"
 
     # No dialog and saved successfully
-    expect(page).to have_css(".op-toast.-success")
+    expect_flash(message: "Successful update.")
   end
 end

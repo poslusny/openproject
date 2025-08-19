@@ -51,7 +51,9 @@ module Shares
           multiple: true,
           focusDirectly: true,
           appendToComponent: true,
-          disabled: @disabled
+          disabled: @disabled,
+          isOpenedInModal: true,
+          hoverCards: true
         }
       )
     end

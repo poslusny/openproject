@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -42,6 +44,10 @@ module Storages::ProjectStorages
 
     def id
       "project-storage-#{@project_storage.id}-destroy-confirmation-dialog"
+    end
+
+    def title
+      I18n.t("project_storages.remove_project.dialog.title")
     end
 
     def heading

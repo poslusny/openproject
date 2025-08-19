@@ -52,7 +52,6 @@ RSpec.describe API::V3::UserPreferences::UserPreferenceRepresenter,
 
   subject(:generated) { representer.to_json }
 
-  it { expect(subject).to have_json_path("hideMail") }
   it { expect(subject).to have_json_path("timeZone") }
   it { expect(subject).to have_json_path("commentSortDescending") }
   it { expect(subject).to have_json_path("warnOnLeavingUnsaved") }
@@ -62,8 +61,8 @@ RSpec.describe API::V3::UserPreferences::UserPreferenceRepresenter,
     context "without a timezone set" do
       let(:preference) { build(:user_preference, time_zone: "") }
 
-      it "shows the timeZone as nil" do
-        expect(subject).to be_json_eql(nil.to_json).at_path("timeZone")
+      it "shows the timeZone as utc" do
+        expect(subject).to be_json_eql("Etc/UTC".to_json).at_path("timeZone")
       end
     end
 

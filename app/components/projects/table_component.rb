@@ -63,8 +63,8 @@ module Projects
 
     ##
     # The project sort by is handled differently
-    def build_sort_header(column, options)
-      helpers.projects_sort_header_tag(column, **options, param: :json)
+    def quick_action_table_header(column, options)
+      helpers.projects_sort_header_tag(column, query.selects.map(&:attribute), **options, param: :json)
     end
 
     # We don't return the project row
@@ -119,7 +119,10 @@ module Projects
     end
 
     def order_options(select, turbo: false)
-      options = { caption: select.caption }
+      options = {
+        caption: select.caption,
+        sortable: sortable_column?(select)
+      }
 
       if turbo
         options[:data] = { "turbo-stream": true }
@@ -130,6 +133,10 @@ module Projects
 
     def sortable_column?(select)
       sortable? && query.known_order?(select.attribute)
+    end
+
+    def use_quick_action_table_headers?
+      true
     end
 
     def columns
@@ -144,10 +151,20 @@ module Projects
     end
 
     def projects(query)
-      query
-        .results
-        .with_required_storage
-        .with_latest_activity
+      scope = query.results
+
+      # The two columns associated with the
+      # * disk storage
+      # * latest activity
+      # information are only available to admins.
+      # For non admins, the performance penalty of fetching the information therefore needs never be paid.
+      if User.current.admin?
+        scope = scope
+                  .with_required_storage
+                  .with_latest_activity
+      end
+
+      scope
         .includes(:custom_values, :enabled_modules)
         .paginate(page: helpers.page_param(params), per_page: helpers.per_page_param(params))
     end
@@ -176,6 +193,14 @@ module Projects
 
     def favored_project_ids
       @favored_project_ids ||= Favorite.where(user: current_user, favored_type: "Project").pluck(:favored_id)
+    end
+
+    def project_phase_by_definition(definition, project)
+      @project_phases_by_definition ||= Project::Phase
+                                                    .visible
+                                                    .index_by { |s| [s.definition_id, s.project_id] }
+
+      @project_phases_by_definition[[definition.id, project.id]]
     end
 
     def sorted_by_lft?

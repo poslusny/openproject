@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -29,8 +30,11 @@
 module Meetings
   class CreateContract < BaseContract
     attribute :type
+    attribute :recurring_meeting_id
+
     validate :user_allowed_to_add
     validate :type_in_allowed
+    validate :recurring_meeting_visible
 
     private
 
@@ -41,7 +45,17 @@ module Meetings
     end
 
     def user_allowed_to_add
+      return if model.project.nil?
+
       unless user.allowed_in_project?(:create_meetings, model.project)
+        errors.add :base, :error_unauthorized
+      end
+    end
+
+    def recurring_meeting_visible
+      return if model.recurring_meeting.nil?
+
+      unless user.allowed_in_project?(:view_meetings, model.recurring_meeting.project)
         errors.add :base, :error_unauthorized
       end
     end

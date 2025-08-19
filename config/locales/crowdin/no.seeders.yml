@@ -34,6 +34,15 @@
           name: Grå (mørk)
         item_13:
           name: Sort
+      project_phase_colors:
+        item_0:
+          name: PM2 Orange
+        item_1:
+          name: PM2 Red
+        item_2:
+          name: PM2 Magenta
+        item_3:
+          name: PM2 Green Yellow
       document_categories:
         item_0:
           name: Dokumentasjon
@@ -67,7 +76,21 @@
       global_roles:
         item_0:
           name: Leder for ansatte og prosjekter
+        item_1:
+          name: Standard global role
     standard:
+      project_phases:
+        item_0:
+          name: Initiating
+        item_1:
+          name: Planlegging
+          start_gate: Ready for Planning
+        item_2:
+          name: Executing
+          start_gate: Ready for Executing
+        item_3:
+          name: Closing
+          start_gate: Ready for Closing
       priorities:
         item_0:
           name: Lav
@@ -458,7 +481,7 @@
         item_1:
           name: Milepæl
         item_2:
-          name: Fase
+          name: Summary task
         item_3:
           name: Funksjon
         item_4:

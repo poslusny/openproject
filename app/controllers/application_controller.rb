@@ -52,6 +52,7 @@ class ApplicationController < ActionController::Base
   include AdditionalUrlHelpers
   include OpenProjectErrorHelper
   include Security::DefaultUrlOptions
+  include OpModalFlashable
 
   layout "base"
 
@@ -344,7 +345,7 @@ class ApplicationController < ActionController::Base
     params[:back_url] || request.env["HTTP_REFERER"]
   end
 
-  def redirect_back_or_default(default, use_escaped = true)
+  def redirect_back_or_default(default, use_escaped: true, status: :found)
     policy = RedirectPolicy.new(
       params[:back_url],
       hostname: request.host,
@@ -352,7 +353,7 @@ class ApplicationController < ActionController::Base
       return_escaped: use_escaped
     )
 
-    redirect_to policy.redirect_url
+    redirect_to(policy.redirect_url, status:)
   end
 
   # Picks which layout to use based on the request

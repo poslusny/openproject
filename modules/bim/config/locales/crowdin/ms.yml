@@ -9,6 +9,7 @@ ms:
     label_bcf: 'BCF'
     label_imported_failed: 'Import topik BCF yang gagal'
     label_imported_successfully: 'Import topik BCF yang berjaya'
+    label_bcf_issue_associated: "Isu BCF berkaitan"
     issues: "Isu-isu"
     recommended: 'disarankan'
     not_recommended: 'tidak disarankan'
@@ -83,6 +84,12 @@ ms:
         ifc_attachment: "Fail IFC"
         is_default: "Model default"
         attachments: "Fail IFC"
+      bim/bcf/issue:
+        bcf_comment: "BCF comment"
+        bim_snippet: "BIM snippet"
+        reference_links: "Reference links"
+        stage: "Peringkat"
+        viewpoint: "Sudut pandangan"
     errors:
       models:
         bim/ifc_models/ifc_model:

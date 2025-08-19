@@ -53,7 +53,6 @@ import { OpenprojectDashboardsModule } from 'core-app/features/dashboards/openpr
 import {
   OpenprojectWorkPackageGraphsModule,
 } from 'core-app/shared/components/work-package-graphs/openproject-work-package-graphs.module';
-import { PreviewTriggerService } from 'core-app/core/setup/globals/global-listeners/preview-trigger.service';
 import { OpenprojectOverviewModule } from 'core-app/features/overview/openproject-overview.module';
 import { OpenprojectMyPageModule } from 'core-app/features/my-page/openproject-my-page.module';
 import { OpenprojectProjectsModule } from 'core-app/features/projects/openproject-projects.module';
@@ -76,9 +75,6 @@ import { DynamicContentModalComponent } from 'core-app/shared/components/modals/
 import {
   PasswordConfirmationModalComponent,
 } from 'core-app/shared/components/modals/request-for-confirmation/password-confirmation.modal';
-import {
-  WpPreviewModalComponent,
-} from 'core-app/shared/components/modals/preview-modal/wp-preview-modal/wp-preview.modal';
 import {
   OpHeaderProjectSelectComponent,
 } from 'core-app/shared/components/header-project-select/header-project-select.component';
@@ -125,9 +121,6 @@ import {
 import {
   ProjectAutocompleterComponent,
 } from 'core-app/shared/components/autocompleter/project-autocompleter/project-autocompleter.component';
-import {
-  AutocompleteSelectDecorationComponent,
-} from 'core-app/shared/components/autocompleter/autocomplete-select-decoration/autocomplete-select-decoration.component';
 import {
   MembersAutocompleterComponent,
 } from 'core-app/shared/components/autocompleter/members-autocompleter/members-autocompleter.component';
@@ -179,9 +172,6 @@ import { TimerAccountMenuComponent } from 'core-app/shared/components/time_entri
 import {
   RemoteFieldUpdaterComponent,
 } from 'core-app/shared/components/remote-field-updater/remote-field-updater.component';
-import {
-  OpModalSingleDatePickerComponent,
-} from 'core-app/shared/components/datepicker/modal-single-date-picker/modal-single-date-picker.component';
 import { SpotDropModalPortalComponent } from 'core-app/spot/components/drop-modal/drop-modal-portal.component';
 import { OpModalOverlayComponent } from 'core-app/shared/components/modal/modal-overlay.component';
 import {
@@ -213,12 +203,6 @@ import {
 import { CopyToClipboardComponent } from 'core-app/shared/components/copy-to-clipboard/copy-to-clipboard.component';
 import { GlobalSearchTitleComponent } from 'core-app/core/global_search/title/global-search-title.component';
 import { ContentTabsComponent } from 'core-app/shared/components/tabs/content-tabs/content-tabs.component';
-import {
-  AddSectionDropdownComponent,
-} from 'core-app/shared/components/hide-section/add-section-dropdown/add-section-dropdown.component';
-import {
-  HideSectionLinkComponent,
-} from 'core-app/shared/components/hide-section/hide-section-link/hide-section-link.component';
 import { PersistentToggleComponent } from 'core-app/shared/components/persistent-toggle/persistent-toggle.component';
 import { TypeFormConfigurationComponent } from 'core-app/features/admin/types/type-form-configuration.component';
 import { ToastsContainerComponent } from 'core-app/shared/components/toaster/toasts-container.component';
@@ -237,18 +221,34 @@ import {
 } from 'core-app/shared/components/attribute-help-texts/static-attribute-help-text.component';
 import { appBaseSelector, ApplicationBaseComponent } from 'core-app/core/routing/base/application-base.component';
 import { SpotSwitchComponent } from 'core-app/spot/components/switch/switch.component';
+import { OPContextMenuService } from 'core-app/shared/components/op-context-menu/op-context-menu.service';
+import { CurrentProjectService } from 'core-app/core/current-project/current-project.service';
+import {
+  TimeEntriesWorkPackageAutocompleterComponent,
+} from 'core-app/shared/components/autocompleter/time-entries-work-package-autocompleter/time-entries-work-package-autocompleter.component';
+import {
+  OpWpDatePickerInstanceComponent,
+} from 'core-app/shared/components/datepicker/wp-date-picker-modal/wp-date-picker-instance.component';
 
 export function initializeServices(injector:Injector) {
   return () => {
-    const PreviewTrigger = injector.get(PreviewTriggerService);
     const topMenuService = injector.get(TopMenuService);
     const keyboardShortcuts = injector.get(KeyboardShortcutService);
+    const contextMenu = injector.get(OPContextMenuService);
+    const currentProject = injector.get(CurrentProjectService);
+
     // Conditionally add the Revit Add-In settings button
     injector.get(RevitAddInSettingsButtonService);
 
     topMenuService.register();
+    contextMenu.register();
 
-    PreviewTrigger.setupListener();
+    // Re-register on turbo:load
+    document.addEventListener('turbo:load', () => {
+      topMenuService.register();
+      contextMenu.register();
+      currentProject.detect();
+    });
 
     keyboardShortcuts.register();
 
@@ -370,7 +370,6 @@ export function initializeServices(injector:Injector) {
     ConfirmDialogModalComponent,
     DynamicContentModalComponent,
     PasswordConfirmationModalComponent,
-    WpPreviewModalComponent,
 
     // Main menu
     MainMenuResizerComponent,
@@ -387,26 +386,45 @@ export function initializeServices(injector:Injector) {
 export class OpenProjectModule implements DoBootstrap {
   // noinspection JSUnusedGlobalSymbols
   ngDoBootstrap(appRef:ApplicationRef) {
+    this.runBootstrap(appRef);
+
+    // Connect ui router to turbo drive
+    document.addEventListener('turbo:load', () => {
+      // Remove all previous references to components
+      // This is mainly the bsae component
+      appRef.components.slice().forEach((component) => {
+        appRef.detachView(component.hostView);
+        component.destroy();
+      });
+
+      // Run bootstrap again to initialize the new application
+      this.runBootstrap(appRef);
+    });
+
+    this.registerCustomElements(appRef.injector);
+  }
+
+  private runBootstrap(appRef:ApplicationRef) {
     // Try to bootstrap a dynamic root element
     const root = document.querySelector(appBaseSelector);
     if (root) {
       appRef.bootstrap(ApplicationBaseComponent, root);
     }
 
-    this.registerCustomElements(appRef.injector);
+    document.body.classList.add('__ng2-bootstrap-has-run');
   }
 
   private registerCustomElements(injector:Injector) {
     registerCustomElement('opce-macro-embedded-table', EmbeddedTablesMacroComponent, { injector });
     registerCustomElement('opce-principal', OpPrincipalComponent, { injector });
-    registerCustomElement('opce-single-date-picker', OpBasicSingleDatePickerComponent, { injector });
+    registerCustomElement('opce-basic-single-date-picker', OpBasicSingleDatePickerComponent, { injector });
     registerCustomElement('opce-range-date-picker', OpBasicRangeDatePickerComponent, { injector });
     registerCustomElement('opce-global-search', GlobalSearchInputComponent, { injector });
     registerCustomElement('opce-autocompleter', OpAutocompleterComponent, { injector });
     registerCustomElement('opce-project-autocompleter', ProjectAutocompleterComponent, { injector });
-    registerCustomElement('opce-select-decoration', AutocompleteSelectDecorationComponent, { injector });
     registerCustomElement('opce-members-autocompleter', MembersAutocompleterComponent, { injector });
     registerCustomElement('opce-user-autocompleter', UserAutocompleterComponent, { injector });
+    registerCustomElement('opce-time-entries-work-package-autocompleter', TimeEntriesWorkPackageAutocompleterComponent, { injector });
     registerCustomElement('opce-macro-attribute-value', AttributeValueMacroComponent, { injector });
     registerCustomElement('opce-macro-attribute-label', AttributeLabelMacroComponent, { injector });
     registerCustomElement('opce-macro-wp-quickinfo', WorkPackageQuickinfoMacroComponent, { injector });
@@ -431,9 +449,7 @@ export class OpenProjectModule implements DoBootstrap {
     registerCustomElement('opce-wp-split-view', WorkPackageSplitViewEntryComponent, { injector });
     registerCustomElement('opce-timer-account-menu', TimerAccountMenuComponent, { injector });
     registerCustomElement('opce-remote-field-updater', RemoteFieldUpdaterComponent, { injector });
-    registerCustomElement('opce-modal-single-date-picker', OpModalSingleDatePickerComponent, { injector });
-    registerCustomElement('opce-basic-single-date-picker', OpBasicSingleDatePickerComponent, { injector });
-    registerCustomElement('opce-storage-login-button', StorageLoginButtonComponent, { injector });
+    registerCustomElement('opce-wp-date-picker-instance', OpWpDatePickerInstanceComponent, { injector });
     registerCustomElement('opce-spot-drop-modal-portal', SpotDropModalPortalComponent, { injector });
     registerCustomElement('opce-spot-switch', SpotSwitchComponent, { injector });
     registerCustomElement('opce-modal-overlay', OpModalOverlayComponent, { injector });
@@ -455,8 +471,6 @@ export class OpenProjectModule implements DoBootstrap {
     registerCustomElement('opce-copy-to-clipboard', CopyToClipboardComponent, { injector });
     registerCustomElement('opce-global-search-title', GlobalSearchTitleComponent, { injector });
     registerCustomElement('opce-content-tabs', ContentTabsComponent, { injector });
-    registerCustomElement('opce-add-section-dropdown', AddSectionDropdownComponent, { injector });
-    registerCustomElement('opce-hide-section-link', HideSectionLinkComponent, { injector });
     registerCustomElement('opce-persistent-toggle', PersistentToggleComponent, { injector });
     registerCustomElement('opce-admin-type-form-configuration', TypeFormConfigurationComponent, { injector });
     registerCustomElement('opce-toasts-container', ToastsContainerComponent, { injector });

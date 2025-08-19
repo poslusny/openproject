@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -27,12 +29,22 @@
 #++
 
 Rails.application.routes.draw do
+  resources :time_entries, only: %i[create update destroy] do
+    get :dialog, on: :collection
+    get :dialog, on: :member
+    get "/users/:user_id/tz_caption", action: :user_tz_caption, on: :collection
+    post :refresh_form, on: :collection
+    post :refresh_form, on: :member
+  end
+
   scope "projects/:project_id", as: "projects" do
     resources :cost_entries, controller: "costlog", only: %i[new create]
 
     resources :hourly_rates, only: %i[show edit update] do
       post :set_rate, on: :member
     end
+
+    get "/time_entries/dialog" => "time_entries#dialog"
   end
 
   scope "my" do
@@ -47,18 +59,37 @@ Rails.application.routes.draw do
 
   scope "work_packages/:work_package_id", as: "work_packages" do
     resources :cost_entries, controller: "costlog", only: %i[new]
+    get "/time_entries/dialog" => "time_entries#dialog"
   end
 
   resources :cost_entries, controller: "costlog", only: %i[edit update destroy]
 
-  resources :cost_types, only: %i[index new edit update create destroy] do
-    member do
-      # TODO: check if this can be replaced with update method
-      put :set_rate
-      patch :restore
-    end
-  end
+  get "/cost_types", to: redirect("/admin/cost_types")
 
   # TODO: this is a duplicate from a route defined under project/:project_id, check whether we really want to do that
   resources :hourly_rates, only: %i[edit update]
+
+  namespace :admin do
+    namespace :settings do
+      resources :time_entry_activities, except: [:show] do
+        member do
+          put :move
+          get :reassign
+        end
+      end
+    end
+
+    resources :cost_types, only: %i[index new edit update create destroy] do
+      member do
+        # TODO: check if this can be replaced with update method
+        put :set_rate
+        patch :restore
+      end
+    end
+
+    resource :costs,
+             only: %i[show update],
+             controller: "costs_settings",
+             as: "costs_settings"
+  end
 end

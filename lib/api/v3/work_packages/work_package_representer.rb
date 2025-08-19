@@ -133,6 +133,17 @@ module API
           }
         end
 
+        link :generate_pdf,
+             cache_if: -> { export_work_packages_allowed? } do
+          next if represented.new_record?
+
+          {
+            href: generate_pdf_dialog_work_package_path(id: represented.id),
+            type: "text/vnd.turbo-stream.html",
+            title: "Generate PDF"
+          }
+        end
+
         link :atom,
              cache_if: -> { export_work_packages_allowed? } do
           next if represented.new_record? || !Setting.feeds_enabled?
@@ -632,7 +643,8 @@ module API
         def relations
           self_path = api_v3_paths.work_package_relations(represented.id)
           visible_relations = represented
-            .visible_relations(current_user)
+            .relations
+            .visible(current_user)
             .includes(::API::V3::Relations::RelationCollectionRepresenter.to_eager_load)
 
           ::API::V3::Relations::RelationCollectionRepresenter.new(visible_relations,
@@ -683,6 +695,7 @@ module API
 
         # Attachments need to be eager loaded for the description
         self.to_eager_load = %i[parent
+                                priority
                                 type
                                 watchers
                                 attachments

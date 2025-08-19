@@ -103,8 +103,8 @@ ko:
     button_settings: "설정"
     button_uncheck_all: "모두 선택 취소"
     button_update: "업데이트"
-    button_export-pdf: "PDF 다운로드"
     button_export-atom: "Atom 다운로드"
+    button_generate_pdf: "PDF 생성"
     button_create: "만들기"
     card:
       add_new: "새로운 카드를 추가하다"
@@ -221,6 +221,8 @@ ko:
             label_maximum_users: "최대 활성 사용자"
             label_starts_at: "시작:"
             label_expires_at: "에서 만료됨"
+            label_plan: "플랜"
+            label_additional_features: "추가 기능"
             receive_newsletter: OpenProject <a target="_blank" href="%{link}">뉴스레터</a>를 받아 보겠습니다.
             taken_domain: 도메인당 하나의 활성 평가판만 있어야 합니다.
             domain_mismatch: 현재 요청 호스트 이름이 구성된 호스트 이름과 일치하지 않습니다. 시스템 설정을 다시 확인하세요.
@@ -356,10 +358,10 @@ ko:
           learn_about: "새로운 기능에 대해 자세히 알아보기"
           #Include the version to invalidate outdated translations in other locales.
           #Otherwise, e.g. chinese might still have the translations for 10.0 in the 12.0 release.
-          "14_6":
+          "15_5":
             standard:
               new_features_html: >
-                이 릴리스는 다음을 비롯한 다양한 기능과 개선 사항을 제공합니다. <br> <ul class="%{list_styling_class}"> <li>사용자 피드백이 반영되여, 더욱 유연한 진행률 보고의 이점을 누립니다.</li> <li>미팅에 대한 다시 로드 옵션이 포함된 업데이트 알림을 받습니다.</li> <li>한 번에 여러 프로젝트에 대한 사용자 지정 필드를 활성화합니다.</li> <li>상대적 작업 패키지 특성 매크로를 사용합니다.</li> <li>저장된 서식 있는 텍스트로 빈 줄을 표시합니다.</li> <li>미팅 탭 옆의 숫자에 포함된 이전 미팅을 확인합니다.</li> </ul>
+                이 릴리스에서는 사용자를 위한 다음과 같은 다양한 기능과 개선 사항이 제공됩니다. <br> <ul class="%{list_styling_class}"> <li>작업 패키지의 하위 항목(자식 및 손자)을 필터링합니다.</li> <li>날짜 선택기의 고급 접근성을 지원합니다.</li> <li>작업 패키지 테이블 합계에 포함된 완료 %가 표시됩니다.</li> <li>작업 패키지 테이블에 자식에 대한 열이 포함됩니다.</li> <li>모바일 화면에서 날짜 선택기를 보다 효율적으로 사용합니다.</li> <li>구성된 양식 레이아웃과 일치하는 PDF를 내보냅니다.</li> </ul>
     ical_sharing_modal:
       title: "캘린더 구독"
       inital_setup_error_message: "데이터를 가져오는 중에 오류가 발생했습니다."
@@ -620,14 +622,15 @@ ko:
         prioritized: "우선 순위 지정됨"
         dateAlert: "날짜 경보"
         shared: "공유됨"
+        reminder: "미리 알림"
       date_alerts:
         milestone_date: "마일스톤 날짜"
         overdue: "기한 지남"
-        overdue_since: "%{difference_in_days} 이후"
-        property_today: "- 오늘입니다"
-        property_is: "- %{difference_in_days} 이내입니다"
-        property_was: "- %{difference_in_days} 전이었습니다"
-        property_is_deleted: "- 삭제되었습니다"
+        overdue_since: "- %{difference_in_days} 이후."
+        property_today: "- 오늘입니다."
+        property_is: "- %{difference_in_days} 이내입니다."
+        property_was: "- %{difference_in_days} 전이었습니다."
+        property_is_deleted: "- 삭제되었습니다."
         upsale:
           title: "날짜 경보"
           description: "날짜 경보를 사용하면, 중요 마감일을 놓치거나 잊지 않도록 향후 시작 날짜 또는 종료 날짜에 대한 알림을 받게 됩니다."
@@ -651,6 +654,8 @@ ko:
         new_notifications:
           message: "새 알림이 있습니다."
           link_text: "로드하려면 여기를 클릭하세요."
+      reminders:
+        note: "참고: \"%{note}\""
       settings:
         change_notification_settings: '중요 업데이트를 놓치지 않도록 <a target="_blank" href="%{url}">알림 설정</a>을 수정할 수 있습니다.'
         title: "알림 설정"
@@ -713,18 +718,18 @@ ko:
       description: "설명: 클릭하여 편집..."
       relation_description: "이 관계에 대한 설명을 추가하려면 클릭"
     project:
-      required_outside_context: >
-        모든 특성을 보려면 작업 패키지를 만들 프로젝트를 선택하십시오. 위 유형이 활성화된 프로젝트만 선택할 수 있습니다.
-      details_activity: "프로젝트 세부 정보 활동"
-      context: "프로젝트 컨텍스트"
-      click_to_switch_to_project: "프로젝트: %{projectname}"
-      confirm_template_load: "템플릿을 전환하면 페이지가 다시 로드되고 이 양식에 대한 모든 입력이 손실됩니다. 계속하시겠습니까?"
-      use_template: "템플릿 사용"
-      no_template_selected: "(없음)"
-      copy:
-        copy_options: "복사 설정"
       autocompleter:
         label: "프로젝트 자동완성"
+      click_to_switch_to_project: "프로젝트: %{projectname}"
+      confirm_template_load: "템플릿을 전환하면 페이지가 다시 로드되고 이 양식에 대한 모든 입력이 손실됩니다. 계속하시겠습니까?"
+      context: "프로젝트 컨텍스트"
+      copy:
+        copy_options: "복사 설정"
+      not_available: "프로젝트 N/A"
+      no_template_selected: "(없음)"
+      required_outside_context: >
+        모든 특성을 보려면 작업 패키지를 만들 프로젝트를 선택하십시오. 위 유형이 활성화된 프로젝트만 선택할 수 있습니다.
+      use_template: "템플릿 사용"
     reminders:
       settings:
         daily:
@@ -739,6 +744,7 @@ ko:
         immediate:
           title: "내게 이메일 미리 알림 보내기"
           mentioned: "누군가 나를 @멘션할 때 즉시"
+          personal_reminder: "개인 미리 알림을 받는 즉시"
         alerts:
           title: "기타 항목에 대한 이메일 알림(작업 패키지 외)"
           explanation: >
@@ -770,10 +776,6 @@ ko:
         upgrade_to_ee_text: "와우! 만약 이 추가 기능이 필요하다면 여러분은 진짜 프로입니다! Enterprise Edition 고객이 되어서 OpenSource 개발자들을 지원할 생각이 있으신가요?"
         more_information: "더보기"
         nevermind: "신경쓰지 마세요"
-      edit:
-        form_configuration: "양식 구성"
-        projects: "프로젝트"
-        settings: "설정"
     time_entry:
       work_package_required: "먼저 작업 패키지를 선택해야 합니다."
       title: "작업시간 기록"
@@ -796,6 +798,7 @@ ko:
       typeahead_placeholder: 가능한 전문가를 검색합니다
     relation_labels:
       parent: "부모"
+      child: "자식"
       children: "하위"
       relates: "관련 항목"
       duplicates: "중복"
@@ -825,7 +828,7 @@ ko:
       add_new_child: "새 자식 만들기"
       create_new: "새로 만들기"
       add_existing: "기존 추가"
-      add_existing_child: "기존 자식 추가"
+      add_existing_child: "자식 추가"
       remove_child: "자식 제거"
       add_new_relation: "새 관계 만들기"
       add_existing_relation: "기존 관계 추가"
@@ -851,8 +854,6 @@ ko:
       select_branch: "브랜치 선택"
     field_value_enter_prompt: "'%{field}'에 대 한 값을 입력하세요."
     project_menu_details: "세부 정보"
-    scheduling:
-      manual: "수동 스케줄링"
     sort:
       sorted_asc: "오름차순 정렬이 적용됨, "
       sorted_dsc: "내림차순 정렬이 적용됨, "
@@ -900,15 +901,6 @@ ko:
       comment_send_failed: "오류가 발생했습니다. 코멘트를 제출할 수 없습니다."
       comment_updated: "코멘트가 성곡적으로 갱신되었습니다."
       confirm_edit_cancel: "편집 중인 작업 패키지를 취소하시겠습니까?"
-      datepicker_modal:
-        automatically_scheduled_parent: "자동으로 예약됩니다. 날짜는 관계에서 파생됩니다."
-        manually_scheduled: "수동 스케줄링이 활성화되고, 모든 관계가 무시됩니다."
-        start_date_limited_by_relations: "사용 가능한 시작 및 종료 날짜는 관계에 따라 제한됩니다."
-        changing_dates_affects_follow_relations: "이 날짜를 변경하면 관련 작업 패키지의 날짜에 영향을 줍니다."
-        click_on_show_relations_to_open_gantt: 'GANTT 개요를 보려면 "%{button_name}" 클릭을 하세요.'
-        show_relations: "관계 표시"
-        ignore_non_working_days:
-          title: "근무일만"
       description_filter: "필터"
       description_enter_text: "텍스트 입력"
       description_options_hide: "옵션 숨기기"
@@ -1042,6 +1034,12 @@ ko:
           not_found: "해당 보기가 없습니다."
           duplicate_query_title: "이 보기의 이름이 이미 존재합니다. 그래도 변경하시겠습니까?"
         text_no_results: "일치하는 보기가 없습니다."
+      reminders:
+        button_label: "미리 알림 설정"
+        title:
+          new: "미리 알림 설정"
+          edit: "미리 알림 편집"
+        subtitle: "선택한 시간에 이 작업 패키지에 대한 알림을 받게 됩니다."
       scheduling:
         is_parent: "이 작업 패키지의 날짜는 자식으로부터 자동으로 추정됩니다. '수동 스케줄링'을 활성화하여 날짜를 설정할 수 있습니다."
         is_switched_from_manual_to_automatic: "다른 작업 패키지와의 관계로 인해 수동 스케줄링에서 자동 스케줄링으로 전환한 후 이 작업 패키지의 날짜를 다시 계산해야 할 수 있습니다."
@@ -1342,5 +1340,3 @@ ko:
       waiting_subtitle:
         network_off: "네트워크 문제가 있습니다."
         network_on: "네트워크가 복원되었습니다. 작업 중입니다."
-        timeout: >
-          예상 시간 내에 OpenProject에서 프로젝트 폴더에 대한 액세스를 제공하지 못했습니다. 다시 한 번 시도해 보세요.<br><br> 문제가 지속되면 OpenProject 관리자에게 문의하여 <a href="https://www.openproject.org/docs/system-admin-guide/files/external-file-storages/file-storage-troubleshooting/">파일 저장소 설정 상태</a>를 확인하세요.

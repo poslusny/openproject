@@ -30,9 +30,11 @@ hu:
         overridden_costs: "Felülbírált költségek"
         spent: "Elköltve"
         spent_on: "Dátum"
+        logged_by: "Naplózta"
       cost_type:
         unit: "Egység neve"
         unit_plural: "Többes számú egység neve"
+        default: "Cost type by default"
       work_package:
         costs_by_type: "Elhasznált egységek"
         labor_costs: "Munkaerő költségek"
@@ -44,13 +46,35 @@ hu:
         rate: "Díj"
       user:
         default_rates: "Alapértelmezett díj"
+      time_entry:
+        project: Projekt
+        user: Felhasználó
+        work_package: Feladatcsoport
+        hours: órák
+        comments: Vélemény
+        activity: Tevékenység
+        spent_on: dátum
+        start_time: Kezdés
+        end_time: Finish time
     models:
+      time_entry:
+        one: "Belépési idő"
+        other: "Time entries"
+      cost_entry:
+        one: "Költség tétel"
+        other: "Cost entries"
       cost_type:
         one: "Költségtípus"
         other: "Költségtípusok"
+      time_entry_activity:
+        one: "Time tracking activity"
+        other: "Időnyilvántartási tevékenységek"
       rate: "Díj"
     errors:
       models:
+        time_entry:
+          invalid_time: "must be between 00:00 and 23:59."
+          cannot_log_for_this_work_package: "Cannot log time for this work package."
         work_package:
           is_not_a_valid_target_for_cost_entries: "Munkacsomag #%{id} nem érvényes cél a költség újrahozzárendeléséhez."
           nullify_is_not_valid_for_cost_entries: "Költségek nem hozzárendelhetőek a projekthez."
@@ -65,6 +89,8 @@ hu:
     fixed_date: "Fix dátum"
   button_add_rate: "Új díj"
   button_log_costs: "Költségek naplózása"
+  button_log_time: "Log"
+  button_add_activity: "Tevékenység"
   caption_booked_on_project: "Foglalt projekt"
   caption_default: "Alapértelmezett"
   caption_default_rate_history_for: "Alapértelmezett díj történet %{user}-nek"
@@ -76,7 +102,10 @@ hu:
   caption_save_rate: "Díj mentése"
   caption_set_rate: "Aktuális díj beállítása"
   caption_show_locked: "Zárolt nemek mutatása"
+  caption_log_time_dialog: "Eltöltött idő rögzítése"
   description_date_for_new_rate: "Új díj dátuma"
+  description_costs_settings: "Define the desired format for the costs in all projects."
+  description_time_settings: "Define which fields are mandatory to fill when logging time in all projects."
   group_by_others: "nincs egy csoportban sem"
   label_between: "között"
   label_cost_filter_add: "Költség tétel szűrő hozzáadása"
@@ -85,8 +114,6 @@ hu:
   label_cost_type_plural: "Költségtípusok"
   label_cost_type_specific: "Költség típus%{id}%{name}"
   label_costs_per_page: "Költések oldalanként"
-  label_currency: "Pénznem"
-  label_currency_format: "Pénznem formátuma"
   label_current_default_rate: "Jelenlegi alapértelmezett díj"
   label_date_on: "mikor"
   label_deleted_cost_types: "Törölt költségnemek"
@@ -105,21 +132,30 @@ hu:
   label_kind: "Típus"
   label_less_or_equal: "<="
   label_log_costs: "Naplózott költségek"
+  label_new_time_entry_activity: "New time entry activity"
+  label_time_entry_activity_form_description: "Changes to this time entry activity will be reflected in all projects where it is enabled."
   label_no: "Nem"
   label_option_plural: "Beállítások"
   label_overall_costs: "Összes költség"
   label_rate: "Díj"
   label_rate_plural: "Díjak"
   label_status_finished: "Kész"
+  label_show: "Mutat"
   label_units: "Költség egységek"
   label_user: "Felhasználó"
   label_until: "-ig"
   label_valid_from: "Innentől érvényes"
   label_yes: "Igen"
+  label_time: "Idő"
+  label_cost: "Cost"
+  label_costs: "Költségek"
+  label_mandatory_fields: "Mandatory fields"
+  placeholder_activity_select_work_package_first: Work package selection is required first
   notice_something_wrong: "Valami hiba történt. Kérlek próbáld újra."
   notice_successful_restore: "Sikeres visszaállítás."
   notice_successful_lock: "Sikeresen zárolt."
-  notice_cost_logged_successfully: 'Egységköltség sikeresen naplózva.'
+  notice_cost_logged_successfully: "Egységköltség sikeresen naplózva."
+  notice_different_time_zones: "This user has a different time zone (%{tz}). Time will be logged using their time zone."
   permission_edit_cost_entries: "Könyvelt egységköltségek szerkesztése"
   permission_edit_own_cost_entries: "Saját könyvelt egységköltségek szerkesztése"
   permission_edit_hourly_rates: "Órabérek szerkesztése"
@@ -134,6 +170,10 @@ hu:
   permission_view_own_hourly_rate: "Saját óradíj megtekintése"
   permission_view_own_time_entries: "Az eltöltött idő megtekintése"
   project_module_costs: "Idő és költség"
+  setting_allow_tracking_start_and_end_times: "Lehetővé teszi a felhasználók számára, hogy nyomon kövessék az időrekordok kezdő és befejező időpontját"
+  setting_costs_currency: "Pénznem"
+  setting_costs_currency_format: "Pénznem formátuma"
+  setting_enforce_tracking_start_and_end_times: "A felhasználókat a kezdő és befejező időpont beállítására kényszeríti az időrekordoknál"
   text_assign_time_and_cost_entries_to_project: "Idők és költségek projekthez rendelése"
   text_destroy_cost_entries_question: "A work package-hez rögzített %{cost_entries} törlése. Mit szeretnél tenni?"
   text_destroy_time_and_cost_entries: "Idők és költségek törlése"
@@ -141,5 +181,7 @@ hu:
   text_reassign_time_and_cost_entries: "A work packege-hez jelentett órák és költségek újrafelvitele:"
   text_warning_hidden_elements: "Néhány bejegyzés lehet, hogy kimaradt az összesítésből."
   week: "hét"
-  js:
-    text_are_you_sure: "Biztos vagy benne?"
+  api_v3:
+    errors:
+      validation:
+        start_time_different_date: "Date part of startTime (%{start_time}) must be the same as the spentOn (%{spent_on}) date."

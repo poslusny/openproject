@@ -36,7 +36,7 @@ class User < Principal
     firstname: [:firstname],
     lastname_firstname: %i[lastname firstname],
     lastname_n_firstname: %i[lastname firstname],
-    lastname_coma_firstname: %i[lastname firstname],
+    lastname_comma_firstname: %i[lastname firstname],
     username: [:login]
   }.freeze
 
@@ -68,14 +68,16 @@ class User < Principal
   belongs_to :ldap_auth_source, optional: true
 
   # Authorized OAuth grants
-  has_many :oauth_grants,
+  has_many :oauth_grants, # rubocop:disable Rails/InverseOf
            class_name: "Doorkeeper::AccessGrant",
-           foreign_key: "resource_owner_id"
+           foreign_key: "resource_owner_id",
+           dependent: :delete_all
 
   # User-defined oauth applications
   has_many :oauth_applications,
            class_name: "Doorkeeper::Application",
-           as: :owner
+           as: :owner,
+           dependent: :destroy
 
   # Meeting memberships
   has_many :meeting_participants,
@@ -91,6 +93,8 @@ class User < Principal
            inverse_of: :user,
            dependent: :destroy
 
+  has_many :emoji_reactions, dependent: :destroy
+  has_many :reminders, foreign_key: "creator_id", dependent: :destroy, inverse_of: :creator
   has_many :remote_identities, dependent: :destroy
 
   # Users blocked via brute force prevention
@@ -295,7 +299,7 @@ class User < Principal
     when :firstname_lastname then "#{firstname} #{lastname}"
     when :lastname_firstname then "#{lastname} #{firstname}"
     when :lastname_n_firstname then "#{lastname}#{firstname}"
-    when :lastname_coma_firstname then "#{lastname}, #{firstname}"
+    when :lastname_comma_firstname then "#{lastname}, #{firstname}"
     when :firstname then firstname
     when :username then login
 
@@ -304,11 +308,16 @@ class User < Principal
     end
   end
 
-  # Return user's authentication provider for display
   def authentication_provider
-    return if identity_url.blank?
+    return nil if identity_url.blank?
 
-    identity_url.split(":", 2).first.titleize
+    slug = identity_url.split(":", 2).first
+    AuthProvider.find_by(slug:)
+  end
+
+  # Return user's authentication provider for display
+  def human_authentication_provider
+    authentication_provider&.display_name
   end
 
   ##
@@ -399,7 +408,7 @@ class User < Principal
   end
 
   def log_successful_login
-    update_attribute(:last_login_on, Time.now)
+    update_attribute(:last_login_on, Time.current)
   end
 
   def pref
@@ -407,7 +416,13 @@ class User < Principal
   end
 
   def time_zone
-    @time_zone ||= (pref.time_zone.blank? ? nil : ActiveSupport::TimeZone[pref.time_zone])
+    @time_zone ||= ActiveSupport::TimeZone[pref.time_zone] || ActiveSupport::TimeZone["Etc/UTC"]
+  end
+
+  def reload(*)
+    @time_zone = nil
+
+    super
   end
 
   def wants_comments_in_reverse_order?
@@ -538,46 +553,12 @@ class User < Principal
 
   # Returns the anonymous user.  If the anonymous user does not exist, it is created.  There can be only
   # one anonymous user per database.
-  def self.anonymous # rubocop:disable Metrics/AbcSize
-    RequestStore[:anonymous_user] ||=
-      begin
-        anonymous_user = AnonymousUser.first
-
-        if anonymous_user.nil?
-          (anonymous_user = AnonymousUser.new.tap do |u|
-            u.lastname = "Anonymous"
-            u.login = ""
-            u.firstname = ""
-            u.mail = ""
-            u.status = User.statuses[:active]
-          end).save
-
-          raise "Unable to create the anonymous user." if anonymous_user.new_record?
-        end
-        anonymous_user
-      end
+  def self.anonymous
+    RequestStore[:anonymous_user] ||= AnonymousUser.first
   end
 
   def self.system
-    system_user = SystemUser.first
-
-    if system_user.nil?
-      system_user = SystemUser.new(
-        firstname: "",
-        lastname: "System",
-        login: "",
-        mail: "",
-        admin: true,
-        status: User.statuses[:active],
-        first_login: false
-      )
-
-      system_user.save(validate: false)
-
-      raise "Unable to create the automatic migration user." unless system_user.persisted?
-    end
-
-    system_user
+    SystemUser.first
   end
 
   protected
@@ -689,6 +670,6 @@ class User < Principal
   end
 
   def self.default_admin_account_changed?
-    !User.active.find_by_login("admin").try(:current_password).try(:matches_plaintext?, "admin") # rubocop:disable Rails/DynamicFindBy
+    !User.active.find_by_login("admin").try(:current_password).try(:matches_plaintext?, "admin")
   end
 end

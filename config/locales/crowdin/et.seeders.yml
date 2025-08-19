@@ -34,6 +34,15 @@ et:
           name: Hall (tume)
         item_13:
           name: Must
+      project_phase_colors:
+        item_0:
+          name: PM2 Orange
+        item_1:
+          name: PM2 Red
+        item_2:
+          name: PM2 Magenta
+        item_3:
+          name: PM2 Green Yellow
       document_categories:
         item_0:
           name: Documentation
@@ -67,7 +76,21 @@ et:
       global_roles:
         item_0:
           name: Staff and projects manager
+        item_1:
+          name: Standard global role
     standard:
+      project_phases:
+        item_0:
+          name: Initiating
+        item_1:
+          name: Planeerimine
+          start_gate: Ready for Planning
+        item_2:
+          name: Executing
+          start_gate: Ready for Executing
+        item_3:
+          name: Closing
+          start_gate: Ready for Closing
       priorities:
         item_0:
           name: Aega on
@@ -95,7 +118,7 @@ et:
             item_0:
               name: Project plan
             item_1:
-              name: Milestones
+              name: Eesmärgid
             item_2:
               name: Tasks
             item_3:
@@ -145,7 +168,7 @@ et:
                   name: Teemad
               item_6:
                 options:
-                  name: Milestones
+                  name: Eesmärgid
           work_packages:
             item_0:
               subject: Start of project
@@ -462,7 +485,7 @@ et:
         item_1:
           name: Verstapost
         item_2:
-          name: Etapp
+          name: Summary task
         item_3:
           name: Täiendus
         item_4:

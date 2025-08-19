@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -26,13 +27,13 @@
 # See COPYRIGHT and LICENSE files for more details.
 #++
 
-require File.dirname(__FILE__) + "/../spec_helper"
+require_relative "../spec_helper"
 
 RSpec.describe Meeting do
   shared_let (:user1) { create(:user) }
   shared_let (:user2) { create(:user) }
   let(:project) { create(:project, members: project_members) }
-  let(:meeting) { create(:meeting, project:, author: user1) }
+  let(:meeting) { create(:meeting, :author_participates, project:, author: user1) }
   let(:agenda) do
     meeting.create_agenda text: "Meeting Agenda text"
     meeting.reload_agenda # avoiding stale object errors
@@ -205,6 +206,41 @@ RSpec.describe Meeting do
 
     it "uses the :view_meetings permission in STI classes" do
       expect(StructuredMeeting.acts_as_watchable_permission).to eq(:view_meetings)
+    end
+  end
+
+  describe "duration" do
+    it "accepts a float" do
+      meeting.duration = 1.5
+      expect(meeting).to be_valid
+      expect(meeting.duration).to eq(1.5)
+      expect(meeting.formatted_duration).to eq("1.5h")
+    end
+
+    it "accepts a string to be parsed by chronic" do
+      meeting.duration = "30m"
+      expect(meeting).to be_valid
+      expect(meeting.duration).to eq(0.5)
+      expect(meeting.formatted_duration).to eq("0.5h")
+    end
+
+    it "doesn't raise on nil" do
+      meeting.duration = nil
+      expect(meeting).not_to be_valid
+      expect(meeting.errors[:duration]).to include("is not a number.")
+      expect(meeting.formatted_duration).to be_nil
+    end
+  end
+
+  describe "#destroy" do
+    context "with an attachment" do
+      let!(:meeting) { create(:meeting, project: project) }
+      let!(:attachment) { create(:attachment, container: meeting) }
+
+      it "does not raise an exception (Regression #61632)" do
+        expect { meeting.destroy! }.not_to raise_error
+        expect { meeting.reload }.to raise_error(ActiveRecord::RecordNotFound)
+      end
     end
   end
 end

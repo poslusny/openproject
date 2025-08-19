@@ -68,6 +68,19 @@ module TableHelpers
       end
     end
 
+    context "when there are no work packages" do
+      let(:table_data) do
+        TableData.from_work_packages([], columns)
+      end
+      let(:columns) { [Column.for("subject")] }
+
+      it "renders no rows" do
+        expect(representer.render(table_data)).to eq <<~TABLE
+          | subject |
+        TABLE
+      end
+    end
+
     describe "subject column" do
       let(:columns) { [Column.for("subject")] }
 
@@ -98,6 +111,128 @@ module TableHelpers
           | derived remaining work |
           |                     9h |
         TABLE
+      end
+    end
+
+    describe "schedule column" do
+      let(:table) do
+        <<~TABLE
+          | subject |   MTWTFSS   |
+          | wp1     |   X         |
+          | wp2     |     [       |
+          | wp3     |       ]     |
+          | wp4     |             |
+          | wp5     |    XXX      |
+          | wp6     | X           |
+          | wp7     |           X |
+          | wp8     |           X |
+        TABLE
+      end
+      let(:columns) { [Column.for("MTWTFSS")] }
+
+      it "is rendered as a schedule" do
+        expect(representer.render(table_data)).to eq <<~TABLE
+          |   MTWTFSS   |
+          |   X         |
+          |     [       |
+          |       ]     |
+          |             |
+          |    XXX      |
+          | X           |
+          |           X |
+          |           X |
+        TABLE
+      end
+
+      context "when there are no work packages" do
+        let(:table_data) do
+          TableData.from_work_packages([], columns)
+        end
+
+        it "renders no rows" do
+          expect(representer.render(table_data)).to eq <<~TABLE
+            | MTWTFSS |
+          TABLE
+        end
+      end
+
+      context "when non working days are defined" do
+        let(:table) do
+          <<~TABLE
+            | subject | MTWTFSS | days counting
+            | wp1     | XXXXXXX | working days only
+            | wp2     | XXXXXXX | all days
+          TABLE
+        end
+
+        before do
+          set_non_working_week_days("wednesday", "thursday")
+        end
+
+        it "renders the non working days as dots `.` for work packages taking non-working days into account" do
+          expect(representer.render(table_data)).to eq <<~TABLE
+            | MTWTFSS |
+            | XX..XXX |
+            | XXXXXXX |
+          TABLE
+        end
+
+        context "when using a second table which does not have the ignore_non_working_days attribute knowledge" do
+          let(:twin_table) do
+            <<~TABLE
+              | subject | MTWTFSS |
+              | wp1     | XXXXXXX |
+              | wp2     | XXXXXXX |
+            TABLE
+          end
+          let(:twin_table_data) { TableData.for(twin_table) }
+          let(:tables_data) { [table_data, twin_table_data] }
+
+          it "renders the non working days as dots `.` for both tables" do
+            expect(representer.render(table_data)).to eq <<~TABLE
+              | MTWTFSS |
+              | XX..XXX |
+              | XXXXXXX |
+            TABLE
+            expect(representer.render(twin_table_data)).to eq <<~TABLE
+              | MTWTFSS |
+              | XX..XXX |
+              | XXXXXXX |
+            TABLE
+          end
+        end
+      end
+
+      context "when using a second table for the size" do
+        let(:twin_table) do
+          <<~TABLE
+            | subject | MTWTFSS          |
+            | wp5     |  XXX             |
+            | wp9     |               XX |
+          TABLE
+        end
+        let(:twin_table_data) { TableData.for(twin_table) }
+
+        let(:tables_data) { [table_data, twin_table_data] }
+
+        it "adapts the column size to the largest of both tables so they are diffable" do
+          expect(representer.render(table_data)).to eq <<~TABLE
+            |   MTWTFSS          |
+            |   X                |
+            |     [              |
+            |       ]            |
+            |                    |
+            |    XXX             |
+            | X                  |
+            |           X        |
+            |           X        |
+          TABLE
+          expect(representer.render(twin_table_data)).to eq <<~TABLE
+            |   MTWTFSS          |
+            |    XXX             |
+            |                 XX |
+          TABLE
+        end
       end
     end
   end

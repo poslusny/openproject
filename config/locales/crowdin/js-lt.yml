@@ -103,8 +103,8 @@ lt:
     button_settings: "Nustatymai"
     button_uncheck_all: "Atžymėti visus"
     button_update: "Atnaujinti"
-    button_export-pdf: "Atsisiųsti PDF"
     button_export-atom: "Atsisiųsti Atom"
+    button_generate_pdf: "Generate PDF"
     button_create: "Kurti"
     card:
       add_new: "Pridėti naują kortelę"
@@ -221,6 +221,8 @@ lt:
             label_maximum_users: "Maksimalus aktyvių naudotojų skaičius"
             label_starts_at: "Prasideda nuo"
             label_expires_at: "Nustoja galioti"
+            label_plan: "Planas"
+            label_additional_features: "Additional features"
             receive_newsletter: Noriu gauti OpenProject <a target="_blank" href="%{link}">naujienlaiškį</a>.
             taken_domain: Gali būti tik vienas aktyvus bandomasis periodas domenui.
             domain_mismatch: Dabartinės užklausos stoties pavadinimas neatitinka sukonfigūruoto stoties vardo. Prašome patikrinti jūsų sistemos nustatymus.
@@ -356,10 +358,10 @@ lt:
           learn_about: "Sužinokite daugiau apie naujas galimybes"
           #Include the version to invalidate outdated translations in other locales.
           #Otherwise, e.g. chinese might still have the translations for 10.0 in the 12.0 release.
-          "14_6":
+          "15_5":
             standard:
               new_features_html: >
-                The release brings various features and improvements for you, e.g. <br> <ul class="%{list_styling_class}"> <li>Benefit from more flexible progress reporting – thanks to user feedback.</li> <li>Receive an update notification with reload option for meetings.</li> <li>Enable a custom field for multiple projects at once.</li> <li>Use relative work package attribute macros.</li> <li>Show empty lines in saved rich text.</li> <li>See past meetings included in the number next to the Meetings tab.</li> </ul>
+                The release brings various features and improvements for you, e.g. <br> <ul class="%{list_styling_class}"> <li>Filter for descendants (children and grandchildren) of work packages.</li> <li>Benefit from advanced accessibility in the date picker.</li> <li>See % Complete included in work package table sums.</li> <li>Include a column for children in work package tables.</li> <li>Better use the date picker in mobile screens.</li> <li>PDF exports matching configured form layout.</li> </ul>
     ical_sharing_modal:
       title: "Prenumeruoti kalendorių"
       inital_setup_error_message: "Gaunant duomenis įvyko klaida."
@@ -575,7 +577,7 @@ lt:
         members: "Pakvieskite naujus <b>narius</b> prisijungti prie projekto."
         quick_add_button: "Paspauskite pliuso (+) ženklą navigacijos antraštėje ir <b>sukursite naują projektą</b> arba </b>pakviesite bendradarbius</b>."
         sidebar_arrow: "Pasinaudokite grįžimo rodykle viršutiniame kairiajame kampe grįžimui į projekto <b>pagrindinį meniu</b>."
-        welcome: "Paskirkite tris minutes įvadinei kelionei ir išmokite daugumą <b>svarbių sistemos galimybių</b>. <br>Rekomenduojame atlikti visus veiksmus iki pabaigos. Ekskursiją galite paleisti iš naujo bet kuriuo metu."
+        welcome: "Take a three-minute introduction tour to learn the most <b>important features</b>. <br> We recommend completing the steps until the end. You can restart the tour any time."
         wiki: "<b>Wiki</b>'yje galite dokumentuoti ir dalintis žiniomis su savo komandos nariais."
         backlogs:
           overview: "Valdykite savo darbus <b>Darbų sąrašo</b> vaizde."
@@ -612,7 +614,7 @@ lt:
         assigned: "Paskirtas"
         #The enum value is named 'responsible' in the database and that is what is transported through the API
         #up to the frontend.
-        responsible: "Accountable"
+        responsible: "Atsakingas"
         created: "Sukurta"
         scheduled: "Suplanuota"
         commented: "Komentavo"
@@ -620,14 +622,15 @@ lt:
         prioritized: "Prioritized"
         dateAlert: "Datos įspėjimas"
         shared: "Bendrinta"
+        reminder: "Reminder"
       date_alerts:
         milestone_date: "Gairės data"
         overdue: "Vėluojama"
-        overdue_since: "nuo %{difference_in_days}"
-        property_today: "yra šiandien"
-        property_is: "yra %{difference_in_days}"
-        property_was: "buvo prieš %{difference_in_days}"
-        property_is_deleted: "yra ištrintas"
+        overdue_since: "since %{difference_in_days}."
+        property_today: "is today."
+        property_is: "is in %{difference_in_days}."
+        property_was: "was %{difference_in_days} ago."
+        property_is_deleted: "is deleted."
         upsale:
           title: "Datos įspėjimai"
           description: "Su datos įspėjimais jus informuos apie ateinančias pradžios ir pabaigos datas, kad niekada nepraleistumėte ar nepamirštumėte svarbių terminų."
@@ -643,7 +646,7 @@ lt:
           with_current_filter: "Šiuo metu šiame vaizde pranešimų nėra"
         mark_all_read: "Pažymėti visus kaip perskaitytus"
         mark_as_read: "Žymėti kaip skaitytą"
-        text_update_date_by: "%{date} by"
+        text_update_date_by: "%{date} "
         total_count_warning: "Rodomi %{newest_count} paskutiniai pranešimai. Dar %{more_count} yra nerodomi."
         empty_state:
           no_notification: "Panašu, kad jūs pilnai pasivijote."
@@ -654,6 +657,8 @@ lt:
         new_notifications:
           message: "Yra naujų pranešimų."
           link_text: "Spauskite čia, kad juos įkeltumėte."
+      reminders:
+        note: "Note: “%{note}”"
       settings:
         change_notification_settings: 'Jūs galite keisti savo <a target="_blank" href="%{url}">pranešimų nustatymus</a>, kad užtikrintumėte, jog niekada nepraleisite svarbaus atnaujinimo.'
         title: "Pranešimų nustatymai"
@@ -716,18 +721,18 @@ lt:
       description: "Aprašymas: spauskite, kad keistumėte..."
       relation_description: "Paspauskite, kad pridėtumėte šio ryšio aprašymą"
     project:
-      required_outside_context: >
-        Prašau pasirinkti projektą, kuriame turi būti sukurtas darbo paketas, kad matytumėte visus atributus. Jūs galite pasirinkti tik tuos projektus, kurie turi aukščiau nurodytą tipą.
-      details_activity: "Projekto detalių aktyvumas"
-      context: "Projekto kontekstas"
-      click_to_switch_to_project: "Projektas: %{projectname}"
-      confirm_template_load: "Šablono pakeitimas perkraus puslapį ir jūs prarasite visą šioje formoje įvestą informaciją. Tęsti?"
-      use_template: "Naudoti šabloną"
-      no_template_selected: "(Nėra)"
-      copy:
-        copy_options: "Kopijos nustatymai"
       autocompleter:
         label: "Projekto autoužpildymas"
+      click_to_switch_to_project: "Projektas: %{projectname}"
+      confirm_template_load: "Šablono pakeitimas perkraus puslapį ir jūs prarasite visą šioje formoje įvestą informaciją. Tęsti?"
+      context: "Projekto kontekstas"
+      copy:
+        copy_options: "Kopijos nustatymai"
+      not_available: "Project N/A"
+      no_template_selected: "(Nėra)"
+      required_outside_context: >
+        Prašau pasirinkti projektą, kuriame turi būti sukurtas darbo paketas, kad matytumėte visus atributus. Jūs galite pasirinkti tik tuos projektus, kurie turi aukščiau nurodytą tipą.
+      use_template: "Naudoti šabloną"
     reminders:
       settings:
         daily:
@@ -742,6 +747,7 @@ lt:
         immediate:
           title: "Siųsti man e-pašto priminimą"
           mentioned: "Iš karto, kai kažkas @pamini mane"
+          personal_reminder: "Immediately when I receive a personal reminder"
         alerts:
           title: "E-pašto pranešimai kitiems (ne darbo paketų) elementams"
           explanation: >
@@ -773,10 +779,6 @@ lt:
         upgrade_to_ee_text: "Oho! Jei Jums reikia šio priedo, esate super pro! Ar nenorėtumėte paremti mus, OpenSource (atviro kodo) kūrėjus, tapdami Enterprise versijos klientu?"
         more_information: "Daugiau informacijos"
         nevermind: "Nesvarbu"
-      edit:
-        form_configuration: "Formos konfigūracija"
-        projects: "Projektai"
-        settings: "Nustatymai"
     time_entry:
       work_package_required: "Reikia pirma pasirinkti darbo paketą."
       title: "Registruoti laiką"
@@ -799,6 +801,7 @@ lt:
       typeahead_placeholder: Ieškoti galimų stebėtojų
     relation_labels:
       parent: "Tėvas"
+      child: "Child"
       children: "Pasekėjai"
       relates: "Susiję su"
       duplicates: "Dublikatai"
@@ -828,7 +831,7 @@ lt:
       add_new_child: "Sukurti naują vaiką"
       create_new: "Sukurti naują"
       add_existing: "Pridėti esamą"
-      add_existing_child: "Pridėti jau esamą vaiką"
+      add_existing_child: "Pridėti pasiekėją"
       remove_child: "Pašalinti vaiką"
       add_new_relation: "Sukurti naują ryšį"
       add_existing_relation: "Pridėti esamą sąryšį"
@@ -854,8 +857,6 @@ lt:
       select_branch: "Parinkti padalinį"
     field_value_enter_prompt: "Įveskite \"%{field}\" reikšmę "
     project_menu_details: "Detalės"
-    scheduling:
-      manual: "Rankinis laiko parinkimas"
     sort:
       sorted_asc: "Pritaikytas didėjantis rikiavimas, "
       sorted_dsc: "Pritaikytas mažėjantis rikiavimas, "
@@ -903,15 +904,6 @@ lt:
       comment_send_failed: "Įvyko klaida. Neįmanoma pateikti komentaro."
       comment_updated: "Komentaras sėkmingai atnaujintas."
       confirm_edit_cancel: "Ar Jūs tikrai norite atšaukti darbo paketo redagavimą?"
-      datepicker_modal:
-        automatically_scheduled_parent: "Suplanuota automatiškai. Datos paskaičiuotos pagal ryšius."
-        manually_scheduled: "Įjungtas rankinis planavimas, visi ryšiai ignoruojami."
-        start_date_limited_by_relations: "Galimos pradžios ir pabaigos datos ribojamos pagal ryšius."
-        changing_dates_affects_follow_relations: "Šių datų keitimas įtakos susijusių darbo paketų datas."
-        click_on_show_relations_to_open_gantt: 'Spauskite „%{button_name}“ GANTT vaizdui.'
-        show_relations: "Rodyti ryšius"
-        ignore_non_working_days:
-          title: "Tik darbo dienos"
       description_filter: "Filtras"
       description_enter_text: "Įveskite tekstą"
       description_options_hide: "Slėpti parinktis"
@@ -1045,6 +1037,12 @@ lt:
           not_found: "Nėra tokio vaizdo"
           duplicate_query_title: "Toks vaizdo vardas jau yra. Vis tiek keisti?"
         text_no_results: "Atitinkančių vaizdų nerasta."
+      reminders:
+        button_label: "Set reminder"
+        title:
+          new: "Set reminder"
+          edit: "Edit reminder"
+        subtitle: "You will receive a notification for this work package at the chosen time."
       scheduling:
         is_parent: "Šio darbų paketo datos yra automatiškai nustatomos pagal jo vaikų datas. Norėdami nustatyti kitokias datas įjunkite „Rankinį tvarkaraščio parinkimą“"
         is_switched_from_manual_to_automatic: "Po perjungimo iš rankinio į automatinį tvarkaraščio parinkimą, šio darbų paketo datas gali reikėti perskaičiuoti, nes yra sąryšių su kitais darbų paketais."
@@ -1354,5 +1352,3 @@ lt:
       waiting_subtitle:
         network_off: "Yra tinklo problema."
         network_on: "Tinklas grįžo. Mes bandome."
-        timeout: >
-          OpenProject could not provide you access to the project folder within the expected period of time. Please, try once again.<br><br> If that problem persists please contact your OpenProject administrator to check the <a href="https://www.openproject.org/docs/system-admin-guide/files/external-file-storages/file-storage-troubleshooting/">health status of the file storage setup</a>.

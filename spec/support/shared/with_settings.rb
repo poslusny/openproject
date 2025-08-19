@@ -41,9 +41,11 @@ end
 RSpec.shared_context "with settings reset" do
   shared_let(:definitions_before) { Settings::Definition.all.dup }
 
-  def reset(setting)
+  def reset(setting, **definitions)
+    setting = setting.to_sym
+    definitions = Settings::Definition::DEFINITIONS[setting] if definitions.empty?
     Settings::Definition.all.delete(setting)
-    Settings::Definition.add(setting, **Settings::Definition::DEFINITIONS[setting])
+    Settings::Definition.add(setting, **definitions)
   end
 
   def stub_configuration_yml

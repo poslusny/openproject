@@ -34,6 +34,15 @@ lt:
           name: Pilka (tamsi)
         item_13:
           name: Juoda
+      project_phase_colors:
+        item_0:
+          name: PM2 Orange
+        item_1:
+          name: PM2 Red
+        item_2:
+          name: PM2 Magenta
+        item_3:
+          name: PM2 Green Yellow
       document_categories:
         item_0:
           name: Dokumentacija
@@ -67,7 +76,21 @@ lt:
       global_roles:
         item_0:
           name: Darbuotojas ir projekto vadovas
+        item_1:
+          name: Standard global role
     standard:
+      project_phases:
+        item_0:
+          name: Initiating
+        item_1:
+          name: Planavimas
+          start_gate: Ready for Planning
+        item_2:
+          name: Executing
+          start_gate: Ready for Executing
+        item_3:
+          name: Closing
+          start_gate: Ready for Closing
       priorities:
         item_0:
           name: Žemas
@@ -462,7 +485,7 @@ lt:
         item_1:
           name: Svarbus etapas
         item_2:
-          name: Fazė
+          name: Summary task
         item_3:
           name: Požymis
         item_4:

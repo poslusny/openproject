@@ -21,7 +21,7 @@ RSpec.configure do |config|
   # Retry JS feature specs, but not during single runs
   if ENV["CI"]
     config.around :each, :js do |ex|
-      ex.run_with_retry retry: 2
+      ex.run_with_retry retry: ENV["RSPEC_RETRY_RETRY_COUNT"].to_i
     end
   end
 end
@@ -75,6 +75,11 @@ def retry_block(args: {}, screenshot: false, &)
       end
     end
   end
+
+  # By default retry_block works with StandardError, but the ExpectationNotMetError is
+  # not inherited from StandardError. Adding the RSpec::Expectations::ExpectationNotMetError
+  # will makes sure we retry if an expectation fails inside the retry_block.
+  args[:on] ||= [StandardError, RSpec::Expectations::ExpectationNotMetError]
 
   Retriable.retriable(on_retry: log_errors, **args, &)
 end

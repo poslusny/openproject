@@ -45,6 +45,8 @@ uk:
   label_greater: ">"
   label_is_not_project_with_subprojects: "не є (включає підпроекти)"
   label_is_project_with_subprojects: "є (включає підпроекти)"
+  label_is_work_package_with_descendants: "є (включно з нащадками)"
+  label_is_not_work_package_with_descendants: "не є (включно з нащадками)"
   label_work_package_attributes: "Атрибути робочого пакету"
   label_less: "<"
   label_logged_by_reporting: "Ви ввійшли як"
@@ -86,8 +88,16 @@ uk:
   validation_failure_date: "є недійсною датою"
   validation_failure_integer: "не є дійсним цілим числом"
   export:
+    timesheet:
+      title: "Ваші табелі обліку часу, експортовані в PDF"
+      button: "Експортувати табель обліку часу в PDF"
+      timesheet: "Табель обліку часу"
+      time: "Час"
+      sum_hours: Сума
     cost_reports:
       title: "Експорт звітів про витрати у форматі XLS"
+      start_time: "Час початку"
+      end_time: "Час завершення"
   reporting:
     group_by:
       selected_columns: "Вибрані стовпці"

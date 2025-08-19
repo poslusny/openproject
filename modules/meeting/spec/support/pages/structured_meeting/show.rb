@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -61,6 +63,10 @@ module Pages::StructuredMeeting
         yield
         click_on("Save") if save
       end
+    end
+
+    def expect_modal(...)
+      expect(page).to have_modal(...)
     end
 
     def expect_no_add_form
@@ -141,7 +147,23 @@ module Pages::StructuredMeeting
       expect(page).not_to have_test_selector("op-meeting-agenda-title", text: title)
     end
 
+    def expect_agenda_action_menu(item)
+      expect(page)
+        .to have_css("#meeting-agenda-items-item-component-#{item.id} #{test_selector('op-meeting-agenda-actions')}")
+    end
+
+    def expect_no_agenda_action_menu(item)
+      expect(page)
+        .to have_no_css("#meeting-agenda-items-item-component-#{item.id} #{test_selector('op-meeting-agenda-actions')}")
+    end
+
     def select_action(item, action)
+      open_menu(item) do
+        click_on action
+      end
+    end
+
+    def open_menu(item, &)
       retry_block do
         page.within("#meeting-agenda-items-item-component-#{item.id}") do
           page.find_test_selector("op-meeting-agenda-actions").click
@@ -149,8 +171,34 @@ module Pages::StructuredMeeting
         page.find(".Overlay")
       end
 
+      page.within(".Overlay", &)
+    end
+
+    def select_outcome_action(action)
+      retry_block do
+        page.find_test_selector("op-meeting-outcome-actions").click
+        page.find(".Overlay")
+      end
+
       page.within(".Overlay") do
         click_on action
+      end
+    end
+
+    def expect_no_outcome_actions
+      expect(page).to have_no_css("op-meeting-outcome-actions")
+    end
+
+    def expect_no_outcome_action(item)
+      retry_block do
+        page.within("#meeting-agenda-items-item-component-#{item.id}") do
+          page.find_test_selector("op-meeting-agenda-actions").trigger("click")
+        end
+        page.find(".Overlay")
+      end
+
+      page.within(".Overlay") do
+        expect(page).to have_no_text("Add outcome")
       end
     end
 
@@ -169,6 +217,41 @@ module Pages::StructuredMeeting
       page.within_test_selector("meeting-section-header-container-#{section.id}") do
         page.find_test_selector("meeting-section-action-menu").click
       end
+    end
+
+    def in_outcome_component(item, &)
+      page.within("#meeting-agenda-items-outcomes-base-component-#{item.id}", &)
+    end
+
+    def add_outcome(item, &)
+      page.within("#meeting-agenda-items-outcomes-base-component-#{item.id}") do
+        click_link_or_button "Outcome"
+      end
+      expect_outcome_form(item)
+      page.within("#meeting-agenda-items-outcomes-input-component-#{item.id}", &)
+    end
+
+    def add_outcome_from_menu(item, &)
+      select_action item, "Add outcome"
+      expect_outcome_form(item)
+      page.within("#meeting-agenda-items-outcomes-input-component-#{item.id}", &)
+    end
+
+    def expect_outcome_form(item)
+      expect(page)
+        .to have_css("#meeting-agenda-items-outcomes-input-component-#{item.id}")
+    end
+
+    def expect_outcome(text)
+      expect(page).to have_css("#meeting-agenda-items-outcomes-show-notes-component", text:)
+    end
+
+    def expect_no_outcome(text)
+      expect(page).to have_no_css("#meeting-agenda-items-outcomes-show-notes-component", text:)
+    end
+
+    def expect_no_outcome_button
+      expect(page).to have_no_css("op-meeting-outcome--button")
     end
 
     def edit_agenda_item(item, &)
@@ -204,11 +287,11 @@ module Pages::StructuredMeeting
 
     def open_participant_form
       page.find_test_selector("manage-participants-button").click
-      expect(page).to have_css("#edit-participants-dialog")
+      expect_modal("Participants")
     end
 
     def in_participant_form(&)
-      page.within("#edit-participants-dialog", &)
+      page.within_modal("Participants", &)
     end
 
     def expect_participant(participant, invited: false, attended: false, editable: true)
@@ -217,8 +300,17 @@ module Pages::StructuredMeeting
       expect(page).to have_field(id: "checkbox_attended_#{participant.id}", checked: attended, disabled: !editable)
     end
 
+    def expect_participant_invited(participant, invited: true)
+      expect(page).to have_text(participant.name)
+      expect(page).to have_field(id: "checkbox_invited_#{participant.id}", checked: invited)
+    end
+
     def invite_participant(participant)
-      check(id: "checkbox_invited_#{participant.id}")
+      id = "checkbox_invited_#{participant.id}"
+      retry_block do
+        check(id:)
+        raise "Expected #{participant.id} to be invited now" unless page.has_checked_field?(id:)
+      end
     end
 
     def expect_available_participants(count:)
@@ -226,13 +318,20 @@ module Pages::StructuredMeeting
     end
 
     def close_meeting
-      click_on("Close meeting")
+      retry_block do
+        click_on("Open")
+        page.find(".Overlay")
+      end
+
+      page.within(".Overlay") do
+        click_on("Closed")
+      end
       expect(page).to have_link("Reopen meeting")
     end
 
     def reopen_meeting
       click_on("Reopen meeting")
-      expect(page).to have_link("Close meeting")
+      expect(page).to have_link("Start meeting")
     end
 
     def close_dialog
@@ -248,11 +347,13 @@ module Pages::StructuredMeeting
     end
 
     def add_section(&)
-      page.within("#meeting-agenda-items-new-button-component") do
-        click_on I18n.t(:button_add)
-        click_on "Section"
-        # wait for the disabled button, indicating the turbo streams are applied
-        expect(page).to have_css("#meeting-agenda-items-new-button-component button[disabled='disabled']")
+      retry_block do
+        page.within("#meeting-agenda-items-new-button-component") do
+          click_on I18n.t(:button_add)
+          click_on "Section"
+          # wait for the disabled button, indicating the turbo streams are applied
+          expect(page).to have_css("#meeting-agenda-items-new-button-component button[disabled='disabled']")
+        end
       end
 
       in_latest_section_form(&)

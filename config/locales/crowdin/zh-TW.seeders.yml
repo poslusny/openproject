@@ -34,6 +34,15 @@ zh-TW:
           name: 灰色 (深)
         item_13:
           name: 黑色
+      project_phase_colors:
+        item_0:
+          name: PM2 橙色
+        item_1:
+          name: PM2 紅色
+        item_2:
+          name: PM2 紅紫色
+        item_3:
+          name: PM2 黃綠色
       document_categories:
         item_0:
           name: 說明文件
@@ -67,7 +76,21 @@ zh-TW:
       global_roles:
         item_0:
           name: 成員和專案管理員
+        item_1:
+          name: 標準全域角色
     standard:
+      project_phases:
+        item_0:
+          name: 初始化中
+        item_1:
+          name: 計劃中
+          start_gate: 準備規劃
+        item_2:
+          name: 執行中
+          start_gate: 準備執行
+        item_3:
+          name: 正在關閉
+          start_gate: 準備關閉
       priorities:
         item_0:
           name: 低
@@ -99,7 +122,7 @@ zh-TW:
             item_2:
               name: 任務
             item_3:
-              name: 小組工作企劃
+              name: 團隊規劃
           boards:
             kanban:
               name: Kanban看板
@@ -460,7 +483,7 @@ zh-TW:
         item_1:
           name: 里程碑
         item_2:
-          name: 階段
+          name: 摘要工作
         item_3:
           name: 功能
         item_4:

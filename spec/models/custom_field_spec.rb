@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -156,7 +158,7 @@ RSpec.describe CustomField do
 
       it "is not valid" do
         expect(field)
-          .to be_invalid
+          .not_to be_valid
       end
     end
 
@@ -215,17 +217,27 @@ RSpec.describe CustomField do
     let(:project) { build_stubbed(:project) }
     let(:user1) { build_stubbed(:user) }
     let(:user2) { build_stubbed(:user) }
+    let(:in_visible_scope) { instance_double(ActiveRecord::Relation) }
+    let(:principals_scope) { instance_double(ActiveRecord::Relation) }
 
     context "for a user custom field" do
       before do
         field.field_format = "user"
         allow(project)
           .to receive(:principals)
-          .and_return([user1, user2])
+                .and_return(principals_scope)
+
+        allow(principals_scope)
+          .to receive(:select)
+                .and_return([user1, user2])
 
         allow(Principal)
           .to receive(:in_visible_project_or_me)
-          .and_return([user2])
+                .and_return(in_visible_scope)
+
+        allow(in_visible_scope)
+          .to receive(:select)
+                .and_return([user2])
       end
 
       context "for a project" do
@@ -250,6 +262,16 @@ RSpec.describe CustomField do
             .to contain_exactly([user2.name, user2.id.to_s])
         end
       end
+
+      context "with user format setting excluding lastname", with_settings: { user_format: :username } do
+        it "always includes lastname for Group#name{:lastname} aliasing" do
+          expect(field.possible_values_options)
+            .to contain_exactly([user2.name, user2.id.to_s])
+
+          expect(in_visible_scope).to have_received(:select)
+           .with("login", "lastname", "id", "type")
+        end
+      end
     end
 
     context "for a list custom field" do
@@ -269,20 +291,25 @@ RSpec.describe CustomField do
     end
 
     context "for a version custom field" do
-      let(:versions) { [build_stubbed(:version), build_stubbed(:version)] }
+      let(:versions) { [build_stubbed(:version, project:), build_stubbed(:version, project:)] }
+      let(:shared_versions_scope) { instance_double(ActiveRecord::Relation) }
 
       before do
         field.field_format = "version"
+        allow(shared_versions_scope)
+          .to receive(:references)
+          .with(:project)
+          .and_return(versions)
       end
 
       context "with a project provided" do
         it "returns the project's shared_versions" do
           allow(project)
             .to receive(:shared_versions)
-            .and_return(versions)
+            .and_return(shared_versions_scope)
 
           expect(field.possible_values_options(project))
-            .to eql(versions.sort.map { |u| [u.name, u.id.to_s] })
+            .to eql(versions.sort.map { |u| [u.name, u.id.to_s, project.name] })
         end
       end
 
@@ -292,21 +319,35 @@ RSpec.describe CustomField do
         it "returns the project's shared_versions" do
           allow(project)
             .to receive(:shared_versions)
-            .and_return(versions)
+            .and_return(shared_versions_scope)
 
           expect(field.possible_values_options(project))
-            .to eql(versions.sort.map { |u| [u.name, u.id.to_s] })
+            .to eql(versions.sort.map { |u| [u.name, u.id.to_s, project.name] })
         end
       end
 
       context "with nothing provided" do
-        it "returns the systemwide versions" do
-          allow(Version)
-            .to receive(:systemwide)
-            .and_return(versions)
+        context "and no scope provided" do
+          it "returns the systemwide versions" do
+            allow(Version)
+              .to receive(:systemwide)
+              .and_return(shared_versions_scope)
 
-          expect(field.possible_values_options)
-            .to eql(versions.sort.map { |u| [u.name, u.id.to_s] })
+            expect(field.possible_values_options)
+              .to eql(versions.sort.map { |u| [u.name, u.id.to_s, project.name] })
+          end
+        end
+
+        context "and scope: :visible is provided" do
+          it "returns the visible and systemwide versions" do
+            allow(Version).to receive(:visible).and_return(shared_versions_scope)
+            allow(shared_versions_scope).to receive(:or)
+                                        .with(Version.systemwide)
+                                        .and_return(shared_versions_scope)
+
+            expect(field.possible_values_options(options: { scope: :visible }))
+              .to eql(versions.sort.map { |u| [u.name, u.id.to_s, project.name] })
+          end
         end
       end
     end

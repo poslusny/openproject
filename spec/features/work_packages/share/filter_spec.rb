@@ -31,8 +31,7 @@
 require "spec_helper"
 
 RSpec.describe "Work package sharing",
-               :js, :with_cuprite,
-               with_ee: %i[work_package_sharing] do
+               :js, with_ee: %i[work_package_sharing] do
   shared_let(:view_work_package_role) { create(:view_work_package_role) }
   shared_let(:comment_work_package_role) { create(:comment_work_package_role) }
   shared_let(:edit_work_package_role) { create(:edit_work_package_role) }
@@ -276,20 +275,36 @@ RSpec.describe "Work package sharing",
     it "only displays shares that match the current set of applied filters" do
       share_modal.expect_open
 
+      # Change all shared to have the "View" role.
+      retry_block do
+        share_modal.toggle_select_all
+        share_modal.bulk_update("View")
+      end
+
       share_modal.toggle_select_all
-      share_modal.bulk_update("View")
-      share_modal.toggle_select_all
+
+      # Filter for the View role
 
       share_modal.filter("role", "View")
 
-      share_modal.expect_shared_with(project_user)
-      share_modal.expect_shared_with(project_user2)
-      share_modal.expect_shared_with(inherited_project_user)
-      share_modal.expect_shared_with(non_project_user)
-      share_modal.expect_shared_with(shared_project_group)
-      share_modal.expect_shared_with(shared_non_project_group)
+      # Since all shares have the View role, all shares should be displayed.
+
+      share_modal.expect_shared_with(project_user, "View")
+      share_modal.expect_shared_with(project_user2, "View")
+      share_modal.expect_shared_with(inherited_project_user, "View")
+      share_modal.expect_shared_with(non_project_user, "View")
+      share_modal.expect_shared_with(shared_project_group, "View")
+      share_modal.expect_shared_with(shared_non_project_group, "View")
+
+      # Change one share to have the Comment role.
 
       share_modal.change_role(project_user, "Comment")
+
+      # That share is no longer displayed as it does not match the current filter after the role change.
+      share_modal.expect_not_shared_with(project_user)
+
+      # When filtering for the Comment role, only the changed share should be displayed.
+
       share_modal.filter("role", "Comment")
       share_modal.expect_shared_with(project_user, "Comment")
       share_modal.expect_not_shared_with(project_user2)
@@ -297,6 +312,8 @@ RSpec.describe "Work package sharing",
       share_modal.expect_not_shared_with(non_project_user)
       share_modal.expect_not_shared_with(shared_project_group)
       share_modal.expect_not_shared_with(shared_non_project_group)
+
+      # When filtering for the Edit role, no share matches and thus none should be displayed.
 
       share_modal.filter("role", "Edit")
       share_modal.expect_empty_search_blankslate

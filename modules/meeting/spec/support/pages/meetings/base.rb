@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -32,10 +33,6 @@ module Pages::Meetings
 
     def initialize(project)
       self.project = project
-    end
-
-    def toast_type
-      :rails
     end
   end
 end

@@ -29,7 +29,7 @@
 require "spec_helper"
 require "features/work_packages/work_packages_page"
 
-RSpec.describe "Manual sorting of WP table", :js do
+RSpec.describe "Manual sorting of WP table", :js, :selenium do
   let(:user) { create(:admin) }
   let(:wp_table) { Pages::WorkPackagesTable.new(project) }
 
@@ -261,7 +261,7 @@ RSpec.describe "Manual sorting of WP table", :js do
       subject_field.submit_by_enter
 
       wp_table.expect_and_dismiss_toaster(
-        message: "Successful creation. Click here to open this work package in fullscreen view."
+        message: "Successful creation."
       )
 
       wp_table.expect_work_package_subject "Foobar!"

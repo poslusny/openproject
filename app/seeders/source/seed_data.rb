@@ -61,6 +61,9 @@ class Source::SeedData
     else
       references = [reference, *fallbacks].map(&:inspect)
       message = "Nothing registered with #{'reference'.pluralize(references.count)} #{references.to_sentence(locale: false)}"
+      if Rails.env.local?
+        message += "\nPerhaps you forgot to add the `attribute_names_for_lookups` for your seeder?"
+      end
       raise ArgumentError, message
     end
   end

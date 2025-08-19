@@ -33,9 +33,8 @@ require_module_spec_helper
 
 RSpec.describe Storages::ManageStorageIntegrationsJob, type: :job do
   describe ".debounce" do
-    context "when has been debounced by other thread" do
-      before { ActiveJob::Base.disable_test_adapter }
-
+    context "when has been debounced by other thread",
+            with_good_job_batches: [described_class] do
       it "does not change the number of enqueued jobs" do
         expect(GoodJob::Job.count).to eq(0)
         expect(described_class.perform_later.successfully_enqueued?).to be(true)
@@ -76,11 +75,15 @@ RSpec.describe Storages::ManageStorageIntegrationsJob, type: :job do
         expect(good_job_setting.key).to eq("cron_keys_disabled")
         expect(good_job_setting.value).to eq(["Storages::ManageStorageIntegrationsJob"])
 
-        expect { described_class.disable_cron_job_if_needed }.not_to change(GoodJob::Setting, :count).from(1)
+        expect { described_class.disable_cron_job_if_needed }.to change(GoodJob::Setting, :count).from(1).to(2)
 
         good_job_setting.reload
         expect(good_job_setting.key).to eq("cron_keys_disabled")
         expect(good_job_setting.value).to eq([])
+
+        good_job_setting = GoodJob::Setting.second
+        expect(good_job_setting.key).to eq("cron_keys_enabled")
+        expect(good_job_setting.value).to eq(["Storages::ManageStorageIntegrationsJob"])
       end
 
       it "does nothing if the cron_job is not disabled" do

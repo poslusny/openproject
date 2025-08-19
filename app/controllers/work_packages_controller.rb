@@ -32,15 +32,18 @@ class WorkPackagesController < ApplicationController
   include Layout
   include WorkPackagesControllerHelper
   include OpTurbo::DialogStreamHelper
+  include OpTurbo::ComponentStream
 
   accept_key_auth :index, :show
 
   before_action :authorize_on_work_package,
-                :project, only: :show
+                :project, only: %i[show generate_pdf_dialog generate_pdf]
   before_action :load_and_authorize_in_optional_project,
                 :check_allowed_export,
                 :protect_from_unauthorized_export, only: %i[index export_dialog]
-  authorization_checked! :index, :show, :export_dialog
+
+  before_action :authorize, only: :show_conflict_flash_message
+  authorization_checked! :index, :show, :export_dialog, :generate_pdf_dialog, :generate_pdf
 
   before_action :load_and_validate_query, only: :index, unless: -> { request.format.html? }
   before_action :load_work_packages, only: :index, if: -> { request.format.atom? }
@@ -88,6 +91,41 @@ class WorkPackagesController < ApplicationController
 
   def export_dialog
     respond_with_dialog WorkPackages::Exports::ModalDialogComponent.new(query: @query, project: @project, title: params[:title])
+  end
+
+  def generate_pdf_dialog
+    respond_with_dialog WorkPackages::Exports::Generate::ModalDialogComponent.new(work_package: work_package, params: params)
+  end
+
+  def generate_pdf
+    export = work_package_exporter.export!
+    send_data(export.content, type: export.mime_type, filename: export.title)
+  rescue ::Exports::ExportError => e
+    flash[:error] = e.message
+    redirect_back(fallback_location: work_package_path(work_package))
+  end
+
+  def work_package_exporter
+    case params[:template]
+    when "contract"
+      WorkPackage::PDFExport::DocumentGenerator.new(work_package, params)
+    else
+      # when "attributes"
+      WorkPackage::PDFExport::WorkPackageToPdf.new(work_package, params)
+    end
+  end
+
+  def show_conflict_flash_message
+    scheme = params[:scheme]&.to_sym || :danger
+
+    render_flash_message_via_turbo_stream(
+      component: WorkPackages::UpdateConflictComponent,
+      scheme:,
+      message: I18n.t("notice_locking_conflict_#{scheme}"),
+      button_text: I18n.t("notice_locking_conflict_action_button")
+    )
+
+    respond_with_turbo_streams
   end
 
   protected
@@ -145,7 +183,7 @@ class WorkPackagesController < ApplicationController
   end
 
   def project
-    @project ||= work_package ? work_package.project : nil
+    @project ||= work_package&.project
   end
 
   def work_package

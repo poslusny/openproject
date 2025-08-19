@@ -28,7 +28,7 @@
 
 require "spec_helper"
 
-RSpec.describe "wiki pages", :js, with_settings: { journal_aggregation_time_minutes: 0 } do
+RSpec.describe "wiki pages", :js, :selenium, with_settings: { journal_aggregation_time_minutes: 0 } do
   let(:project) do
     create(:project, enabled_module_names: [:news])
   end
@@ -82,6 +82,7 @@ RSpec.describe "wiki pages", :js, with_settings: { journal_aggregation_time_minu
     find(".ck-content").base.send_keys(content_first_version)
     click_button "Save"
 
+    expect_and_dismiss_flash(message: "Successful creation.")
     expect(page).to have_css(".title-container", text: "New page")
     expect(page).to have_css(".wiki-content", text: content_first_version)
 

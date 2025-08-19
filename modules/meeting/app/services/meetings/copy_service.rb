@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -74,7 +76,7 @@ module Meetings
       meeting
         .attributes
         .slice(*writable_meeting_attributes(meeting))
-        .merge("start_time" => meeting.start_time + 1.week)
+        .merge("start_time" => meeting.start_time + 1.day)
         .merge("author" => user)
         .merge("state" => "open")
         .merge("participants_attributes" => copied_participants)
@@ -82,10 +84,12 @@ module Meetings
     end
 
     def copied_participants
-      if meeting.allowed_participants.empty?
+      if meeting.allowed_participants.present?
+        meeting.allowed_participants.collect(&:copy_attributes)
+      elsif !user.builtin?
         [{ "user_id" => user.id, "invited" => true }]
       else
-        meeting.allowed_participants.collect(&:copy_attributes)
+        []
       end
     end
 
@@ -127,6 +131,14 @@ module Meetings
           text: meeting.agenda&.text,
           journal_notes: I18n.t("meeting.copied", id: meeting.id)
         )
+      end
+    end
+
+    def copy_structured_meeting_participants(copy)
+      meeting.participants.each do |participant|
+        copied_participant = participant.dup
+        copied_participant.meeting_id = copy.id
+        copy.participants << copied_participant
       end
     end
   end

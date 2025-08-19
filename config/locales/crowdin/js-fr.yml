@@ -103,8 +103,8 @@ fr:
     button_settings: "Paramètres"
     button_uncheck_all: "Tout désélectionner"
     button_update: "Mettre à jour"
-    button_export-pdf: "Télécharger le PDF"
     button_export-atom: "Télécharger Atom"
+    button_generate_pdf: "Générer un fichier PDF"
     button_create: "Créer"
     card:
       add_new: "Ajouter une nouvelle carte"
@@ -188,8 +188,8 @@ fr:
           without_type: "Créer un lot de travaux"
           with_type: "Créer un lot de travaux (Type : %{typename})"
         embedded_table:
-          button: "Tableau intégré de lots de travaux"
-          text: "[Placeholder] Tableau intégré de lots de travaux"
+          button: "Intégrer le lot de travaux"
+          text: "[Placeholder] Tableau du lot de travaux intégré"
         embedded_calendar:
           text: "[Placeholder] Calendrier embarqué"
     admin:
@@ -221,6 +221,8 @@ fr:
             label_maximum_users: "Nombre maximal d’utilisateurs actif"
             label_starts_at: "Commence à"
             label_expires_at: "Expire le"
+            label_plan: "Abonnement"
+            label_additional_features: "Fonctionnalités supplémentaires"
             receive_newsletter: Je veux recevoir la <a target="_blank" href="%{link}">newsletter OpenProject</a>.
             taken_domain: Il ne peut y avoir qu'un seul essai actif par domaine.
             domain_mismatch: Le nom d'hôte de la requête actuelle ne correspond pas au nom d'hôte configuré. Veuillez vérifier les paramètres de votre système.
@@ -279,7 +281,7 @@ fr:
           Voulez-vous continuer ?
       work_packages_settings:
         warning_progress_calculation_mode_change_from_status_to_field_html: >-
-          Passer du mode de calcul de la progression basé sur le statut au mode basé sur le travail transformera <i>% réalisé</i> en champ librement modifiable. Si vous complétez les champs <i>Travail</i> et <i>Travail restant</i>, ils seront également liés à <i>% réalisé</i>. Changer le champ <i>Travail restant</i> peut alors changer le <i>% réalisé</i>.
+          Passer du mode de calcul de la progression basé sur le statut au mode basé sur le travail transformera <i>% réalisé</i> en champ librement modifiable. Si vous complétez les champs <i>Travail</i> et <i>Travail restant</i>, ils seront également liés à <i>% réalisé</i>. Changer le champ <i>Travail restant</i> peut alors changer le <i>% réalisé</i>.
         warning_progress_calculation_mode_change_from_field_to_status_html: >-
           Passer du mode de calcul de la progression basé sur le travail au mode basé sur le statut entraînera la perte de toutes les valeurs de <i>% réalisé</i> existantes et leur remplacement par les valeurs associées à chaque statut. Les valeurs existantes pour <i>Travail restant</i> peuvent également être recalculées pour refléter ce changement. Cette action est irréversible.
     custom_actions:
@@ -356,10 +358,10 @@ fr:
           learn_about: "En savoir plus sur les nouvelles fonctionnalités"
           #Include the version to invalidate outdated translations in other locales.
           #Otherwise, e.g. chinese might still have the translations for 10.0 in the 12.0 release.
-          "14_6":
+          "15_5":
             standard:
               new_features_html: >
-                Cette version apporte diverses fonctionnalités et améliorations, p. ex., <br> <ul class="%{list_styling_class}"> <li>Bénéficiez de rapports de progression plus flexibles grâce aux commentaires des utilisateurs.</li> <li>Recevez une notification de mise à jour avec option de rechargement pour les réunions.</li> <li>Activez un champ personnalisé pour plusieurs projets à la fois.</li> <li>Utilisez des macros d'attributs relatifs pour les lots de travaux.</li> <li>Affichez les lignes vides dans le texte enrichi enregistré.</li> <li>Affichez les réunions passées incluses dans le nombre situé à côté de l'onglet Réunions.</li> </ul>
+                La version apporte diverses fonctionnalités et améliorations, par exemple : <br> <ul class="%{list_styling_class}"> <li>Filtre pour les descendants (enfants et petits-enfants) des lots de travaux.</li> <li>Accessibilité avancée dans le sélecteur de date.</li> <li>Affichage du pourcentage d'avancement inclus dans les totaux des tableaux de lots de travaux.</li> <li>Ajout d'une colonne pour les enfants dans les tableaux des lots de travaux.</li> <li>Utilisation améliorée du sélecteur de date sur les écrans mobiles.</li> <li>Correspondance des exportations PDF avec la mise en page configurée du formulaire.</li> </ul>
     ical_sharing_modal:
       title: "S'abonner au calendrier"
       inital_setup_error_message: "Une erreur est survenue lors de la récupération des données."
@@ -443,7 +445,7 @@ fr:
     label_in: "dans"
     label_in_less_than: "dans moins de"
     label_in_more_than: "dans plus de"
-    label_incoming_emails: "Courriels entrants"
+    label_incoming_emails: "E-mails entrants"
     label_information_plural: "Information"
     label_invalid: "Non valide"
     label_import: "Importer"
@@ -453,7 +455,7 @@ fr:
     label_less_or_equal: "<="
     label_less_than_ago: "il y a moins de quelques jours"
     label_loading: "Chargement…"
-    label_mail_notification: "Notifications par courriel"
+    label_mail_notification: "Notifications par e-mail"
     label_manage_columns: "Gérer et réorganiser les colonnes"
     label_me: "moi"
     label_meeting_agenda: "Ordre du jour"
@@ -575,7 +577,7 @@ fr:
         members: "Invitez de nouveaux <b>membres</b> à rejoindre votre projet."
         quick_add_button: "Cliquez sur l'icône plus (+) dans l'en-tête de navigation pour <b>créer un nouveau projet</b> ou <b>inviter des collègues</b>."
         sidebar_arrow: "Utilisez la flèche de retour dans le coin supérieur gauche pour retourner au <b>menu principal</b> du projet."
-        welcome: "Faites une visite d’introduction de trois minutes d’apprendre le plus de caractéristiques importantes de <b></b>. <br> il est recommandé d’avoir effectué les étapes jusqu'à la fin. Vous pouvez redémarrer la tournée à tout moment."
+        welcome: "Faites une visite d’introduction de trois minutes pour apprendre <b>les fonctionnalités les plus importantes</b>.<br>Il est recommandé d’effectuer les étapes jusqu'à la fin. Vous pouvez redémarrer cette visite à tout moment."
         wiki: "Dans le <b>wiki</b> vous pouvez documenter et partager vos connaissances avec votre équipe."
         backlogs:
           overview: "Gérez votre travail dans la vue <b>backlogs</b>."
@@ -620,14 +622,15 @@ fr:
         prioritized: "Priorisé"
         dateAlert: "Alarmes"
         shared: "Partagé"
+        reminder: "Rappel"
       date_alerts:
         milestone_date: "Date jalon"
         overdue: "En retard"
-        overdue_since: "depuis %{difference_in_days}"
-        property_today: "est aujourd’hui"
-        property_is: "est dans %{difference_in_days}"
-        property_was: "était il y a %{difference_in_days}"
-        property_is_deleted: "est supprimé"
+        overdue_since: "depuis %{difference_in_days}."
+        property_today: "a lieu aujourd'hui."
+        property_is: "a lieu dans %{difference_in_days}."
+        property_was: "avait lieu il y a %{difference_in_days}."
+        property_is_deleted: "a été supprimée."
         upsale:
           title: "Alarmes"
           description: "Avec les alarmes, vous serez informé(e) à l'approche des dates de début ou de fin vous concernant afin de ne jamais manquer ou oublier une échéance importante."
@@ -652,6 +655,8 @@ fr:
         new_notifications:
           message: "Il y a de nouvelles notifications."
           link_text: "Cliquez ici pour les télécharger."
+      reminders:
+        note: "Note : \"%{note}\""
       settings:
         change_notification_settings: 'Vous pouvez modifier vos <a target="_blank" href="%{url}">paramètres de notification</a> pour vous assurer de ne jamais manquer une mise à jour importante.'
         title: "Paramètres de notifications"
@@ -714,18 +719,18 @@ fr:
       description: "Description: Cliquez pour modifier..."
       relation_description: "Cliquez pour ajouter la description pour cette relation"
     project:
-      required_outside_context: >
-        Veuillez choisir un projet pour créer le lot de travaux et voir tous les attributs. Vous pouvez seulement sélectionner des projets ayant le type ci-dessus activé.
-      details_activity: "Activité des détails du projet"
-      context: "Contexte du projet"
-      click_to_switch_to_project: "Projet : %{projectname}"
-      confirm_template_load: "Changer de modèle rechargera la page et vous perdrez toutes les entrées de ce formulaire. Continuer ?"
-      use_template: "Utiliser le modèle"
-      no_template_selected: "(aucun)"
-      copy:
-        copy_options: "Options de copie"
       autocompleter:
         label: "Remplissage automatique du projet"
+      click_to_switch_to_project: "Projet : %{projectname}"
+      confirm_template_load: "Changer de modèle rechargera la page et vous perdrez toutes les entrées de ce formulaire. Continuer ?"
+      context: "Contexte du projet"
+      copy:
+        copy_options: "Options de copie"
+      not_available: "Projet N/D"
+      no_template_selected: "(aucun)"
+      required_outside_context: >
+        Veuillez choisir un projet pour créer le lot de travaux et voir tous les attributs. Vous pouvez seulement sélectionner des projets ayant le type ci-dessus activé.
+      use_template: "Utiliser le modèle"
     reminders:
       settings:
         daily:
@@ -740,6 +745,7 @@ fr:
         immediate:
           title: "Envoyez-moi un rappel par e-mail"
           mentioned: "Immédiatement quand quelqu'un me @mentionne"
+          personal_reminder: "Immédiatement lorsque je reçois un rappel personnel"
         alerts:
           title: "Alertes par e-mail pour les autres éléments (qui ne sont pas des lots de travaux)"
           explanation: >
@@ -771,10 +777,6 @@ fr:
         upgrade_to_ee_text: "Waouh ! Si vous avez besoin de cette fonctionnalité, vous êtes un véritable pro ! Cela vous dérangerait-il de soutenir les développeurs Open Source en devenant un client de la version Entreprise ?"
         more_information: "Plus d'informations"
         nevermind: "Peu importe"
-      edit:
-        form_configuration: "Configuration du formulaire"
-        projects: "Projets"
-        settings: "Paramètres"
     time_entry:
       work_package_required: "Nécessite d'abord la sélection d'un lot de travaux."
       title: "Consigner temps"
@@ -797,6 +799,7 @@ fr:
       typeahead_placeholder: Rechercher les observateurs potentiels
     relation_labels:
       parent: "Parent"
+      child: "Enfant"
       children: "Enfants"
       relates: "En relation avec"
       duplicates: "Duplique"
@@ -826,7 +829,7 @@ fr:
       add_new_child: "Créer un nouvel enfant"
       create_new: "Créer nouveau"
       add_existing: "Ajouter existant"
-      add_existing_child: "Ajouter un enfant existant"
+      add_existing_child: "Ajouter un enfant"
       remove_child: "Supprimer enfant"
       add_new_relation: "Créer une nouvelle relation"
       add_existing_relation: "Ajouter une relation existante"
@@ -852,8 +855,6 @@ fr:
       select_branch: "Sélectionner une branche"
     field_value_enter_prompt: "Saisissez une valeur pour « %{field} »"
     project_menu_details: "Détails"
-    scheduling:
-      manual: "Planification manuelle"
     sort:
       sorted_asc: "Tri par ordre croissant appliqué, "
       sorted_dsc: "Tri par ordre décroissant appliqué, "
@@ -901,15 +902,6 @@ fr:
       comment_send_failed: "Une erreur s'est produite. Impossible de soumettre le commentaire."
       comment_updated: "Le commentaire a été mis à jour avec succès."
       confirm_edit_cancel: "Êtes-vous sûr de vouloir annuler l'édition du lot de travaux ?"
-      datepicker_modal:
-        automatically_scheduled_parent: "Planification automatique. Les dates sont dérivées des relations."
-        manually_scheduled: "La planification manuelle est activée, toutes les relations sont ignorées."
-        start_date_limited_by_relations: "Les dates de début et de fin disponibles sont limitées par les relations."
-        changing_dates_affects_follow_relations: "La modification de ces dates affectera les dates des lots de travaux connexes."
-        click_on_show_relations_to_open_gantt: 'Cliquez sur « %{button_name} » pour avoir une vue d''ensemble de GANTT.'
-        show_relations: "Afficher les relations"
-        ignore_non_working_days:
-          title: "Jours ouvrés seulement"
       description_filter: "Filtrer"
       description_enter_text: "Saisir texte"
       description_options_hide: "Masquer les options"
@@ -1043,6 +1035,12 @@ fr:
           not_found: "Cette vue n'existe pas"
           duplicate_query_title: "Le nom de cette vue existe déjà. Changer quand même ?"
         text_no_results: "Aucune vue correspondante n'a été trouvée."
+      reminders:
+        button_label: "Définir un rappel"
+        title:
+          new: "Définir un rappel"
+          edit: "Modifier un rappel"
+        subtitle: "Vous recevrez une notification pour ce lot de travaux au moment choisi."
       scheduling:
         is_parent: "Les dates de ce lot de travaux sont automatiquement déduites de ses enfants. Activez la « Planification manuelle » pour définir les dates."
         is_switched_from_manual_to_automatic: "Les dates de ce lot de travaux peuvent avoir besoin d'être recalculées après avoir passé de la planification manuelle à la planification automatique en raison de relations avec d'autres lots de travaux."
@@ -1238,7 +1236,7 @@ fr:
           title: "Utilisateur de remplacement"
           title_no_ee: "Utilisateur fictif (add-on de la version Entreprise uniquement)"
           description: "N'a pas d'accès au projet et aucun e-mail n'est envoyé."
-          description_no_ee: 'N''a pas accès au projet et aucun courriel n''est envoyé. <br>Consultez la <a href="%{eeHref}" target="_blank">version Entreprise</a>.'
+          description_no_ee: 'N''a pas accès au projet et aucun e-mail n''est envoyé. <br>Consultez la <a href="%{eeHref}" target="_blank">version Entreprise</a>.'
       principal:
         label:
           name_or_email: "Nom ou adresse e-mail"
@@ -1346,5 +1344,3 @@ fr:
       waiting_subtitle:
         network_off: "Un problème de réseau est survenu."
         network_on: "Le réseau est à nouveau disponible. Nous essayons."
-        timeout: >
-          OpenProject n'a pas pu vous donner accès au dossier du projet dans le délai imparti. Veuillez réessayer.<br><br> Si ce problème persiste, veuillez contacter votre administrateur OpenProject pour vérifier le <a href="https://www.openproject.org/docs/system-admin-guide/files/external-file-storages/file-storage-troubleshooting/">statut de santé de l'espace de stockage de fichiers</a>.

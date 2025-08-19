@@ -50,8 +50,8 @@ To edit the value of any visible project attribute, click on the **Edit** (penci
 
 Edit the values for each project attribute and click on **Save** to confirm and save your changes.
 
->[!NOTE]
->If you are an instance admin and would like to create, modify or add project attributes, please read our [admin guide to project attributes](../../system-admin-guide/projects/project-attributes).
+> [!NOTE]
+> If you are an instance admin and would like to create, modify or add project attributes, please read our [admin guide to project attributes](../../system-admin-guide/projects/project-attributes).
 
 ### Project attribute settings 
 
@@ -59,8 +59,8 @@ To adjust the the project attribute settings for a specific project click the **
 
 ![Link to project attribute settings from project overview page in OpenProject](openproject_user_guide_project_overview_project_attributes_settings.png)
 
->[!NOTE]
->This option is always available to instance and project administrators. It can also be activated for specific roles by enabling the *select_project_attributes* permission for that role via the [Roles and permissions page](../../system-admin-guide/users-permissions/roles-permissions/) in the administrator settings.
+> [!NOTE]
+> This option is always available to instance and project administrators. It can also be activated for specific roles by enabling the *select_project_attributes* permission for that role via the [Roles and permissions page](../../system-admin-guide/users-permissions/roles-permissions/) in the administrator settings.
 
 ## Mark a project as favorite
 
@@ -75,8 +75,8 @@ You can archive a project directly from the project overview page. To do that cl
 
 ![Archive a project on the project overview page in OpenProject](openproject_user_guide_project_overview_archive_project.png)
 
->[!NOTE]
->This option is always available to instance and project administrators. It can also be activated for specific roles by enabling the *archive_project* permission for that role via the [Roles and permissions page](../../system-admin-guide/users-permissions/roles-permissions/) in the administrator settings.
+> [!NOTE]
+> This option is always available to instance and project administrators. It can also be activated for specific roles by enabling the *archive_project* permission for that role via the [Roles and permissions page](../../system-admin-guide/users-permissions/roles-permissions/) in the administrator settings.
 
 You can also archive a project under [project settings](../projects/#archive-a-project) or in a [projects list](../projects/project-lists/). 
 
@@ -142,19 +142,6 @@ The project description widget adds the project description to your project over
 The description can be added or changed in the [project settings](../projects/project-settings).
 
 ![project description widget](image-20191112143652698.png)
-
-### Project details widget
-
-> [!IMPORTANT]
-> Project details widget was replaced by [Project attributes](#project-attributes) in [OpenProject 14.0](../../release-notes/14-0-0/) and will be removed in the future.
-
-The project details widget displays all custom fields for projects, e.g. project owner, project due date, project number, or any other custom field for this project.
-
-The custom fields can be adapted in the [project settings](../projects/project-settings/). As a system administrator you can [create new custom fields for projects](../../system-admin-guide/custom-fields/custom-fields-projects/).
-
-![project details widget](image-20191112144557906.png)
-
-New custom fields for projects can be created in the [system administration](../../system-admin-guide/).
 
 ### Project status widget
 

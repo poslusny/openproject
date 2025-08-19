@@ -95,7 +95,7 @@ RSpec.describe "Moving a work package through Rails view", :js do
 
       context "when the limit to move in the frontend is 1",
               with_settings: { work_packages_bulk_request_limit: 1 } do
-        it "copies them in the background and shows a status page", :with_cuprite do
+        it "copies them in the background and shows a status page" do
           click_on "Move and follow"
           wait_for_reload
 
@@ -122,7 +122,7 @@ RSpec.describe "Moving a work package through Rails view", :js do
         end
       end
 
-      it "moves parent and child wp to a new project", :with_cuprite do
+      it "moves parent and child wp to a new project" do
         click_on "Move and follow"
         wait_for_reload
         page.find(".inline-edit--container.subject", text: work_package.subject)
@@ -136,14 +136,11 @@ RSpec.describe "Moving a work package through Rails view", :js do
       context "when the target project does not have the type" do
         let!(:project2) { create(:project, name: "Target", types: [type2]) }
 
-        it "does not move the work package", :with_cuprite do
+        it "does not move the work package" do
           click_on "Move and follow"
           wait_for_reload
 
-          expect(page)
-            .to have_css(".op-toast.-error",
-                         text: I18n.t(:"work_packages.bulk.none_could_be_saved",
-                                      total: 1))
+          expect_flash type: :error, message: I18n.t(:"work_packages.bulk.none_could_be_saved", total: 1)
 
           # Should NOT have moved
           child_wp.reload
@@ -170,10 +167,7 @@ RSpec.describe "Moving a work package through Rails view", :js do
             click_on "Move and follow"
           end
 
-          expect(page)
-            .to have_css(".op-toast.-error",
-                         text: I18n.t(:"work_packages.bulk.none_could_be_saved",
-                                      total: 1))
+          expect_flash type: :error, message: I18n.t(:"work_packages.bulk.none_could_be_saved", total: 1)
           child_wp.reload
           work_package.reload
           expect(work_package.project_id).to eq(project.id)
@@ -215,23 +209,16 @@ RSpec.describe "Moving a work package through Rails view", :js do
     end
 
     it "displays an error message explaining which work package could not be moved and why" do
-      expect(page)
-        .to have_css(".op-toast.-error",
-                     text: I18n.t("work_packages.bulk.could_not_be_saved"),
-                     wait: 10)
+      expect_flash(type: :error,
+                   message: I18n.t("work_packages.bulk.could_not_be_saved"))
+      expect_flash(type: :error,
+                   message: "#{work_package2.id}: Project #{I18n.t('activerecord.errors.messages.error_readonly')}")
 
-      expect(page)
-        .to have_css(
-          ".op-toast.-error",
-          text: "#{work_package2.id}: Project #{I18n.t('activerecord.errors.messages.error_readonly')}"
-        )
-
-      expect(page)
-        .to have_css(".op-toast.-error",
-                     text: I18n.t("work_packages.bulk.x_out_of_y_could_be_saved",
-                                  failing: 1,
-                                  total: 2,
-                                  success: 1))
+      expect_flash(type: :error, message:
+        I18n.t("work_packages.bulk.x_out_of_y_could_be_saved",
+               failing: 1,
+               total: 2,
+               success: 1))
 
       expect(work_package.reload.project_id).to eq(project2.id)
       expect(work_package2.reload.project_id).to eq(project.id)

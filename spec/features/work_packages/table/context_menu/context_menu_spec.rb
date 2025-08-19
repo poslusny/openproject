@@ -2,8 +2,7 @@ require "spec_helper"
 require_relative "context_menu_shared_examples"
 
 RSpec.describe "Work package table context menu",
-               :js,
-               :with_cuprite do
+               :js do
   shared_let(:user) { create(:admin) }
   shared_let(:project) { create(:project, enabled_module_names: %i[work_package_tracking gantt costs]) }
   shared_let(:work_package) { create(:work_package, project:) }
@@ -58,8 +57,7 @@ RSpec.describe "Work package table context menu",
           find("body").send_keys [:control, "a"]
 
           menu.open_for(work_package)
-          menu.expect_options "Open details view", "Open fullscreen view",
-                              "Bulk edit", "Bulk copy", "Bulk change of project", "Bulk delete"
+          menu.expect_options "Bulk edit", "Bulk copy", "Bulk change of project", "Bulk delete"
         end
       end
     end

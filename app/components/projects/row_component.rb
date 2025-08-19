@@ -29,8 +29,10 @@
 #++
 module Projects
   class RowComponent < ::RowComponent
-    delegate :favored_project_ids, to: :table
     delegate :identifier, to: :project
+    delegate :favored_project_ids,
+             :project_phase_by_definition,
+             to: :table
 
     def project
       model.first
@@ -69,6 +71,8 @@ module Projects
     def column_value(column)
       if custom_field_column?(column)
         custom_field_column(column)
+      elsif project_phase_column?(column)
+        project_phase_column(column)
       else
         send(column.attribute)
       end
@@ -92,6 +96,16 @@ module Projects
       else
         custom_value
       end
+    end
+
+    def project_phase_column(column)
+      return nil unless user_can_view_project_phases?
+
+      phase = project_phase_by_definition(column.project_phase_definition, project)
+
+      return nil if phase.blank?
+
+      render Projects::PhaseComponent.new(phase:)
     end
 
     def created_at
@@ -310,7 +324,7 @@ module Projects
           scheme: :default,
           icon: :check,
           label: I18n.t(:label_project_activity),
-          href: project_activity_index_path(project, event_types: ["project_attributes"])
+          href: project_activity_index_path(project, event_types: ["project_details"])
         }
       end
     end
@@ -370,8 +384,16 @@ module Projects
       User.current.allowed_in_project?(:view_project_attributes, project)
     end
 
+    def user_can_view_project_phases?
+      User.current.allowed_in_project?(:view_project_phases, project)
+    end
+
     def custom_field_column?(column)
       column.is_a?(::Queries::Projects::Selects::CustomField)
+    end
+
+    def project_phase_column?(column)
+      column.is_a?(::Queries::Projects::Selects::ProjectPhase)
     end
 
     def current_page

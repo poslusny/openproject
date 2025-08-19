@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -32,6 +34,8 @@
 
 class AddWorkPackageNoteService
   include Contracted
+  include Shared::ServiceContext
+
   attr_accessor :user, :work_package
 
   def initialize(user:, work_package:)
@@ -40,9 +44,9 @@ class AddWorkPackageNoteService
     self.contract_class = WorkPackages::CreateNoteContract
   end
 
-  def call(notes, send_notifications: nil)
-    Journal::NotificationConfiguration.with send_notifications do
-      work_package.add_journal(user:, notes:)
+  def call(notes, send_notifications: nil, restricted: false)
+    in_context(work_package, send_notifications:) do
+      work_package.add_journal(user:, notes:, restricted:)
 
       success, errors = validate_and_yield(work_package, user) do
         work_package.save_journals

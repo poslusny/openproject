@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -43,6 +45,10 @@ module Storages::ProjectStorages::Projects
     end
 
     def sortable?
+      false
+    end
+
+    def use_quick_action_table_headers?
       false
     end
 

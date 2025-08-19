@@ -52,11 +52,9 @@ import { DayElement } from 'flatpickr/dist/types/instance';
 import { populateInputsFromDataset } from '../../dataset-inputs';
 import { DeviceService } from 'core-app/core/browser/device.service';
 
-
 @Component({
   selector: 'op-basic-single-date-picker',
   templateUrl: './basic-single-date-picker.component.html',
-  styleUrls: ['../styles/datepicker.modal.sass'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   providers: [
@@ -82,7 +80,25 @@ export class OpBasicSingleDatePickerComponent implements ControlValueAccessor, O
     return this._value;
   }
 
-  @Input() id = `flatpickr-input-${+(new Date())}`;
+  // Having an `@Input() id;` property breaks the turbo morphing with idiomorph.
+  // The reason is, the `id` set by angular will override the `id` set as html attribute on
+  // the component.
+  // This is problematic, because new elements from the response template
+  // will not have angular initialized on them, and calling `element.id` will return the html
+  // id attribute, while calling `element.id` on existing elements will return the angular
+  // defined `id` property.
+  // It also means, when idiomorph compares the new elements with the old ones,
+  // the same element will have a different id set, and it will not be matched. The old element
+  // will have the angular `@Input id` property, while new one will have the html id attribute.
+  //
+  // The solution is to rename the `id` to `inputId`. The component would still get an id
+  // attribute assigned if provided when declaring the component, but angular will not
+  // programatically overwrite the `id` getter.
+  //
+  // This comment can be removed once the https://github.com/bigskysoftware/idiomorph/pull/131
+  // is accepted.
+
+  @Input() inputId = `flatpickr-input-${+(new Date())}`;
 
   @Input() name = '';
 
@@ -95,6 +111,10 @@ export class OpBasicSingleDatePickerComponent implements ControlValueAccessor, O
   @Input() inputClassNames = '';
 
   @Input() remoteFieldKey = null;
+
+  @Input() inDialog:string;
+
+  @Input() dataAction = '';
 
   @ViewChild('input') input:ElementRef;
 
@@ -143,13 +163,16 @@ export class OpBasicSingleDatePickerComponent implements ControlValueAccessor, O
   }
 
   showDatePicker():void {
-    this.datePickerInstance?.show();
+    if (!this.datePickerInstance?.isOpen) {
+      this.datePickerInstance?.show();
+      this.sentCalendarToTopLayer();
+    }
   }
 
   private initializeDatePicker() {
     this.datePickerInstance = new DatePicker(
       this.injector,
-      this.id,
+      this.inputId,
       this.value || '',
       {
         allowInput: true,
@@ -171,6 +194,9 @@ export class OpBasicSingleDatePickerComponent implements ControlValueAccessor, O
 
           this.cdRef.detectChanges();
         },
+        onOpen: () => {
+          this.sentCalendarToTopLayer();
+        },
         onDayCreate: async (_dObj:Date[], _dStr:string, _fp:flatpickr.Instance, dayElem:DayElement) => {
           onDayCreate(
             dayElem,
@@ -179,6 +205,8 @@ export class OpBasicSingleDatePickerComponent implements ControlValueAccessor, O
             !!this.minimalDate && dayElem.dateObj <= this.minimalDate,
           );
         },
+        static: false,
+        appendTo: this.appendToBodyOrDialog(),
       },
       this.input.nativeElement as HTMLInputElement,
     );
@@ -199,5 +227,32 @@ export class OpBasicSingleDatePickerComponent implements ControlValueAccessor, O
 
   registerOnTouched(fn:(_:string) => void):void {
     this.onTouched = fn;
+  }
+
+  // In case the date picker is opened in a dialog, it needs to be in the top layer
+  // since the dialog is also there. This method is called in two cases:
+  // 1. When the date picker is opened
+  // 2. When the date picker is already opened and the user clicks on the input
+  // The later is necessary as otherwise the date picker would be removed from the top layer
+  // when the user clicks on the input. That is because the input is not part of the date picker
+  // so clicking on it would be considered a click on the backdrop which removes an item from
+  // the top layer again.
+  public sentCalendarToTopLayer() {
+    if (!this.datePickerInstance.isOpen || !this.inDialog) {
+      return;
+    }
+
+    const calendarContainer = this.datePickerInstance.datepickerInstance.calendarContainer;
+    calendarContainer.setAttribute('popover', '');
+    calendarContainer.showPopover();
+    calendarContainer.style.marginTop = '0';
+  }
+
+  private appendToBodyOrDialog():HTMLElement|undefined {
+    if (this.inDialog) {
+      return document.querySelector(`#${this.inDialog}`) as HTMLElement;
+    }
+
+    return undefined;
   }
 }

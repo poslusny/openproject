@@ -32,15 +32,16 @@ See COPYRIGHT and LICENSE files for more details.
 <%=
   render Primer::OpenProject::PageHeader.new do |header|
     header.with_title { t(:label_type_new) }
-    header.with_breadcrumbs([{ href: admin_index_path, text: t("label_administration") },
-                             { href: admin_settings_work_packages_general_path, text: t(:label_work_package_plural) },
-                             { href: types_path, text: t(:label_type_plural) },
-                             t(:label_type_new)])
+    header.with_breadcrumbs(
+      [{ href: admin_index_path, text: t("label_administration") },
+       { href: admin_settings_work_packages_general_path, text: t(:label_work_package_plural) },
+       { href: types_path, text: t(:label_type_plural) },
+       t(:label_type_new)]
+    )
   end
 %>
 
-<%= error_messages_for 'type' %>
-
-<%= form_for controller.type, builder: TabularFormBuilder, lang: current_language  do |f| %>
-  <%= render partial: 'types/form/settings', locals: { f: f } %>
-<% end %>
+<%=
+  copy_workflow_from = maybe_integer(params.dig(:type, :copy_workflow_from)).value_or(nil)
+  render WorkPackages::Types::SettingsComponent.new(@type, copy_workflow_from:)
+%>

@@ -34,6 +34,15 @@ pl:
           name: Szary (ciemny)
         item_13:
           name: Czarny
+      project_phase_colors:
+        item_0:
+          name: PM2 pomarańczowy
+        item_1:
+          name: PM2 czerwony
+        item_2:
+          name: PM2 amarantowy
+        item_3:
+          name: PM2 żółtozielony
       document_categories:
         item_0:
           name: Dokumentacja
@@ -67,7 +76,21 @@ pl:
       global_roles:
         item_0:
           name: Kierownik personelu i projektów
+        item_1:
+          name: Standardowa rola globalna
     standard:
+      project_phases:
+        item_0:
+          name: Inicjowanie
+        item_1:
+          name: Planowanie
+          start_gate: Gotowy do planowania
+        item_2:
+          name: Wykonywanie
+          start_gate: Gotowy do wykonania
+        item_3:
+          name: Zamykanie
+          start_gate: Gotowy do zamknięcia
       priorities:
         item_0:
           name: Niski
@@ -462,7 +485,7 @@ pl:
         item_1:
           name: Kamień milowy
         item_2:
-          name: Etap
+          name: Zadanie sumaryczne
         item_3:
           name: Cecha/Funkcja
         item_4:

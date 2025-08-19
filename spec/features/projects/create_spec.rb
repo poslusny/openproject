@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -29,8 +31,7 @@
 require "spec_helper"
 
 RSpec.describe "Projects", "creation",
-               :js,
-               :with_cuprite do
+               :js do
   shared_let(:name_field) { FormFields::InputFormField.new :name }
   shared_let(:project_custom_field_section) { create(:project_custom_field_section, name: "Section A") }
 
@@ -74,8 +75,8 @@ RSpec.describe "Projects", "creation",
     expect(project.identifier).to eq "foo-project-1"
   end
 
-  context "with a multi-select custom field" do
-    let!(:list_custom_field) do
+  context "with a multi-select list custom field" do
+    shared_let(:list_custom_field) do
       create(:list_project_custom_field, name: "List CF", multi_value: true, project_custom_field_section:)
     end
     let(:list_field) { FormFields::SelectFormField.new list_custom_field }
@@ -102,6 +103,55 @@ RSpec.describe "Projects", "creation",
     end
   end
 
+  context "with a multi-select version custom field" do
+    include_context "ng-select-autocomplete helpers"
+
+    shared_let(:public_project) do
+      create(:project, name: "Public Pr", identifier: "public-pr", public: true)
+    end
+
+    shared_let(:versions) do
+      [
+        create(:version, project:, name: "Ringbo 1.0", sharing: "system"),
+        create(:version, project: public_project, name: "Ringbo 2.0", sharing: "system")
+      ]
+    end
+
+    shared_let(:version_custom_field) do
+      create(:version_project_custom_field,
+             name: "Version CF",
+             multi_value: true,
+             project_custom_field_section:)
+    end
+
+    let(:version_field) { FormFields::SelectFormField.new version_custom_field }
+
+    it "can create a project" do
+      projects_page.navigate_to_new_project_page_from_toolbar_items
+
+      name_field.set_value "Foo bar"
+
+      find(".op-fieldset--toggle", text: "ADVANCED SETTINGS").click
+
+      # expect the versions are grouped by the project name
+      version_field.expect_option(versions.first.name, grouping: project.name)
+      version_field.expect_option(versions.last.name, grouping: public_project.name)
+
+      version_field.select_option(versions.first.name, versions.last.name)
+
+      click_button "Save"
+
+      expect(page).to have_current_path /\/projects\/foo-bar\/?/
+      expect(page).to have_content "Foo bar"
+
+      project = Project.last
+      expect(project.name).to eq "Foo bar"
+
+      typed_values = project.custom_value_for(version_custom_field).map(&:typed_value)
+      expect(typed_values).to eq versions
+    end
+  end
+
   it "hides the active field and the identifier" do
     visit new_project_path
 
@@ -112,13 +162,13 @@ RSpec.describe "Projects", "creation",
   end
 
   context "with optional and required custom fields" do
-    let!(:optional_custom_field) do
+    shared_let(:optional_custom_field) do
       create(:project_custom_field, name: "Optional Foo",
                                     field_format: "string",
                                     is_for_all: true,
                                     project_custom_field_section:)
     end
-    let!(:required_custom_field) do
+    shared_let(:required_custom_field) do
       create(:project_custom_field, name: "Required Foo",
                                     field_format: "string",
                                     is_for_all: true,
@@ -126,16 +176,27 @@ RSpec.describe "Projects", "creation",
                                     project_custom_field_section:)
     end
 
-    it "separates optional and required custom fields for new" do
-      visit new_project_path
+    context "with required custom fields" do
+      shared_let(:required_user_custom_field) do
+        create(:user_project_custom_field, name: "Required User",
+                                           is_for_all: true,
+                                           is_required: true,
+                                           project_custom_field_section:)
+      end
 
-      expect(page).to have_content "Required Foo"
+      it "separates optional and required custom fields for new" do
+        visit new_project_path
 
-      click_on "Advanced settings"
+        expect(page).to have_content "Required Foo"
+        expect(page).to have_content "Required User"
 
-      within(".op-fieldset") do
-        expect(page).to have_text "Optional Foo"
-        expect(page).to have_no_text "Required Foo"
+        click_on "Advanced settings"
+
+        within(".op-fieldset") do
+          expect(page).to have_text "Optional Foo"
+          expect(page).to have_no_text "Required Foo"
+          expect(page).to have_no_text "Required User"
+        end
       end
     end
 
@@ -153,7 +214,7 @@ RSpec.describe "Projects", "creation",
     end
 
     context "with correct custom field activation" do
-      let!(:unused_custom_field) do
+      shared_let(:unused_custom_field) do
         create(:project_custom_field, name: "Unused Foo",
                                       field_format: "string",
                                       project_custom_field_section:)
@@ -184,19 +245,11 @@ RSpec.describe "Projects", "creation",
       end
 
       context "with correct handling of default values" do
-        let!(:custom_field_with_default_value) do
+        shared_let(:custom_field_with_default_value) do
           create(:project_custom_field, name: "Foo with default value",
                                         field_format: "string",
                                         default_value: "Default value",
                                         project_custom_field_section:)
-        end
-
-        before do
-          visit new_project_path
-          fill_in "Name", with: "Foo bar"
-          fill_in "Required Foo", with: "Required value"
-
-          click_on "Advanced settings"
         end
 
         it "enables custom fields with default values if not set to blank explicitly" do
@@ -251,32 +304,24 @@ RSpec.describe "Projects", "creation",
       end
 
       context "with correct handling of optional boolean values" do
-        let!(:custom_boolean_field_default_true) do
+        shared_let(:custom_boolean_field_default_true) do
           create(:project_custom_field, name: "Boolean with default true",
                                         field_format: "bool",
                                         default_value: true,
                                         project_custom_field_section:)
         end
 
-        let!(:custom_boolean_field_default_false) do
+        shared_let(:custom_boolean_field_default_false) do
           create(:project_custom_field, name: "Boolean with default false",
                                         field_format: "bool",
                                         default_value: false,
                                         project_custom_field_section:)
         end
 
-        let!(:custom_boolean_field_with_no_default) do
+        shared_let(:custom_boolean_field_with_no_default) do
           create(:project_custom_field, name: "Boolean with no default",
                                         field_format: "bool",
                                         project_custom_field_section:)
-        end
-
-        before do
-          visit new_project_path
-          fill_in "Name", with: "Foo bar"
-          fill_in "Required Foo", with: "Required value"
-
-          click_on "Advanced settings"
         end
 
         it "only enables boolean custom fields with default values if untouched" do
@@ -334,58 +379,50 @@ RSpec.describe "Projects", "creation",
           expect(project.custom_value_for(custom_boolean_field_default_true).typed_value).to be_falsy
         end
       end
-    end
 
-    context "with correct handling of invisible values" do
-      let!(:invisible_field) do
-        create(:string_project_custom_field, name: "Text for Admins only",
-                                             admin_only: true,
-                                             project_custom_field_section:)
-      end
-
-      before do
-        visit new_project_path
-        fill_in "Name", with: "Foo bar"
-        fill_in "Required Foo", with: "Required value"
-
-        click_on "Advanced settings"
-      end
-
-      context "with an admin user" do
-        it "shows invisible fields in the form and allows their activation" do
-          expect(page).to have_content "Text for Admins only"
-
-          fill_in "Text for Admins only", with: "foo"
-
-          click_on "Save"
-
-          expect(page).to have_current_path /\/projects\/foo-bar\/?/
-
-          project = Project.last
-
-          expect(project.project_custom_field_ids).to contain_exactly(
-            required_custom_field.id, invisible_field.id
-          )
-
-          expect(project.custom_value_for(invisible_field).typed_value).to eq("foo")
+      context "with correct handling of invisible values" do
+        shared_let(:invisible_field) do
+          create(:string_project_custom_field, name: "Text for Admins only",
+                                               admin_only: true,
+                                               project_custom_field_section:)
         end
-      end
 
-      context "with a non-admin user" do
-        current_user { create(:user, global_permissions: %i[add_project]) }
+        context "with an admin user" do
+          it "shows invisible fields in the form and allows their activation" do
+            expect(page).to have_content "Text for Admins only"
 
-        it "does not show invisible fields in the form and thus not activates the invisible field" do
-          expect(page).to have_no_content "Text for Admins only"
+            fill_in "Text for Admins only", with: "foo"
 
-          click_on "Save"
+            click_on "Save"
 
-          expect(page).to have_current_path /\/projects\/foo-bar\/?/
+            expect(page).to have_current_path /\/projects\/foo-bar\/?/
 
-          project = Project.last
+            project = Project.last
 
-          expect(project.project_custom_field_ids).to contain_exactly(
-            required_custom_field.id
-          )
+            expect(project.project_custom_field_ids).to contain_exactly(
+              required_custom_field.id, invisible_field.id
+            )
+
+            expect(project.custom_value_for(invisible_field).typed_value).to eq("foo")
+          end
+        end
+
+        context "with a non-admin user" do
+          current_user { create(:user, global_permissions: %i[add_project]) }
+
+          it "does not show invisible fields in the form and thus not activates the invisible field" do
+            expect(page).to have_no_content "Text for Admins only"
+
+            click_on "Save"
+
+            expect(page).to have_current_path /\/projects\/foo-bar\/?/
+
+            project = Project.last
+
+            expect(project.project_custom_field_ids).to contain_exactly(
+              required_custom_field.id
+            )
+          end
         end
       end
     end

@@ -30,7 +30,7 @@ require "spec_helper"
 require_relative "../support/pages/backlogs"
 
 RSpec.describe "Backlogs in backlog view", :js,
-               with_cuprite: false do
+               :selenium do
   let!(:project) do
     create(:project,
            types: [story, task],
@@ -185,8 +185,7 @@ RSpec.describe "Backlogs in backlog view", :js,
 
     click_button "Save"
 
-    backlogs_page
-      .expect_and_dismiss_toaster(message: "Successful update.")
+    expect_and_dismiss_flash(message: "Successful update.")
 
     backlogs_page
       .expect_backlog(sprint)
@@ -206,8 +205,7 @@ RSpec.describe "Backlogs in backlog view", :js,
 
     click_button "Save"
 
-    backlogs_page
-      .expect_and_dismiss_toaster(message: "Successful update.")
+    expect_and_dismiss_flash(message: "Successful update.")
 
     # Now works as a sprint instead of a backlog
     backlogs_page
@@ -228,8 +226,7 @@ RSpec.describe "Backlogs in backlog view", :js,
 
     click_button "Save"
 
-    backlogs_page
-      .expect_and_dismiss_toaster(message: "Successful update.")
+    expect_and_dismiss_flash(message: "Successful update.")
 
     # the disabled backlog/sprint is no longer visible
     expect(page)
@@ -250,8 +247,7 @@ RSpec.describe "Backlogs in backlog view", :js,
 
     click_button "Save"
 
-    backlogs_page
-      .expect_and_dismiss_toaster(message: "Successful update.")
+    expect_and_dismiss_flash(message: "Successful update.")
 
     # the disabled backlog/sprint is no longer visible
     expect(page)

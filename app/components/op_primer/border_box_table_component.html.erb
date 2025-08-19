@@ -31,23 +31,55 @@ See COPYRIGHT and LICENSE files for more details.
   render(
     border_box_container(
       classes: container_class,
-      test_selector:,
-    )) do |component|
+      test_selector:
+    )
+  ) do |component|
     component.with_header(classes: grid_class, color: :muted) do
       headers.each do |name, args|
-        caption = args.delete(:caption)
-        concat render(Primer::Beta::Text.new(font_weight: :semibold, **header_args(name))) { caption }
+        concat render(
+          Primer::Beta::Text.new(
+            classes: header_classes(name),
+            font_weight: :semibold,
+            **header_args(name)
+          )
+        ) { args[:caption] }
       end
 
+      concat render(
+        Primer::Beta::Text.new(
+          classes: "op-border-box-grid--mobile-heading",
+          font_weight: :semibold
+        )
+      ) { mobile_title }
+
       if has_actions?
-        concat render(Primer::BaseComponent.new(tag: :div))
+        concat render(
+          Primer::BaseComponent.new(
+            classes: heading_class,
+            tag: :div
+          )
+        )
       end
     end
 
-    rows.each do |row|
-      component.with_row(scheme: :default) do
-        render(row_class.new(row:, table: self))
+    if rows.empty?
+      component.with_row(scheme: :default) { render_blank_slate }
+    else
+      rows.each do |row|
+        component.with_row(scheme: :default) do
+          render(row_class.new(row:, table: self))
+        end
+      end
+    end
+
+    if has_footer?
+      component.with_footer(classes: grid_class, color: :muted) do
+        footer
       end
     end
   end
 %>
+
+<% if paginated? %>
+  <%= helpers.pagination_links_full rows %>
+<% end %>

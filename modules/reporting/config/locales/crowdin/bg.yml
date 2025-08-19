@@ -23,7 +23,7 @@ bg:
   plugin_openproject_reporting:
     name: "OpenProject Reporting"
     description: "This plugin allows creating custom cost reports with filtering and grouping created by the OpenProject Time and costs plugin."
-  button_save_report_as: "Save report as..."
+  button_save_report_as: "Запазване на отчета като..."
   comments: "Коментар"
   cost_reports_title: "Време и разходи"
   label_cost_report: "Доклад за разходите"
@@ -45,6 +45,8 @@ bg:
   label_greater: ">"
   label_is_not_project_with_subprojects: "не е (включва подпроекти)"
   label_is_project_with_subprojects: "е (включва подпроекти)"
+  label_is_work_package_with_descendants: "is (includes descendants)"
+  label_is_not_work_package_with_descendants: "is not (includes descendants)"
   label_work_package_attributes: "Атрибути на работния пакет"
   label_less: "<"
   label_logged_by_reporting: "Влязъл от"
@@ -86,8 +88,16 @@ bg:
   validation_failure_date: "не е валидна дата"
   validation_failure_integer: "не е валидно цяло число"
   export:
+    timesheet:
+      title: "Your PDF timesheet export"
+      button: "Export PDF timesheet"
+      timesheet: "Timesheet"
+      time: "Час"
+      sum_hours: Сума
     cost_reports:
       title: "Вашият износ на отчети за разходите XLS"
+      start_time: "Начален час"
+      end_time: "End time"
   reporting:
     group_by:
       selected_columns: "Избрани колони"

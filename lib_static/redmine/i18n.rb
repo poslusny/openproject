@@ -26,6 +26,9 @@
 # See COPYRIGHT and LICENSE files for more details.
 #++
 
+# This file is to be split up into smaller files in the OpenProject namespace.
+# A start has been made by splitting off OpenProject::Internationalization::Date into its own file.
+
 module Redmine
   module I18n
     include ActionView::Helpers::NumberHelper
@@ -39,10 +42,10 @@ module Redmine
 
     def self.all_languages
       @@all_languages ||= Rails.root.glob("config/locales/**/*.yml")
-          .map { |f| f.basename.to_s.split(".").first }
-          .reject! { |l| l.start_with?("js-") }
-          .uniq
-          .sort
+                               .map { |f| f.basename.to_s.split(".").first }
+                               .reject! { |l| l.start_with?("js-") }
+                               .uniq
+                               .sort
     end
 
     def self.valid_languages
@@ -91,13 +94,15 @@ module Redmine
     #
     # @param i18n_key [String] The I18n key to translate.
     # @param links [Hash] Link names mapped to URLs.
-    def link_translate(i18n_key, links: {}, locale: ::I18n.locale)
+    # @param target [String] optional HTML target attribute for the links.
+    def link_translate(i18n_key, links: {}, locale: ::I18n.locale, target: nil)
       translation = ::I18n.t(i18n_key.to_s, locale:)
       result = translation.scan(link_regex).inject(translation) do |t, matches|
         link, text, key = matches
         href = String(links[key.to_sym])
+        link_tag = content_tag(:a, text, href:, target:)
 
-        t.sub(link, "<a href=\"#{href}\">#{text}</a>")
+        t.sub(link, link_tag)
       end
 
       result.html_safe
@@ -113,18 +118,17 @@ module Redmine
       /(\[(.+?)\]\((.+?)\))/
     end
 
-    # Format the time to a date in the user time zone if one is set.
-    # If none is set and the time is in utc time zone (meaning it came from active record), format the date in the system timezone
-    # otherwise just use the date in the time zone attached to the time.
-    def format_time_as_date(time, format = nil)
+    # Formats the given time as a date string according to the user's time zone and
+    # optional specified format.
+    #
+    # @param time [Time] The time to format.
+    # @param format [String, nil] The strftime format to use for the date. If nil, the default
+    #   date format from `Setting.date_format` is used.
+    # @return [String, nil] The formatted date string, or nil if the time is not provided.
+    def format_time_as_date(time, format: nil)
       return nil unless time
 
-      zone = User.current.time_zone
-      local_date = (if zone
-                      time.in_time_zone(zone)
-                    else
-                      time.utc? ? time.localtime : time
-                    end).to_date
+      local_date = in_user_zone(time).to_date
 
       if format
         local_date.strftime(format)
@@ -133,18 +137,71 @@ module Redmine
       end
     end
 
-    def format_time(time, include_date = true)
+    # Formats the given time as a time string according to the user's time zone
+    # and optional specified format.
+    #
+    # @param time [Time] The time to format.
+    # @param include_date [Boolean] Whether to include the date in the formatted
+    #   output. Defaults to true.
+    # @param time_zone [ActiveSupport::TimeZone] Use a different time zone than the current users's.
+    #   If provided, will output the time zone identifier
+    # @param format [String] The strftime format to use for the time. Defaults
+    #   to the format in `Setting.time_format`.
+    # @return [String, nil] The formatted time string, or nil if the time is not
+    #   provided.
+    def format_time(time, include_date: true, time_zone: nil, format: Setting.time_format)
       return nil unless time
 
-      time = time.to_time if time.is_a?(String)
-      zone = User.current.time_zone
-      local = if zone
-                time.in_time_zone(zone)
-              else
-                (time.utc? ? time.to_time.localtime : time)
-              end
-      (include_date ? "#{format_date(local)} " : "") +
-        (Setting.time_format.blank? ? ::I18n.l(local, format: :time) : local.strftime(Setting.time_format))
+      local =
+        if time_zone
+          time.in_time_zone(time_zone)
+        else
+          in_user_zone(time)
+        end
+
+      parts = []
+      parts << format_date(local) if include_date
+      parts <<
+        if format.blank?
+          ::I18n.l(local, format: :time)
+        else
+          local.strftime(format)
+        end
+
+      parts.join(" ")
+    end
+
+    ##
+    # Formats the given time as a time string according to the +user+'s time zone
+    # @param time [Time] The time to format.
+    # @param user [User] The user to use for the time zone. Defaults to +User.current+.
+    # @return [Time] The time with the user's time zone applied.
+    def in_user_zone(time, user: User.current)
+      time.in_time_zone(user.time_zone)
+    end
+
+    # Returns the offset to UTC (with utc prepended) currently active
+    # in the current users time zone. DST is factored in so the offset can
+    # shift over the course of the year
+    def formatted_time_zone_offset(user: User.current)
+      # Doing User.current.time_zone and format that will not take heed of DST as it has no notion
+      # of a current time.
+      # https://github.com/rails/rails/issues/7297
+      "UTC#{user.time_zone.now.formatted_offset}"
+    end
+
+    ##
+    # Formats an ActiveSupport::TimeZone object into a user-friendly string.
+    # @param time_zone [ActiveSupport::TimeZone] The time zone to format.
+    # @param period [Timel] The time in which to represent the zone name.
+    # Relevant for DST considerations, e.g. "CET" vs. "CEST".
+    # @return [String] The formatted time zone string.
+    def friendly_timezone_name(time_zone, period: Time.current)
+      time_zone
+        .tzinfo
+        .period_for_utc(period.utc)
+        .abbreviation
+        .to_s
     end
 
     def day_name(day)
@@ -192,7 +249,7 @@ module Redmine
         general_attributes = ::I18n.t("attributes", locale:)
         ::I18n.t("activerecord.attributes",
                  locale:).inject(general_attributes) do |attr_t, model_t|
-          attr_t.merge(model_t.last || {})
+          attr_t.reverse_merge(model_t.last || {})
         end
       end
       @cached_attribute_translations[locale]

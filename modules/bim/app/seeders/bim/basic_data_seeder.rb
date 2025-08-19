@@ -37,6 +37,8 @@ module Bim
         ::BasicData::TimeEntryActivitySeeder,
         ::BasicData::ColorSeeder,
         ::BasicData::ColorSchemeSeeder,
+        ::BasicData::ProjectPhaseColorSeeder,
+        ::BasicData::ProjectPhaseDefinitionSeeder,
         ::BasicData::WorkflowSeeder,
         ::BasicData::PrioritySeeder,
         ::Bim::BasicData::SettingSeeder,

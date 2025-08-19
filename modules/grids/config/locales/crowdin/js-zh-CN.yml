@@ -5,7 +5,7 @@ zh-CN:
       remove: '移除微件'
       configure: '配置微件'
       upsale:
-        text: "某些组件，如工作包图组件，只在企业版提供。"
+        text: "某些微件，如工作包图微件，只在企业版中提供。"
         link: '企业版。'
       widgets:
         missing_permission: "您没有查看此微件所需的权限。"
@@ -27,9 +27,6 @@ zh-CN:
         project_description:
           title: '项目描述'
           no_results: "尚未写入任何描述。可以在“项目设置”中提供一个描述。"
-        project_details:
-          title: '项目详细信息'
-          no_results: '没有为项目定义自定义字段。'
         project_status:
           title: '项目状态'
           not_started: '未开始'

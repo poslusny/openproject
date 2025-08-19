@@ -47,6 +47,13 @@ RSpec.describe User do
           status:)
   end
 
+  describe "Associations" do
+    it { is_expected.to have_many(:emoji_reactions).dependent(:destroy) }
+    it { is_expected.to have_many(:reminders).with_foreign_key(:creator_id).dependent(:destroy).inverse_of(:creator) }
+    it { is_expected.to have_many(:oauth_grants).with_foreign_key(:resource_owner_id).dependent(:delete_all) }
+    it { is_expected.to have_many(:oauth_applications).dependent(:destroy) }
+  end
+
   describe "with long but allowed attributes" do
     it "is valid" do
       user.firstname = "a" * 256
@@ -332,7 +339,7 @@ RSpec.describe User do
         it { is_expected.to eq "SmithJohn" }
       end
 
-      context "for lastname_coma_firstname", with_settings: { user_format: :lastname_coma_firstname } do
+      context "for lastname_comma_firstname", with_settings: { user_format: :lastname_comma_firstname } do
         it { is_expected.to eq "Smith, John" }
       end
 
@@ -350,8 +357,8 @@ RSpec.describe User do
 
       let(:user) { described_class.select_for_name(formatter).last }
 
-      context "for lastname_coma_firstname" do
-        let(:formatter) { :lastname_coma_firstname }
+      context "for lastname_comma_firstname" do
+        let(:formatter) { :lastname_comma_firstname }
 
         it { is_expected.to eq "Smith, John" }
       end
@@ -365,13 +372,44 @@ RSpec.describe User do
   end
 
   describe "#authentication_provider" do
+    let!(:provider) { create(:oidc_provider, slug: "test_provider") }
+
     before do
       user.identity_url = "test_provider:veryuniqueid"
       user.save!
     end
 
-    it "creates a human readable name" do
-      expect(user.authentication_provider).to eql("Test Provider")
+    it "returns the provider" do
+      expect(user.authentication_provider).to eql(provider)
+    end
+
+    context "when no matching provider exists" do
+      let!(:provider) { nil }
+
+      it "returns nil" do
+        expect(user.authentication_provider).to be_nil
+      end
+    end
+  end
+
+  describe "#human_authentication_provider" do
+    let!(:provider) { create(:oidc_provider, slug: "test_provider", display_name: "Karl") }
+
+    before do
+      user.identity_url = "test_provider:veryuniqueid"
+      user.save!
+    end
+
+    it "returns a human readable name" do
+      expect(user.human_authentication_provider).to eql("Karl")
+    end
+
+    context "when no matching provider exists" do
+      let!(:provider) { nil }
+
+      it "returns nil" do
+        expect(user.authentication_provider).to be_nil
+      end
     end
   end
 
@@ -820,6 +858,39 @@ RSpec.describe User do
     it "handles suffixed mails" do
       _, suffixed = described_class.mail_regexp("foo+bar@example.org")
       expect(suffixed).to be_truthy
+    end
+  end
+
+  describe "#time_zone" do
+    let(:user) { build(:user, preferences:) }
+
+    context "with an existing time zone in the prefs" do
+      let(:preferences) { { "time_zone" => "Europe/Athens" } }
+
+      it "returns the matching ActiveSupport::TimeZone" do
+        expect(user.time_zone)
+          .to eql ActiveSupport::TimeZone["Europe/Athens"]
+      end
+    end
+
+    context "with an invalid time zone" do
+      # Would need to be Etc/UTC or UTC to be valid
+      let(:preferences) { { "time_zone" => "utc" } }
+
+      it "returns the utc ActiveSupport::TimeZone" do
+        expect(user.time_zone)
+          .to eql ActiveSupport::TimeZone["Etc/UTC"]
+      end
+    end
+
+    context "without a time zone" do
+      # Would need to be Etc/UTC or UTC to be valid
+      let(:preferences) { {} }
+
+      it "returns the utc ActiveSupport::TimeZone" do
+        expect(user.time_zone)
+          .to eql ActiveSupport::TimeZone["Etc/UTC"]
+      end
     end
   end
 

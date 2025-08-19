@@ -44,7 +44,7 @@ class ProjectsController < ApplicationController
   include PaginationHelper
   include QueriesHelper
   include ProjectsHelper
-  include Projects::QueryLoading
+  include Queries::Loading
   include OpTurbo::DialogStreamHelper
 
   helper_method :has_managed_project_folders?
@@ -53,7 +53,7 @@ class ProjectsController < ApplicationController
     :projects
   end
 
-  def index # rubocop:disable Format/AbcSize
+  def index # rubocop:disable Metrics/AbcSize
     respond_to do |format|
       format.html do
         flash.now[:error] = @query.errors.full_messages if @query.errors.any?

@@ -37,6 +37,8 @@ module Standard
         ::BasicData::TimeEntryActivitySeeder,
         ::BasicData::ColorSeeder,
         ::BasicData::ColorSchemeSeeder,
+        ::BasicData::ProjectPhaseColorSeeder,
+        ::BasicData::ProjectPhaseDefinitionSeeder,
         ::BasicData::WorkflowSeeder,
         ::BasicData::PrioritySeeder,
         ::BasicData::SettingSeeder,

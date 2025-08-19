@@ -103,8 +103,8 @@ sk:
     button_settings: "Nastavenia"
     button_uncheck_all: "Odznačiť všetky"
     button_update: "Aktualizovať"
-    button_export-pdf: "Stiahnuť PDF"
     button_export-atom: "Stiahnuť Atom"
+    button_generate_pdf: "Generate PDF"
     button_create: "Vytvoriť"
     card:
       add_new: "Pridať novú kartu"
@@ -221,6 +221,8 @@ sk:
             label_maximum_users: "Maximálny počet aktívnych užívateľov"
             label_starts_at: "Starts at"
             label_expires_at: "Platnosť končí"
+            label_plan: "Plan"
+            label_additional_features: "Additional features"
             receive_newsletter: I want to receive the OpenProject <a target="_blank" href="%{link}">newsletter</a>.
             taken_domain: There can only be one active trial per domain.
             domain_mismatch: The current request host name does not match the configured host name. Please double check your system settings.
@@ -356,10 +358,10 @@ sk:
           learn_about: "Learn more about the new features"
           #Include the version to invalidate outdated translations in other locales.
           #Otherwise, e.g. chinese might still have the translations for 10.0 in the 12.0 release.
-          "14_6":
+          "15_5":
             standard:
               new_features_html: >
-                The release brings various features and improvements for you, e.g. <br> <ul class="%{list_styling_class}"> <li>Benefit from more flexible progress reporting – thanks to user feedback.</li> <li>Receive an update notification with reload option for meetings.</li> <li>Enable a custom field for multiple projects at once.</li> <li>Use relative work package attribute macros.</li> <li>Show empty lines in saved rich text.</li> <li>See past meetings included in the number next to the Meetings tab.</li> </ul>
+                The release brings various features and improvements for you, e.g. <br> <ul class="%{list_styling_class}"> <li>Filter for descendants (children and grandchildren) of work packages.</li> <li>Benefit from advanced accessibility in the date picker.</li> <li>See % Complete included in work package table sums.</li> <li>Include a column for children in work package tables.</li> <li>Better use the date picker in mobile screens.</li> <li>PDF exports matching configured form layout.</li> </ul>
     ical_sharing_modal:
       title: "Subscribe to calendar"
       inital_setup_error_message: "An error occured while fetching data."
@@ -575,7 +577,7 @@ sk:
         members: "Invite new <b>members</b> to join your project."
         quick_add_button: "Click on the plus (+) icon in the header navigation to <b>create a new project</b> or to <b>invite coworkers</b>."
         sidebar_arrow: "Use the return arrow in the top left corner to return to the project’s <b>main menu</b>."
-        welcome: "Urobte si tri minúty čas na úvodnú prehliadku, aby ste sa naučili čo najviac <b>dôležité funkcie</b>.<br> Doporučujeme dokončiť prehliadku až do konca. Prehliadku môžete kedykoľvek reštartovať."
+        welcome: "Take a three-minute introduction tour to learn the most <b>important features</b>. <br> We recommend completing the steps until the end. You can restart the tour any time."
         wiki: "Within the <b>wiki</b> you can document and share knowledge together with your team."
         backlogs:
           overview: "Manage your work in the <b>backlogs</b> view."
@@ -612,7 +614,7 @@ sk:
         assigned: "Priradené"
         #The enum value is named 'responsible' in the database and that is what is transported through the API
         #up to the frontend.
-        responsible: "Accountable"
+        responsible: "Zodpovedný"
         created: "Vytvorený"
         scheduled: "Naplánované"
         commented: "Komentované"
@@ -620,14 +622,15 @@ sk:
         prioritized: "Prioritized"
         dateAlert: "Date alert"
         shared: "Shared"
+        reminder: "Reminder"
       date_alerts:
         milestone_date: "Milestone date"
         overdue: "Overdue"
-        overdue_since: "since %{difference_in_days}"
-        property_today: "is today"
-        property_is: "is in %{difference_in_days}"
-        property_was: "was %{difference_in_days} ago"
-        property_is_deleted: "is deleted"
+        overdue_since: "since %{difference_in_days}."
+        property_today: "is today."
+        property_is: "is in %{difference_in_days}."
+        property_was: "was %{difference_in_days} ago."
+        property_is_deleted: "is deleted."
         upsale:
           title: "Date alerts"
           description: "With date alerts, you will be notified of upcoming start or finish dates so that you never miss or forget an important deadline."
@@ -654,6 +657,8 @@ sk:
         new_notifications:
           message: "There are new notifications."
           link_text: "Click here to load them."
+      reminders:
+        note: "Note: “%{note}”"
       settings:
         change_notification_settings: 'You can modify your <a target="_blank" href="%{url}">notification settings</a> to ensure you never miss an important update.'
         title: "Notification settings"
@@ -716,18 +721,18 @@ sk:
       description: "Description: Click to edit..."
       relation_description: "Kliknutím pridáte popis tohto vzťahu"
     project:
-      required_outside_context: >
-        Please choose a project to create the work package in to see all attributes. You can only select projects which have the type above activated.
-      details_activity: "Project details activity"
-      context: "Kontext projektu"
-      click_to_switch_to_project: "Project: %{projectname}"
-      confirm_template_load: "Switching the template will reload the page and you will lose all input to this form. Continue?"
-      use_template: "Použiť šablónu"
-      no_template_selected: "(None)"
-      copy:
-        copy_options: "Copy options"
       autocompleter:
         label: "Automatické doplňovanie projektu"
+      click_to_switch_to_project: "Project: %{projectname}"
+      confirm_template_load: "Switching the template will reload the page and you will lose all input to this form. Continue?"
+      context: "Kontext projektu"
+      copy:
+        copy_options: "Copy options"
+      not_available: "Project N/A"
+      no_template_selected: "(None)"
+      required_outside_context: >
+        Please choose a project to create the work package in to see all attributes. You can only select projects which have the type above activated.
+      use_template: "Použiť šablónu"
     reminders:
       settings:
         daily:
@@ -742,6 +747,7 @@ sk:
         immediate:
           title: "Send me an email reminder"
           mentioned: "Immediately when someone @mentions me"
+          personal_reminder: "Immediately when I receive a personal reminder"
         alerts:
           title: "Email alerts for other items (that are not work packages)"
           explanation: >
@@ -773,10 +779,6 @@ sk:
         upgrade_to_ee_text: "Wow! If you need this add-on you are a super pro! Would you mind supporting us OpenSource developers by becoming an Enterprise edition client?"
         more_information: "Viac informácií"
         nevermind: "Nie ďakujem"
-      edit:
-        form_configuration: "Form Configuration"
-        projects: "Projekty"
-        settings: "Nastavenia"
     time_entry:
       work_package_required: "Requires selecting a work package first."
       title: "Zaprotokoluj čas"
@@ -799,6 +801,7 @@ sk:
       typeahead_placeholder: Vyhľadajte možných pozorovateľov
     relation_labels:
       parent: "Nadradený balíček"
+      child: "Child"
       children: "Potomkovia"
       relates: "Previazaný na"
       duplicates: "Kópie"
@@ -828,7 +831,7 @@ sk:
       add_new_child: "Vytvoriť nový podradený"
       create_new: "Vytvoriť nový"
       add_existing: "Pridať existujúci"
-      add_existing_child: "Pridať existujúci podradený"
+      add_existing_child: "Pridať potomka"
       remove_child: "Zmazať podradený"
       add_new_relation: "Vytvoriť nový vzťah"
       add_existing_relation: "Pridať existujúci vzťah"
@@ -854,8 +857,6 @@ sk:
       select_branch: "Vyberte odbor"
     field_value_enter_prompt: "Zadajte hodnotu pre \"%{field}\""
     project_menu_details: "Podrobnosti"
-    scheduling:
-      manual: "Manuálne plánovanie"
     sort:
       sorted_asc: "Použiť vzostupné zoradenie, "
       sorted_dsc: "Použiť zostupné zoradenie, "
@@ -903,15 +904,6 @@ sk:
       comment_send_failed: "Vyskytla sa chyba. Nebolo možné pridať komentár."
       comment_updated: "Komentár bol úspešne aktualizovaný."
       confirm_edit_cancel: "Naozaj chcete zrušiť upravovanie pracovného balíka?"
-      datepicker_modal:
-        automatically_scheduled_parent: "Automatically scheduled. Dates are derived from relations."
-        manually_scheduled: "Manual scheduling enabled, all relations ignored."
-        start_date_limited_by_relations: "Available start and finish dates are limited by relations."
-        changing_dates_affects_follow_relations: "Changing these dates will affect dates of related work packages."
-        click_on_show_relations_to_open_gantt: 'Click on "%{button_name}" for GANTT overview.'
-        show_relations: "Show relations"
-        ignore_non_working_days:
-          title: "Working days only"
       description_filter: "Filtrovať"
       description_enter_text: "Zadajte text"
       description_options_hide: "Skryť možnosti"
@@ -1045,6 +1037,12 @@ sk:
           not_found: "Toto zobrazenie sa nepodarilo nájsť"
           duplicate_query_title: "Zobrazenie s týmto názvom už existuje. Napriek tomu zmeniť?"
         text_no_results: "Neboli nájdené žiadne zodpovedajúce zobrazenia."
+      reminders:
+        button_label: "Set reminder"
+        title:
+          new: "Set reminder"
+          edit: "Edit reminder"
+        subtitle: "You will receive a notification for this work package at the chosen time."
       scheduling:
         is_parent: "The dates of this work package are automatically deduced from its children. Activate 'Manual scheduling' to set the dates."
         is_switched_from_manual_to_automatic: "The dates of this work package may need to be recalculated after switching from manual to automatic scheduling due to relationships with other work packages."
@@ -1354,5 +1352,3 @@ sk:
       waiting_subtitle:
         network_off: "There is a network problem."
         network_on: "Network is back. We are trying."
-        timeout: >
-          OpenProject could not provide you access to the project folder within the expected period of time. Please, try once again.<br><br> If that problem persists please contact your OpenProject administrator to check the <a href="https://www.openproject.org/docs/system-admin-guide/files/external-file-storages/file-storage-troubleshooting/">health status of the file storage setup</a>.

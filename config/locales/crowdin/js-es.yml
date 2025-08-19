@@ -103,8 +103,8 @@ es:
     button_settings: "Configuración"
     button_uncheck_all: "Deseleccionar todos"
     button_update: "Actualizar"
-    button_export-pdf: "Descargar PDF"
     button_export-atom: "Descargar Atom"
+    button_generate_pdf: "Generar PDF"
     button_create: "Crear"
     card:
       add_new: "Añadir nueva tarjeta"
@@ -221,6 +221,8 @@ es:
             label_maximum_users: "Máximo de usuarios activos"
             label_starts_at: "Empieza el"
             label_expires_at: "Expira el"
+            label_plan: "Plan"
+            label_additional_features: "Funciones adicionales"
             receive_newsletter: Quiero recibir el <a target="_blank" href="%{link}">boletín</a> de OpenProject.
             taken_domain: Solo puede existir una prueba activa por dominio.
             domain_mismatch: El nombre actual de host no coincide con el nombre de host configurado. Por favor, comprueba la configuración del sistema.
@@ -356,10 +358,10 @@ es:
           learn_about: "Más información sobre las nuevas funciones"
           #Include the version to invalidate outdated translations in other locales.
           #Otherwise, e.g. chinese might still have the translations for 10.0 in the 12.0 release.
-          "14_6":
+          "15_5":
             standard:
               new_features_html: >
-                La versión trae varias características y mejoras para usted, por ejemplo <br> <ul class=«%{list_styling_class}»> <li>Benefíciese de informes de progreso más flexibles, gracias a los comentarios de los usuarios.</li> <li>Reciba una notificación de actualización con opción de recarga para las reuniones. </li> <li>Habilite un campo personalizado para varios proyectos a la vez.</li> <li>Utilice macros de atributos relativos del paquete de trabajo.</li> <li>Muestre las líneas vacías en el texto enriquecido guardado.</li> <li>Vea las reuniones anteriores incluidas en el número junto a la pestaña Reuniones.</li> </ul>
+                La versión incluye varias funciones y mejoras para usted, por ejemplo: <br> <ul class="%{list_styling_class}"> <li>Filtro para descendientes (secundarios y subsecundarios) de paquetes de trabajo. </li> <li>Benefíciese de la accesibilidad avanzada en el selector de fechas.</li> <li>Vea el % completado incluido en las sumas de la tabla de paquetes de trabajo.</li> <li>Incluya una columna para los elementos secundarios en las tablas de paquetes de trabajo.</li> <li>Utilice mejor el selector de fechas en las pantallas móviles.</li> <li>Exportaciones en PDF que coinciden con el diseño de formulario configurado.</li> </ul>
     ical_sharing_modal:
       title: "Suscribirse al calendario"
       inital_setup_error_message: "Se ha producido un error al obtener los datos."
@@ -575,7 +577,7 @@ es:
         members: "Invitar a nuevos <b>miembros</b> a unirse a tu proyecto."
         quick_add_button: "Haga clic en el icono del signo más (+) en el menú de navegación del encabezado para <b>crear un proyecto</b> o <b>invitar a compañeros</b>."
         sidebar_arrow: "Usa la flecha de retorno en la esquina superior izquierda para regresar al <b>menú principal</b> del proyecto."
-        welcome: "Realice un paseo de introducción de tres minutos para conocer las <b>funciones más importantes</b>. <br> Le recomendamos que complete todos los pasos. Puede volver a iniciar el paseo en cualquier momento."
+        welcome: "Realice un recorrido de introducción de tres minutos para conocer las <b>funciones más importantes</b>. <br> Le recomendamos que complete todos los pasos. Puede volver a iniciar el paseo en cualquier momento."
         wiki: "En la <b>wiki</b>, puede elaborar documentos y compartir conocimientos con su equipo."
         backlogs:
           overview: "Administre su trabajo en la vista de <b>trabajos pendientes</b>."
@@ -620,14 +622,15 @@ es:
         prioritized: "Priorizado"
         dateAlert: "Alerta de fecha"
         shared: "Compartido"
+        reminder: "Recordatorio"
       date_alerts:
         milestone_date: "Fecha de hito"
         overdue: "Vencido"
-        overdue_since: "desde %{difference_in_days}"
-        property_today: "es hoy"
-        property_is: "está en %{difference_in_days}"
-        property_was: "era hace %{difference_in_days}"
-        property_is_deleted: "se ha eliminado"
+        overdue_since: "desde %{difference_in_days}."
+        property_today: "es hoy."
+        property_is: "está en %{difference_in_days}."
+        property_was: "fue hace %{difference_in_days}."
+        property_is_deleted: "se ha eliminado."
         upsale:
           title: "Alertas de fecha"
           description: "Con las alertas de fecha, recibirá notificaciones de próximas fechas de inicio o finalización para que nunca olvide una fecha límite importante."
@@ -652,6 +655,8 @@ es:
         new_notifications:
           message: "Hay nuevas notificaciones."
           link_text: "Haga clic aquí para cargarlas."
+      reminders:
+        note: "Nota: «%{note}»"
       settings:
         change_notification_settings: 'Puede modificar su <a target="_blank" href="%{url}">configuración de notificaciones</a> para asegurarse que nunca se pierda una actualización importante.'
         title: "Ajustes de notificación"
@@ -714,18 +719,18 @@ es:
       description: "Descripción: Haga clic para editar..."
       relation_description: "Haga clic para añadir la descripción a esta relación"
     project:
-      required_outside_context: >
-        Seleccione el proyecto donde quiere crear el paquete de trabajo para ver todos los atributos. Solo puede seleccionar proyectos que tengan activado el tipo de paquete utilizado.
-      details_activity: "Actividad de detalles del proyecto"
-      context: "Contexto del proyecto"
-      click_to_switch_to_project: "Proyecto: %{projectname}"
-      confirm_template_load: "Al cambiar la plantilla, se actualizará la página y perderá todos los datos introducidos en el formulario. ¿Quiere continuar?"
-      use_template: "Usar plantilla"
-      no_template_selected: "(Ninguna)"
-      copy:
-        copy_options: "Opciones de copia"
       autocompleter:
         label: "Autocompletado del proyecto"
+      click_to_switch_to_project: "Proyecto: %{projectname}"
+      confirm_template_load: "Al cambiar la plantilla, se actualizará la página y perderá todos los datos introducidos en el formulario. ¿Quiere continuar?"
+      context: "Contexto del proyecto"
+      copy:
+        copy_options: "Opciones de copia"
+      not_available: "Proyecto N/D"
+      no_template_selected: "(Ninguna)"
+      required_outside_context: >
+        Seleccione el proyecto donde quiere crear el paquete de trabajo para ver todos los atributos. Solo puede seleccionar proyectos que tengan activado el tipo de paquete utilizado.
+      use_template: "Usar plantilla"
     reminders:
       settings:
         daily:
@@ -740,6 +745,7 @@ es:
         immediate:
           title: "Enviarme un recordatorio por correo electrónico"
           mentioned: "De inmediato cuando alguien me @mencione"
+          personal_reminder: "Inmediatamente al recibir un recordatorio personal"
         alerts:
           title: "Alertas por correo electrónico de otros elementos (que no sean paquetes de trabajo)"
           explanation: >
@@ -771,10 +777,6 @@ es:
         upgrade_to_ee_text: "¡Vaya! Si necesita está extensión, entonces ¡es un usuario experto! ¿Le importaría apoyar a los desarrolladores de código abierto convirtiéndose en cliente de Enterprise?"
         more_information: "Más información"
         nevermind: "No importa"
-      edit:
-        form_configuration: "Configuración del formulario"
-        projects: "Proyectos"
-        settings: "Configuración"
     time_entry:
       work_package_required: "Es necesario seleccionar primero un paquete de trabajo."
       title: "Registro de tiempo"
@@ -797,6 +799,7 @@ es:
       typeahead_placeholder: Buscar posibles observadores
     relation_labels:
       parent: "Principal"
+      child: "Elemento secundario"
       children: "Sub-elemento"
       relates: "Relacionado con"
       duplicates: "Duplicados"
@@ -826,7 +829,7 @@ es:
       add_new_child: "Crear nuevo sub-elemento"
       create_new: "Crear nuevo"
       add_existing: "Agregar existente"
-      add_existing_child: "Añadir sub-elemento existente"
+      add_existing_child: "Añadir elemento secundario"
       remove_child: "Eliminar sub-elemento"
       add_new_relation: "Crear nueva relación"
       add_existing_relation: "Agregar relación existente"
@@ -852,8 +855,6 @@ es:
       select_branch: "Seleccione rama"
     field_value_enter_prompt: "Introduzca un valor para '%{field}'"
     project_menu_details: "Detalles"
-    scheduling:
-      manual: "Programación manual"
     sort:
       sorted_asc: "Orden ascendiente aplicado, "
       sorted_dsc: "Orden descendiente aplicado, "
@@ -901,15 +902,6 @@ es:
       comment_send_failed: "Ha ocurrido un error. No se pudo añadir el comentario."
       comment_updated: "El comentario se actualizó correctamente."
       confirm_edit_cancel: "¿Está seguro que desea cancelar la edición del paquete de trabajo?"
-      datepicker_modal:
-        automatically_scheduled_parent: "Programado automáticamente. Las fechas están derivadas de relaciones."
-        manually_scheduled: "Programación manual activa, todas las relaciones son ignoradas."
-        start_date_limited_by_relations: "Las fechas de inicio y final disponibles están limitadas por relaciones."
-        changing_dates_affects_follow_relations: "Cambiar estas fechas afectará a las fechas de los paquetes de trabajo relacionados."
-        click_on_show_relations_to_open_gantt: 'Haga clic en "%{button_name}" para la vista general de GANTT.'
-        show_relations: "Mostrar relaciones"
-        ignore_non_working_days:
-          title: "Solo días laborables"
       description_filter: "Filtro"
       description_enter_text: "Introducir texto"
       description_options_hide: "Ocultar opciones"
@@ -1043,6 +1035,12 @@ es:
           not_found: "No existe la vista"
           duplicate_query_title: "El nombre de la vista ya existe. ¿Quiere cambiarlo de todos modos?"
         text_no_results: "No se encontraron vistas que coincidan."
+      reminders:
+        button_label: "Establecer recordatorio"
+        title:
+          new: "Establecer recordatorio"
+          edit: "Editar recordatorio"
+        subtitle: "Recibirá una notificación para este paquete de trabajo en el momento elegido."
       scheduling:
         is_parent: "Las fechas de este paquete de trabajo son deducidas automáticamente de sus sub-elementos. Active 'Programación manual' para establecer las fechas."
         is_switched_from_manual_to_automatic: "Las fechas de este paquete de trabajo pueden necesitar ser recalculadas después de pasar de programación manual a programación automática debido a las relaciones con otros paquetes de trabajo."
@@ -1346,5 +1344,3 @@ es:
       waiting_subtitle:
         network_off: "Hay un problema de red."
         network_on: "La red ha vuelto. Lo estamos intentando."
-        timeout: >
-          OpenProject no ha podido proporcionarle acceso a la carpeta del proyecto en el periodo de tiempo esperado. Inténtelo de nuevo.<br><br> Si el problema persiste, contacte con su administrador de OpenProject para comprobar el <a href="https://www.openproject.org/docs/system-admin-guide/files/external-file-storages/file-storage-troubleshooting/">estado de salud de la configuración de almacenamiento de archivos</a>.

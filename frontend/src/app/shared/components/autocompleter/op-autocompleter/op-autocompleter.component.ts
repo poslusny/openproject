@@ -21,10 +21,11 @@ import {
   Type,
   ViewChild,
   ViewContainerRef,
+  ViewEncapsulation,
 } from '@angular/core';
 import { DropdownPosition, NgSelectComponent } from '@ng-select/ng-select';
-import { BehaviorSubject, merge, NEVER, Observable, of, Subject, timer } from 'rxjs';
-import { debounce, distinctUntilChanged, filter, switchMap, tap } from 'rxjs/operators';
+import { BehaviorSubject, merge, NEVER, Observable, of, Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, filter, switchMap, tap } from 'rxjs/operators';
 import { AddTagFn, GroupValueFn } from '@ng-select/ng-select/lib/ng-select.component';
 
 import { HalResource } from 'core-app/features/hal/resources/hal-resource';
@@ -49,6 +50,14 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { ID } from '@datorama/akita';
 import { HttpClient } from '@angular/common/http';
 import { ApiV3Service } from 'core-app/core/apiv3/api-v3.service';
+import { HalResourceService } from 'core-app/features/hal/services/hal-resource.service';
+import {
+  IAPIFilter,
+  IOPAutocompleterOption,
+  TOpAutocompleterResource,
+} from 'core-app/shared/components/autocompleter/op-autocompleter/typings';
+import { UserResource } from 'core-app/features/hal/resources/user-resource';
+import { PathHelperService } from 'core-app/core/path-helper/path-helper.service';
 
 export interface IAutocompleteItem {
   id:ID;
@@ -65,6 +74,7 @@ export interface IAutocompleterTemplateComponent {
 @Component({
   selector: 'op-autocompleter',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
   templateUrl: './op-autocompleter.component.html',
   styleUrls: ['./op-autocompleter.component.sass'],
   providers: [
@@ -110,6 +120,8 @@ export class OpAutocompleterComponent<T extends IAutocompleteItem = IAutocomplet
 
   @Input() public inputBindValue = 'id';
 
+  @Input() public additionalClassProperty:string|null = null;
+
   @Input() public hiddenFieldAction = '';
 
   @Input() public required?:boolean = false;
@@ -137,7 +149,7 @@ export class OpAutocompleterComponent<T extends IAutocompleteItem = IAutocomplet
 
   @Input() public items?:IOPAutocompleterOption[]|HalResource[];
 
-  private items$ = new BehaviorSubject(null);
+  private items$ = new BehaviorSubject<IOPAutocompleterOption[]|null>(null);
 
   @Input() public clearSearchOnAdd?:boolean = true;
 
@@ -189,7 +201,7 @@ export class OpAutocompleterComponent<T extends IAutocompleteItem = IAutocomplet
 
   @Input() public selectableGroupAsModel?:boolean = true;
 
-  @Input() public searchFn:(term:string, item:any) => boolean;
+  @Input() public searchFn:(term:string, item:unknown) => boolean;
 
   @Input() public trackByFn = this.defaultTrackByFunction();
 
@@ -221,6 +233,8 @@ export class OpAutocompleterComponent<T extends IAutocompleteItem = IAutocomplet
   @Input() public getOptionsFn:(searchTerm:string) => Observable<unknown>;
 
   @Input() public url:string;
+
+  @Input() public debounceTimeMs:number = 250;
 
   @Output() public open = new EventEmitter<unknown>();
 
@@ -278,9 +292,7 @@ export class OpAutocompleterComponent<T extends IAutocompleteItem = IAutocomplet
 
   footerTemplate:TemplateRef<Element>;
 
-  initialDebounce = true;
-
-  private opAutocompleterService = new OpAutocompleterService(this.apiV3Service);
+  readonly opAutocompleterService = new OpAutocompleterService(this.apiV3Service, this.halResourceService);
 
   constructor(
     readonly injector:Injector,
@@ -291,6 +303,8 @@ export class OpAutocompleterComponent<T extends IAutocompleteItem = IAutocomplet
     readonly ngZone:NgZone,
     readonly vcRef:ViewContainerRef,
     readonly I18n:I18nService,
+    readonly halResourceService:HalResourceService,
+    readonly pathHelperService:PathHelperService,
   ) {
     super();
   }
@@ -302,7 +316,23 @@ export class OpAutocompleterComponent<T extends IAutocompleteItem = IAutocomplet
       this.typeahead = new BehaviorSubject<string>('');
     }
 
-    if (this.inputValue && !this.model) {
+    if (this.items) {
+      this.items$.next(this.items as IOPAutocompleterOption[]);
+    }
+  }
+
+  ngOnChanges(changes:SimpleChanges):void {
+    if (changes.items) {
+      this.items$.next(changes.items.currentValue as IOPAutocompleterOption[]);
+    }
+  }
+
+  ngAfterViewInit():void {
+    if (this.inputName && this.model) {
+      this.syncHiddenField(this.mappedInputValue);
+    }
+
+    if (this.inputValue && this.resource && !this.model) {
       this
         .opAutocompleterService
         .loadValue(this.inputValue, this.resource, this.multiple)
@@ -311,19 +341,6 @@ export class OpAutocompleterComponent<T extends IAutocompleteItem = IAutocomplet
           this.syncHiddenField(this.mappedInputValue);
           this.cdRef.detectChanges();
         });
-    }
-  }
-
-  ngOnChanges(changes:SimpleChanges):void {
-    if (changes.items) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-      this.items$.next(changes.items.currentValue);
-    }
-  }
-
-  ngAfterViewInit():void {
-    if (this.inputName && this.model) {
-      this.syncHiddenField(this.mappedInputValue);
     }
 
     this.ngZone.runOutsideAngular(() => {
@@ -368,7 +385,7 @@ export class OpAutocompleterComponent<T extends IAutocompleteItem = IAutocomplet
     this.open.emit();
   }
 
-  public getOptionsItems(searchKey:string):Observable<any> {
+  public getOptionsItems(searchKey:string):Observable<unknown> {
     return of((this.items as IOPAutocompleterOption[])?.filter((element) => element.name.includes(searchKey)));
   }
 
@@ -397,6 +414,7 @@ export class OpAutocompleterComponent<T extends IAutocompleteItem = IAutocomplet
     this.onTouched(val);
     this.onChange(val);
     this.syncHiddenField(this.mappedInputValue);
+    this.syncedInput?.nativeElement.dispatchEvent(new Event('change'));
     this.change.emit(val);
 
     if (this.resetOnChange) {
@@ -456,35 +474,34 @@ export class OpAutocompleterComponent<T extends IAutocompleteItem = IAutocomplet
     }
 
     return this.typeahead.pipe(
-      filter(() => !!(this.defaultData || this.getOptionsFn)),
+      filter(() => !!(this.defaultData || this.url || this.getOptionsFn)),
       distinctUntilChanged(),
       tap(() => this.loading$.next(true)),
-      // tap(() => console.log('Debounce is ', this.getDebounceTimeout())),
-      debounce(() => timer(this.getDebounceTimeout())),
+      debounceTime(this.debounceTimeForCurrentEnvironment),
       switchMap((queryString:string) => {
-        if (this.defaultData) {
-          return this.opAutocompleterService.loadData(queryString, this.resource, this.filters, this.searchKey);
-        }
-
         if (this.getOptionsFn) {
           return this.getOptionsFn(queryString);
         }
 
+        if (this.url) {
+          return this.opAutocompleterService.loadFromUrl(this.url, queryString, this.resource, this.filters, this.searchKey);
+        }
+
+        if (this.defaultData) {
+          return this.opAutocompleterService.loadData(queryString, this.resource, this.filters, this.searchKey);
+        }
+
         return NEVER;
       }),
-      tap(
-        () => this.loading$.next(false),
-        () => this.loading$.next(false),
-      ),
+      tap({
+        next: () => this.loading$.next(false),
+        error: () => this.loading$.next(false),
+      }),
     );
   }
 
-  private getDebounceTimeout():number {
-    if (this.initialDebounce) {
-      this.initialDebounce = false;
-      return 0;
-    }
-    return 50;
+  private get debounceTimeForCurrentEnvironment():number {
+    return (window.OpenProject.environment === 'test') ? 0 : this.debounceTimeMs;
   }
 
   writeValue(value:T|T[]|null):void {
@@ -539,13 +556,19 @@ export class OpAutocompleterComponent<T extends IAutocompleteItem = IAutocomplet
     );
   }
 
-  protected syncHiddenField(mappedInputValue:string|string[]) {
+  protected syncHiddenField(mappedInputValue:string|string[]):void {
     const input = this.syncedInput?.nativeElement;
-    if (input) {
-      input.value = Array.isArray(mappedInputValue) ? mappedInputValue.join(',') : mappedInputValue;
-      const event = new Event('change');
-      input.dispatchEvent(event);
+    if (!input) {
+      return;
     }
+
+    const newValue = Array.isArray(mappedInputValue) ? mappedInputValue.join(',') : mappedInputValue;
+    // Don't fire a change event if the value is the same
+    if (input.value === newValue) {
+      return;
+    }
+
+    input.value = newValue;
   }
 
   public addNewObjectFn(searchTerm:string):unknown {
@@ -556,7 +579,31 @@ export class OpAutocompleterComponent<T extends IAutocompleteItem = IAutocomplet
     return null;
   }
 
-  protected defaultCompareWithFunction():(a:unknown, b:unknown) => boolean {
-    return (a, b) => a === b;
+  protected defaultCompareWithFunction():null|((a:unknown, b:unknown) => boolean) {
+    return (a, b) => {
+      if (this.bindValue && !_.isObject(b)) {
+        return (a as Record<string, unknown>)[this.bindValue] === b;
+      }
+
+      return a === b;
+    };
+  }
+
+  /**
+   * Attaches hover card event listeners by setting this attribute for users.
+   */
+  protected getHoverCardTriggerTarget(item:HalResource) {
+    return item instanceof UserResource ? 'trigger' : '';
+  }
+
+  /**
+   * Enables hover card data loading by setting this attribute for users.
+   */
+  protected getHoverCardUrl(item:HalResource) {
+    if (item instanceof UserResource && item.id) {
+      return this.pathHelperService.userHoverCardPath(item.id);
+    }
+
+    return '';
   }
 }

@@ -50,6 +50,7 @@ OpenProject::CustomFieldFormat.map do |fields|
   fields.register OpenProject::CustomFieldFormat.new("list",
                                                      label: :label_list,
                                                      order: 6,
+                                                     multi_value_possible: true,
                                                      formatter: "CustomValue::ListStrategy")
   fields.register OpenProject::CustomFieldFormat.new("date",
                                                      label: :label_date,
@@ -61,17 +62,17 @@ OpenProject::CustomFieldFormat.map do |fields|
                                                      formatter: "CustomValue::BoolStrategy")
   fields.register OpenProject::CustomFieldFormat.new("user",
                                                      label: Proc.new { User.model_name.human },
-                                                     only: %w(WorkPackage TimeEntry
-                                                              Version Project),
+                                                     only: %w(WorkPackage TimeEntry Version Project),
                                                      edit_as: "list",
                                                      order: 9,
+                                                     multi_value_possible: true,
                                                      formatter: "CustomValue::UserStrategy")
   fields.register OpenProject::CustomFieldFormat.new("version",
                                                      label: Proc.new { Version.model_name.human },
-                                                     only: %w(WorkPackage TimeEntry
-                                                              Version Project),
+                                                     only: %w(WorkPackage TimeEntry Version Project),
                                                      edit_as: "list",
                                                      order: 10,
+                                                     multi_value_possible: true,
                                                      formatter: "CustomValue::VersionStrategy")
   # This is an internal formatter used as a fallback in case a value is not found.
   # Setting the label to nil in order to avoid it becoming available for selection as a custom value format.
@@ -79,4 +80,11 @@ OpenProject::CustomFieldFormat.map do |fields|
                                                      label: nil,
                                                      order: 11,
                                                      formatter: "CustomValue::EmptyStrategy")
+
+  fields.register OpenProject::CustomFieldFormat.new("hierarchy",
+                                                     label: :label_hierarchy,
+                                                     only: %w(WorkPackage),
+                                                     order: 12,
+                                                     multi_value_possible: true,
+                                                     formatter: "CustomValue::HierarchyStrategy")
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -29,6 +31,10 @@
 require "will_paginate"
 
 module PaginationHelper
+  SHOW_MORE_DEFAULT_LIMIT = 5
+  SHOW_MORE_DEFAULT_INCREMENT = 20
+  SHOW_MORE_MAX_LIMIT = 1000
+
   def pagination_links_full(paginator, options = {})
     return unless paginator.total_entries > 0
 
@@ -69,7 +75,7 @@ module PaginationHelper
       content = will_paginate(paginator, options) || ""
 
       range = "(#{page_first} - #{page_last}/#{total})"
-      content << content_tag(:li, range, class: "op-pagination--range", title: range)
+      content += content_tag(:li, range, class: "op-pagination--range", title: range)
 
       content.html_safe
     end
@@ -109,7 +115,7 @@ module PaginationHelper
   #  * page
   #  parameters.
   #  Prefers page over the other two and
-  #  calculates page in it's absence based on limit and offset.
+  #  calculates page in its absence based on limit and offset.
   #  Return 1 if all else fails.
   def page_param(options = params)
     page = if options[:page]
@@ -149,6 +155,24 @@ module PaginationHelper
 
       union.first
     end
+  end
+
+  ##
+  # For "Show more" paginated links, we want to load an initial number of items (defaulting to 5)
+  # unless a higher number is provided. These values do not correspond to the per_page_options
+  def show_more_limit_param(options = params, initial_limit: SHOW_MORE_DEFAULT_LIMIT)
+    limit = options[:limit].to_i
+    if limit.zero?
+      initial_limit
+    else
+      [limit, SHOW_MORE_MAX_LIMIT].min
+    end
+  end
+
+  ##
+  # Paginate an AR relation for the "show more" pagination functionality
+  def show_more_pagination(paginator, options = params)
+    paginator.paginate(page: 1, per_page: show_more_limit_param(options))
   end
 
   class LinkRenderer < ::WillPaginate::ActionView::LinkRenderer

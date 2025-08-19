@@ -45,6 +45,8 @@ es:
   label_greater: ">"
   label_is_not_project_with_subprojects: "no (incluye subproyectos)"
   label_is_project_with_subprojects: "es (incluye subproyectos)"
+  label_is_work_package_with_descendants: "es (incluye descendientes)"
+  label_is_not_work_package_with_descendants: "no es (incluye descendientes)"
   label_work_package_attributes: "Atributos del paquetes de trabajo"
   label_less: "<"
   label_logged_by_reporting: "Registrado por"
@@ -86,8 +88,16 @@ es:
   validation_failure_date: "no es una fecha válida"
   validation_failure_integer: "no es un entero válido"
   export:
+    timesheet:
+      title: "Su exportación de registro horario en PDF"
+      button: "Exportar registro horario en PDF"
+      timesheet: "Registro horario"
+      time: "Tiempo"
+      sum_hours: Suma
     cost_reports:
       title: "Su exportación de informes de costes XLS"
+      start_time: "Hora de inicio"
+      end_time: "Hora de finalización"
   reporting:
     group_by:
       selected_columns: "Columnas seleccionadas"

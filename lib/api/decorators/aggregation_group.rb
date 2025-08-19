@@ -33,23 +33,27 @@ module API
         @count = count
         @query = query
 
-        if group_key.is_a?(Array)
-          group_key = set_links!(group_key)
-        end
-
-        @link = ::API::V3::Utilities::ResourceLinkGenerator.make_link(group_key)
+        @links =
+          if group_key.is_a?(Array)
+            group_key.map do |element|
+              {
+                href: ::API::V3::Utilities::ResourceLinkGenerator.make_link(element),
+                title: element.to_s
+              }
+            end
+          else
+            [
+              {
+                href: ::API::V3::Utilities::ResourceLinkGenerator.make_link(group_key)
+              }
+            ]
+          end
 
         super(group_key, current_user:)
       end
 
       links :valueLink do
-        if @links
-          @links
-        elsif @link
-          [{ href: @link }]
-        else
-          []
-        end
+        @links
       end
 
       property :value,
@@ -68,28 +72,14 @@ module API
       attr_reader :count,
                   :query
 
-      ##
-      # Initializes the links collection for this group if the group has multiple keys
-      #
-      # @return [String] A new group key for the multi value custom field.
-      def set_links!(group_key)
-        @links = group_key.map do |opt|
-          {
-            href: ::API::V3::Utilities::ResourceLinkGenerator.make_link(opt),
-            title: opt.to_s
-          }
-        end
-
-        if group_key.present?
-          group_key.map(&:name).sort.join(", ")
-        end
-      end
-
       def value
-        if represented == true || represented == false
+        case represented
+        when TrueClass, FalseClass
           represented
+        when Array
+          represented.empty? ? nil : represented.map(&:to_s).sort.join(", ")
         else
-          represented ? represented.to_s : nil
+          represented&.to_s
         end
       end
 

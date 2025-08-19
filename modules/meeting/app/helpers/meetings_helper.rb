@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -83,5 +84,27 @@ module MeetingsHelper
 
   def global_create_meeting_action?
     request.path == meetings_path && @project.nil?
+  end
+
+  def copy_structured_meeting_participants?
+    @copy_from.is_a?(StructuredMeeting) && params[:meeting][:copy_participants] == "1"
+  end
+
+  def create_participants
+    @converted_params[:participants_attributes] = @copy_from.participants.map do |p|
+      {
+        "attended" => false,
+        "invited" => p.invited ? "1" : false,
+        "user_id" => p.user_id.to_s
+      }
+    end
+  end
+
+  def force_defaults
+    @converted_params[:participants_attributes].each { |p| p.reverse_merge! attended: false, invited: false }
+  end
+
+  def copy_param(key)
+    params[key.to_sym] == "1" || params.dig(:meeting, key.to_sym) == "1"
   end
 end

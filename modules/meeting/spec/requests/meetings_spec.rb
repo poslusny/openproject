@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -74,7 +75,7 @@ RSpec.describe "Meeting requests",
       let(:send_notifications) { "1" }
 
       it "sends an invitation mail to the invited users" do
-        patch(meeting_path(meeting), params:)
+        patch(project_meeting_path(project, meeting), params:)
 
         expect(subject.participants.count).to eq(2)
 
@@ -88,7 +89,7 @@ RSpec.describe "Meeting requests",
       let(:send_notifications) { "0" }
 
       it "sends an invitation mail to the invited users" do
-        patch(meeting_path(meeting), params:)
+        patch(project_meeting_path(project, meeting), params:)
 
         expect(subject.participants.count).to eq(2)
 
@@ -141,8 +142,6 @@ RSpec.describe "Meeting requests",
         let(:send_notifications) { "1" }
 
         before do
-          meeting.participants.create!(user:, invited: true)
-
           subject
           perform_enqueued_jobs
         end

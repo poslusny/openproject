@@ -170,13 +170,25 @@ export function initializeUiRouterListeners(injector:Injector) {
   const currentProject:CurrentProjectService = injector.get(CurrentProjectService);
   const firstRoute:FirstRouteService = injector.get(FirstRouteService);
   const backRoutingService:BackRoutingService = injector.get(BackRoutingService);
+  const uiRouter = injector.get(UIRouter);
 
   // Check whether we are running within our complete app, or only within some other bootstrapped
   // component
-  const wpBase = document.querySelector(appBaseSelector);
+  let openprojectBaseApp = document.querySelector(appBaseSelector);
+
+  // Connect ui router to turbo drive
+  document.addEventListener('turbo:load', () => {
+    // Re-find the current app-base
+    openprojectBaseApp = document.querySelector(appBaseSelector);
+    uiRouter.urlService.sync();
+
+    // Re-apply the body classes if the turbo load event is on the same page (e.g. when creating a child from the relations tab)
+    if (stateService.href(uiRouter.globals.current) === window.location.pathname + window.location.search) {
+      bodyClass(_.get(uiRouter.globals.current, 'data.bodyClasses'), 'add');
+    }
+  });
 
   // Uncomment to trace route changes
-  // const uiRouter = injector.get(UIRouter);
   // uiRouter.trace.enable();
 
   // For some pages it makes no sense to display them on mobile (e.g. the split screen).
@@ -186,29 +198,6 @@ export function initializeUiRouterListeners(injector:Injector) {
   $transitions.onBefore(
     { to: (state) => (state ? mobileGuardActivated(state) : false) },
     (transition) => redirectToMobileAlternative(transition),
-  );
-
-  // Fire an event when navigating to a different module. This event then can be detected in
-  // the non-angular parts of the application. A usecase for this can be found in the
-  // overview-header.controllers.ts
-  // See https://community.openproject.org/wp/55024 for details.
-  $transitions.onBefore(
-    {},
-    (transition:Transition) => {
-      const fromState = transition.from();
-      const toState = transition.to();
-      if (
-        !!fromState.name
-        && !!toState.name
-        && fromState.name?.split('.')[0] !== toState.name?.split('.')[0]
-      ) {
-        window.dispatchEvent(new CustomEvent('angular:router:module-changed', {
-          detail: toState.name?.split('.')[0],
-        }));
-      }
-
-      return true;
-    },
   );
 
   // Apply classes from bodyClasses in each state definition
@@ -268,7 +257,7 @@ export function initializeUiRouterListeners(injector:Injector) {
     // The FirstRoute service remembers the first angular route we went to
     // but for pages without any angular routes, this will stay empty.
     // So we also allow routes to happen after some delay
-    if (wpBase === null) {
+    if (openprojectBaseApp === null) {
       // Get the current path and compare
       const path = window.location.pathname;
       const pathWithSearch = path + window.location.search;

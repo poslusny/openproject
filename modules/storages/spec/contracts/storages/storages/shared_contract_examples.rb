@@ -294,8 +294,7 @@ RSpec.shared_examples_for "nextcloud storage contract", :storage_server_helpers,
 
     context "when not automatically managed, no username or password" do
       before do
-        storage.provider_fields = {}
-        storage.assign_attributes(automatic_management_enabled: false)
+        storage.assign_attributes(automatic_management_enabled: false, username: nil, password: nil)
       end
 
       it_behaves_like "contract is valid"
@@ -342,6 +341,12 @@ RSpec.shared_examples_for "nextcloud storage contract", :storage_server_helpers,
           expect(contract).not_to have_received(:provider_type_strategy)
         end
       end
+    end
+  end
+
+  describe ".with_provider_contract" do
+    it "looks like it descends from Storages::Storages::BaseContract" do
+      expect(described_class.with_provider_contract(instance_double(Class))).to be <= Storages::Storages::BaseContract
     end
   end
 end

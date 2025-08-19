@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -129,6 +131,7 @@ class Notifications::CreateFromModelService
     Notifications::UpdateService
       .new(model: existing_notification, user:, contract_class: EmptyContract)
       .call(read_ian: strategy.supports_ian?(reason) ? false : nil,
+            mail_alert_sent: existing_notification.mail_alert_sent || (strategy.supports_mail?(reason) ? false : nil),
             reason:)
   end
 
@@ -252,7 +255,7 @@ class Notifications::CreateFromModelService
   # * only lines added
   # * excluding quoted lines
   def text_for_mentions
-    potential_text = ""
+    potential_text = +""
     potential_text << journal.notes if journal.try(:notes)
 
     %i[description subject].each do |field|
@@ -331,7 +334,7 @@ class Notifications::CreateFromModelService
 
   def user_not_mentioned_or_mentioned_indirectly(self_reason)
     self_reason != NotificationSetting::MENTIONED ||
-    (mention_matches[:user_ids].exclude?(user_with_fallback.id) &&
+    (mention_matches[:user_ids].exclude?(user_with_fallback.id.to_s) &&
      mention_matches[:user_login_names].exclude?(user_with_fallback.login))
   end
 

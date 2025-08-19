@@ -86,13 +86,44 @@ class Project < ApplicationRecord
   has_many :notification_settings, dependent: :destroy
   has_many :project_storages, dependent: :destroy, class_name: "Storages::ProjectStorage"
   has_many :storages, through: :project_storages
+  has_many :phases, class_name: "Project::Phase", dependent: :destroy
+  has_many :available_phases,
+           -> { visible.eager_load(:definition).order(position: :asc) },
+           class_name: "Project::Phase",
+           inverse_of: :project,
+           dependent: :destroy
+
+  has_many :recurring_meetings, dependent: :destroy
+
+  accepts_nested_attributes_for :available_phases
+  validates_associated :available_phases, on: :saving_phases
 
   store_attribute :settings, :deactivate_work_package_attachments, :boolean
 
   acts_as_favorable
 
-  acts_as_customizable # extended in Projects::CustomFields in order to support sections
+  acts_as_customizable validate_on: :saving_custom_fields
+  # extended in Projects::CustomFields in order to support sections
   # and project-level activation of custom fields
+
+  # Override the `validation_context` getter to include the `default_validation_context` when the
+  # context is `:saving_custom_fields`. This is required, because the `acts_as_url` plugin from
+  # `stringex` defines a callback on the `:create` context for initialising the `identifier` field.
+  # Providing a custom context while creating the project, will not execute the callbacks on the
+  # `:create` or `:update` contexts, meaning the identifier will not get initialised.
+  # In order to initialise the identifier, the `default_validation_context` (`:create`, or `:update`)
+  # should be included when validating via the `:saving_custom_fields`. This way every create
+  # or update callback will also be executed alongside the `:saving_custom_fields` callbacks.
+  # This problem does not affect the contextless callbacks, they are always executed.
+
+  def validation_context
+    case Array(super)
+    in [*, :saving_custom_fields, *] => context
+      context | [default_validation_context]
+    else
+      super
+    end
+  end
 
   acts_as_searchable columns: %W(#{table_name}.name #{table_name}.identifier #{table_name}.description),
                      date_column: "#{table_name}.created_at",
@@ -115,6 +146,8 @@ class Project < ApplicationRecord
   register_journal_formatted_fields "public", formatter_key: :visibility
   register_journal_formatted_fields "parent_id", formatter_key: :subproject_named_association
   register_journal_formatted_fields /custom_fields_\d+/, formatter_key: :custom_field
+  register_journal_formatted_fields /^project_phase_\d+_active$/, formatter_key: :project_phase_active
+  register_journal_formatted_fields /^project_phase_\d+_date_range$/, formatter_key: :project_phase_dates
 
   has_paper_trail
 
@@ -174,7 +207,7 @@ class Project < ApplicationRecord
   scopes :activated_time_activity,
          :visible_with_activated_time_activity
 
-  enum status_code: {
+  enum :status_code, {
     on_track: 0,
     at_risk: 1,
     off_track: 2,

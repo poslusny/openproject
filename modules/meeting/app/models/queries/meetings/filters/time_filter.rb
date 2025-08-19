@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -39,13 +40,20 @@ class Queries::Meetings::Filters::TimeFilter < Queries::Meetings::Filters::Meeti
     ]
   end
 
+  def past?
+    values.first == PAST_VALUE
+  end
+
   def where
-    case values.first
-    when PAST_VALUE
-      '"meetings"."start_time" < NOW()'
-    when FUTURE_VALUE
-      '"meetings"."start_time" + "meetings"."duration" * interval \'1 hour\' > NOW()'
+    if past?
+      ['"meetings"."start_time" < ?', Time.current]
+    else
+      ['"meetings"."start_time" + "meetings"."duration" * interval \'1 hour\' >= ?', Time.current]
     end
+  end
+
+  def human_name
+    Meeting.human_attribute_name(:start_time)
   end
 
   def type

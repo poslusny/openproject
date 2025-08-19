@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -73,7 +74,7 @@ RSpec.describe "Meetings deletion" do
       end
 
       expect(page)
-        .to have_content(I18n.t(".no_results_title_text", cascade: true))
+        .to have_content(I18n.t("meeting.blankslate.title"))
 
       expect(page)
         .to have_current_path index_path

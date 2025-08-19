@@ -2,6 +2,7 @@
 fr:
   js:
     storages:
+      authentication_error: "L'authentification avec %{storageType} a échoué"
       link_files_in_storage: "Lier des fichiers dans %{storageType}"
       link_existing_files: "Lier des fichiers existants"
       upload_files: "Charger des fichiers"
@@ -13,11 +14,13 @@ fr:
       open_storage: "Ouvrir %{storageType}"
       select_location: "Sélectionnez l'emplacement"
       choose_location: "Choisir emplacement"
+      new_folder: "Nouveau dossier"
       types:
         nextcloud: "Nextcloud"
         one_drive: "OneDrive/SharePoint"
         default: "Stockage"
       information:
+        authentication_error: "Erreur : la requête à %{storageType} n'a pas pu être authentifiée."
         connection_error: >
           Certains paramètres de %{storageType} ne fonctionnent pas. Veuillez contacter votre administrateur %{storageType}.
         live_data_error: "Erreur lors de la récupération des détails du fichier"
@@ -26,6 +29,8 @@ fr:
         no_file_links: "Afin de lier des fichiers à ce lot de travaux, veuillez le faire via %{storageType}."
         not_logged_in: >
           Pour ajouter un lien, voir ou téléverser des fichiers liés à ce lot de travaux, veuillez vous connecter à %{storageType}.
+        suggest_logout: Vous pouvez essayer de vous déconnecter et de revenir pour tenter de résoudre le problème.
+        suggest_relink: Vous pouvez essayer de réassocier votre compte via le bouton de connexion ci-dessous pour résoudre ce problème.
       files:
         already_existing_header: "Ce fichier existe déjà"
         already_existing_body: >
@@ -42,6 +47,7 @@ fr:
           Le dossier de projet géré automatiquement n'a pas encore été trouvé. Veuillez patienter, rechargez la page pour récupérer les données les plus récentes, puis réessayez.
         managed_project_folder_no_access: >
           Vous n'avez pas encore accès au dossier de projet géré. Veuillez patienter un peu avant de réessayer.
+        cannot_create_folder: Échec de la création du dossier. Évitez d'utiliser des caractères spéciaux et des symboles, et assurez-vous que le dossier n'existe pas déjà.
         upload_keep_both: "Garder les deux"
         upload_replace: "Remplacer"
       file_links:

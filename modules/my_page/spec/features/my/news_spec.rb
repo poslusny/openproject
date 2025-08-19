@@ -30,7 +30,9 @@ require "spec_helper"
 
 require_relative "../../support/pages/my/page"
 
-RSpec.describe "My page news widget spec", :js do
+RSpec.describe "My page news widget spec",
+               :js,
+               :selenium do
   let!(:project) { create(:project) }
   let!(:other_project) { create(:project) }
   let!(:visible_news) do
@@ -51,6 +53,10 @@ RSpec.describe "My page news widget spec", :js do
   end
   let(:my_page) do
     Pages::My::Page.new
+  end
+
+  let!(:my_page_grid) do
+    create(:my_page, :empty, user:)
   end
 
   before do

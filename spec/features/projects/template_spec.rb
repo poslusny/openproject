@@ -28,8 +28,7 @@
 
 require "spec_helper"
 
-RSpec.describe "Project templates", :js, :with_cuprite,
-               with_good_job_batches: [CopyProjectJob, SendCopyProjectStatusEmailJob] do
+RSpec.describe "Project templates", :js, with_good_job_batches: [CopyProjectJob, SendCopyProjectStatusEmailJob] do
   describe "making project a template" do
     let(:project) { create(:project) }
 
@@ -43,15 +42,16 @@ RSpec.describe "Project templates", :js, :with_cuprite,
       visit project_settings_general_path(project)
 
       # Make a template
-      find(".button", text: "Set as template").click
+      page.find_test_selector("project-settings-more-menu").click
+      page.find_test_selector("project-settings--mark-template", text: "Set as template").click
+      expect_and_dismiss_flash(message: "Successful update.")
 
-      expect(page).to have_css(".button", text: "Remove from templates")
       project.reload
       expect(project).to be_templated
 
       # unset template
-      find(".button", text: "Remove from templates").click
-      expect(page).to have_css(".button", text: "Set as template")
+      page.find_test_selector("project-settings-more-menu").click
+      page.find_test_selector("project-settings--mark-template", text: "Remove from templates").click
 
       project.reload
       expect(project).not_to be_templated
@@ -136,7 +136,6 @@ RSpec.describe "Project templates", :js, :with_cuprite,
 
       # Run background jobs twice: the background job which itself enqueues the mailer job
       GoodJob.perform_inline
-      2.times { perform_enqueued_jobs }
 
       mail = ActionMailer::Base
         .deliveries

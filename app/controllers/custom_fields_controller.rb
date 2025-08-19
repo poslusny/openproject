@@ -30,14 +30,17 @@ class CustomFieldsController < ApplicationController
   include CustomFields::SharedActions # share logic with ProjectCustomFieldsControlller
   layout "admin"
 
+  # rubocop:disable Rails/LexicallyScopedActionFilter
   before_action :require_admin
   before_action :find_custom_field, only: %i(edit update destroy delete_option reorder_alphabetical)
   before_action :prepare_custom_option_position, only: %i(update create)
   before_action :find_custom_option, only: :delete_option
+  before_action :validate_enterprise_token, only: %i(create)
+  # rubocop:enable Rails/LexicallyScopedActionFilter
 
   def index
     # loading wp cfs exclicity to allow for eager loading
-    @custom_fields_by_type = CustomField.all
+    @custom_fields_by_type = CustomField
       .where.not(type: ["WorkPackageCustomField", "ProjectCustomField"])
       .group_by { |f| f.class.name }
 
@@ -64,6 +67,12 @@ class CustomFieldsController < ApplicationController
     false
   end
 
+  def validate_enterprise_token
+    if params.dig(:custom_field, :field_format) == "hierarchy" && !EnterpriseToken.allows_to?(:custom_field_hierarchies)
+      render_403
+    end
+  end
+
   def find_custom_field
     @custom_field = CustomField.find(params[:id])
   rescue ActiveRecord::RecordNotFound
@@ -71,7 +80,7 @@ class CustomFieldsController < ApplicationController
   end
 
   def check_custom_field
-    # ProjecCustomFields now managed in a different UI
+    # ProjectCustomFields now managed in a different UI
     if @custom_field.nil? || @custom_field.type == "ProjectCustomField"
       flash[:error] = "Invalid CF type"
       redirect_to action: :index

@@ -27,6 +27,7 @@
 #++
 
 require "spec_helper"
+require_relative "../support/pages/projects/settings/backlogs"
 
 RSpec.describe "Resolved status" do
   let!(:project) do
@@ -42,19 +43,19 @@ RSpec.describe "Resolved status" do
     create(:user,
            member_with_roles: { project => role })
   end
-  let(:settings_page) { Pages::Projects::Settings.new(project) }
+  let(:settings_page) { Pages::Projects::Settings::Backlogs.new(project) }
 
   before do
     login_as current_user
   end
 
   it "allows setting a status as done although it is not closed" do
-    settings_page.visit_tab! "backlogs"
+    settings_page.visit!
 
     check status.name
     click_button "Save"
 
-    settings_page.expect_toast(message: "Successful update")
+    expect_flash(type: :success, message: "Successful update")
 
     expect(page)
       .to have_checked_field(status.name)

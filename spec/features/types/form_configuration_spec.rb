@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -28,7 +30,7 @@
 
 require "spec_helper"
 
-RSpec.describe "form configuration", :js do
+RSpec.describe "form configuration", :js, :selenium do
   shared_let(:admin) { create(:admin) }
   let(:type) { create(:type) }
 
@@ -51,7 +53,7 @@ RSpec.describe "form configuration", :js do
 
       before do
         login_as(admin)
-        visit edit_type_tab_path(id: type.id, tab: "form_configuration")
+        visit edit_tab_type_path(id: type.id, tab: "form_configuration")
       end
 
       it "resets the form properly after changes" do
@@ -91,7 +93,7 @@ RSpec.describe "form configuration", :js do
 
         # Save configuration
         form.save_changes
-        expect(page).to have_css(".op-toast.-success", text: "Successful update.", wait: 10)
+        expect_flash(message: "Successful update.")
 
         form.expect_empty
 
@@ -171,7 +173,7 @@ RSpec.describe "form configuration", :js do
 
         # Save configuration
         form.save_changes
-        expect(page).to have_css(".op-toast.-success", text: "Successful update.", wait: 10)
+        expect_flash(message: "Successful update.")
 
         # Expect configuration to be correct now
         form.expect_no_attribute("assignee", "Cool Stuff")
@@ -256,7 +258,7 @@ RSpec.describe "form configuration", :js do
         custom_field
 
         login_as(admin)
-        visit edit_type_tab_path(id: type.id, tab: "form_configuration")
+        visit edit_tab_type_path(id: type.id, tab: "form_configuration")
       end
 
       it "shows the field" do
@@ -269,12 +271,12 @@ RSpec.describe "form configuration", :js do
         form.expect_attribute(key: cf_identifier)
 
         form.save_changes
-        expect(page).to have_css(".op-toast.-success", text: "Successful update.", wait: 10)
+        expect_flash(message: "Successful update.")
       end
     end
 
     describe "custom fields" do
-      let(:project_settings_page) { Pages::Projects::Settings.new(project) }
+      let(:project_cf_settings_page) { Pages::Projects::Settings::WorkPackageCustomFields.new(project) }
 
       let(:custom_fields) { [custom_field] }
       let(:custom_field) { create(:issue_custom_field, :integer, name: "MyNumber") }
@@ -286,7 +288,7 @@ RSpec.describe "form configuration", :js do
         custom_field
 
         login_as(admin)
-        visit edit_type_tab_path(id: type.id, tab: "form_configuration")
+        visit edit_tab_type_path(id: type.id, tab: "form_configuration")
 
         # Should be initially disabled
         form.expect_inactive(cf_identifier)
@@ -299,25 +301,12 @@ RSpec.describe "form configuration", :js do
         form.expect_attribute(key: cf_identifier)
 
         form.save_changes
-        expect(page).to have_css(".op-toast.-success", text: "Successful update.", wait: 10)
+        expect_flash(message: "Successful update.")
       end
 
       context "if inactive in project" do
         it "can be added to the type, but is not shown" do
           add_cf_to_group
-          # Disable in project, should be invisible
-          # This step is necessary, since we auto-activate custom fields
-          # when adding them to the form configuration
-          project_settings_page.visit_tab!("custom_fields")
-
-          expect(page).to have_css(".custom-field-#{custom_field.id} td", text: "MyNumber")
-          expect(page).to have_css(".custom-field-#{custom_field.id} td", text: type.name)
-
-          id_checkbox = find("#project_work_package_custom_field_ids_#{custom_field.id}")
-          expect(id_checkbox).to be_checked
-          id_checkbox.set(false)
-
-          click_button "Save"
 
           # Visit work package with that type
           wp_page.visit!
@@ -328,7 +317,7 @@ RSpec.describe "form configuration", :js do
           wp_page.expect_attribute_hidden(cf_identifier_api)
 
           # Enable in project, should then be visible
-          project_settings_page.visit_tab!("custom_fields")
+          project_cf_settings_page.visit!
           expect(page).to have_css(".custom-field-#{custom_field.id} td", text: "MyNumber")
           expect(page).to have_css(".custom-field-#{custom_field.id} td", text: type.name)
 
@@ -369,7 +358,7 @@ RSpec.describe "form configuration", :js do
           end
 
           # Ensure CF is checked
-          project_settings_page.visit_tab!("custom_fields")
+          project_cf_settings_page.visit!
           expect(page).to have_css(".custom-field-#{custom_field.id} td", text: "MyNumber")
           expect(page).to have_css(".custom-field-#{custom_field.id} td", text: type.name)
           expect(page).to have_css("#project_work_package_custom_field_ids_#{custom_field.id}[checked]")
@@ -383,7 +372,7 @@ RSpec.describe "form configuration", :js do
 
     it "must disable adding and renaming groups" do
       login_as(admin)
-      visit edit_type_tab_path(id: type.id, tab: "form_configuration")
+      visit edit_tab_type_path(id: type.id, tab: "form_configuration")
 
       find(".group-edit-handler", text: "DETAILS").click
       dialog.expect_open

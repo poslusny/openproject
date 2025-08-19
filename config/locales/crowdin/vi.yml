@@ -24,6 +24,26 @@ vi:
   activities:
     index:
       no_results_title_text: Đã không có bất kỳ hoạt động nào cho dự án trong khung thời gian này.
+    work_packages:
+      activity_tab:
+        no_results_title_text: Không hiện hoạt động nào
+        no_results_description_text: 'Chọn "Hiện mọi thứ" để hiện tất cả các hoạt động và bình luận'
+        label_activity_show_all: "Hiện mọi thứ"
+        label_activity_show_only_comments: "Chỉ hiện bình luận"
+        label_activity_show_only_changes: "Chỉ hiện thay đổi"
+        label_sort_asc: "Newest at the bottom"
+        label_sort_desc: "Newest on top"
+        label_type_to_comment: "Add a comment. Type @ to notify people."
+        label_submit_comment: "Submit comment"
+        label_who: Who?
+        changed_on: "changed on"
+        created_on: "created this on"
+        changed: "changed"
+        created: "created"
+        commented: "commented"
+        restrict_visibility: Restrict visibility
+        restricted_journal: Restricted comments are visible to a limited group of members.
+        unsaved_changes_confirmation_message: You have unsaved changes. Are you sure you want to close the editor?
   admin:
     plugins:
       no_results_title_text: Hiện tại không có plugin nào được cài đặt.
@@ -39,16 +59,9 @@ vi:
         accent-color: "Nhấn mạnh"
         header-bg-color: "Nền của tiêu đề"
         header-item-bg-hover-color: "Màu nền tiêu đề khi trỏ chuột"
-        header-item-font-color: "Phông chữ tiêu đề"
-        header-item-font-hover-color: "Phông chữ tiêu đề khi trỏ chuột"
-        header-border-bottom-color: "Viền của tiêu đề"
         main-menu-bg-color: "Nền menu chính"
         main-menu-bg-selected-background: "Menu chính khi được chọn"
         main-menu-bg-hover-background: "Menu khi trỏ chuột"
-        main-menu-font-color: "Phông chữ menu chính"
-        main-menu-selected-font-color: "Phông chữ menu chính khi được chọn"
-        main-menu-hover-font-color: "Phông chữ menu chính khi trỏ chuột"
-        main-menu-border-color: "Đường viền menu chính"
       custom_colors: "Tùy chỉnh màu sắc"
       customize: "Tùy chỉnh cài đặt OpenProject của bạn với logo và màu sắc riêng."
       enterprise_notice: "Như một lời 'Cảm ơn!' đặc biệt cho sự đóng góp tài chính của họ để phát triển OpenProject, tiện ích nhỏ này chỉ có sẵn cho người đăng ký hỗ trợ phiên bản Enterprise."
@@ -119,9 +132,9 @@ vi:
     sync_failed: "Không thể đồng bộ hóa từ LDAP: %{message}."
     back_to_index: "Nhấp vào đây để quay lại danh sách kết nối."
     technical_warning_html: |
-      Biểu mẫu LDAP này yêu cầu kiến thức kỹ thuật về thiết lập LDAP / Active Directory của bạn.
-      <br/>
-      <a href="https://www.openproject.org/help/administration/manage-ldap-authentication/">Vui lòng truy cập tài liệu của chúng tôi để được hướng dẫn chi tiết</a>.
+      This LDAP form requires technical knowledge of your LDAP / Active Directory setup.
+      <br>
+      <a href="https://www.openproject.org/help/administration/manage-ldap-authentication/">Please visit our documentation for detailed instructions</a>.
     attribute_texts:
       name: Tên tùy ý của kết nối LDAP
       host: Tên máy chủ LDAP hoặc địa chỉ IP
@@ -129,10 +142,8 @@ vi:
       generic_map: "84/5000\nKhóa thuộc tính trong LDAP được ánh xạ tới thuộc tính `%{attribute}` của OpenProject"
       admin_map_html: "Tùy chọn: Khóa thuộc tính trong LDAP mà <strong>nếu có</strong> đánh dấu người dùng OpenProject là quản trị viên. Để trống khi nghi ngờ."
       system_user_dn_html: |
-
-        58/5000
-        Nhập DN của người dùng hệ thống được sử dụng để truy cập chỉ đọc.
-        <br/>
+        Enter the DN of the system user used for read-only access.
+        <br>
         Example: uid=openproject,ou=system,dc=example,dc=com
       system_user_password: Nhập mật khẩu liên kết của người dùng hệ thống
       base_dn: |
@@ -172,7 +183,7 @@ vi:
     tls_options:
       verify_peer: "Xác minh chứng chỉ SSL"
       verify_peer_description_html: >
-        Kích hoạt xác minh SSL nghiêm ngặt của chuỗi chứng chỉ đáng tin cậy. <br/> <strong>Cảnh báo:</strong> Bỏ chọn tùy chọn này sẽ tắt xác minh SSL của chứng chỉ máy chủ LDAP. Điều này làm lộ kết nối của bạn đến các cuộc tấn công Man in the Middle.
+        Enables strict SSL verification of the certificate trusted chain. <br> <strong>Warning:</strong> Unchecking this option disables SSL verification of the LDAP server certificate. This exposes your connection to Man in the Middle attacks.
       tls_certificate_description: "Nếu chứng chỉ máy chủ LDAP không có trong nguồn tin cậy của hệ thống này, bạn có thể thêm nó thủ công ở đây. Nhập chuỗi chứng chỉ PEM X509."
   forums:
     show:
@@ -211,8 +222,33 @@ vi:
     admin:
       custom_field_projects:
         is_for_all_blank_slate:
-          heading: For all projects
+          heading: Cho tất cả các dự án
           description: This custom field is enabled in all projects since the "For all projects" option is checked. It cannot be deactivated for individual projects.
+      items:
+        actions: "Item actions"
+        blankslate:
+          root:
+            title: "Your list of items is empty"
+            description: "Start by adding items to the custom field of type hierarchy. Each item can be used to create a hierarchy bellow it. To navigate and create sub-items inside a hierarchy click on the created item."
+          item:
+            title: This item doesn't have any hierarchy level below
+            description: Add items to this list to create sub-items inside another one
+        delete_dialog:
+          title: "Delete custom field item"
+          heading: "Delete custom field item?"
+          description: "This action will irreversibly remove the item and all its sub-items. Any assigned values will be permanently deleted. If this field is required, removing items may cause existing work packages to become invalid."
+        placeholder:
+          label: "Item label"
+          short: "Short name"
+      notice:
+        remember_items_and_projects: "Remember to set items and projects in the respective tabs for this custom field."
+      hierarchy:
+        subitems:
+          zero: no sub-items
+          one: 1 sub-item
+          other: "%{count} sub-items"
+    upsale:
+      custom_field_format_hierarchy: "Need a hierarchy in your custom fields for work packages?"
     text_add_new_custom_field: >
       Để thêm các trường tùy chỉnh mới vào một dự án, trước tiên bạn cần tạo chúng trước khi có thể thêm vào dự án này.
     is_enabled_globally: "Được bật toàn cầu"
@@ -221,10 +257,12 @@ vi:
     confirm_destroy_option: "Xóa một tùy chọn sẽ xóa tất cả các sự kiện của nó (ví dụ như trong các gói công việc). Bạn có chắc bạn muốn xóa bỏ nó?"
     reorder_alphabetical: "Sắp xếp lại giá trị theo thứ tự bảng chữ cái"
     reorder_confirmation: "Cảnh báo: Thứ tự hiện tại của các giá trị sẽ bị mất. Tiếp tục?"
+    placeholder_version_select: "Work package or project selection is required first"
     instructions:
       is_required: "Đánh dấu trường tùy chỉnh là bắt buộc. Điều này sẽ làm cho việc điền vào trường là bắt buộc khi tạo mới hoặc cập nhật tài nguyên hiện có."
       is_required_for_project: "Tích để bật thuộc tính này và yêu cầu nó trong tất cả các dự án. Không thể hủy kích hoạt nó cho từng dự án."
       is_for_all: "Đánh dấu trường tùy chỉnh là khả dụng trong tất cả các dự án hiện có và mới."
+      multi_select: "Allows the user to assign multiple values to this custom field."
       searchable: "Bao gồm giá trị trường khi sử dụng chức năng tìm kiếm toàn cầu."
       searchable_for_project: "Bao gồm giá trị trường khi sử dụng chức năng tìm kiếm toàn cầu."
       editable: "Cho phép trường có thể chỉnh sửa bởi người dùng tự mình."
@@ -236,6 +274,29 @@ vi:
       no_results_content_text: Tạo trường tùy chỉnh mới
   concatenation:
     single: "hoặc"
+  dry_validation:
+    errors:
+      int?: "must be an integer."
+      filled?: "must be filled."
+      greater_or_equal_zero: "must be greater or equal to 0."
+      not_found: "not found."
+      rules:
+        item:
+          root_item: "cannot be a root item."
+          not_persisted: "must be an already existing item."
+        label:
+          not_unique: "must be unique within the same hierarchy level."
+        short:
+          not_unique: "must be unique within the same hierarchy level."
+        parent:
+          not_descendant: "must be a descendant of the hierarchy root."
+    rules:
+      depth: "Depth"
+      item: "Item"
+      label: "Label"
+      short: "Short name"
+      parent: "Cha"
+      blueprint: "Pattern blueprint"
   global_search:
     placeholder: "Tìm kiếm trong %{app_title}"
     overwritten_tabs:
@@ -289,9 +350,13 @@ vi:
         placeholder: "Danh sách dự án mới"
       delete_modal:
         title: "Xóa danh sách dự án"
+        heading: "Delete this project list?"
         text: "Hành động này sẽ không xóa bất kỳ dự án nào có trong danh sách. Bạn có chắc chắn muốn xóa danh sách dự án này không?"
     settings:
       change_identifier: Thay đổi định danh
+      actions:
+        label_enable_all: "Bật tất cả"
+        label_disable_all: "Tắt tất cả"
       activities:
         no_results_title_text: Không có hoạt động nào hiện tại.
       forums:
@@ -302,18 +367,26 @@ vi:
         no_results_content_text: Tạo ra một loại gói công việc mới
       custom_fields:
         no_results_title_text: Không không có trường tùy chỉnh.
+      life_cycle:
+        header:
+          title: "Project life cycle"
+          description_html: "The active project phases define this project's life cycle and are defined in the <a href=%{admin_settings_url} target=\"_blank\">administration settings</a>. Enabled phases will be displayed in your <a href=%{overview_url} target=\"_blank\">project overview</a>."
+        non_defined: "No phases are currently defined."
+        section_header: "Phases"
+        step:
+          use_in_project: "Use %{step} in this project"
+        filter:
+          label: "Search project phase"
       project_custom_fields:
         header:
           title: "Thuộc tính dự án"
-          description: 'Các thuộc tính dự án này sẽ được hiển thị trên <a href=%{overview_url} target="_blank">trang tổng quan dự án</a> của bạn dưới các phần tương ứng của chúng. Bạn có thể bật hoặc tắt các thuộc tính cá nhân. Các thuộc tính và phần của dự án được xác định trong <a href=%{admin_settings_url} target="_blank">cài đặt quản trị</a> bởi quản trị viên của phiên bản.'
+          description_html: 'Các thuộc tính dự án này sẽ được hiển thị trên <a href=%{overview_url} target="_blank">trang tổng quan dự án</a> của bạn dưới các phần tương ứng của chúng. Bạn có thể bật hoặc tắt các thuộc tính cá nhân. Các thuộc tính và phần của dự án được xác định trong <a href=%{admin_settings_url} target="_blank">cài đặt quản trị</a> bởi quản trị viên của phiên bản.'
         filter:
           label: "Tìm kiếm thuộc tính dự án"
         actions:
           label_enable_single: "Kích hoạt trong dự án này, nhấp để tắt"
           label_disable_single: "Không kích hoạt trong dự án này, nhấp để bật"
           remove_from_project: "Xóa khỏi dự án"
-          label_enable_all: "Bật tất cả"
-          label_disable_all: "Tắt tất cả"
         is_required_blank_slate:
           heading: Bắt buộc trong tất cả các dự án
           description: Thuộc tính dự án này được kích hoạt trong tất cả các dự án vì tùy chọn "Bắt buộc trong tất cả các dự án" đã được chọn. Nó không thể bị vô hiệu hóa cho các dự án cá nhân.
@@ -326,6 +399,11 @@ vi:
         no_results_content_text: Tạo ra một phiên bản mới
       storage:
         no_results_title_text: Không có không gian đĩa bổ sung nào được ghi nhận bởi dự án này.
+      work_package_priorities:
+        new_label: "New priority"
+  project_phase:
+    working_days_count:
+      other: "Duration: %{count} working days"
   lists:
     create:
       success: "Danh sách đã sửa đổi đã được lưu thành danh sách mới"
@@ -397,6 +475,7 @@ vi:
   my:
     access_token:
       create_dialog:
+        title: Token generated
         header: Token %{type} đã được tạo
         warning: Lưu ý rằng đây là lần duy nhất bạn thấy được token này, chắc chắn phải sao chép nó ngay.
       errors:
@@ -440,8 +519,12 @@ vi:
     groups:
       member_in_these_groups: "Người dùng này hiện là thành viên của các nhóm sau:"
       no_results_title_text: Người dùng này hiện không phải là thành viên của nhóm nào.
+      summary_with_more: Member of %{names} and %{count_link}.
+      more: "%{count} more"
+      summary: Member of %{names}.
     memberships:
       no_results_title_text: Người dùng này không phải là thành viên của dự án.
+    open_profile: "Open profile"
   page:
     text: "Văn bản"
   placeholder_users:
@@ -463,23 +546,37 @@ vi:
       priority_color_text: |
         Nhấp để chỉ định hoặc thay đổi màu của mức ưu tiên này.
         Có thể sử dụng để làm nổi bật các gói công việc trong bảng.
+  reactions:
+    action_title: "React"
+    add_reaction: "Add reaction"
+    react_with: "React with %{reaction}"
+    and_user: "and %{user}"
+    and_others:
+      other: và %{count} nữa
+    reaction_by: "%{reaction} by"
   reportings:
     index:
       no_results_title_text: Hiện tại không có báo cáo trạng thái.
       no_results_content_text: Thêm một báo cáo trạng thái
   statuses:
     edit:
-      status_readonly_html: |
-        Đánh dấu tùy chọn này để đánh dấu các gói công việc với trạng thái này là chỉ đọc.
-        Không thể thay đổi các thuộc tính ngoại trừ trạng thái.
-        <br/>
-        <strong>Lưu ý</strong>: Các giá trị kế thừa (ví dụ: từ các mục con hoặc mối quan hệ) vẫn sẽ được áp dụng.
-      status_excluded_from_totals_text: |-
-        Đánh dấu tùy chọn này để loại trừ các gói công việc có trạng thái này khỏi tổng số Công việc,
-        Công việc còn lại, và % Hoàn thành trong một cấu trúc phân cấp.
       status_color_text: |
         Nhấp để gán hoặc thay đổi màu của trạng thái này.
         Nó được hiển thị trên nút trạng thái và có thể được sử dụng để làm nổi bật các gói công việc trong bảng.
+      status_default_text: |-
+        New work packages are by default set to this type. They cannot be read-only.
+      status_excluded_from_totals_text: |-
+        Đánh dấu tùy chọn này để loại trừ các gói công việc có trạng thái này khỏi tổng số Công việc,
+        Công việc còn lại, và % Hoàn thành trong một cấu trúc phân cấp.
+      status_percent_complete_text: |-
+        In <a href="%{href}">status-based progress calculation mode</a>, the % Complete of a work
+        package is automatically set to this value when this status is selected.
+        Ignored in work-based mode.
+      status_readonly_html: |
+        Check this option to mark work packages with this status as read-only.
+        No attributes can be changed with the exception of the status.
+        <br>
+        <strong>Note</strong>: Inherited values (e.g., from children or relations) will still apply.
     index:
       no_results_title_text: Hiện tại không có trạng thái gói công việc nào.
       no_results_content_text: Thêm trạng thái mới
@@ -489,7 +586,7 @@ vi:
         is_readonly: "Chỉ đọc"
         excluded_from_totals: "Loại trừ khỏi tổng số"
   themes:
-    dark: "Tối (thử nghiệm)"
+    dark: "Dark"
     light: "Sáng"
     light_high_contrast: "Sáng, độ tương phản cao"
   types:
@@ -497,18 +594,40 @@ vi:
       no_results_title_text: Hiện tại không có loại nào.
       no_results_content_text: Tạo loại mới
     edit:
-      settings: "Cài đặt"
-      form_configuration: "Cấu hình biểu mẫu"
+      form_configuration:
+        tab: "Mẫu cấu hình"
       more_info_text_html: >
         Phiên bản Doanh nghiệp cho phép bạn tùy chỉnh cấu hình biểu mẫu với các tiện ích bổ sung sau: <br> <ul class="%{list_styling_class}"> <li><b>Thêm nhóm thuộc tính mới</b></li> <li><b>Đổi tên nhóm thuộc tính</b></li> <li><b>Thêm bảng các gói công việc liên quan</b></li> </ul>
-      projects: "Dự án"
-      enabled_projects: "Các dự án đã bật"
-      edit_query: "Chỉnh sửa bảng"
-      query_group_placeholder: "Đặt tên cho bảng"
-      reset: "Đặt lại về mặc định"
-      type_color_text: |
-        Màu đã chọn phân biệt các loại khác nhau
-        trong biểu đồ Gantt hoặc bảng gói công việc. Do đó, nên sử dụng màu mạnh.
+      projects:
+        tab: "Các dự án"
+        enabled_projects: "Các dự án được kích hoạt"
+      settings:
+        tab: "Cài đặt"
+        type_color_text: The selected color distinguishes different types in Gantt charts or work packages tables. It is therefore recommended to use a strong color.
+      subject_configuration:
+        tab: "Subject configuration"
+        manually_editable_subjects:
+          label: "Manually editable subjects"
+          caption: "Users can manually enter and edit work package subjects without restrictions."
+        automatically_generated_subjects:
+          label: "Automatically generated subjects"
+          caption: "Define a pattern using referenced attributes and text to automatically generate work package subjects. Users will not be able to manually edit subjects."
+        pattern:
+          label: "Subject pattern"
+          caption: "Add text or type / to search for an attribute. You can add spaces to separate them."
+          headings:
+            work_package: "Work Package"
+            parent: "Cha"
+            project: "Dự án"
+          insert_as_text: "No attributes found. Add as text: \"%{word}\""
+      export_configuration:
+        tab: "Generate PDF"
+        intro: "Select which templates from those that are available you would like to enable for this type. The template determines the design and attributes visible in the exported PDF of a work package using this type. The first template on the list is selected by default."
+        pdf_export_templates:
+          label: "PDF Export templates"
+          actions:
+            label_enable_all: "Bật tất cả"
+            label_disable_all: "Tắt tất cả"
   versions:
     overview:
       work_packages_in_archived_projects: "Phiên bản này được chia sẻ với các dự án đã lưu trữ vẫn có gói công việc được gán cho phiên bản này. Những gói công việc này được tính, nhưng sẽ không xuất hiện trong các chế độ xem liên kết."
@@ -523,6 +642,47 @@ vi:
     index:
       no_results_title_text: Hiện tại không có quy trình làm việc nào.
   work_packages:
+    datepicker_modal:
+      banner:
+        description:
+          automatic_mobile: "Start date derived."
+          click_on_show_relations_to_open_gantt: 'Click on "%{button_name}" for Gantt overview.'
+          manual_mobile: "Ignoring relations."
+          manual_gap_between_predecessors: "There is a gap between this and all predecessors."
+          manual_overlap_with_predecessors: "Overlaps with at least one predecessor."
+          manual_with_children: "This has child work packages but their start dates are ignored."
+        title:
+          automatic_mobile: "Automatically scheduled."
+          automatic_with_children: "The dates are determined by child work packages."
+          automatic_with_predecessor: "The start date is set by a predecessor."
+          manual_mobile: "Manually scheduled."
+          manually_scheduled: "Manually scheduled. Dates not affected by relations."
+      blankslate:
+        title: "No predecessors"
+        description: "To enable automatic scheduling, this work package needs to have at least one predecessor. It will then automatically be scheduled to start after the closest predecessor."
+      ignore_non_working_days:
+        title: "Chỉ ngày làm việc"
+      mode:
+        title: "Scheduling mode"
+        automatic: "Tự động"
+        manual: "Manual"
+      show_relations: "Hiển thị các mối quan hệ"
+      tabs:
+        aria_label: "Datepicker tabs"
+        children: "Con"
+        dates: "Dates"
+        predecessors: "Predecessors"
+        successors: "Successors"
+        blankslate:
+          predecessors:
+            title: "No predecessors"
+            description: "This work package does not have any predecessors."
+          successors:
+            title: "No successors"
+            description: "This work package does not have any successors."
+          children:
+            title: "No children"
+            description: "This work package does not have any children."
     x_descendants:
       other: "%{count} gói sản phẩm phụ thuộc"
     bulk:
@@ -531,7 +691,7 @@ vi:
       could_not_be_saved: "Không thể lưu các gói công việc sau:"
       none_could_be_saved: "Không có gói công việc nào trong số %{total} có thể được cập nhật."
       x_out_of_y_could_be_saved: "%{failing} trong số %{total} gói công việc không thể được cập nhật trong khi %{success} thì có thể."
-      selected_because_descendants: "Khi %{selected} gói công việc được chọn, tổng cộng %{total} gói công việc bị ảnh hưởng bao gồm các mục kế thừa."
+      selected_because_descendants: "While %{selected} work packages were selected, in total %{total} work packages are affected which includes descendants."
       descendant: "gói công việc kế thừa của được chọn"
     move:
       no_common_statuses_exists: "Có là tình trạng không có sẵn cho tất cả các gói đã chọn công việc. Tình trạng của họ không thể thay đổi."
@@ -545,6 +705,7 @@ vi:
         title: "Thiếu quy trình làm việc cho việc chia sẻ gói công việc"
         message: "Không có quy trình làm việc nào được cấu hình cho vai trò 'Biên tập viên gói công việc'. Không có quy trình làm việc, người được chia sẻ không thể thay đổi trạng thái của gói công việc. Các quy trình làm việc có thể được sao chép. Chọn một loại nguồn (ví dụ: 'Nhiệm vụ') và vai trò nguồn (ví dụ: 'Thành viên'). Sau đó chọn các loại mục tiêu. Để bắt đầu, bạn có thể chọn tất cả các loại làm mục tiêu. Cuối cùng, chọn vai trò 'Biên tập viên gói công việc' làm mục tiêu và nhấp vào 'Sao chép'. Sau khi đã tạo ra các mặc định như vậy, tinh chỉnh các quy trình làm việc như bạn làm với mọi vai trò khác."
         link_message: "Cấu hình các quy trình làm việc trong quản trị."
+    templated_subject_hint: Automatically generated through type %{type}
     summary:
       reports:
         category:
@@ -561,6 +722,77 @@ vi:
           no_results_title_text: Hiện tại không có loại nào có sẵn.
         version:
           no_results_title_text: Hiện tại không sẵn có phiên bản nào.
+  work_package_relations_tab:
+    index:
+      action_bar_title: "Add relations to other work packages to create a link between them."
+      no_results_title_text: There are currently no relations available.
+      blankslate_heading: "No relations"
+      blankslate_description: "This work package does not have any relations yet."
+    label_add_child_button: "Child"
+    label_add_x: "Add %{x}"
+    label_edit_x: "Edit %{x}"
+    label_add_description: "Add description"
+    lag:
+      subject: "Kết quả chậm"
+      caption: "The minimum number of working days to keep in between the two work packages."
+    relations:
+      label_new_child_created: "New work package created and added as a child"
+      label_relates_singular: "liên quan đến"
+      label_relates_plural: "liên quan đến"
+      label_relates_to_singular: "liên quan đến"
+      label_relates_to_plural: "liên quan đến"
+      relates_description: "Creates a visible link between the two work packages with no additional effect"
+      relates_to_description: "Creates a visible link between the two work packages with no additional effect"
+      label_precedes_singular: "successor (after)"
+      label_precedes_plural: "successors (after)"
+      precedes_description: "The related work package necessarily needs to start after this one finishes"
+      label_follows_singular: "predecessor (before)"
+      label_follows_plural: "predecessors (before)"
+      follows_description: "The related work package necessarily needs to finish before this one can start"
+      label_child_singular: "child"
+      label_child_plural: "children"
+      new_child: "Tạo con mới"
+      new_child_text: "Creates a related work package as a sub-item of the current (parent) work package"
+      child: "Child"
+      child_description: "Makes the related work package a sub-item of the current (parent) work package"
+      label_closest: "Closest"
+      label_blocks_singular: "các khối"
+      label_blocks_plural: "các khối"
+      blocks_description: "The related work package cannot be closed until this one is closed first"
+      label_blocked_singular: "bị chặn bởi"
+      label_blocked_plural: "bị chặn bởi"
+      label_blocked_by_singular: "bị chặn bởi"
+      label_blocked__by_plural: "bị chặn bởi"
+      blocked_description: "This work package cannot be closed until the related one is closed first"
+      blocked_by_description: "This work package cannot be closed until the related one is closed first"
+      label_duplicates_singular: "Nhân đôi"
+      label_duplicates_plural: "Nhân đôi"
+      duplicates_description: "This is a copy of the related work package"
+      label_duplicated_singular: "bị trùng bởi"
+      label_duplicated_plural: "bị trùng bởi"
+      label_duplicated_by_singular: "bị trùng bởi"
+      label_duplicated_by_plural: "bị trùng bởi"
+      duplicated_by_description: "The related work package is a copy of this"
+      duplicated_description: "The related work package is a copy of this"
+      label_includes_singular: "bao gồm"
+      label_includes_plural: "bao gồm"
+      includes_description: "Marks the related work package as including this one with no additional effect"
+      label_partof_singular: "một phần của"
+      label_partof_plural: "một phần của"
+      label_part_of_singular: "một phần của"
+      label_part_of_plural: "một phần của"
+      partof_description: "Marks the related work package as being part of this one with no additional effect"
+      part_of_description: "Marks the related work package as being part of this one with no additional effect"
+      label_requires_singular: "bắt buộc"
+      label_requires_plural: "bắt buộc"
+      requires_description: "Marks the related work package as a requirement to this one"
+      label_required_singular: "required by"
+      label_required_plural: "required by"
+      required_description: "Marks this work package as being a requirement to the related one"
+      label_parent_singular: "parent"
+      label_parent_plural: "parent"
+      ghost_relation_title: "Work package liên quan"
+      ghost_relation_description: "This is not visible to you due to permissions."
   label_invitation: Thư mời
   account:
     delete: "Xoá tài khoản"
@@ -600,6 +832,7 @@ vi:
       attachment:
         attachment_content: "Số lượng Tệp đính kèm"
         attachment_file_name: "Tên tập tin đính kèm"
+        content_type: "Content-type"
         downloads: "Những mục đã tải xuống"
         file: "Tệp"
         filename: "Tệp"
@@ -607,10 +840,10 @@ vi:
       attribute_help_text:
         attribute_name: "Thuộc tính"
         help_text: "Văn bản trợ giúp"
+      capability:
+        context: "Context"
       changeset:
         repository: "Kho lưu trữ"
-      color:
-        hexcode: "Mã màu hex"
       comment:
         commented: "Đã bình luận" #an object that this comment belongs to
       custom_action:
@@ -621,9 +854,11 @@ vi:
         editable: "Có thể chỉnh sửa"
         field_format: "Định dạng"
         is_filter: "Dùng như bộ lọc"
+        is_for_all: "Cho tất cả các dự án"
         is_required: "Bắt buộc"
         max_length: "Chiều dài tối đa"
         min_length: "Chiều dài tối thiểu"
+        content_right_to_left: "Right-to-Left content"
         multi_value: "Cho phép nhiều lựa chọn"
         possible_values: "Giá trị có thể"
         regexp: "Biểu thức chính quy"
@@ -636,12 +871,15 @@ vi:
         secret: "Bí mật khách hàng"
         owner: "Người sở hữu"
         builtin: "Builtin"
-        enabled: "Active"
+        enabled: "Đang hoạt động"
         redirect_uri: "URI đổi hướng"
         client_credentials_user_id: "ID người dùng thông tin xác thực của khách hàng"
         scopes: "Phạm vi"
         confidential: "Bí mật"
+      emoji_reaction:
+        reactable: "Reacted on"
       enterprise_token:
+        domain: "Miền"
         starts_at: "Có hiệu lực kể từ"
         subscriber: "Người đăng ký"
         encoded_token: "Mã thông báo hỗ trợ doanh nghiệp"
@@ -653,12 +891,15 @@ vi:
         widgets: "Tiện ích"
       journal:
         notes: "Ghi chú"
+        cause_type: "Cause type"
       ldap_auth_source:
         account: "Tài khoản"
         attr_firstname: "Thuộc tính tên"
         attr_lastname: "Thuộc tính họ"
         attr_login: "Thuộc tính tên người dùng"
         attr_mail: "Thuộc tính email"
+        filter_string: "Filter string"
+        admin: "Người Quản lý"
         base_dn: "DN căn bản"
         host: "Máy chủ"
         onthefly: "Tạo người dùng tự động"
@@ -666,14 +907,17 @@ vi:
         tls_certificate_string: "Chứng chỉ SSL của máy chủ LDAP"
       member:
         roles: "Vai trò"
+      notification:
+        read_ian: "Read in-app"
+        resource: "Resource"
       oauth_client:
         client: "ID khách hàng"
-      planning_element_type_color:
-        hexcode: Mã Hex
       project:
         active_value:
           true: "chưa lưu trữ"
           false: "đã lưu trữ"
+        description: "Mô tả"
+        enabled_modules: "Các mô-đun đã bật"
         identifier: "Định danh"
         latest_activity_at: "Các hoạt động mới nhất tại"
         parent: "Dự án con của"
@@ -683,7 +927,6 @@ vi:
           false: "riêng tư"
         queries: "Truy vấn"
         status_code: "Trạng thái dự án"
-        description: "Mô tả"
         status_explanation: "Mô tả trạng thái dự án"
         status_codes:
           not_started: "Chưa bắt đầu"
@@ -702,17 +945,53 @@ vi:
       project_custom_field:
         is_required: "Yêu cầu cho tất cả các dự án"
         custom_field_section: Mục tùy chỉnh
+      project/phase:
+        date_range: "Khoảng thời gian"
+        definition: "Definition"
+      project/phase_definition:
+        name: "Tên"
+        color: "Màu sắc"
+        start_gate: "Start phase gate"
+        start_gate_name: "Start phase gate name"
+        finish_gate: "Finish phase gate"
+        finish_gate_name: "Finish phase gate name"
       query:
+        sums: "Sums"
+        columns: "Cột"
         column_names: "Cột"
         relations_to_type_column: "Quan hệ với %{type}"
         relations_of_type_column: "%{type} quan hệ"
+        child_work_packages: "Child work packages"
         group_by: "Nhóm kết quả bởi"
+        sort_by: "Sort results by"
         filters: "Bộ lọc"
         timeline_labels: "Nhãn dòng thời gian"
+        timeline_visible: "Xem biểu đồ sự kiện"
+        timeline_zoom_level: "Gantt chart zoom level"
+        timestamps: "Baseline timestamps"
+        sort_criteria: "Sort criteria"
+        highlighted_attributes: "Highlighted attributes"
+        highlighting_mode: "Highlight mode"
+        display_representation: "Display mode"
+        show_hierarchies: "Display mode"
+        starred: "Yêu thích"
+        hidden: "Hidden"
+        manual_sorting: "Manual sort order"
+        ordered_work_packages: "Work packages order"
+        include_subprojects: "Bao gồm dự án con"
+        results: "Các kết quả"
       relation:
         lag: "Kết quả chậm"
-        from: "Gói công việc"
+        from: "Work package liên quan"
         to: "Work package liên quan"
+        relation_type: "Relation type"
+      reminder:
+        remindable: "Reminded object"
+        remind_at: "Remind at"
+        remind_at_date: "Ngày"
+        remind_at_time: "Thời gian"
+      reminder_notification:
+        notification: "Notification"
       repository:
         url: "Đường dẫn (URL)"
       role:
@@ -722,6 +1001,9 @@ vi:
         is_readonly: "Work package chỉ đọc"
         excluded_from_totals: "Loại trừ khỏi tính tổng trong phân cấp"
         default_done_ratio: "% Hoàn thành"
+      token/ical:
+        calendar: "Lịch"
+        ical_token_query_assignment: "Query assignment"
       time_entry:
         activity: "Hoạt động"
         hours: "Giờ"
@@ -735,6 +1017,11 @@ vi:
         is_default: "Kích hoạt cho các dự án mới theo mặc định"
         is_milestone: "Là cột mốc"
         color: "Màu sắc"
+        patterns: "Patterns"
+      remote_identity:
+        auth_source: "Auth Source"
+        integration: "Integration"
+        user: "Người dùng"
       user:
         admin: "Người Quản lý"
         auth_source: "Nguồn xác thực"
@@ -744,18 +1031,23 @@ vi:
         force_password_change: "Buộc thay đổi mật khẩu trong lần đăng nhập tiếp theo"
         language: "Ngôn ngữ"
         last_login_on: "Lần đăng nhập trước"
+        failed_login_count: "Failed login attempts"
+        first_name: "Tên"
+        last_name: "Họ"
+        first_login: "First login"
         new_password: "Mật khẩu mới"
         password_confirmation: "Xác nhận lại mật khẩu"
         consented_at: "Đồng ý tại"
       user_preference:
         comments_sorting: "Hiện bình luận"
-        hide_mail: "Ẩn địa chỉ email của tôi"
         impaired: "Viet nam"
-        time_zone: "Múi giờ"
         auto_hide_popups: "Tự động ẩn thông báo thành công"
         warn_on_leaving_unsaved: "Cảnh báo tôi khi rời khỏi gói công việc với thay đổi chưa lưu"
         theme: "Chế độ"
+        time_zone: "Múi giờ"
         mode_guideline: "Một số chế độ sẽ ghi đè màu chủ đề tùy chỉnh để đảm bảo khả năng truy cập và dễ đọc. Để có chủ đề tùy chỉnh đầy đủ, vui lòng chọn chế độ Sáng."
+        daily_reminders: "Daily reminders"
+        workdays: "Ngày làm việc"
       version:
         effective_date: "Ngày hoàn thành"
         sharing: "Chia sẻ"
@@ -764,7 +1056,9 @@ vi:
       wiki_page:
         parent_title: "Trang mẹ"
         redirect_existing_links: "Chuyển hướng các liên kết hiện có"
+        text: "Page content"
       work_package:
+        ancestor: "Descendants of" #used for filtering of work packages that are descendants of a given work package
         begin_insertion: "Bắt đầu chèn"
         begin_deletion: "Bắt đầu xóa"
         children: "Subelements"
@@ -780,6 +1074,7 @@ vi:
           title: "Ngày làm việc"
           false: "chỉ ngày làm việc"
           true: "bao gồm ngày không làm việc"
+        journal_restricted: Restricted Journal
         notify: "Thông báo" #used in custom actions
         parent: "Cha"
         parent_issue: "Cha"
@@ -802,6 +1097,7 @@ vi:
       messages:
         accepted: "phải được đồng ý"
         after: "phải sau %{date}"
+        after_today: "must be in the future."
         after_or_equal_to: "phải sau hoặc tương đương với %{date}"
         before: "phải trước khi %{date}"
         before_or_equal_to: "phải có trước hay tương đương với %{date}"
@@ -822,6 +1118,7 @@ vi:
         empty: "không thể để trống"
         even: "phải là số chẵn."
         exclusion: "được bảo lưu."
+        feature_disabled: is not available.
         file_too_large: "quá lớn (kích thước tối đa là %{count} bytes)"
         filter_does_not_exist: "bộ lọc không tồn tại."
         format: "không khớp với định dạng mong đợi '%{expected}'."
@@ -839,13 +1136,16 @@ vi:
         not_available: "không có sẵn do cấu hình hệ thống."
         not_deletable: "không thể bị xóa."
         not_current_user: "không phải là người dùng hiện tại."
+        not_found: "not found."
         not_a_date: "không phải là ngày hợp lệ"
         not_a_datetime: "không phải là thời gian hợp lệ"
         not_a_number: "không phải là số"
         not_allowed: "không hợp lệ vì thiếu quyền."
+        not_json: "is not a valid JSON object."
         not_an_integer: "không phải là một số nguyên"
         not_an_iso_date: "không phải là một ngày hợp lệ. Yêu cầu định dạng: YYYY-MM-DD."
         not_same_project: "không thuộc cùng dự án."
+        datetime_must_be_in_future: "must be in the future."
         odd: "phải là số lẻ"
         regex_match_failed: "không khớp với biểu thức chính quy %{expression}."
         regex_invalid: "có thể không được xác nhận với các biểu hiện thường xuyên liên kết."
@@ -885,7 +1185,7 @@ vi:
         custom_fields_project:
           attributes:
             project_ids:
-              blank: "Please select a project."
+              blank: "Vui lòng chọn một dự án."
         custom_actions:
           only_one_allowed: "(%{name}) chỉ có một giá trị được cho phép."
           empty: "giá trị (%{name}) không thể để trống."
@@ -955,6 +1255,12 @@ vi:
           attributes:
             project_ids:
               blank: "Vui lòng chọn một dự án."
+        project/phase:
+          attributes:
+            date_range:
+              start_date_must_be_before_finish_date: "start date must be before the finish date."
+              non_continuous_dates: "can't be earlier than the previous phase's end date."
+              incomplete: "is incomplete."
         query:
           attributes:
             project:
@@ -993,12 +1299,16 @@ vi:
           typed_dag:
             circular_dependency: "Mối quan hệ tạo ra một vòng tròn các mối quan hệ."
           attributes:
-            to:
-              error_not_found: "work package ở vị trí `đến` không tìm thấy hoặc không hiển thị"
-              error_readonly: "liên kết `to` của một mối quan hệ hiện có là không thay đổi được"
-            from:
-              error_not_found: "work package ở vị trí `từ` không tìm thấy hoặc không hiển thị"
-              error_readonly: "liên kết `from` của một mối quan hệ hiện có là không thay đổi được"
+            to_id:
+              error_not_found: "not found or not visible."
+              error_readonly: "cannot be changed for existing relations."
+            from_id:
+              error_not_found: "not found or not visible."
+              error_readonly: "cannot be changed for existing relations."
+            lag:
+              greater_than_or_equal_to:
+                zero: "cannot be negative."
+              less_than_or_equal_to: "is too high."
         repository:
           not_available: "Nhà cung cấp SCM không có sẵn"
           not_whitelisted: "không được cấu hình cho phép."
@@ -1050,6 +1360,10 @@ vi:
         work_package:
           is_not_a_valid_target_for_time_entries: "Work package #%{id} không phải là một mục tiêu hợp lệ để gán lại các mục thời gian."
           attributes:
+            id:
+              format: "%{message}"
+              cannot_add_child_because_of_lack_of_permission: "Cannot add child because you don't have permissions to edit the selected work package."
+              blank: "ID can't be blank."
             assigned_to:
               format: "%{message}"
             done_ratio:
@@ -1066,6 +1380,7 @@ vi:
               smaller_than_dates: "nhỏ hơn khoảng thời gian giữa ngày bắt đầu và ngày kết thúc."
               not_available_for_milestones: "không khả dụng cho các gói công việc kiểu cột mốc."
               cannot_be_null: "không thể được đặt thành null vì ngày bắt đầu và ngày kết thúc đã được biết."
+              not_an_integer: "không phải là thời gian hợp lệ."
             parent:
               cannot_be_milestone: "không thể là một cột mốc."
               cannot_be_self_assigned: "không thể tự phân bổ cho chính nó."
@@ -1106,6 +1421,8 @@ vi:
               duplicate_group: "Nhóm tên '%{group}' được sử dụng nhiều hơn một lần. Tên nhóm phải là duy nhất."
               query_invalid: "Truy vấn nhúng '%{group}' là không hợp lệ: %{details}"
               group_without_name: "Các nhóm không tên không được phép."
+            patterns:
+              invalid_tokens: "One or more attributes inside the field are not valid. Please, fix the attributes before saving."
         user:
           attributes:
             base:
@@ -1162,6 +1479,8 @@ vi:
       forum: "Diễn đàn"
       global_role: "Vai trò toàn cầu"
       group: "Nhóm"
+      issue_priority:
+        other: "Priorities"
       member: "Thành viên"
       news: "Tin tức"
       notification:
@@ -1171,6 +1490,7 @@ vi:
       project_query:
         other: "Danh sách dự án"
       query: "Truy vấn riêng"
+      reminder: "Reminder"
       role:
         other: "Vai trò"
       status: "Tình trạng work package"
@@ -1218,71 +1538,115 @@ vi:
       changeset: "Thay đổi"
       message: "Diễn đàn"
       news: "Tin tức"
-      project_attribute: "Thuộc tính dự án"
+      project_details: "Chi tiết dự án"
       subproject: "Bao gồm dự án con"
       time_entry: "Thời gian đã sử dụng"
       wiki_edit: "Wiki"
       work_package: "Gói công việc"
+    project_phase:
+      activated: "đã kích hoạt"
+      deactivated: "đã tắt"
+      added_date: "set to %{date}"
+      changed_date: "changed from %{from} to %{to}"
+      removed_date: "date deleted %{date}"
+      phase_and_one_gate: "%{phase_message}. %{gate_message}"
+      phase_and_both_gates: "%{phase_message}. %{start_gate_message}, and %{finish_gate_message}"
   #common attributes of all models
   attributes:
     active: "Đang hoạt động"
     assigned_to: "Người được giao"
     assignee: "Người được phân công"
     attachments: "Đính kèm"
+    actor: "Actor"
+    action: "Hành động"
     author: "Tác giả"
+    avatar: "Ảnh đại diện"
     base: "Lỗi tổng quan:"
+    body: "Body"
     blocks_ids: "ID của các work package bị chặn"
     category: "Danh mục"
     comment: "Nhận xét"
     comments: "Nhận xét"
     content: "Nội dung"
     color: "Màu sắc"
+    creator: "Người tạo"
     created_at: "Tạo ngày"
+    custom_field: "Tùy chỉnh mục"
     custom_options: "Giá trị có thể có"
     custom_values: "Tùy chỉnh mục"
     date: "Ngày"
+    dates_interval: "Khoảng thời gian"
     default_columns: "Cột mặc định"
     description: "Mô tả"
     derived_due_date: "Ngày kết thúc suy ra"
     derived_estimated_hours: "Tổng thời gian làm việc"
     derived_start_date: "Ngày bắt đầu suy ra"
+    direction: "Direction"
     display_sums: "Hiển thị tổng"
     due_date: "Ngày kết thúc"
     estimated_hours: "Thời gian ước tính"
     estimated_time: "Thời gian ước tính"
+    email: "Thư điện tử"
+    entity_type: "Entity"
     expires_at: "Hết hạn vào"
     firstname: "Tên"
+    filter: "Bộ lọc"
     group: "Nhóm"
     groups: "Nhóm"
+    hexcode: "Mã Hex"
     id: "ID"
     is_default: "Giá trị mặc định"
     is_for_all: "Cho tất cả các dự án"
     public: "Công khai"
+    principal: "User or group"
     #kept for backwards compatibility
     issue: "Gói công việc"
+    journal: "Nhật ký"
+    journal_notes: "Nhận xét"
     lastname: "Họ"
     login: "Tên người dùng"
+    lock_version: "Khóa phiên bản"
     mail: "Thư điện tử"
     name: "Tên"
+    note: "Ghi chú"
+    notes: "Ghi chú"
+    number: "Number"
+    options: "Tuỳ chọn"
+    operator: "Toán tử"
     password: "Mật khẩu"
     priority: "Ưu tiên"
     project: "Dự án"
+    project_ids: "Project IDs"
+    reason: "Lý do"
     responsible: "Trách nhiệm"
+    required: "Bắt buộc"
+    recipient: "Recipient"
     role: "Vai trò"
     roles: "Vai trò"
+    search: "Tìm kiếm"
     start_date: "Ngày bắt đầu"
     status: "Trạng thái"
+    state: "State"
     subject: "Chủ đề"
+    slug: "Slug"
     summary: "Tóm tắt"
+    time_zone: "Múi giờ"
+    text: "Văn bản"
     title: "Tiêu đề"
     type: "Loại"
+    typeahead: "Autocomplete"
     updated_at: "Được cập nhật vào lúc"
     updated_on: "Cập nhật vào"
     uploader: "Tải lên"
     user: "Người dùng"
+    username: "Tên người dùng"
+    unit: "Đơn vị"
     value: "Giá trị"
+    values: "Values"
     version: "Phiên bản"
+    visible: "Hiển thị"
     work_package: "Work Package"
+    work_package_id: "Work Package"
   backup:
     failed: "Sao lưu thất bại"
     label_backup_token: "Sao lưu token"
@@ -1314,6 +1678,9 @@ vi:
   button_actions: "Hành động"
   button_add: "Thêm"
   button_add_comment: "Thêm bình luận"
+  button_add_item_above: "Add item above"
+  button_add_item_below: "Add item below"
+  button_add_sub_item: "Add sub-item"
   button_add_member: Thêm thành viên
   button_add_watcher: "Thêm người theo dõi"
   button_annotate: "Chú giải"
@@ -1337,8 +1704,9 @@ vi:
   button_copy_and_follow: "Sao chép và làm theo"
   button_create: "Tạo mới"
   button_create_and_continue: "Tạo và tiếp tục"
-  button_delete: "Xoá"
   button_decline: "Từ chối"
+  button_delete: "Xoá"
+  button_delete_permanently: "Delete permanently"
   button_delete_watcher: "Xóa watcher %{name}"
   button_download: "Tải"
   button_duplicate: "Nhân đôi"
@@ -1347,6 +1715,7 @@ vi:
   button_expand_all: "Mở rộng tất cả"
   button_favorite: "Thêm vào yêu thích"
   button_filter: "Lọc"
+  button_finish_setup: "Finish setup"
   button_generate: "Tạo"
   button_list: "Danh sách"
   button_lock: "Khóa"
@@ -1356,6 +1725,7 @@ vi:
   button_print: "In"
   button_quote: "Trích dẫn"
   button_remove: Xoá
+  button_remove_reminder: "Remove reminder"
   button_rename: "Đổi tên"
   button_replace: "Thay thế"
   button_revoke: "Thu hồi"
@@ -1366,6 +1736,7 @@ vi:
   button_save_as: "Lưu thành"
   button_apply_changes: "Áp dụng thay đổi"
   button_save_back: "Lưu và trở lại"
+  button_set_reminder: "Set reminder"
   button_show: "Hiện"
   button_sort: "Sắp xếp"
   button_submit: "Gửi"
@@ -1520,6 +1891,8 @@ vi:
     units:
       hour:
         other: "hours"
+      day:
+        other: "ngày"
   description_active: "Đang hoạt động?"
   description_attachment_toggle: "Hiển thị/ẩn các đính kèm"
   description_autocomplete: >
@@ -1553,15 +1926,21 @@ vi:
   direction: ltr
   ee:
     upsale:
+      title: "Tiện ích mở rộng doanh nghiệp"
+      link_title: "Thông tin thêm"
+      automatic_subject_generation:
+        description: "Create automatically generated subjects using referenced attributes and text."
+      customize_life_cycle:
+        description: "Create and organize different project phases than the ones provided by PM2 project cycle planning."
       form_configuration:
         description: "Tùy chỉnh cấu hình mẫu với các tiện ích bổ sung sau:"
         add_groups: "Thêm 1 nhóm thuộc tính"
         rename_groups: "Đổi tên nhóm thuộc tính"
-      project_filters:
-        description_html: "Lọc và sắp xếp trên các trường tùy chỉnh là một tiện ích bổ sung của phiên bản Enterprise."
   enumeration_activities: "Theo dõi hoạt động"
   enumeration_work_package_priorities: "Độ ưu tiên của work package"
   enumeration_reported_project_statuses: "Tình trạng dự án đã báo cáo"
+  enumeration_caption_order_changed: "Order successfully changed."
+  enumeration_could_not_be_moved: "Enumeration could not be moved."
   error_auth_source_sso_failed: "Đăng nhập một lần (SSO) cho người dùng '%{value}' không thành công"
   error_can_not_archive_project: "Dự án này không thể lưu trữ: %{errors}"
   error_can_not_delete_entry: "Không thể xoá"
@@ -1591,6 +1970,7 @@ vi:
   error_pdf_export_too_many_columns: "Quá nhiều cột được chọn cho xuất PDF. Vui lòng giảm số lượng cột."
   error_pdf_failed_to_export: "Xuất PDF không thể được lưu: %{error}"
   error_token_authenticity: "Không thể xác minh token Cross-Site Request Forgery. Bạn có cố gắng gửi dữ liệu trên nhiều trình duyệt hoặc tab không? Vui lòng đóng tất cả các tab và thử lại."
+  error_reminder_not_found: "The reminder was not found or was already notified about."
   error_work_package_not_found_in_project: "Work package không được tìm thấy hoặc không thuộc về dự án này"
   error_work_package_id_not_found: "Không tìm thấy gói công việc."
   error_must_be_project_member: "phải là thành viên dự án"
@@ -1621,7 +2001,7 @@ vi:
     changeset: "Đã chỉnh sửa Changeset (bộ thay đổi)"
     message: Đã chỉnh sửa tin nhắn
     news: Tin tức
-    project_attributes: "Thuộc tính dự án đã được chỉnh sửa"
+    project_details: "Project details edited"
     project: "Dự án đã được chỉnh sửa"
     projects: "Dự án đã được chỉnh sửa"
     reply: Đã phản hồi
@@ -1650,6 +2030,7 @@ vi:
         input_label_report: "Thêm cột vào bảng thuộc tính"
         input_caption_report: "Theo mặc định, tất cả các thuộc tính được thêm vào dưới dạng cột trong danh sách gói công việc đều được chọn. Các trường văn bản dài không có trong bảng thuộc tính, nhưng có thể được hiển thị bên dưới."
         input_caption_table: "Theo mặc định, tất cả các thuộc tính được thêm vào dưới dạng cột trong danh sách gói công việc đều được chọn. Các trường văn bản dài không khả dụng trong xuất dựa trên bảng."
+        input_caption_required: "It is not possible to export the view without any column. Please add at least one column."
       pdf:
         export_type:
           label: "Loại xuất PDF"
@@ -1699,6 +2080,8 @@ vi:
     your_work_packages_export: "Các gói công việc đang được xuất khẩu"
     succeeded: "Xuất hoàn tất"
     failed: "Đã xảy ra lỗi khi cố gắng xuất các gói công việc: %{message}"
+    errors:
+      embedded_table_with_too_many_columns: "This embedded work package table could not fit on the page, please reduce the number of columns."
     format:
       atom: "Atom"
       csv: "CSV"
@@ -1718,6 +2101,37 @@ vi:
     units:
       hours: h
       days: d
+  pdf_generator:
+    page_nr_footer: "Page %{page} of %{total}"
+    template_attributes:
+      label: "Attributes and description"
+      caption: All the attributes present in the current form configuration using the default template.
+    template_contract:
+      label: "Contract"
+      caption: Work package details formatted to the standard German contract form.
+    dialog:
+      title: Generate PDF
+      submit: Tải
+      templates:
+        label: "Mẫu"
+        none_enabled: "No template has been enabled for this work package type"
+      footer_center:
+        label: Footer text
+        caption: This text will appear on every page at the center of the footer.
+      footer_right:
+        label: Footer text
+        caption: This text will appear on every page at the right of the footer.
+      hyphenation:
+        label: Hyphenation
+        caption: Break line between words for better layout and justification.
+      hyphenation_language:
+        label: Language and hyphenation
+      page_orientation:
+        label: Page orientation
+        caption: Select the orientation of the pages in the PDF document.
+        options:
+          portrait: Portrait
+          landscape: Landscape
   extraction:
     available:
       pdftotext: "Pdftotext có sẵn (không bắt buộc)"
@@ -1770,6 +2184,7 @@ vi:
       progress_mode_changed_to_status_based: "Cập nhật tính toán tiến độ"
       status_changed: "Trạng thái '%{status_name}'"
       system_update: "Cập nhật hệ thống OpenProject:"
+      work_package_duplicate_closed: "Duplicate work package updated:"
       total_percent_complete_mode_changed_to_work_weighted_average: "Calculation of % Complete totals now weighted by Work."
       total_percent_complete_mode_changed_to_simple_average: "Calculation of % Complete totals now based on a simple average of only % Complete values."
     cause_descriptions:
@@ -1777,6 +2192,7 @@ vi:
       work_package_parent_changed_times: bởi các thay đổi đối với cha %{link}
       work_package_children_changed_times: bởi các thay đổi đối với con %{link}
       work_package_related_changed_times: bởi các thay đổi đối với liên quan %{link}
+      work_package_duplicate_closed: The status was automatically updated by the duplicated work package %{link}
       unaccessable_work_package_changed: bởi các thay đổi đối với một gói công việc liên quan
       working_days_changed:
         changed: "bởi các thay đổi đối với ngày làm việc (%{changes})"
@@ -1797,6 +2213,8 @@ vi:
           Tính toán tiến độ tự động <a href="%{href}" target="_blank">được đặt thành chế độ dựa trên công việc và điều chỉnh với cập nhật phiên bản</a>.
         progress_calculation_adjusted: >-
           Tính toán tiến độ tự động <a href="%{href}" target="_blank">được điều chỉnh với cập nhật phiên bản</a>.
+        scheduling_mode_adjusted: >-
+          Scheduling mode automatically adjusted with version update.
         totals_removed_from_childless_work_packages: >-
           Tổng số công việc và tiến độ tự động bị xóa cho các gói công việc không có cha với <a href="%{href}" target="_blank">cập nhật phiên bản</a>. Đây là một nhiệm vụ bảo trì và có thể được bỏ qua một cách an toàn.
       total_percent_complete_mode_changed_to_work_weighted_average: >-
@@ -1817,8 +2235,6 @@ vi:
       api_and_webhooks: "API và webhooks"
     quick_add:
       label: "Mở menu thêm nhanh"
-    breadcrumb:
-      nested_element: "%{section_header}: <b>%{title}</b>"
   my_account:
     access_tokens:
       no_results:
@@ -1865,6 +2281,7 @@ vi:
       responsible: "Có trách nhiệm"
       shared: "Được chia sẻ"
       watched: "Quan sát viên"
+      reminder: "Reminder"
     facets:
       unread: "Chưa đọc"
       unread_title: "Hiện chưa đọc"
@@ -1898,6 +2315,7 @@ vi:
   label_add_subtask: "Thêm subtask"
   label_added: "đã thêm"
   label_added_by: "Thêm bởi %{author}"
+  label_added_by_on: "Added by %{author} on %{date}"
   label_added_time_by: "Thêm bởi %{author} cách đây %{age}"
   label_additional_workflow_transitions_for_assignee: "Chuyển đổi bổ sung được cho phép khi người sử dụng là người được gán"
   label_additional_workflow_transitions_for_author: "Các chuyển đổi bổ xung được phép khi người dùng là tác giả"
@@ -1922,6 +2340,7 @@ vi:
   label_ical_access_key_generation_hint: "Tự động tạo khi đăng ký lịch."
   label_ical_access_key_latest: "mới nhất"
   label_ical_access_key_revoke: "Thu hồi"
+  label_add_column: "Add column"
   label_applied_status: "Tình trạng áp dụng"
   label_archive_project: "Lưu trữ dự án"
   label_ascending: "Tăng dần"
@@ -1948,6 +2367,7 @@ vi:
   label_api_doc: "Tài liệu API"
   label_backup: "Sao lưu"
   label_backup_code: "Mã sao lưu"
+  label_basic_details: "Basic details"
   label_between: "giữa"
   label_blocked_by: "bị chặn bởi"
   label_blocks: "các khối"
@@ -1966,6 +2386,7 @@ vi:
   label_calendars_and_dates: "Lịch và ngày"
   label_calendar_show: "Hiển thị Lịch"
   label_category: "Danh mục"
+  label_completed: Đã hoàn tất
   label_consent_settings: "Tùy chọn đồng ý"
   label_wiki_menu_item: Khoản mục menu wiki
   label_select_main_menu_item: Chọn mục trình đơn chính mới
@@ -1985,7 +2406,6 @@ vi:
   label_check_uncheck_all_in_row: "Chọn/Bỏ chọn tất cả trong hàng"
   label_child_element: "Phần tử con"
   label_choices: "Lựa chọn"
-  label_chronological_order: "Cũ nhất trước"
   label_close_versions: "Đóng các phiên bản đã hoàn thành"
   label_closed_work_packages: "đã đóng"
   label_collapse: "Thu gọn"
@@ -2030,13 +2450,16 @@ vi:
   label_default: "Mặc định"
   label_delete_user: "Xóa người dùng"
   label_delete_project: "Xóa dự án"
+  label_delete: "Xoá"
   label_deleted: "đã xóa"
   label_deleted_custom_field: "(đã xóa các mục tùy chỉnh)"
+  label_deleted_custom_item: "(deleted item)"
   label_deleted_custom_option: "(tùy chọn đã xóa)"
   label_empty_element: "(rỗng)"
   label_missing_or_hidden_custom_option: "(giá trị thiếu hoặc không có quyền truy cập)"
   label_descending: "Giảm dần"
   label_details: "Chi tiết"
+  label_defaults: "Defaults"
   label_development_roadmap: "Lộ trình phát triển"
   label_diff: "sự khác nhau"
   label_diff_inline: "nội tuyến"
@@ -2068,10 +2491,10 @@ vi:
   label_enterprise_active_users: "%{current}/%{limit} người dùng đang hoạt động đã đặt chỗ"
   label_enterprise_edition: "Phiên bản doanh nghiệp"
   label_enterprise_support: "Hỗ trợ doanh nghiệp"
-  label_enterprise_addon: "Tiện ích mở rộng doanh nghiệp"
   label_environment: "Môi trường"
   label_estimates_and_progress: "Ước lượng và tiến độ"
   label_equals: "là"
+  label_equals_with_descendants: "is any with descendants"
   label_everywhere: "mọi nơi"
   label_example: "Ví dụ"
   label_experimental: "Thử nghiệm"
@@ -2090,8 +2513,10 @@ vi:
   label_feeds_access_key_created_on: "Khoá truy cập API đựơc tạo cách đây %{value}"
   label_feeds_access_key_type: "RSS"
   label_file_plural: "Tệp"
-  label_filter_add: "Thêm bộ lọc"
   label_filter: "Bộ lọc"
+  label_filter_add: "Thêm bộ lọc"
+  label_filter_by: "Filter by"
+  label_filter_any_name_attribute: "Name attributes"
   label_filter_plural: "Các bộ lọc"
   label_filters_toggle: "Hiển thị/ẩn bộ lọc"
   label_float: "Số thực"
@@ -2114,6 +2539,7 @@ vi:
   label_here: đây
   label_hide: "Ẩn"
   label_history: "Lịch sử"
+  label_hierarchy: "Phân cấp"
   label_hierarchy_leaf: "Hệ thống phân cấp lá"
   label_home: "Trang chủ"
   label_subject_or_id: "Chủ đề hoặc Mã"
@@ -2125,6 +2551,7 @@ vi:
   label_inactive: "Không hoạt động"
   label_incoming_emails: "Các thư đến"
   label_includes: "bao gồm"
+  label_incomplete: Chưa hoàn tất
   label_include_sub_projects: Bao gồm dự án con
   label_index_by_date: "Chỉ mục theo ngày"
   label_index_by_title: "Chỉ mục theo tiêu đề"
@@ -2135,12 +2562,14 @@ vi:
   label_internal: "Nội bộ"
   label_introduction_video: "Giới thiệu video"
   label_invite_user: "Mời người dùng"
+  label_item: "Item"
+  label_item_plural: "Items"
   label_share: "Chia sẻ"
   label_share_project_list: "Chia sẻ danh sách dự án"
   label_share_work_package: "Chia sẻ gói công việc"
   label_show_all_registered_users: "Hiển thị tất cả người dùng đã đăng ký"
-  label_show_less: "Show less"
-  label_show_more: "Show more"
+  label_show_less: "Hiển thị ít hơn"
+  label_show_more: "Xem thêm"
   label_journal: "Nhật ký"
   label_journal_diff: "So sánh mô tả"
   label_language: "Ngôn ngữ"
@@ -2176,6 +2605,7 @@ vi:
   label_custom_favicon: "Favicon tuỳ chỉnh"
   label_custom_touch_icon: "Tùy chỉnh biểu tượng ICON"
   label_logout: "Đăng xuất"
+  label_mapping_for: "Mapping for: %{attribute}"
   label_main_menu: "Menu bên"
   label_manage: "Quản lý"
   label_manage_groups: "Quản lý nhóm"
@@ -2210,8 +2640,10 @@ vi:
   label_months_from: "tháng từ"
   label_more: "Xem thêm"
   label_more_than_ago: "nhiều hơn mấy ngày trước"
+  label_move_column_left: "Di chuyển cột sang trái"
+  label_move_column_right: "Di chuyển cột sang phải"
   label_move_work_package: "Di chuyển work package"
-  label_my_account: "Tài khoản của tôi"
+  label_my_account: "Account settings"
   label_my_activity: "Hoạt động của tôi"
   label_my_account_data: "Dữ liệu tài khoản của tôi"
   label_my_avatar: "Ảnh đại diện của tôi"
@@ -2238,11 +2670,13 @@ vi:
   label_no_parent_page: "Không có trang quan hệ"
   label_nothing_display: "Không có gì để hiển thị"
   label_nobody: "không ai"
+  label_not_configured: "Not configured"
   label_not_found: "không tìm thấy"
   label_none: "không"
   label_none_parentheses: "(trống)"
   label_not_contains: "không chứa"
   label_not_equals: "không là"
+  label_life_cycle_step_plural: "Project life cycle"
   label_on: "bật"
   label_operator_all: "không rỗng"
   label_operator_none: "rỗng"
@@ -2300,10 +2734,11 @@ vi:
   label_project_latest: "Dự án mới nhất"
   label_project_default_type: "Cho phép kiểu rỗng"
   label_project_hierarchy: "Phân cấp dự án"
-  label_project_mappings: "Đã bật trong dự án"
+  label_project_mappings: "Các dự án"
   label_project_new: "Dự án mới"
   label_project_plural: "Dự án"
   label_project_list_plural: "Danh sách dự án"
+  label_project_life_cycle: "Project life cycle"
   label_project_attributes_plural: "Các thuộc tính dự án"
   label_project_custom_field_plural: "Các thuộc tính dự án"
   label_project_settings: "Thiết lập dự án"
@@ -2327,10 +2762,14 @@ vi:
   label_related_work_packages: "Work package liên quan"
   label_relates: "liên quan đến"
   label_relates_to: "liên quan đến"
+  label_relation: "Relation"
+  label_relation_actions: "Relation actions"
   label_relation_delete: "Xóa quan hệ"
+  label_relation_edit: "Edit relation"
   label_relation_new: "Quan hệ mới"
   label_release_notes: "Ghi chú phát hành"
   label_remaining_work: "Công việc còn lại"
+  label_remove_column: "Xóa cột"
   label_remove_columns: "Loại bỏ cột được chọn"
   label_renamed: "đổi tên"
   label_reply_plural: "Trả lời"
@@ -2341,12 +2780,12 @@ vi:
   label_reporting: "Đang báo cáo"
   label_reporting_plural: "Đang báo cáo"
   label_repository: "Kho lưu trữ"
+  label_repository_remove: "Remove repository"
   label_repository_root: "Gốc kho lưu trữ"
   label_repository_plural: "Kho lưu trữ"
   label_required: "bắt buộc"
   label_requires: "bắt buộc"
   label_result_plural: "Các kết quả"
-  label_reverse_chronological_order: "Mới nhất trước"
   label_revision: "Sửa đổi"
   label_revision_id: "Sửa đổi %{value}"
   label_revision_plural: "Sửa đổi"
@@ -2357,6 +2796,7 @@ vi:
   label_roadmap_overdue: "%{value} trễ hạn"
   label_role_and_permissions: "Vai trò và Quyền hạn"
   label_role_new: "Vai trò mới"
+  label_role_grantable: "Grantable role"
   label_role_plural: "Vai trò"
   label_role_search: "Chỉ định vai trò cho các thành viên mới"
   label_scm: "SCM"
@@ -2372,8 +2812,10 @@ vi:
   label_show_completed_versions: "Xem phiên bản đã hoàn thành"
   label_columns: "Cột"
   label_sort: "Sắp xếp"
+  label_sort_ascending: "Sắp xếp tăng dần"
   label_sort_by: "Sắp xếp theo %{value}"
   label_sorted_by: "sắp xếp theo %{value}"
+  label_sort_descending: "Sắp xếp giảm dần"
   label_sort_higher: "Chuyển lên"
   label_sort_highest: "Lên trên cùng"
   label_sort_lower: "Dịch xuống"
@@ -2402,11 +2844,16 @@ vi:
   label_this_month: "tháng này"
   label_this_week: "tuần này"
   label_this_year: "năm này"
+  label_time: "Thời gian"
   label_time_entry_plural: "Thời gian đã tiêu tốn"
   label_time_entry_activity_plural: "Hoạt động thời gian đã tiêu tốn"
   label_title: "Tiêu đề"
   label_projects_menu: "Dự án"
   label_today: "hôm nay"
+  label_token_version: "Token Version"
+  label_today_as_start_date: "Select today as start date."
+  label_today_as_due_date: "Select today as finish date."
+  label_today_as_date: "Select today as date."
   label_top_menu: "Trình đơn trên cùng"
   label_topic_plural: "Các chủ đề"
   label_total: "Tổng cộng"
@@ -2437,6 +2884,7 @@ vi:
   label_user_settings: "Cài đặt người dùng"
   label_users_settings: "Cài đặt người dùng"
   label_version_new: "Phiên bản mới"
+  label_version_edit: "Chỉnh sửa phiên bản"
   label_version_plural: "Các phiên bản"
   label_version_sharing_descendants: "Với các dự án con"
   label_version_sharing_hierarchy: "Với phân cấp dự án"
@@ -2518,7 +2966,7 @@ vi:
   label_global_role: "Vai trò toàn cầu"
   label_not_changeable: "(không thể thay đổi)"
   label_global: "Toàn cầu"
-  label_seeded_from_env_warning: Bản ghi này đã được tạo thông qua biến cài đặt / môi trường. Nó không thể chỉnh sửa qua giao diện người dùng.
+  label_seeded_from_env_warning: This record has been created through a setting environment variable. It is not editable through UI.
   macro_execution_error: "Lỗi khi thực thi macro %{macro_name}"
   macro_unavailable: "Macro %{macro_name} không thể được hiển thị."
   macros:
@@ -2573,8 +3021,13 @@ vi:
         prefix: "Nhận được do cài đặt thông báo: %{reason}"
         date_alert_start_date: "Cảnh báo ngày"
         date_alert_due_date: "Cảnh báo ngày"
+        reminder: "Reminder"
       see_all: "Xem tất cả"
       updated_at: "Cập nhật vào %{timestamp} bởi %{user}"
+    reminder_notifications:
+      subject: "Reminder: %{note}"
+      heading: "You have a new reminder"
+      note: "Note: “%{note}”"
     sharing:
       work_packages:
         allowed_actions: "Bạn có thể %{allowed_actions} gói công việc này. Điều này có thể thay đổi tùy thuộc vào vai trò và quyền hạn của bạn trong dự án."
@@ -2722,6 +3175,9 @@ vi:
   notice_locking_conflict: "Thông tin đã được cập nhật bởi ít nhất một người dùng khác trong thời gian này."
   notice_locking_conflict_additional_information: "Bản cập nhật(s) này đến từ %{users}."
   notice_locking_conflict_reload_page: "Vui lòng tải lại trang, xem xét các thay đổi và áp dụng lại các cập nhật của bạn."
+  notice_locking_conflict_warning: "This page has been updated by someone else. To not lose your edits, copy them locally and reload to view the updated version."
+  notice_locking_conflict_danger: "Could not save your changes because of conflicting modifications. To not lose your edits, copy them locally and reload to view the updated version."
+  notice_locking_conflict_action_button: "Discard changes and reload"
   notice_member_added: Đã thêm %{name} vào dự án.
   notice_members_added: Đã thêm %{number} người dùng vào dự án.
   notice_member_removed: "Đã xóa %{user} khỏi dự án."
@@ -2730,6 +3186,7 @@ vi:
   notice_bad_request: "Yêu cầu không hợp lệ."
   notice_not_authorized: "Bạn không được phép truy cập trang này."
   notice_not_authorized_archived_project: "Dự án bạn đang cố gắng truy cập đã bị lưu trữ."
+  notice_requires_enterprise_token: "Enterprise token missing or doesn't allow access to this page."
   notice_password_confirmation_failed: "Mật khẩu của bạn không chính xác. Không thể tiếp tục."
   notice_principals_found_multiple: "Có %{number} kết quả được tìm thấy. \n Nhấn Tab để tập trung vào kết quả đầu tiên."
   notice_principals_found_single: "Có một kết quả. \n Nhấn Tab để tập trung vào nó."
@@ -2738,13 +3195,11 @@ vi:
   notice_successful_connection: "Kết nối thành công."
   notice_successful_create: "Tạo thành công."
   notice_successful_delete: "Xóa thành công."
+  notice_successful_cancel: "Successful cancellation."
   notice_successful_update: "Cập nhật thành công."
   notice_successful_update_custom_fields_added_to_project: |
     Cập nhật thành công. Các trường tùy chỉnh của các loại đã kích hoạt sẽ tự động được kích hoạt
     trên biểu mẫu gói công việc. <a href="%{url}" target="_blank">Xem thêm</a>.
-  notice_successful_update_custom_fields_added_to_type: |
-    Cập nhật thành công. Các trường tùy chỉnh đang hoạt động sẽ tự động được kích hoạt cho
-    các dự án liên kết với loại này.
   notice_to_many_principals_to_display: "Có quá nhiều kết quả.\nThu hẹp tìm kiếm bằng cách gõ tên của thành viên (hoặc nhóm) mới."
   notice_user_missing_authentication_method: Người dùng chưa chọn mật khẩu hoặc phương thức đăng nhập khác.
   notice_user_invitation_resent: Một lời mời đã được gửi đến %{email}.
@@ -2779,12 +3234,13 @@ vi:
     text_getting_started_description: "Nhận cái nhìn tổng quan nhanh về quản lý dự án và cộng tác nhóm với OpenProject. Bạn có thể khởi động lại video này từ menu trợ giúp."
     welcome: "Chào mừng đến với %{app_title}"
     select_language: "Vui lòng chọn ngôn ngữ của bạn"
-  permission_add_work_package_notes: "Thêm ghi chú"
+  permission_add_work_package_notes: "Add comments"
   permission_add_work_packages: "Thêm mới Gói công việc"
   permission_add_messages: "Đăng tin nhắn"
   permission_add_project: "Tạo dự án"
   permission_add_work_package_attachments: "Thêm tệp đính kèm"
   permission_add_work_package_attachments_explanation: "Cho phép thêm tệp đính kèm mà không cần quyền chỉnh sửa gói công việc"
+  permission_add_comments_with_restricted_visibility: "Write comments with restricted visibility"
   permission_archive_project: "Lưu trữ dự án"
   permission_create_user: "Tạo người dùng"
   permission_manage_user: "Chỉnh sửa người dùng"
@@ -2809,14 +3265,19 @@ vi:
   permission_delete_timelines: "Xóa mốc thời gian"
   permission_delete_wiki_pages: "Xóa trang wiki"
   permission_delete_wiki_pages_attachments: "Xóa tệp đính kèm"
-  permission_edit_work_package_notes: "Chỉnh sửa ghi chú"
+  permission_edit_work_package_notes: "Moderate comments"
+  permission_edit_work_package_notes_explanation: "Caution: Users with this permission are able to edit anyone's comment."
   permission_edit_work_packages: "Chỉnh sửa gói công việc"
   permission_edit_messages: "Chỉnh sửa tin nhắn"
-  permission_edit_own_work_package_notes: "Chỉnh sửa ghi chú của riêng bạn"
+  permission_edit_own_comments_with_restricted_visibility: "Edit own comments with restricted visibility"
+  permission_edit_own_work_package_notes: "Edit own comments"
   permission_edit_own_messages: "Chỉnh sửa tin nhắn của riêng bạn"
   permission_edit_own_time_entries: "Chỉnh sửa nhật ký thời gian của riêng bạn"
+  permission_edit_others_comments_with_restricted_visibility: "Moderate comments with restricted visibility"
+  permission_edit_others_comments_with_restricted_visibility_explanation: "Caution: Users with this permission are able to edit other users' comments with restricted visibility."
   permission_edit_project: "Chỉnh sửa dự án"
   permission_edit_project_attributes: "Chỉnh sửa thuộc tính dự án"
+  permission_edit_project_phases: "Edit project phases"
   permission_edit_reportings: "Chỉnh sửa báo cáo"
   permission_edit_time_entries: "Chỉnh sửa nhật ký thời gian của người khác"
   permission_edit_timelines: "Chỉnh sửa mốc thời gian"
@@ -2846,11 +3307,15 @@ vi:
   permission_search_project: "Tìm kiếm dự án"
   permission_select_custom_fields: "Chọn trường tùy chỉnh"
   permission_select_project_custom_fields: "Chọn thuộc tính dự án"
+  permission_select_project_phases: "Select project phases"
+  permission_select_project_phases_explanation: "Activate/Deactivate the phases in a project. Enables the user to select the life cycle appropriate for the project as inactive phases will not be visible in the project overview page nor the project list."
   permission_select_project_modules: "Chọn các mô-đun dự án"
   permission_share_work_packages: "Chia sẻ gói công việc"
   permission_manage_types: "Chọn loại"
+  permission_manage_own_reminders: "Create own reminders"
   permission_view_project: "Xem dự án"
   permission_view_changesets: "Xem các sửa đổi kho trong OpenProject"
+  permission_view_comments_with_restricted_visibility: "View comments with restricted visibility"
   permission_view_commit_author_statistics: "Xem thống kê tác giả cam kết"
   permission_view_dashboards: "Xem bảng điều khiển"
   permission_view_work_package_watchers: "Xem danh sách người theo dõi"
@@ -2862,12 +3327,14 @@ vi:
   permission_view_shared_work_packages: "Xem chia sẻ gói công việc"
   permission_view_time_entries: "Xem thời gian đã chi tiêu"
   permission_view_timelines: "Xem mốc thời gian"
+  permission_view_user_email: "View users' mail addresses"
   permission_view_wiki_edits: "Xem lịch sử chỉnh sửa wiki"
   permission_view_wiki_pages: "Xem wiki"
   permission_work_package_assigned: "Trở thành người được chỉ định/chịu trách nhiệm"
   permission_work_package_assigned_explanation: "Gói công việc có thể được gán cho người dùng và nhóm sở hữu vai trò này trong dự án tương ứng"
   permission_view_project_activity: "Xem hoạt động dự án"
   permission_view_project_attributes: "Xem thuộc tính dự án"
+  permission_view_project_phases: "View project phases"
   permission_save_bcf_queries: "Lưu các truy vấn BCF"
   permission_manage_public_bcf_queries: "Quản lý các truy vấn BCF công khai"
   permission_edit_attribute_help_texts: "Chỉnh sửa văn bản trợ giúp thuộc tính"
@@ -2877,6 +3344,13 @@ vi:
   placeholders:
     default: "-"
   project:
+    archive:
+      are_you_sure: "Bạn có chắc bạn muốn lưu trữ các dự án '%{name}'?"
+      archived: "Đã lưu"
+    count:
+      zero: "0 projects"
+      one: "một dự án"
+      other: "%{count} dự án"
     destroy:
       confirmation: "Nếu bạn tiếp tục, dự án %{identifier} sẽ bị xóa vĩnh viễn. Để xác nhận hành động này, hãy nhập tên dự án vào trường bên dưới, điều này sẽ:"
       project_delete_result_1: "Xóa tất cả dữ liệu liên quan."
@@ -2885,23 +3359,21 @@ vi:
       project_verification: "Nhập tên dự án %{name} để xác minh việc xóa."
       subprojects_confirmation: "Các dự án con(s) của nó: %{value} cũng sẽ bị xóa."
       title: "Xóa dự án %{name}"
+    filters:
+      project_phase: "Project phase: %{phase}"
+      project_phase_any: "Project phase: Any"
+      project_phase_gate: "Project phase gate: %{gate}"
     identifier:
       warning_one: Các thành viên của dự án sẽ phải di chuyển các kho của dự án.
       warning_two: Các liên kết hiện có tới dự án sẽ không còn hoạt động.
       title: Thay đổi mã định danh của dự án
+    not_available: "Project N/A"
     template:
       copying: >
         Dự án của bạn đang được tạo từ dự án mẫu đã chọn. Bạn sẽ nhận được thông báo qua email ngay khi dự án có sẵn.
       use_template: "Sử dụng mẫu"
       make_template: "Đặt thành mẫu"
       remove_from_templates: "Xóa khỏi mẫu"
-    archive:
-      are_you_sure: "Bạn có chắc bạn muốn lưu trữ các dự án '%{name}'?"
-      archived: "Đã lưu"
-    count:
-      zero: "0 Dự án"
-      one: "1 Dự án"
-      other: "%{count} Dự án"
   project_module_activity: "Hoạt động"
   project_module_forums: "Diễn đàn"
   project_module_work_package_tracking: "Gói công việc"
@@ -3032,9 +3504,19 @@ vi:
     warnings:
       cannot_annotate: "Tệp này không thể được chú thích."
   scheduling:
-    activated: "đã kích hoạt"
-    deactivated: "đã tắt"
+    manual: "set to Manual"
+    automatic: "set to Automatic"
   search_input_placeholder: "Tìm kiếm ..."
+  setting_allowed_link_protocols: "Allowed link protocols"
+  setting_allowed_link_protocols_text_html: >-
+    Allow these protocols to be rendered as links in work package descriptions, long text fields and comments. For example, %{tel_code} or %{element_code}. Enter one protocol per line. <br/> Protocols %{http_code}, %{https_code}, and %{mailto_code} are always allowed.
+  setting_after_first_login_redirect_url: "First login redirect"
+  setting_after_first_login_redirect_url_text_html: >
+    Set a path to redirect users after their first login. If empty, redirects to the home page for the onboarding tour. <br/> Example: <code>/my/page</code>
+  setting_after_login_default_redirect_url: "After login redirect"
+  setting_after_login_default_redirect_url_text_html: >
+    Set a default path to redirect users after login, if no back link was provided. Redirects to home page if not set. <br/> Example: <code>/my/page</code>
+  setting_apiv3_cors_title: "Cross-Origin Resource Sharing (CORS)"
   setting_apiv3_cors_enabled: "Kích hoạt CORS"
   setting_apiv3_cors_origins: "Các nguồn gốc được phép của API V3 Cross-Origin Resource Sharing (CORS)"
   setting_apiv3_cors_origins_text_html: >
@@ -3092,7 +3574,9 @@ vi:
   setting_default_language: "Ngôn ngữ mặc định"
   setting_default_projects_modules: "Các mô-đun kích hoạt mặc định cho dự án mới"
   setting_default_projects_public: "Dự án mới là công khai theo mặc định"
+  setting_disable_password_login: "Disable password authentication"
   setting_diff_max_lines_displayed: "Số dòng khác biệt tối đa hiển thị"
+  setting_omniauth_direct_login_provider: "Direct login SSO provider"
   setting_display_subprojects_work_packages: "Hiển thị các gói công việc của các dự án phụ trên các dự án chính theo mặc định"
   setting_duration_format: "Định dạng thời gian"
   setting_duration_format_hours_only: "Chỉ giờ"
@@ -3154,7 +3638,6 @@ vi:
   setting_registration_footer: "Chân trang đăng ký"
   setting_repositories_automatic_managed_vendor: "Loại nhà cung cấp kho tự động"
   setting_repositories_encodings: "Mã hóa kho"
-  setting_repository_authentication_caching_enabled: "Kích hoạt bộ nhớ cache cho yêu cầu xác thực của phần mềm kiểm soát phiên bản"
   setting_repository_storage_cache_minutes: "Bộ nhớ cache kích thước đĩa kho"
   setting_repository_checkout_display: "Hiển thị hướng dẫn kiểm tra"
   setting_repository_checkout_base_url: "URL cơ sở kiểm tra"
@@ -3189,6 +3672,10 @@ vi:
   setting_work_package_list_default_highlighted_attributes: "Các thuộc tính được tô sáng mặc định trong dòng"
   setting_working_days: "Ngày làm việc"
   settings:
+    authentication:
+      single_sign_on: "Single Sign-On"
+      omniauth_direct_login_hint_html: >
+        If this option is active, login requests will redirect to the configured omniauth provider. The login dropdown and sign-in page will be disabled. <br/> <strong>Note:</strong> Unless you also disable password logins, with this option enabled, users can still log in internally by visiting the <code>%{internal_path}</code> login page.
     attachments:
       whitelist_text_html: >
         Xác định danh sách các phần mở rộng tệp hợp lệ và/hoặc loại mime cho các tệp tải lên. <br/> Nhập các phần mở rộng tệp (ví dụ: <code>%{ext_example}</code>) hoặc loại mime (ví dụ: <code>%{mime_example}</code>). <br/> Để trống để cho phép tải lên bất kỳ loại tệp nào. Nhiều giá trị được phép (mỗi giá trị trên một dòng).
@@ -3255,6 +3742,27 @@ vi:
       new:
         heading: "Thuộc tính mới"
         description: "Những thay đổi đối với thuộc tính dự án này sẽ được phản ánh trong tất cả các dự án mà nó được bật. Các thuộc tính bắt buộc không thể bị tắt ở mức dự án."
+    project_phase_definitions:
+      heading: "Project life cycle"
+      heading_description: "Project life cycle define the project phases that can be used for your project planning and will appear in the overview page of each project. These attributes can be enabled or disabled but not re-ordered at a project level."
+      label_add: "Thêm"
+      label_add_description: "Add life cycle definition"
+      filter:
+        label: "Search project phase"
+      section_header: "Phases"
+      non_defined: "No phases are currently defined."
+      phase_gates: "Phase gates"
+      new:
+        description: "Changes to this project phase will be reflected in all projects where it is enabled."
+        heading: "New Phase"
+      edit:
+        heading: "Edit Phase"
+      both_gate: "Start and finish gate"
+      no_gate: "No gate"
+      start_gate: "Start gate"
+      start_gate_caption: "Add a gate with the start date of the phase"
+      finish_gate: "Finish gate"
+      finish_gate_caption: "Add a gate with the end date of the phase"
     projects:
       missing_dependencies: "Mô-đun dự án %{module} đã được kiểm tra và phụ thuộc vào %{dependencies}. Bạn cần kiểm tra các phụ thuộc này cũng vậy."
       section_new_projects: "Cài đặt cho các dự án mới"
@@ -3267,6 +3775,8 @@ vi:
     working_days:
       section_work_week: "Tuần làm việc"
       section_holidays_and_closures: "Ngày nghỉ và đóng cửa"
+    work_packages:
+      not_allowed_text: "You do not have the necessary permissions to view this page."
   text_formatting:
     markdown: "Gạch dưới"
     plain: "Văn bản thuần"
@@ -3288,6 +3798,7 @@ vi:
   text_are_you_sure_continue: "Bạn có chắc chắn muốn tiếp tục không?"
   text_are_you_sure_with_children: "Xóa gói công việc và tất cả các gói công việc con?"
   text_are_you_sure_with_project_custom_fields: "Xóa thuộc tính này cũng sẽ xóa các giá trị của nó trong tất cả các dự án. Bạn có chắc chắn muốn làm điều này không?"
+  text_are_you_sure_with_project_life_cycle_step: "Deleting this phase will also delete its usages in all projects. Are you sure you want to do this?"
   text_assign_to_project: "Gán cho dự án"
   text_form_configuration: >
     Bạn có thể tùy chỉnh các trường sẽ được hiển thị trong các gói công việc. Bạn có thể tự do nhóm các trường để phản ánh nhu cầu cho tên miền của bạn.
@@ -3367,6 +3878,7 @@ vi:
   text_notice_security_badge_displayed_html: >
     Lưu ý: nếu được kích hoạt, một bảng thông báo về tình trạng của phần mềm sẽ được hiển thị tại trang quản trị <a href="%{information_panel_path}">%{information_panel_label}</a>, và tại trang chủ. Thông tin này chỉ được thấy bởi Quản trị viên. <br/> Bảng thông báo sẽ kiểm tra các thông tin cập nhật từ OpenProject và thông báo về các cập nhật mới hay các lỗi được phát hiện. Để biết thêm chi tiết, vui lòng tham khảo <a href="%{more_info_url}">tài liệu cấu hình</a>.
   text_own_membership_delete_confirmation: "Bạn sắp xóa một số hoặc tất cả quyền của mình và có thể không còn khả năng chỉnh sửa dự án này sau đó.\nBạn có chắc chắn muốn tiếp tục không?"
+  text_permanent_delete_confirmation_checkbox_label: "I understand that this deletion cannot be reversed"
   text_plugin_assets_writable: "Thư mục tài sản plugin có thể ghi được"
   text_powered_by: "Được cung cấp bởi %{link}"
   text_project_identifier_info: "Chỉ cho phép chữ cái viết thường (a-z), số, dấu gạch ngang và gạch dưới, phải bắt đầu bằng chữ cái viết thường."
@@ -3384,6 +3896,7 @@ vi:
   text_unallowed_characters: "Ký tự không được phép"
   text_user_invited: Người dùng đã được mời và đang chờ đăng ký.
   text_user_wrote: "%{value} đã viết:"
+  text_wrote: "wrote"
   text_warn_on_leaving_unsaved: "Gói công việc chứa văn bản chưa được lưu sẽ bị mất nếu bạn rời khỏi trang này."
   text_what_did_you_change_click_to_add_comment: "Bạn đã thay đổi gì? Kích để thêm ghi chú"
   text_wiki_destroy_confirmation: "Bạn có chắc chắn muốn xóa wiki này và tất cả nội dung của nó không?"
@@ -3541,6 +4054,12 @@ vi:
       edit_description: "Có thể xem, nhận xét và chỉnh sửa gói công việc này."
       view: "Xem"
       view_description: "Có thể xem gói công việc này."
+    reminders:
+      label_remind_at: "Ngày"
+      note_placeholder: "Why are you setting this reminder?"
+      success_creation_message: "Reminder set successfully. You will receive a notification for this work package at the chosen time."
+      success_update_message: "Reminder updated successfully."
+      success_deletion_message: "Reminder deleted successfully."
   sharing:
     count:
       zero: "0 người dùng"
@@ -3627,7 +4146,6 @@ vi:
   nothing_to_preview: "Không có gì để xem trước"
   api_v3:
     attributes:
-      lock_version: "Phiên bản khóa"
       property: "Thuộc tính"
     errors:
       code_400: "Yêu cầu không hợp lệ: %{message}"
@@ -3725,8 +4243,10 @@ vi:
   oauth:
     application:
       builtin: Built-in instance application
-      confidential: Confidential
+      confidential: Bí mật
       singular: "Ứng dụng OAuth"
+      scopes: "Phạm vi"
+      client_credentials: "Client credentials"
       plural: "Các ứng dụng OAuth"
       named: "Ứng dụng OAuth '%{name}'"
       new: "Ứng dụng OAuth mới"
@@ -3782,6 +4302,7 @@ vi:
       connected: "Đã kết nối"
       error: "Lỗi"
       failed_authorization: "Xác thực không thành công"
+      not_connected: "Not connected"
     labels:
       label_oauth_integration: "Tích hợp OAuth2"
       label_redirect_uri: "URI chuyển hướng"
@@ -3832,3 +4353,29 @@ vi:
   plugin_openproject_auth_saml:
     name: "OmniAuth SAML / Đăng nhập một lần"
     description: "Thêm nhà cung cấp OmniAuth SAML vào OpenProject"
+  enterprise_plans:
+    legacy_enterprise: "Enterprise Plan"
+  enterprise_features:
+    baseline_comparison: Baseline Comparison
+    board_view: Board View
+    conditional_highlighting: Conditional Highlighting
+    custom_actions: Custom Actions
+    custom_field_hierarchies: Custom Field Hierarchies
+    customize_life_cycle: Customize Life Cycle
+    date_alerts: Date Alerts
+    define_custom_style: Define Custom Style
+    edit_attribute_groups: Edit Attribute Groups
+    gantt_pdf_export: Gantt PDF Export
+    grid_widget_wp_graph: Grid Widget Work Package Graph
+    ldap_groups: LDAP Groups
+    one_drive_sharepoint_file_storage: OneDrive/SharePoint File Storage
+    placeholder_users: Placeholder Users
+    project_list_sharing: Project List Sharing
+    readonly_work_packages: Readonly Work Packages
+    sso_auth_providers: SSO Auth Providers
+    team_planner_view: Team Planner View
+    two_factor_authentication: Two-Factor Authentication
+    virus_scanning: Attachment Virus Scanning
+    work_package_query_relation_columns: Work Package Query Relation Columns
+    work_package_sharing: Work Package Sharing
+    work_package_subject_generation: Work Package Subject Generation

@@ -26,7 +26,7 @@
 # See COPYRIGHT and LICENSE files for more details.
 #++
 
-require File.expand_path(File.dirname(__FILE__) + "/../../spec_helper.rb")
+require_relative "../../spec_helper"
 
 RSpec.describe "Copying a budget", :js do
   let(:project) { create(:project, enabled_module_names: %i[budgets costs]) }
@@ -88,7 +88,7 @@ RSpec.describe "Copying a budget", :js do
 
     click_button "Create"
 
-    budget_page.expect_toast message: "Successful creation."
+    expect_flash message: "Successful creation."
 
     expect(page)
       .to have_css(".author", text: current_user.name)

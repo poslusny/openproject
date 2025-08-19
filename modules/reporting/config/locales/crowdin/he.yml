@@ -23,7 +23,7 @@ he:
   plugin_openproject_reporting:
     name: "OpenProject Reporting"
     description: "This plugin allows creating custom cost reports with filtering and grouping created by the OpenProject Time and costs plugin."
-  button_save_report_as: "Save report as..."
+  button_save_report_as: "שמור דוח כ..."
   comments: "הערה"
   cost_reports_title: "עלויות"
   label_cost_report: "דוח עלות"
@@ -45,6 +45,8 @@ he:
   label_greater: ">"
   label_is_not_project_with_subprojects: "לא (כולל תת פרוייקטים)"
   label_is_project_with_subprojects: "הוא (כולל תת פרוייקטים)"
+  label_is_work_package_with_descendants: "is (includes descendants)"
+  label_is_not_work_package_with_descendants: "is not (includes descendants)"
   label_work_package_attributes: "תכונות חבילת עבודה"
   label_less: "<"
   label_logged_by_reporting: "Logged by"
@@ -86,8 +88,16 @@ he:
   validation_failure_date: "אינו תאריך בר תוקף"
   validation_failure_integer: "אינו מספר שלם חוקי"
   export:
+    timesheet:
+      title: "Your PDF timesheet export"
+      button: "Export PDF timesheet"
+      timesheet: "Timesheet"
+      time: "זמן"
+      sum_hours: סכום
     cost_reports:
       title: "Your Cost Reports XLS export"
+      start_time: "Start time"
+      end_time: "End time"
   reporting:
     group_by:
       selected_columns: "Selected columns"

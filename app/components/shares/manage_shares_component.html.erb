@@ -1,7 +1,7 @@
 <%=
   if strategy.manageable?
     modal_content.with_row do
-      render(Shares::InviteUserFormComponent.new(strategy:, errors: errors))
+      render(Shares::InviteUserFormComponent.new(strategy:, errors:))
     end
   end
 
@@ -105,5 +105,4 @@
       end
     end
   end
-
 %>

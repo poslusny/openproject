@@ -28,8 +28,7 @@
 require "spec_helper"
 
 RSpec.describe "Project list sharing",
-               :js,
-               :with_cuprite do
+               :js do
   shared_let(:view_project_query_role) { create(:view_project_query_role) }
   shared_let(:edit_project_query_role) { create(:edit_project_query_role) }
 
@@ -176,6 +175,44 @@ RSpec.describe "Project list sharing",
           projects_index_page.save_query
           # TODO: Toast is currently not rendered in turbo actions
           # projects_index_page.expect_toast(message: "The modified list has been saved")
+        end
+      end
+
+      context "when searching for users to share with" do
+        it "does not show the mail address of other users" do
+          using_session "sharer" do
+            login_as(sharer)
+
+            projects_index_page.visit!
+            projects_index_page.set_sidebar_filter "Member-of list"
+            projects_index_page.open_share_dialog
+
+            share_dialog.expect_open
+            target_dropdown = share_dialog.search_user("")
+
+            expect(target_dropdown).to have_css(".ng-option", text: wildcard_user.firstname)
+            expect(target_dropdown).to have_no_css(".ng-option", text: wildcard_user.mail)
+          end
+        end
+
+        context "with permission to see emails" do
+          let!(:standard) { create(:standard_global_role) }
+
+          it "does show the mail address of other users" do
+            using_session "sharer" do
+              login_as(sharer)
+
+              projects_index_page.visit!
+              projects_index_page.set_sidebar_filter "Member-of list"
+              projects_index_page.open_share_dialog
+
+              share_dialog.expect_open
+              target_dropdown = share_dialog.search_user("")
+
+              expect(target_dropdown).to have_css(".ng-option", text: wildcard_user.firstname)
+              expect(target_dropdown).to have_css(".ng-option", text: wildcard_user.mail)
+            end
+          end
         end
       end
     end

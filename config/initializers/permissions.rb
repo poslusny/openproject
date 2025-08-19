@@ -81,6 +81,11 @@ Rails.application.reloader.to_prepare do
                      require: :loggedin,
                      contract_actions: { placeholder_users: %i[create read update] }
 
+      map.permission :view_user_email,
+                     {},
+                     permissible_on: :global,
+                     require: :loggedin
+
       map.permission :view_project,
                      { projects: [:show] },
                      permissible_on: :project,
@@ -95,6 +100,7 @@ Rails.application.reloader.to_prepare do
                      {
                        "projects/settings/general": %i[show],
                        "projects/settings/storage": %i[show],
+                       "projects/settings/work_packages": %i[show],
                        "projects/templated": %i[create destroy],
                        "projects/identifier": %i[show update]
                      },
@@ -128,6 +134,28 @@ Rails.application.reloader.to_prepare do
                      permissible_on: :project,
                      require: :member
 
+      map.permission :view_project_phases,
+                     {},
+                     permissible_on: :project,
+                     dependencies: :view_project,
+                     visible: -> { OpenProject::FeatureDecisions.stages_and_gates_active? }
+
+      map.permission :edit_project_phases,
+                     {},
+                     permissible_on: :project,
+                     require: :member,
+                     dependencies: :view_project_phases,
+                     contract_actions: { projects: %i[update] },
+                     visible: -> { OpenProject::FeatureDecisions.stages_and_gates_active? }
+
+      map.permission :select_project_phases,
+                     {
+                       "projects/settings/life_cycle_steps": %i[index toggle enable_all disable_all]
+                     },
+                     permissible_on: :project,
+                     require: :member,
+                     visible: -> { OpenProject::FeatureDecisions.stages_and_gates_active? }
+
       map.permission :manage_members,
                      {
                        members: %i[index new create update destroy destroy_by_principal autocomplete_for_member menu],
@@ -156,14 +184,14 @@ Rails.application.reloader.to_prepare do
 
       map.permission :manage_types,
                      {
-                       "projects/settings/types": %i[show update]
+                       "projects/settings/work_packages/types": %i[show update]
                      },
                      permissible_on: :project,
                      require: :member
 
       map.permission :select_custom_fields,
                      {
-                       "projects/settings/custom_fields": %i[show update]
+                       "projects/settings/work_packages/custom_fields": %i[show update]
                      },
                      permissible_on: :project,
                      require: :member
@@ -214,16 +242,22 @@ Rails.application.reloader.to_prepare do
                      {
                        versions: %i[index show status_by],
                        journals: %i[index],
-                       work_packages: %i[show index],
+                       work_packages: %i[show index show_conflict_flash_message],
                        work_packages_api: [:get],
                        "work_packages/reports": %i[report report_details],
-                       "work_packages/menus": %i[show]
+                       "work_packages/activities_tab": %i[index update_streams update_sorting update_filter],
+                       "work_packages/menus": %i[show],
+                       "work_packages/hover_card": %i[show],
+                       work_package_relations_tab: %i[index],
+                       "work_packages/reminders": %i[modal_body create update destroy]
                      },
                      permissible_on: %i[work_package project],
                      contract_actions: { work_packages: %i[read] }
 
       wpt.permission :add_work_packages,
-                     {},
+                     {
+                       work_package_relations: %i[new create]
+                     },
                      permissible_on: :project,
                      dependencies: :view_work_packages,
                      contract_actions: { work_packages: %i[create] }
@@ -254,22 +288,55 @@ Rails.application.reloader.to_prepare do
                      {
                        # FIXME: Although the endpoint is removed, the code checking whether a user
                        # is eligible to add work packages through the API still seems to rely on this.
-                       journals: [:new]
+                       journals: [:new],
+                       "work_packages/activities_tab": %i[create toggle_reaction]
                      },
                      permissible_on: %i[work_package project],
                      dependencies: :view_work_packages
 
+      wpt.permission :edit_own_work_package_notes,
+                     {
+                       "work_packages/activities_tab": %i[edit cancel_edit update]
+                     },
+                     permissible_on: %i[work_package project],
+                     require: :loggedin,
+                     dependencies: :view_work_packages
+
       wpt.permission :edit_work_package_notes,
-                     {},
+                     {
+                       "work_packages/activities_tab": %i[edit cancel_edit update]
+                     },
                      permissible_on: :project,
                      require: :loggedin,
                      dependencies: :view_work_packages
 
-      wpt.permission :edit_own_work_package_notes,
+      wpt.permission :view_comments_with_restricted_visibility,
                      {},
-                     permissible_on: %i[work_package project],
+                     permissible_on: %i[project],
                      require: :loggedin,
-                     dependencies: :view_work_packages
+                     dependencies: :view_work_packages,
+                     visible: -> { OpenProject::FeatureDecisions.comments_with_restricted_visibility_active? }
+
+      wpt.permission :add_comments_with_restricted_visibility,
+                     {},
+                     permissible_on: %i[project],
+                     require: :loggedin,
+                     dependencies: %i[view_project view_comments_with_restricted_visibility],
+                     visible: -> { OpenProject::FeatureDecisions.comments_with_restricted_visibility_active? }
+
+      wpt.permission :edit_own_comments_with_restricted_visibility,
+                     {},
+                     permissible_on: %i[project],
+                     require: :loggedin,
+                     dependencies: %i[view_project view_comments_with_restricted_visibility],
+                     visible: -> { OpenProject::FeatureDecisions.comments_with_restricted_visibility_active? }
+
+      wpt.permission :edit_others_comments_with_restricted_visibility,
+                     {},
+                     permissible_on: %i[project],
+                     require: :loggedin,
+                     dependencies: %i[view_project view_comments_with_restricted_visibility],
+                     visible: -> { OpenProject::FeatureDecisions.comments_with_restricted_visibility_active? }
 
       # WP attachments can be added with :edit_work_packages, this permission allows it without Edit WP as well.
       wpt.permission :add_work_package_attachments,
@@ -280,7 +347,7 @@ Rails.application.reloader.to_prepare do
       # WorkPackage categories
       wpt.permission :manage_categories,
                      {
-                       "projects/settings/categories": [:show],
+                       "projects/settings/work_packages/categories": [:show],
                        categories: %i[new create edit update destroy]
                      },
                      permissible_on: :project,
@@ -304,13 +371,15 @@ Rails.application.reloader.to_prepare do
 
       wpt.permission :manage_work_package_relations,
                      {
-                       work_package_relations: %i[create destroy]
+                       work_package_relations: %i[edit update create destroy]
                      },
                      permissible_on: %i[work_package project],
                      dependencies: :view_work_packages
 
       wpt.permission :manage_subtasks,
-                     {},
+                     {
+                       work_package_children_relations: %i[new create destroy]
+                     },
                      permissible_on: :project,
                      dependencies: :view_work_packages
       # Queries

@@ -1,13 +1,14 @@
 ro:
   plugin_openproject_webhooks:
-    name: "OpenProject Webhooks"
-    description: "Provides a plug-in API to support OpenProject webhooks for better 3rd party integration."
+    name: "Webhook-uri OpenProject"
+    description: "Oferă un plug-in API pentru a sprijini OpenProject webhooks pentru o mai bună integrare a terților."
   activerecord:
     attributes:
       webhooks/webhook:
         url: 'URL de încărcare utilă'
         secret: 'Secretul semnăturii'
         events: 'Evenimente'
+        enabled: 'Enabled'
         projects: 'Proiecte activate'
       webhooks/log:
         event_name: 'Numele evenimentului'
@@ -38,7 +39,7 @@ ro:
         enabled: 'Webhook este activat'
         disabled: 'Webhook este dezactivat'
         enabled_text: 'Webhook va emite sarcini utile pentru evenimentele definite mai jos.'
-        disabled_text: 'Fă clic pe butonul de editare pentru a activa webhook-ul.'
+        disabled_text: 'Clic pe butonul de editare pentru a activa webhook-ul.'
       deliveries:
         no_results_table: Nu au fost efectuate livrări pentru acest webhook în ultimele zile.
         title: 'Livrări recente'

@@ -37,7 +37,7 @@ import { IToast, ToastService } from 'core-app/shared/components/toaster/toast.s
 import {
   centerUpdatedInPlace,
   markNotificationsAsRead,
-  notificationCountIncreased,
+  notificationCountChanged,
   notificationsMarkedRead,
 } from 'core-app/core/state/in-app-notifications/in-app-notifications.actions';
 import { INotification } from 'core-app/core/state/in-app-notifications/in-app-notification.model';
@@ -61,6 +61,7 @@ import { ApiV3ListFilter, ApiV3ListParameters } from 'core-app/core/apiv3/paths/
 import { FrameElement } from '@hotwired/turbo';
 import { PathHelperService } from 'core-app/core/path-helper/path-helper.service';
 import { UrlParamsService } from 'core-app/core/navigation/url-params.service';
+import { IanBellService } from 'core-app/features/in-app-notifications/bell/state/ian-bell.service';
 
 export interface INotificationPageQueryParameters {
   filter?:string|null;
@@ -156,7 +157,7 @@ export class IanCenterService extends UntilDestroyedMixin {
     }),
     switchMap(() => this
       .resourceService
-      .fetchCollection(this.params)
+      .fetchCollection(this.params, { handleErrors: false })
       .pipe(
         switchMap(
           (results) => from(this.sideLoadInvolvedWorkPackages(results._embedded.elements))
@@ -192,6 +193,7 @@ export class IanCenterService extends UntilDestroyedMixin {
     readonly state:StateService,
     readonly deviceService:DeviceService,
     readonly pathHelper:PathHelperService,
+    readonly ianBellService:IanBellService,
   ) {
     super();
     this.reload.subscribe();
@@ -260,40 +262,26 @@ export class IanCenterService extends UntilDestroyedMixin {
   }
 
   /**
-   * Check for updates after bell count increased
+   * Pull latest notifications from API directly and trigger all related UI updates
    */
-  @EffectCallback(notificationCountIncreased)
-  private checkForNewNotifications() {
+  updateImmediate() {
+    this.ianBellService.fetchUnread().subscribe();
+  }
+
+  /**
+   * Handle updates after bell count changed (+/-)
+   */
+  @EffectCallback(notificationCountChanged)
+  private handleChangedNotificationCount() {
+    // update the UI state for increased AND decreased notifications, not only increased count
+    // decreasing the notification count could happen when the user itself
+    // marks notifications as read in the split view or on another tab
     this.onReload.pipe(take(1)).subscribe((collection) => {
-      const { activeCollection } = this.query.getValue();
-      const hasNewNotifications = !collection.ids.reduce(
-        (allInOldCollection, id) => allInOldCollection && activeCollection.ids.includes(id),
-        true,
-      );
-
-      if (!hasNewNotifications) {
-        return;
-      }
-
-      if (this.activeReloadToast) {
-        this.toastService.remove(this.activeReloadToast);
-        this.activeReloadToast = null;
-      }
-
-      this.activeReloadToast = this.toastService.add({
-        type: 'info',
-        icon: 'bell',
-        message: this.I18n.t('js.notifications.center.new_notifications.message'),
-        link: {
-          text: this.I18n.t('js.notifications.center.new_notifications.link_text'),
-          target: () => {
-            this.store.update({ activeCollection: collection });
-            this.actions$.dispatch(centerUpdatedInPlace({ origin: this.id }));
-            this.activeReloadToast = null;
-          },
-        },
-      });
+      // directly update the UI state in both cases (count increased or decreased)
+      this.store.update({ activeCollection: collection });
+      this.actions$.dispatch(centerUpdatedInPlace({ origin: this.id }));
     });
+
     this.reload.next(false);
   }
 

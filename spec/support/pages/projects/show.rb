@@ -33,11 +33,9 @@ module Pages
     class Show < ::Pages::Page
       attr_reader :project
 
-      # rubocop:disable Lint/MissingSuper
       def initialize(project)
         @project = project
       end
-      # rubocop:enable Lint/MissingSuper
 
       def path
         project_path(project)
@@ -47,20 +45,21 @@ module Pages
         within("#menu-sidebar", &)
       end
 
-      def toast_type
-        :rails
-      end
-
       def visit_page
         visit path
       end
 
       def expect_no_visible_sidebar
         expect_angular_frontend_initialized
-        expect(page).to have_no_css(".op-grid-page--grid-container")
+        expect(page).to have_no_css(".Layout-sidebar")
       end
 
-      def within_async_loaded_sidebar(&)
+      def expect_visible_sidebar
+        expect_angular_frontend_initialized
+        expect(page).to have_css(".Layout-sidebar")
+      end
+
+      def within_project_attributes_sidebar(&)
         within "#project-custom-fields-sidebar" do
           expect(page).to have_css("[data-test-selector='project-custom-fields-sidebar-async-content']")
           yield
@@ -76,14 +75,33 @@ module Pages
       end
 
       def open_edit_dialog_for_section(section)
-        within_async_loaded_sidebar do
+        within_project_attributes_sidebar do
           scroll_to_element(page.find("[data-test-selector='project-custom-field-section-#{section.id}']"))
           within_custom_field_section_container(section) do
             page.find("[data-test-selector='project-custom-field-section-edit-button']").click
           end
         end
 
-        expect(page).to have_css("[data-test-selector='async-dialog-content']", wait: 5)
+        wait_for_size_animation_completion("[data-test-selector='async-dialog-content']")
+      end
+
+      def open_edit_dialog_for_life_cycles
+        within_life_cycles_sidebar do
+          page.find("[data-test-selector='project-life-cycles-edit-button']").click
+        end
+
+        Components::Projects::ProjectLifeCycles::EditDialog.new.tap(&:expect_open)
+      end
+
+      def within_life_cycles_sidebar(&)
+        within "#project-life-cycles-sidebar" do
+          expect(page).to have_css("[data-test-selector='project-life-cycles-sidebar-async-content']")
+          yield
+        end
+      end
+
+      def within_life_cycle_container(life_cycle, &)
+        within("[data-test-selector='project-life-cycle-#{life_cycle.id}']", &)
       end
 
       def expand_text(custom_field)

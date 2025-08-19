@@ -29,7 +29,7 @@
 require "spec_helper"
 require_relative "../../../modules/my_page/spec/support/pages/my/page"
 
-RSpec.describe "Favorite projects", :js do
+RSpec.describe "Favorite projects", :js, :selenium do
   shared_let(:project) { create(:public_project, name: "My favorite!", enabled_module_names: []) }
   shared_let(:other_project) { create(:public_project, name: "Other project", enabled_module_names: []) }
   shared_let(:user) do
@@ -41,6 +41,11 @@ RSpec.describe "Favorite projects", :js do
   end
   let(:projects_page) { Pages::Projects::Index.new }
   let(:top_menu) { Components::Projects::TopMenu.new }
+
+  let!(:my_page_grid) do
+    create(:my_page, :empty, user:)
+  end
+
   let(:my_page) do
     Pages::My::Page.new
   end

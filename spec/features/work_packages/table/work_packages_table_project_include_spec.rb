@@ -29,7 +29,7 @@
 require "spec_helper"
 require_relative "../project_include/project_include_shared_examples"
 
-RSpec.describe "Work package project include", :js do
+RSpec.describe "Work package project include", :js, :selenium do
   shared_let(:enabled_modules) { %w[work_package_tracking] }
   shared_let(:status) { create(:default_status) }
   shared_let(:priority) { create(:default_priority) }
@@ -89,7 +89,7 @@ RSpec.describe "Work package project include", :js do
       subject_field.submit_by_enter
 
       work_package_view.expect_and_dismiss_toaster(
-        message: "Successful creation. Click here to open this work package in fullscreen view."
+        message: "Successful creation."
       )
 
       work_package_view.expect_work_package_subject "Foobar!"

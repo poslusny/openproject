@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -130,9 +131,9 @@ class WorkPackageMeetingsTabController < ApplicationController
   def get_agenda_items_of_work_package(direction)
     agenda_items = MeetingAgendaItem
         .includes(:meeting)
-        .where(meeting_id: Meeting.visible(current_user))
+        .where(meeting_id: Meeting.not_templated.visible(current_user))
         .where(work_package_id: @work_package.id)
-        .reorder(sort_clause(direction))
+        .order(sort_clause(direction))
 
     comparison = direction == :past ? "<" : ">="
     agenda_items.where("meetings.start_time + (interval '1 hour' * meetings.duration) #{comparison} ?", Time.zone.now)

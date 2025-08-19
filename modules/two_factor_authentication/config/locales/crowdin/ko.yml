@@ -9,8 +9,12 @@ ko:
       two_factor_authentication/device:
         identifier: "식별자"
         default: "기본값으로 사용"
+        channel: "채널"
       two_factor_authentication/device/sms:
         phone_number: "전화번호"
+      two_factor_authentication/device/webauthn:
+        webauthn_external: "WebAuthn ID"
+        webauthn_public_key: "WebAuthn 공개 키"
     errors:
       models:
         two_factor_authentication/device:
@@ -128,7 +132,7 @@ ko:
         time_based: "시간 기반"
         account: "계정 이름/발급자"
         setup: |
-          Google 인증자로 2단계 인증 설정을 위해, Apple App Store 또는 Google Play Store에서 애플리케이션을 다운로드하세요.
+          Google 인증자로 2단계 인증 설정을 위해, Apple App Store 또는 Google Play Store에서 애플리케이션을 다운로드하세요. 
           앱을 연 후, 다음 QR 코드를 스캔하여 장치를 등록할 수 있습니다.
         question_cannot_scan: |
           애플리케이션을 사용하여 코드를 스캔할 수 없습니까?

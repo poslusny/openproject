@@ -21,9 +21,9 @@
 #++
 ro:
   plugin_openproject_reporting:
-    name: "OpenProject Reporting"
-    description: "This plugin allows creating custom cost reports with filtering and grouping created by the OpenProject Time and costs plugin."
-  button_save_report_as: "Save report as..."
+    name: "Raport OpenProject"
+    description: "Acest plugin permite crearea de rapoarte de costuri personalizate cu filtrare şi grupare create de OpenProject Time şi de plugin-ul costuri."
+  button_save_report_as: "Salvează raportul ca..."
   comments: "Comentariu"
   cost_reports_title: "Timp și costuri"
   label_cost_report: "Raport de cost"
@@ -45,6 +45,8 @@ ro:
   label_greater: ">"
   label_is_not_project_with_subprojects: "nu este (incluzând subproiecte)"
   label_is_project_with_subprojects: "este (incluzând subproiecte)"
+  label_is_work_package_with_descendants: "is (includes descendants)"
+  label_is_not_work_package_with_descendants: "is not (includes descendants)"
   label_work_package_attributes: "Atribute pachet de lucru"
   label_less: "<"
   label_logged_by_reporting: "Logat ca"
@@ -58,18 +60,18 @@ ro:
   label_public_report_plural: "Rapoarte de cost publice"
   label_really_delete_question: "Sunteți sigur că doriți să ștergeți acest raport?"
   label_rows: "Rânduri"
-  label_saving: "Salvare în curs..."
+  label_saving: "Salvează în curs..."
   label_spent_on_reporting: "Data (consumată)"
   label_sum: "Sumă"
   label_units: "Unități"
   label_week_reporting: "Săptămână (consumată)"
   label_year_reporting: "An (consumat)"
   label_count: "Număr"
-  label_filter: "Filtrare"
-  label_filter_add: "Adăugare filtru"
+  label_filter: "Filtrează"
+  label_filter_add: "Adaugă filtru"
   label_filter_plural: "Filtre"
   label_group_by: "Grupează după"
-  label_group_by_add: "Adaugă atributul Grupare-după"
+  label_group_by_add: "Adaugă atributul Grupează-după"
   label_inactive: "Inactiv"
   label_no: "Nu"
   label_none: "Sincronizați datele"
@@ -77,8 +79,8 @@ ro:
   label_report: "Raportare"
   label_yes: "Da"
   load_query_question: "Raportul va avea %{size} de celule şi e posibil ca generarea să dureze un timp. Sunteți sigur că doriți generarea?"
-  permission_save_cost_reports: "Salvare rapoarte de cost publice"
-  permission_save_private_cost_reports: "Salvare rapoarte de cost private"
+  permission_save_cost_reports: "Salvează rapoarte de cost publice"
+  permission_save_private_cost_reports: "Salvează rapoarte de cost private"
   project_module_reporting_module: "Rapoarte de cost"
   text_costs_are_rounded_note: "Valorile afișate sunt rotunjite. Toate calculele sunt bazate pe valorile nerotunjite."
   toggle_multiselect: "activare/dezactivare selecție multiplă"
@@ -86,8 +88,16 @@ ro:
   validation_failure_date: "nu e o dată validă"
   validation_failure_integer: "nu e un întreg valid"
   export:
+    timesheet:
+      title: "Your PDF timesheet export"
+      button: "Export PDF timesheet"
+      timesheet: "Timesheet"
+      time: "Timp"
+      sum_hours: Sumă
     cost_reports:
       title: "Exportul dumneavoastră de rapoarte de costuri XLS"
+      start_time: "Dată început"
+      end_time: "End time"
   reporting:
     group_by:
       selected_columns: "Coloane selectate"

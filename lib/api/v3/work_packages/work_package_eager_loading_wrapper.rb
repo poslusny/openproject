@@ -75,12 +75,13 @@ module API
               ::API::V3::WorkPackages::EagerLoading::Hierarchy,
               ::API::V3::WorkPackages::EagerLoading::Ancestor,
               ::API::V3::WorkPackages::EagerLoading::Project,
+              ::API::V3::WorkPackages::EagerLoading::Principals,
               ::API::V3::WorkPackages::EagerLoading::Checksum,
               ::API::V3::WorkPackages::EagerLoading::CustomValue,
               ::API::V3::WorkPackages::EagerLoading::CustomAction,
               # Have the historic attributes last as they require the custom values
               # to be loaded first in order to create the diffs between the current
-              # and the historic values without loading the custom fields (JournableDiffer).
+              # and the historic values without loading the custom fields (Acts::Journalized::Differ).
               ::API::V3::WorkPackages::EagerLoading::HistoricAttributes
             ]
           end

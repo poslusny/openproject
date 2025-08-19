@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -27,18 +28,17 @@
 #++
 
 class MeetingsController < ApplicationController
-  around_action :set_time_zone
-  before_action :load_and_authorize_in_optional_project, only: %i[index new show create history]
-  before_action :verify_activities_module_activated, only: %i[history]
+  before_action :load_and_authorize_in_optional_project
+
   before_action :determine_date_range, only: %i[history]
   before_action :determine_author, only: %i[history]
-  before_action :build_meeting, only: %i[new]
-  before_action :find_meeting, except: %i[index new create]
+  before_action :build_meeting, only: %i[new new_dialog fetch_timezone]
+  before_action :find_meeting, except: %i[index new create new_dialog fetch_timezone]
+  before_action :redirect_to_project, only: %i[show]
   before_action :set_activity, only: %i[history]
   before_action :find_copy_from_meeting, only: %i[create]
   before_action :convert_params, only: %i[create update update_participants]
-  before_action :authorize, except: %i[index new create update_title update_details update_participants change_state]
-  before_action :authorize_global, only: %i[index new create update_title update_details update_participants change_state]
+  before_action :prevent_template_destruction, only: :destroy
 
   helper :watchers
   helper :meeting_contents
@@ -50,27 +50,37 @@ class MeetingsController < ApplicationController
 
   include OpTurbo::ComponentStream
   include OpTurbo::FlashStreamHelper
+  include OpTurbo::DialogStreamHelper
   include Meetings::AgendaComponentStreams
   include MetaTagsHelper
 
   menu_item :new_meeting, only: %i[new create]
 
   def index
-    @query = load_query
-    @meetings = load_meetings(@query)
-    render "index", locals: { menu_name: project_or_global_menu }
+    load_meetings
+
+    render "index",
+           locals: { menu_name: project_or_global_menu }
   end
 
   current_menu_item :index do
     :meetings
   end
 
-  def show
-    html_title "#{t(:label_meeting)}: #{@meeting.title}"
-    if @meeting.is_a?(StructuredMeeting)
-      render(Meetings::ShowComponent.new(meeting: @meeting, project: @project))
-    elsif @meeting.agenda.present? && @meeting.agenda.locked?
-      params[:tab] ||= "minutes"
+  def show # rubocop:disable Metrics/AbcSize
+    respond_to do |format|
+      format.html do
+        html_title "#{t(:label_meeting)}: #{@meeting.title}"
+        if @meeting.is_a?(StructuredMeeting)
+          if @meeting.state == "cancelled"
+            render_404
+          else
+            render(Meetings::ShowComponent.new(meeting: @meeting), layout: true)
+          end
+        elsif @meeting.agenda.present? && @meeting.agenda.locked?
+          params[:tab] ||= "minutes"
+        end
+      end
     end
   end
 
@@ -94,20 +104,48 @@ class MeetingsController < ApplicationController
           .call(@converted_params)
       end
 
+    @meeting = call.result
+
     if call.success?
       text = I18n.t(:notice_successful_create)
-      if User.current.time_zone.nil?
-        link = I18n.t(:notice_timezone_missing, zone: Time.zone)
+      unless User.current.pref.time_zone?
+        link = I18n.t(:notice_timezone_missing, zone: formatted_time_zone_offset)
         text += " #{view_context.link_to(link, { controller: '/my', action: :settings, anchor: 'pref_time_zone' },
                                          class: 'link_to_profile')}"
       end
       flash[:notice] = text.html_safe # rubocop:disable Rails/OutputSafety
 
-      redirect_to action: "show", id: call.result
+      redirect_to status: :see_other, action: "show", id: @meeting
     else
-      @meeting = call.result
-      render template: "meetings/new", project_id: @project, locals: { copy_from: @copy_from }
+      respond_to do |format|
+        format.html do
+          render action: :new,
+                 status: :unprocessable_entity,
+                 project_id: @project,
+                 locals: { copy_from: @copy_from }
+        end
+
+        format.turbo_stream do
+          update_via_turbo_stream(
+            component: Meetings::Index::FormComponent.new(
+              meeting: @meeting,
+              project: @project,
+              copy_from: @copy_from
+            ),
+            status: :bad_request
+          )
+
+          respond_with_turbo_streams
+        end
+      end
     end
+  end
+
+  def new_dialog
+    respond_with_dialog Meetings::Index::DialogComponent.new(
+      meeting: @meeting,
+      project: @project
+    )
   end
 
   def new; end
@@ -123,13 +161,44 @@ class MeetingsController < ApplicationController
       .call(save: false)
 
     @meeting = call.result
-    render action: "new", project_id: @project, locals: { copy_from: }
+    respond_to do |format|
+      format.html do
+        render action: :new, status: :unprocessable_entity, project_id: @project, locals: { copy_from: }
+      end
+
+      format.turbo_stream do
+        respond_with_dialog Meetings::Index::DialogComponent.new(
+          meeting: @meeting,
+          project: @project,
+          copy_from:
+        )
+      end
+    end
   end
 
-  def destroy
-    @meeting.destroy
-    flash[:notice] = I18n.t(:notice_successful_delete)
-    redirect_to action: "index", project_id: @project
+  def delete_dialog
+    respond_with_dialog Meetings::DeleteDialogComponent.new(
+      meeting: @meeting,
+      back_url: params[:back_url]
+    )
+  end
+
+  def destroy # rubocop:disable Metrics/AbcSize
+    recurring = @meeting.recurring_meeting
+
+    # rubocop:disable Rails/ActionControllerFlashBeforeRender
+    Meetings::DeleteService
+      .new(model: @meeting, user: User.current)
+      .call
+      .on_success { flash[:notice] = recurring ? I18n.t(:notice_successful_cancel) : I18n.t(:notice_successful_delete) }
+      .on_failure { |call| flash[:error] = call.message }
+    # rubocop:enable Rails/ActionControllerFlashBeforeRender
+
+    if recurring
+      redirect_to project_recurring_meeting_path(@project, recurring), status: :see_other
+    else
+      redirect_back_or_default project_meetings_path(@project), status: :see_other
+    end
   end
 
   def edit
@@ -168,7 +237,7 @@ class MeetingsController < ApplicationController
       redirect_to action: "show", id: @meeting
     else
       @meeting = call.result
-      render action: "edit"
+      render action: :edit, status: :unprocessable_entity
     end
   end
 
@@ -223,6 +292,8 @@ class MeetingsController < ApplicationController
       @meeting.open!
     when "closed"
       @meeting.closed!
+    when "in_progress"
+      @meeting.in_progress!
     end
 
     if @meeting.errors.any?
@@ -258,6 +329,23 @@ class MeetingsController < ApplicationController
     redirect_to action: :show, id: @meeting
   end
 
+  def fetch_timezone
+    return unless timezone_params.keys.count == 2
+
+    User.execute_as(User.current) do
+      meeting = Meeting.new(timezone_params)
+      @text = friendly_timezone_name(User.current.time_zone, period: meeting.start_time)
+    end
+
+    prefix = params[:structured_meeting] ? "structured_" : ""
+
+    add_caption_to_input_element_via_turbo_stream("input[name='#{prefix}meeting[start_time_hour]']",
+                                                  caption: @text,
+                                                  clean_other_captions: true)
+
+    respond_with_turbo_streams
+  end
+
   private
 
   def load_query
@@ -266,43 +354,91 @@ class MeetingsController < ApplicationController
       current_user
     ).call(params)
 
-    query = apply_default_filter_if_none_given(query)
-
-    if @project
-      query.where("project_id", "=", @project.id)
-    end
+    apply_default_filter_if_none_given(query)
+    apply_time_filter_and_sort(query)
+    query.where("project_id", "=", @project.id) if @project
 
     query
+  end
+
+  def apply_time_filter_and_sort(query)
+    if params[:upcoming] == "false"
+      query.where("time", "=", Queries::Meetings::Filters::TimeFilter::PAST_VALUE)
+      query.order(start_time: :desc)
+    else
+      query.where("time", "=", Queries::Meetings::Filters::TimeFilter::FUTURE_VALUE)
+      query.order(start_time: :asc)
+    end
   end
 
   def apply_default_filter_if_none_given(query)
-    return query if query.filters.any?
+    return if params.key?(:filters)
 
-    query.where("time", "=", Queries::Meetings::Filters::TimeFilter::FUTURE_VALUE)
     query.where("invited_user_id", "=", [User.current.id.to_s])
   end
 
-  def load_meetings(query)
-    query
-      .results
-      .paginate(page: page_param, per_page: per_page_param)
+  def load_meetings
+    @query = load_query
+
+    # We group meetings into individual groups, but only for upcoming meetings
+    if params[:upcoming] == "false"
+      @meetings = show_more_pagination(@query.results)
+    else
+      @grouped_meetings = group_meetings(@query.results)
+    end
   end
 
-  def set_time_zone(&)
-    zone = User.current.time_zone
-    if zone.nil?
-      localzone = Time.current.utc_offset
-      localzone -= 3600 if Time.current.dst?
-      zone = ::ActiveSupport::TimeZone[localzone]
+  def group_meetings(all_meetings) # rubocop:disable Metrics/AbcSize
+    next_week = Time
+      .current
+      .next_occurring(OpenProject::Internationalization::Date.beginning_of_week)
+      .beginning_of_day
+    groups = Hash.new { |h, k| h[k] = [] }
+    groups[:later] = show_more_pagination(all_meetings
+                                            .where(start_time: next_week..)
+                                            .order(start_time: :asc))
+
+    all_meetings
+      .where(start_time: ...next_week)
+      .order(start_time: :asc)
+      .each do |meeting|
+      start_date = meeting.start_time.to_date
+
+      group_key =
+        if start_date == Time.zone.today
+          :today
+        elsif start_date == Time.zone.tomorrow
+          :tomorrow
+        else
+          :this_week
+        end
+
+      groups[group_key] << meeting
     end
 
-    Time.use_zone(zone, &)
+    groups
   end
 
   def build_meeting
-    @meeting = Meeting.new
-    @meeting.project = @project
-    @meeting.author = User.current
+    meeting = meeting_class.new
+
+    service = meeting.is_a?(RecurringMeeting) ? ::RecurringMeetings::SetAttributesService : ::Meetings::SetAttributesService
+    call = service
+      .new(user: current_user, model: meeting, contract_class: EmptyContract)
+      .call(project: @project)
+
+    @meeting = call.result
+  end
+
+  def meeting_class
+    case params[:type]
+    when "recurring"
+      RecurringMeeting
+    when "structured"
+      StructuredMeeting
+    else
+      Meeting
+    end
   end
 
   def global_upcoming_meetings
@@ -315,29 +451,38 @@ class MeetingsController < ApplicationController
     @meeting = Meeting
       .includes([:project, :author, { participants: :user }, :agenda, :minutes])
       .find(params[:id])
-    @project = @meeting.project
   rescue ActiveRecord::RecordNotFound
     render_404
   end
 
-  def convert_params
+  def convert_params # rubocop:disable Metrics/AbcSize
     # We do some preprocessing of `meeting_params` that we will store in this
     # instance variable.
     @converted_params = meeting_params.to_h
 
-    @converted_params[:project] = @project
+    @converted_params[:project] = @project if @project.present?
     @converted_params[:duration] = @converted_params[:duration].to_hours if @converted_params[:duration].present?
-    # Force defaults on participants
-    @converted_params[:participants_attributes] ||= {}
-    @converted_params[:participants_attributes].each { |p| p.reverse_merge! attended: false, invited: false }
     @converted_params[:send_notifications] = params[:send_notifications] == "1"
+
+    # Handle participants separately for each meeting type
+    @converted_params[:participants_attributes] ||= {}
+    if copy_structured_meeting_participants?
+      create_participants
+    else
+      force_defaults
+    end
+
+    # Recurring meeting occurrences can only be copied as one-time meetings
+    @converted_params[:recurring_meeting_id] = nil
   end
 
   def meeting_params
     if params[:meeting].present?
-      params.require(:meeting).permit(:title, :location, :start_time,
-                                      :duration, :start_date, :start_time_hour, :type,
-                                      participants_attributes: %i[email name invited attended user user_id meeting id])
+      params
+        .require(:meeting)
+        .permit(:title, :location, :start_time, :project_id,
+                :duration, :start_date, :start_time_hour, :type,
+                participants_attributes: %i[email name invited attended user user_id meeting id])
     end
   end
 
@@ -347,19 +492,6 @@ class MeetingsController < ApplicationController
         .require(:structured_meeting)
         .permit(:title, :location, :start_time_hour, :duration, :start_date, :state, :lock_version)
     end
-  end
-
-  def meeting_type(given_type)
-    case given_type
-    when "dynamic"
-      "StructuredMeeting"
-    else
-      "Meeting"
-    end
-  end
-
-  def verify_activities_module_activated
-    render_403 if @project && !@project.module_enabled?("activity")
   end
 
   def set_activity
@@ -400,18 +532,39 @@ class MeetingsController < ApplicationController
   end
 
   def find_copy_from_meeting
-    return unless params[:copied_from_meeting_id]
+    copied_from_meeting_id = params[:copied_from_meeting_id] || params[:meeting][:copied_from_meeting_id]
+    return unless copied_from_meeting_id
 
-    @copy_from = Meeting.visible.find(params[:copied_from_meeting_id])
+    @copy_from = Meeting.visible.find(copied_from_meeting_id)
   rescue ActiveRecord::RecordNotFound
     render_404
   end
 
   def copy_attributes
     {
-      copy_agenda: params[:copy_agenda] == "1",
-      copy_attachments: params[:copy_attachments] == "1",
-      send_notifications: params[:send_notifications] == "1"
+      copy_agenda: copy_param(:copy_agenda),
+      copy_attachments: copy_param(:copy_attachments),
+      send_notifications: copy_param(:send_notifications)
     }
+  end
+
+  def prevent_template_destruction
+    render_400 if @meeting.templated?
+  end
+
+  def redirect_to_project
+    return if @project
+
+    redirect_to project_meeting_path(@meeting.project, @meeting, tab: params[:tab]), status: :see_other
+  end
+
+  def timezone_params
+    meeting_params = if params[:meeting]
+                       params.require(:meeting)
+                     else
+                       params.require(:structured_meeting)
+                     end
+
+    @timezone_params ||= meeting_params.permit(:start_date, :start_time_hour).compact_blank
   end
 end

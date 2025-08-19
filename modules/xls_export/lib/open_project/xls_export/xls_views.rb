@@ -11,7 +11,7 @@ class OpenProject::XlsExport::XlsViews
   def field_representation_map(key, value)
     case key.to_sym
     when :units                     then value.to_i
-    when :spent_on                  then value
+    when :spent_on                  then value.iso8601
     when :activity_id               then mapped value, Enumeration, I18n.t("placeholders.default")
     when :project_id                then project_representation(value)
     when :user_id, :assigned_to_id  then user_representation(value)
@@ -32,7 +32,7 @@ class OpenProject::XlsExport::XlsViews
   def cost_type_unit_label(cost_type_id, cost_type_inst = nil, plural = true)
     case cost_type_id
     when -1 then l_hours(2).split[1..-1].join(" ") # get the plural for hours
-    when 0  then Setting.plugin_costs["costs_currency"]
+    when 0  then Setting.costs_currency
     else cost_type_label(cost_type_id, cost_type_inst, plural)
     end
   end
@@ -61,7 +61,7 @@ class OpenProject::XlsExport::XlsViews
   end
 
   def currency_format
-    "#,##0.00 [$#{Setting.plugin_costs['costs_currency']}]"
+    "#,##0.00 [$#{Setting.costs_currency}]"
   end
 
   def number_format

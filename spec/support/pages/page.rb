@@ -27,6 +27,8 @@
 #++
 
 require_relative "../toasts/expectations"
+require_relative "../flash/expectations"
+require_relative "../capybara/wait_helpers"
 
 module Pages
   class Page
@@ -36,6 +38,9 @@ module Pages
     include RSpec::Matchers
     include OpenProject::StaticRouting::UrlHelpers
     include Toasts::Expectations
+    include Flash::Expectations
+    include RSpec::Wait
+    include WaitHelpers
 
     def current_page?
       URI.parse(current_url).path == path
@@ -44,9 +49,9 @@ module Pages
     def visit!
       raise "No path defined" unless path
 
-      visit path
+      visit(path)
 
-      self
+      wait_for_reload
     end
 
     def reload!
@@ -102,6 +107,23 @@ module Pages
     end
 
     def drag_and_drop_list(from:, to:, elements:, handler:)
+      if using_cuprite?
+        drag_and_drop_list_cuprite(from:, to:, elements:, handler:)
+      else
+        drag_and_drop_list_selenium(from:, to:, elements:, handler:)
+      end
+    end
+
+    def drag_and_drop_list_cuprite(from:, to:, elements:, handler:)
+      list = page.all(elements)
+      source_handler = list[from].find(handler)
+      target_handler = list[to].find(handler)
+
+      # doesn't scroll
+      source_handler.native.drag_to(target_handler.native, delay: 0.1)
+    end
+
+    def drag_and_drop_list_selenium(from:, to:, elements:, handler:)
       # Wait a bit because drag & drop in selenium is easily offended
       sleep 1
 
@@ -157,8 +179,12 @@ module Pages
     def navigate_to_modules_menu_item(link_title)
       visit root_path
 
-      within "#op-app-header--modules-menu-list", visible: false do
-        click_on link_title, visible: false
+      within ".op-app-header" do
+        click_on "Modules"
+      end
+
+      within "#op-app-header--modules-menu-list", visible: :all do
+        click_on link_title, visible: :all
       end
     end
   end

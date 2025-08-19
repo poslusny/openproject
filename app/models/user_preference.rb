@@ -90,14 +90,6 @@ class UserPreference < ApplicationRecord
     settings.fetch(:diff_type, "inline")
   end
 
-  def hide_mail
-    settings.fetch(:hide_mail, true)
-  end
-
-  def can_expose_mail?
-    !hide_mail
-  end
-
   def auto_hide_popups=(value)
     settings[:auto_hide_popups] = to_boolean(value)
   end
@@ -132,7 +124,11 @@ class UserPreference < ApplicationRecord
   end
 
   def time_zone
-    super.presence || Setting.user_default_timezone.presence
+    super.presence || Setting.user_default_timezone.presence || "Etc/UTC"
+  end
+
+  def time_zone?
+    settings["time_zone"].present?
   end
 
   def daily_reminders
@@ -144,7 +140,7 @@ class UserPreference < ApplicationRecord
   end
 
   def immediate_reminders
-    super.presence || { mentioned: true }.with_indifferent_access
+    super.presence || { mentioned: true, personal_reminder: true }.with_indifferent_access
   end
 
   def pause_reminders

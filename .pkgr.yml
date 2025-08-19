@@ -21,20 +21,16 @@ targets:
     <<: *debian
   ubuntu-22.04:
     <<: *debian
-  centos-8: &centos8
+  centos-9:
     env:
       - NODE_ENV=production
       - NPM_CONFIG_PRODUCTION=false
+      - SECRET_KEY_BASE=1
     dependencies:
       - epel-release
       - ImageMagick
       - unzip
       - poppler-utils
-  centos-9:
-    <<: *centos8
-    env:
-      - NODE_ENV=production
-      - NPM_CONFIG_PRODUCTION=false
   sles-15:
     build_dependencies:
       - sqlite3-devel
@@ -57,3 +53,4 @@ buildpack: https://github.com/opf/heroku-buildpack-multi.git#master
 env:
   - NODE_ENV=production
   - NPM_CONFIG_PRODUCTION=false
+  - SECRET_KEY_BASE=1

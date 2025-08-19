@@ -38,9 +38,12 @@
           </op-wp-timer-button>
         </li>
         <li class="toolbar-item" *ngIf="displayWatchButton">
-          <wp-watcher-button [workPackage]="workPackage"
-                             [showText]="false">
+          <wp-watcher-button [workPackage]="workPackage">
           </wp-watcher-button>
+        </li>
+        <li class="toolbar-item" *ngIf="displayReminderButton$ | async">
+          <wp-reminder-button [workPackage]="workPackage">
+          </wp-reminder-button>
         </li>
         <li class="toolbar-item" *ngIf="(displayNotificationsButton$ | async)">
           <op-work-package-mark-notification-button
@@ -71,7 +74,7 @@
     </div>
     <div class="work-packages-full-view--split-right work-packages-tab-view--overflow">
       <div class="work-packages--panel-inner">
-        <span class="hidden-for-sighted" tabindex="-1" opAutofocus [textContent]="focusAnchorLabel"></span>
+        <span class="hidden-for-sighted" tabindex="-1"  [textContent]="focusAnchorLabel"></span>
         <op-wp-tabs [workPackage]="workPackage" [view]="'full'"></op-wp-tabs>
         <div class="tabcontent"
              data-notification-selector='notification-scroll-container'

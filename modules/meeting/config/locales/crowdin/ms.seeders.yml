@@ -7,7 +7,7 @@ ms:
     standard:
       projects:
         demo-project:
-          meetings:
+          meeting_series:
             item_0:
               title: Mingguan
           meeting_agenda_items:
@@ -24,6 +24,6 @@ ms:
             item_6:
               title: Semakan semula matlamat suku tahunan
             item_7:
-              title: Maklum balas nilai teras
+              title: Maklum balas nilai teras 
             item_8:
               title: Topik umum

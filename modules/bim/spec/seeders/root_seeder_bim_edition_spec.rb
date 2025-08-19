@@ -36,6 +36,12 @@ RSpec.describe RootSeeder,
                with_config: { edition: "bim" } do
   include RootSeederTestHelpers
 
+  before_all do
+    week_with_saturday_and_sunday_as_weekend
+    clear_enqueued_jobs
+    clear_performed_jobs
+  end
+
   shared_examples "creates BIM demo data" do
     def group_name(reference)
       root_seeder.seed_data.find_reference(reference)["name"]
@@ -47,7 +53,7 @@ RSpec.describe RootSeeder,
 
     it "creates the BIM demo data" do
       expect(Project.count).to eq 4
-      expect(EnabledModule.count).to eq 23
+      expect(EnabledModule.count).to eq 27
       expect(WorkPackage.count).to eq 76
       expect(Wiki.count).to eq 3
       expect(Query.count).to eq 29
@@ -98,12 +104,13 @@ RSpec.describe RootSeeder,
       )
     end
 
-    include_examples "it creates records", model: Color, expected_count: 144
+    include_examples "it creates records", model: Color, expected_count: 148
     include_examples "it creates records", model: DocumentCategory, expected_count: 3
     include_examples "it creates records", model: IssuePriority, expected_count: 4
     include_examples "it creates records", model: Status, expected_count: 4
     include_examples "it creates records", model: TimeEntryActivity, expected_count: 3
     include_examples "it creates records", model: Workflow, expected_count: 273
+    include_examples "it is compatible with the automatic scheduling mode"
   end
 
   describe "demo data" do
@@ -248,5 +255,28 @@ RSpec.describe RootSeeder,
     end
 
     include_examples "no email deliveries"
+  end
+
+  context "when admin user creation is locked with OPENPROJECT_SEED_ADMIN_USER_LOCKED=true",
+          :settings_reset do
+    shared_let(:root_seeder) { described_class.new }
+
+    before_all do
+      with_env("OPENPROJECT_SEED_ADMIN_USER_LOCKED" => "true") do
+        with_edition("bim") do
+          reset(:seed_admin_user_locked)
+          root_seeder.seed_data!
+        end
+      end
+    ensure
+      reset(:seed_admin_user_locked)
+      RequestStore.clear! # resets `User.current` cached result
+    end
+
+    it "seeds without any errors, but locks the admin user", :aggregate_failures do
+      expect(Project.count).to eq 4
+      expect(WorkPackage.count).to eq 76
+      expect(root_seeder.admin_user).to be_locked
+    end
   end
 end

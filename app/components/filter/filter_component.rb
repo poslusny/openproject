@@ -30,6 +30,8 @@
 module Filter
   # rubocop:disable OpenProject/AddPreviewForViewComponent
   class FilterComponent < ApplicationComponent
+    OPERATORS_WITHOUT_VALUES = %w[* !* t w].freeze
+
     # rubocop:enable OpenProject/AddPreviewForViewComponent
     options :query
     options always_visible: false
@@ -54,6 +56,14 @@ module Filter
         .available_advanced_filters
     end
 
+    def value_hidden_class(selected_operator)
+      operator_without_value?(selected_operator) ? "hidden" : ""
+    end
+
+    def operator_without_value?(operator)
+      OPERATORS_WITHOUT_VALUES.include?(operator)
+    end
+
     protected
 
     # With this method we can pass additional options for each type of filter into the frontend. This is especially
@@ -67,18 +77,73 @@ module Filter
       case filter
       when Queries::Filters::Shared::ProjectFilter::Required,
            Queries::Filters::Shared::ProjectFilter::Optional
-        {
-          autocomplete_options: {
-            component: "opce-project-autocompleter",
-            resource: "projects",
-            filters: [
-              { name: "active", operator: "=", values: ["t"] }
-            ]
-          }
-        }
+        { autocomplete_options: project_autocomplete_options }
+      when Queries::Filters::Shared::CustomFields::User
+        { autocomplete_options: user_autocomplete_options }
+      when Queries::Filters::Shared::CustomFields::ListOptional
+        { autocomplete_options: custom_field_list_autocomplete_options(filter) }
+      when Queries::Projects::Filters::ProjectStatusFilter,
+           Queries::Projects::Filters::TypeFilter
+        { autocomplete_options: list_autocomplete_options(filter) }
       else
         {}
       end
+    end
+
+    def custom_field_list_autocomplete_options(filter)
+      options = if filter.custom_field.version?
+                  {
+                    items: filter.allowed_values.map { |name, id, project_name| { name:, id:, project_name: } },
+                    groupBy: "project_name"
+                  }
+                else
+                  { items: filter.allowed_values.map { |name, id| { name:, id: } } }
+                end
+
+      autocomplete_options.merge(options).merge(model: filter.values)
+    end
+
+    def list_autocomplete_options(filter)
+      autocomplete_options.merge(
+        items: filter.allowed_values.map { |name, id| { name:, id: } },
+        model: filter.values
+      )
+    end
+
+    def autocomplete_options
+      {
+        component: "opce-autocompleter",
+        bindValue: "id",
+        bindLabel: "name",
+        hideSelected: true
+      }
+    end
+
+    def project_autocomplete_options
+      {
+        component: "opce-project-autocompleter",
+        resource: "projects",
+        filters: [
+          { name: "active", operator: "=", values: ["t"] }
+        ]
+      }
+    end
+
+    def user_autocomplete_options
+      {
+        component: "opce-user-autocompleter",
+        hideSelected: true,
+        defaultData: false,
+        placeholder: I18n.t(:label_user_search),
+        resource: "principals",
+        url: ::API::V3::Utilities::PathHelper::ApiV3Path.principals,
+        filters: [
+          { name: "type", operator: "=", values: ["User"] },
+          { name: "status", operator: "!", values: [Principal.statuses["locked"].to_s] }
+        ],
+        searchKey: "any_name_attribute",
+        focusDirectly: false
+      }
     end
   end
 end

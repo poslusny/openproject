@@ -1,17 +1,18 @@
 require:
   - rubocop-openproject
-  - rubocop-rails
-  - rubocop-rspec
-  - rubocop-rspec_rails
+  - ./config/initializers/inflections.rb
+
+plugins:
   - rubocop-capybara
   - rubocop-factory_bot
   - rubocop-performance
-  - ./config/initializers/inflections.rb
+  - rubocop-rails
+  - rubocop-rspec
+  - rubocop-rspec_rails
 
-<% if File.exist?('.rubocop-local.yml') %>
+# A rubocop-local.yml file can be added to customized the styles
 inherit_from:
-  - .rubocop-local.yml
-<% end %>
+  - .rubocop-local*.yml
 
 inherit_mode:
   merge:
@@ -19,11 +20,17 @@ inherit_mode:
     - Exclude
 
 AllCops:
-  TargetRubyVersion: 3.3
+  TargetRubyVersion: 3.4
   # Enable any new cops in new versions by default
   NewCops: enable
   Exclude:
     - '**/node_modules/**/*'
+
+# Disable it as it is deprecated
+# From https://docs.rubocop.org/rubocop-capybara/cops_capybara.html#capybaraclicklinkorbuttonstyle
+# "This cop is deprecated. We plan to remove this in the next major version update to 3.0."
+Capybara/ClickLinkOrButtonStyle:
+  Enabled: false
 
 FactoryBot/ConsistentParenthesesStyle:
   Enabled: false
@@ -248,6 +255,7 @@ RSpec/DescribeMethod:
 # to match the exact file name
 RSpec/SpecFilePathFormat:
   CustomTransform:
+    OpenIDConnect: openid_connect
     OAuthClients: oauth_clients
   IgnoreMethods: true
 
@@ -325,9 +333,6 @@ Style/ColonMethodCall:
 Style/CommentAnnotation:
   Enabled: false
 
-Style/PreferredHashMethods:
-  Enabled: false
-
 Style/Documentation:
   Enabled: false
 
@@ -339,6 +344,9 @@ Style/EachWithObject:
 
 Style/EmptyLiteral:
   Enabled: false
+
+Style/EndlessMethod:
+  Enabled: true
 
 Style/EvenOdd:
   Enabled: false
@@ -400,6 +408,9 @@ Style/PercentLiteralDelimiters:
 Style/PerlBackrefs:
   Enabled: false
 
+Style/PreferredHashMethods:
+  Enabled: false
+
 Style/Proc:
   Enabled: false
 
@@ -452,7 +463,8 @@ Style/WordArray:
   Enabled: false
 
 Style/FrozenStringLiteralComment:
-  Enabled: false
+  Enabled: true
+  EnforcedStyle: always_true
 
 Style/NumericLiterals:
   Enabled: false

@@ -103,8 +103,8 @@ zh-CN:
     button_settings: "设置"
     button_uncheck_all: "全部不选"
     button_update: "更新"
-    button_export-pdf: "下载 PDF"
     button_export-atom: "下载 Atom"
+    button_generate_pdf: "生成 PDF"
     button_create: "创建"
     card:
       add_new: "添加新卡"
@@ -221,6 +221,8 @@ zh-CN:
             label_maximum_users: "最大活动用户数"
             label_starts_at: "开始时间："
             label_expires_at: "到期时间"
+            label_plan: "计划"
+            label_additional_features: "附加功能"
             receive_newsletter: 我想要接收 OpenProject <a target="_blank" href="%{link}">简报</a>。
             taken_domain: 每个域名只能有一个活动的试用。
             domain_mismatch: 当前请求的主机名与配置的主机名不匹配。请仔细检查您的系统设置。
@@ -355,10 +357,10 @@ zh-CN:
           learn_about: "详细了解新功能"
           #Include the version to invalidate outdated translations in other locales.
           #Otherwise, e.g. chinese might still have the translations for 10.0 in the 12.0 release.
-          "14_6":
+          "15_5":
             standard:
               new_features_html: >
-                此版本为您带来了各种功能和改进，例如：<br><ul class="%{list_styling_class}"> <li>得益于用户反馈，从更灵活的进度报告中受益。</li> <li>接收带有会议重新加载选项的更新通知。</li> <li>同时为多个项目启用自定义字段。</li> <li>使用相对工作包属性宏。</li> <li>在已保存的富文本中显示空行。</li> <li>查看“会议”选项卡旁边的数字中包含的过往会议。</li> </ul>
+                该版本为您带来了多项功能与改进，例如：<br> <ul class="%{list_styling_class}"> <li>筛选工作包后代（子级和孙级）。</li> <li>日期选择器支持高级无障碍功能。</li> <li>工作包表格汇总中显示完成百分比。</li> <li>工作包表格新增子级列。</li> <li>优化移动端屏幕的日期选择器使用体验。</li> <li>PDF 导出与配置的表单布局保持一致。</li> </ul>
     ical_sharing_modal:
       title: "订阅日历"
       inital_setup_error_message: "获取数据时发生错误。"
@@ -619,14 +621,15 @@ zh-CN:
         prioritized: "已优先"
         dateAlert: "日期提醒"
         shared: "已共享"
+        reminder: "提醒"
       date_alerts:
         milestone_date: "里程碑日期"
         overdue: "逾期"
-        overdue_since: "自 %{difference_in_days}"
-        property_today: "今天"
-        property_is: "%{difference_in_days}后"
-        property_was: "%{difference_in_days}前"
-        property_is_deleted: "已被删除"
+        overdue_since: "自 %{difference_in_days}起。"
+        property_today: "今天。"
+        property_is: "%{difference_in_days}后。"
+        property_was: "%{difference_in_days}前。"
+        property_is_deleted: "已删除。"
         upsale:
           title: "日期提醒"
           description: "借助日期提醒，您将收到即将到来的开始或结束日期的通知，以免错过或忘记重要截止日期。"
@@ -650,6 +653,8 @@ zh-CN:
         new_notifications:
           message: "有新的通知。"
           link_text: "点击此处加载。"
+      reminders:
+        note: "注：\"%{note}\""
       settings:
         change_notification_settings: '您可以修改您的<a target="_blank" href="%{url}">通知设置</a>，以确保您不会错过重要的更新。'
         title: "通知设置"
@@ -712,18 +717,18 @@ zh-CN:
       description: "描述：点击以编辑…"
       relation_description: "点击为此关系添加描述"
     project:
-      required_outside_context: >
-        请选择要创建工作包的项目以查看所有属性。 您只能选择已激活上述类型的项目。
-      details_activity: "项目细节活动"
-      context: "项目上下文"
-      click_to_switch_to_project: "项目: %{projectname}"
-      confirm_template_load: "切换模板将重新加载页面，您将丢失此表单上的所有输入。是否继续？"
-      use_template: "使用模板"
-      no_template_selected: "（无）"
-      copy:
-        copy_options: "复制选项"
       autocompleter:
         label: "项目自动补全"
+      click_to_switch_to_project: "项目: %{projectname}"
+      confirm_template_load: "切换模板将重新加载页面，您将丢失此表单上的所有输入。是否继续？"
+      context: "项目上下文"
+      copy:
+        copy_options: "复制选项"
+      not_available: "项目 N/A"
+      no_template_selected: "（无）"
+      required_outside_context: >
+        请选择要创建工作包的项目以查看所有属性。 您只能选择已激活上述类型的项目。
+      use_template: "使用模板"
     reminders:
       settings:
         daily:
@@ -738,6 +743,7 @@ zh-CN:
         immediate:
           title: "向我发送电子邮件提醒"
           mentioned: "当有人@提及我时立即提醒"
+          personal_reminder: "收到个人提醒后立即发送"
         alerts:
           title: "其他项目（非工作包）的电子邮件提醒"
           explanation: >
@@ -769,10 +775,6 @@ zh-CN:
         upgrade_to_ee_text: "哇！如果您需要此插件，那么您是位超级行家！您是否考虑成为我们的企业版客户，以支持我们这些开源开发者？"
         more_information: "更多信息"
         nevermind: "我愿意"
-      edit:
-        form_configuration: "表单配置"
-        projects: "项目"
-        settings: "设置"
     time_entry:
       work_package_required: "需要先选择一个工作包。"
       title: "记录时间"
@@ -795,6 +797,7 @@ zh-CN:
       typeahead_placeholder: 查找可能的关注者
     relation_labels:
       parent: "父级"
+      child: "子级"
       children: "子任务"
       relates: "关于"
       duplicates: "重复项"
@@ -850,8 +853,6 @@ zh-CN:
       select_branch: "选择分支"
     field_value_enter_prompt: "为'%{field}'输入值"
     project_menu_details: "详细信息"
-    scheduling:
-      manual: "手动计划"
     sort:
       sorted_asc: "升序排列已应用， "
       sorted_dsc: "降序排列已应用， "
@@ -899,15 +900,6 @@ zh-CN:
       comment_send_failed: "出错。无法提交评论。"
       comment_updated: "注释已成功更新。"
       confirm_edit_cancel: "是否确定想要取消编辑工作包？"
-      datepicker_modal:
-        automatically_scheduled_parent: "自动安排。日期来源于关系。"
-        manually_scheduled: "启用手动安排，忽略所有关系。"
-        start_date_limited_by_relations: "可用的开始日期和结束日期受关系限制。"
-        changing_dates_affects_follow_relations: "更改这些日期将影响相关工作包的日期。"
-        click_on_show_relations_to_open_gantt: '点击“%{button_name}”查看 GANTT 概览。'
-        show_relations: "显示关系"
-        ignore_non_working_days:
-          title: "仅工作日"
       description_filter: "筛选器"
       description_enter_text: "输入文本"
       description_options_hide: "隐藏选项"
@@ -982,7 +974,7 @@ zh-CN:
         percentageDone: "完成百分比"
         priority: "优先级"
         projectName: "项目"
-        remainingWork: "剩余工作"
+        remainingWork: "剩余工时"
         remainingWorkAlternative: "剩余小时数"
         responsible: "责任人"
         startDate: "开始日期"
@@ -994,7 +986,7 @@ zh-CN:
         updatedAt: "更新时间"
         versionName: "版本"
         version: "版本"
-        work: "工作"
+        work: "工时"
         workAlternative: "估算工时"
         remainingTime: "剩余的工作"
       default_queries:
@@ -1041,6 +1033,12 @@ zh-CN:
           not_found: "无此视图"
           duplicate_query_title: "此视图的名称已存在。仍要更改？"
         text_no_results: "未找到匹配的视图。"
+      reminders:
+        button_label: "设置提醒"
+        title:
+          new: "设置提醒"
+          edit: "编辑提醒"
+        subtitle: "您将在所选时间收到此工作包的通知。"
       scheduling:
         is_parent: "此工作包的日期会自动从其子项推导出。可激活“手动计划”来设置日期。"
         is_switched_from_manual_to_automatic: "由于与其他工作包的关系，在从手动计划切换为自动计划后，此工作包的日期可能需要重新计算。"
@@ -1341,5 +1339,3 @@ zh-CN:
       waiting_subtitle:
         network_off: "网络有问题。"
         network_on: "网络已恢复。我们正在努力。"
-        timeout: >
-          OpenProject 无法让您在预期时间内访问项目文件夹。请再试一次。<br><br> 如果问题仍然存在，请联系 OpenProject 管理员检查<a href="https://www.openproject.org/docs/system-admin-guide/files/external-file-storages/file-storage-troubleshooting/">文件存储设置的健康状态</a>。

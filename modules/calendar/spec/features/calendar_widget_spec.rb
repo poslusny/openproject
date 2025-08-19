@@ -30,7 +30,7 @@ require "spec_helper"
 require_relative "../../../overviews/spec/support/pages/overview"
 require_relative "../support/pages/calendar"
 
-RSpec.describe "Calendar Widget", :js, :with_cuprite, with_settings: { start_of_week: 1 } do
+RSpec.describe "Calendar Widget", :js, with_settings: { start_of_week: 1 } do
   shared_let(:project) do
     create(:project, enabled_module_names: %w[work_package_tracking calendar_view meetings])
   end
@@ -61,7 +61,7 @@ RSpec.describe "Calendar Widget", :js, :with_cuprite, with_settings: { start_of_
     login_as(current_user)
     overview_page.visit!
 
-    wait_for_network_idle if RSpec.current_example.metadata[:with_cuprite]
+    wait_for_network_idle if using_cuprite?
 
     # within top-left area, add an additional widget
     overview_page.add_widget(1, 1, :row, "Calendar")
@@ -107,7 +107,7 @@ RSpec.describe "Calendar Widget", :js, :with_cuprite, with_settings: { start_of_
     expect(page).to have_text("Overview")
   end
 
-  it "can resize the same work package twice (Regression #48333)", with_cuprite: false do
+  it "can resize the same work package twice (Regression #48333)", :selenium do
     expect(page).to have_css(".fc-event-title", text: work_package.subject)
 
     calendar.resize_date(work_package, work_package.due_date - 1.day)
@@ -121,5 +121,22 @@ RSpec.describe "Calendar Widget", :js, :with_cuprite, with_settings: { start_of_
 
     work_package.reload
     expect(work_package.due_date).to eq Time.zone.today.beginning_of_week.next_occurring(:tuesday)
+  end
+
+  context "when looking at the date headers" do
+    let(:next_tuesday) { Time.zone.today.beginning_of_week.next_occurring(:tuesday) }
+    let(:tue_css_selector) { ".fc-day-tue .fc-col-header-cell-cushion" }
+
+    it "shows the default date format" do
+      expected = /Tue #{next_tuesday.month}\/#{next_tuesday.day}/
+      expect(page).to have_css(tue_css_selector, text: expected)
+    end
+
+    context "with a date format configured", with_settings: { date_format: "%d.%m.%Y" } do
+      it "shows the configured date format" do
+        expected = /Tue #{next_tuesday.day.to_s.rjust(2, '0')}\.#{next_tuesday.month.to_s.rjust(2, '0')}\./
+        expect(page).to have_css(tue_css_selector, text: expected)
+      end
+    end
   end
 end

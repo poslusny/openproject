@@ -54,6 +54,9 @@ def wait_for_reload
 end
 
 def warn_about_cuprite_helper_misuse(method_name)
+  # Don't bloat the output of the CI
+  return if ENV["CI"]
+
   stack = caller(2)
   cause = [stack[0], stack.find { |line| line["_spec.rb:"] }].uniq.join(" … ")
   warn "#{method_name} used in spec not using cuprite (#{cause})"
@@ -67,7 +70,10 @@ def clear_input_field_contents(input_element)
 
   return unless input_element.value.length.positive?
 
+  # Move to the end of the input field and then backspace to clear the field.
+  rights = Array.new(input_element.value.length, :right)
   backspaces = Array.new(input_element.value.length, :backspace)
+  input_element.native.node.type(*rights)
   input_element.native.node.type(*backspaces)
 end
 

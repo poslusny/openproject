@@ -47,7 +47,7 @@ The work package will the be displayed in the table view:
 
  ![create work package define project](create-work-package-define-project-6669224.png)
 
-Another option to create a work package is to do it from the header menu. The [work package types](../../user-guide/projects/project-settings/work-package-types/#work-package-types) that are activated, will be shown and you can select the relevant work package type to be created.
+Another option to create a work package is to do it from the header menu. The [work package types](../../user-guide/projects/project-settings/work-packages/#work-package-types) that are activated, will be shown and you can select the relevant work package type to be created.
 
 ![create-work-package-header](create-work-package-header.png)
 
@@ -75,7 +75,7 @@ To **update the status**, click on the highlighted displayed status on top of th
 
 ## Activity of work packages
 
-To keep informed about all changes to a work package, open the **ACTIVITY** tab in the details view.
+To keep informed about all changes to a work package, open the *Activity* tab in the details view.
 
 Here you will see all changes which have been made to this work package.
 

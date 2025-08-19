@@ -23,7 +23,7 @@ et:
   plugin_openproject_reporting:
     name: "OpenProject Reporting"
     description: "This plugin allows creating custom cost reports with filtering and grouping created by the OpenProject Time and costs plugin."
-  button_save_report_as: "Save report as..."
+  button_save_report_as: "Salvesta aruanne kui..."
   comments: "Kommentaar"
   cost_reports_title: "Time and costs"
   label_cost_report: "Kulude aruanne"
@@ -45,6 +45,8 @@ et:
   label_greater: ">"
   label_is_not_project_with_subprojects: "is not (includes subprojects)"
   label_is_project_with_subprojects: "is (includes subprojects)"
+  label_is_work_package_with_descendants: "is (includes descendants)"
+  label_is_not_work_package_with_descendants: "is not (includes descendants)"
   label_work_package_attributes: "Work package attributes"
   label_less: "<"
   label_logged_by_reporting: "Logged by"
@@ -86,8 +88,16 @@ et:
   validation_failure_date: "pole korrektne kuupäev"
   validation_failure_integer: "pole täisarv"
   export:
+    timesheet:
+      title: "Your PDF timesheet export"
+      button: "Export PDF timesheet"
+      timesheet: "Timesheet"
+      time: "Aeg"
+      sum_hours: Summa
     cost_reports:
       title: "Your Cost Reports XLS export"
+      start_time: "Algusaeg"
+      end_time: "End time"
   reporting:
     group_by:
       selected_columns: "Selected columns"

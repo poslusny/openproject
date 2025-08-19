@@ -1,8 +1,7 @@
-ARG RUBY_VERSION="3.3.4"
+ARG RUBY_VERSION="3.4.2"
 FROM ruby:${RUBY_VERSION}-bookworm AS base
 LABEL maintainer="operations@openproject.com"
 
-ARG BUNDLER_VERSION="2.5.13"
 ARG NODE_VERSION="20.9.0"
 ARG BIM_SUPPORT=true
 ENV USE_JEMALLOC=false
@@ -44,7 +43,7 @@ RUN useradd -d /home/$APP_USER -m $APP_USER && \
 WORKDIR $APP_PATH
 
 # upgrade bundler
-RUN gem install bundler --version "$BUNDLER_VERSION" --no-document
+RUN gem install bundler --no-document
 
 # system dependencies, nodejs
 COPY ./docker/prod/setup/preinstall-common.sh ./docker/prod/setup/preinstall-common.sh
@@ -58,15 +57,8 @@ COPY vendor ./vendor
 # Add lib in case a plugin tries to load VERSION file under lib
 COPY lib ./lib
 
-RUN \
-  bundle config set --local path 'vendor/bundle' && \
-  bundle config set --local without 'test development' && \
-  bundle install --quiet --no-cache --jobs=8 --retry=3 && \
-  bundle config set deployment 'true' && \
-  cp Gemfile.lock Gemfile.lock.bak && \
-  rm -rf vendor/bundle/ruby/*/cache && \
-  rm -rf vendor/bundle/ruby/*/gems/*/spec && \
-  rm -rf vendor/bundle/ruby/*/gems/*/test
+COPY ./docker/prod/setup/bundle-install.sh ./vendor/bundle* ./vendor/
+RUN bash vendor/bundle-install.sh && rm vendor/bundle-install.sh
 
 COPY . .
 
@@ -96,7 +88,9 @@ FROM base AS all-in-one
 ENV OPENPROJECT_RAILS__CACHE__STORE=memcache
 ENV DATABASE_URL=postgres://openproject:openproject@127.0.0.1/openproject
 ENV PGDATA=/var/openproject/pgdata
-ENV GOSU_VERSION="1.17"
+
+COPY --from=openproject/gosu /go/bin/gosu /usr/local/bin/gosu
+RUN chmod +x /usr/local/bin/gosu && gosu nobody true
 
 RUN ./docker/prod/setup/postinstall-onprem.sh && \
   ln -s /app/docker/prod/setup/.irbrc /root/

@@ -62,7 +62,7 @@ class WikiMenuItemsController < ApplicationController
     get_data_from_params(params)
   end
 
-  def update
+  def update # rubocop:disable Metrics/AbcSize, Metrics/PerceivedComplexity
     wiki_menu_setting = wiki_menu_item_params[:setting]
     parent_wiki_menu_item = params[:parent_wiki_menu_item]
 
@@ -101,11 +101,11 @@ class WikiMenuItemsController < ApplicationController
         flash[:notice] = t(:notice_successful_update)
       end
 
-      redirect_back_or_default(action: "edit", id: @page)
+      redirect_back_or_default({ action: "edit", id: @page })
     else
       respond_to do |format|
         format.html do
-          render action: "edit", id: @page
+          render action: :edit, id: @page, status: :unprocessable_entity
         end
       end
     end

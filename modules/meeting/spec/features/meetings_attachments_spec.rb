@@ -1,7 +1,8 @@
+# frozen_string_literal: true
 require "spec_helper"
 require "features/page_objects/notification"
 
-RSpec.describe "Add an attachment to a meeting (agenda)", :js, with_cuprite: false do
+RSpec.describe "Add an attachment to a meeting (agenda)", :js, :selenium do
   let(:role) do
     create(:project_role, permissions: %i[view_meetings edit_meetings create_meeting_agendas])
   end

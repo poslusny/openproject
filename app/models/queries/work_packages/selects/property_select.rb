@@ -53,7 +53,6 @@ class Queries::WorkPackages::Selects::PropertySelect < Queries::WorkPackages::Se
     },
     parent: {
       association: "ancestors_relations",
-      default_order: "asc",
       sortable: false
     },
     status: {
@@ -95,19 +94,15 @@ class Queries::WorkPackages::Selects::PropertySelect < Queries::WorkPackages::Se
     },
     version: {
       association: "version",
-      sortable: [->(table_name = Version.table_name) { Version.semver_sql(table_name) }, "name"],
-      default_order: "ASC",
-      null_handling: "NULLS LAST",
+      sortable: "name",
       groupable: "#{WorkPackage.table_name}.version_id"
     },
     start_date: {
-      sortable: "#{WorkPackage.table_name}.start_date",
-      null_handling: "NULLS LAST"
+      sortable: "#{WorkPackage.table_name}.start_date"
     },
     due_date: {
       highlightable: true,
-      sortable: "#{WorkPackage.table_name}.due_date",
-      null_handling: "NULLS LAST"
+      sortable: "#{WorkPackage.table_name}.due_date"
     },
     estimated_hours: {
       sortable: "#{WorkPackage.table_name}.estimated_hours",
@@ -123,7 +118,18 @@ class Queries::WorkPackages::Selects::PropertySelect < Queries::WorkPackages::Se
     },
     done_ratio: {
       sortable: "#{WorkPackage.table_name}.done_ratio",
-      groupable: true
+      groupable: true,
+      summable: true,
+      summable_select: <<~SQL.squish
+        CASE
+          WHEN estimated_hours IS NULL OR remaining_hours IS NULL OR estimated_hours <= 0 THEN NULL
+          WHEN remaining_hours <= 0 THEN 100
+          WHEN remaining_hours <= estimated_hours * 0.01 THEN 99
+          WHEN remaining_hours >= estimated_hours THEN 0
+          WHEN remaining_hours >= estimated_hours * 0.99 THEN 1
+          ELSE ROUND( ((1 - (remaining_hours / estimated_hours)) * 100)::numeric )::integer
+        END as done_ratio
+      SQL
     },
     created_at: {
       sortable: "#{WorkPackage.table_name}.created_at",
@@ -135,15 +141,12 @@ class Queries::WorkPackages::Selects::PropertySelect < Queries::WorkPackages::Se
     shared_with_users: {
       sortable: false,
       groupable: false
-
     }
   }
 
   def self.instances(_context = nil)
-    property_selects.filter_map do |name, options|
-      next unless !options[:if] || options[:if].call
-
-      new(name, options.except(:if))
+    property_selects.map do |name, options|
+      new(name, options)
     end
   end
 end

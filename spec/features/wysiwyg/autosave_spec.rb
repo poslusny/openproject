@@ -29,8 +29,7 @@
 require "spec_helper"
 
 RSpec.describe "Wysiwyg autosave spec",
-               :js,
-               :with_cuprite do
+               :js do
   shared_let(:user) { create(:admin) }
   shared_let(:project) { create(:project, enabled_module_names: %w[wiki work_package_tracking]) }
   shared_let(:work_package) { create(:work_package, subject: "Foobar", project:) }
@@ -50,7 +49,8 @@ RSpec.describe "Wysiwyg autosave spec",
       editor.click_and_type_slowly "Initial version"
       click_on "Save"
 
-      expect(page).to have_css(".op-toast.-success")
+      expect_and_dismiss_flash(message: "Successful creation.")
+
       within("#content") do
         expect(page).to have_text "Initial version"
       end
@@ -69,7 +69,7 @@ RSpec.describe "Wysiwyg autosave spec",
       # Save wiki page
       click_on "Save"
 
-      expect(page).to have_css(".op-toast.-success")
+      expect_flash(message: "Successful update.")
       within("#content") do
         expect(page).to have_text "This should be saved"
       end
@@ -78,6 +78,8 @@ RSpec.describe "Wysiwyg autosave spec",
 
       keys = page.evaluate_script "Object.keys(localStorage)"
       expect(keys).to include "op_ckeditor_rev_/api/v3/wiki_pages/#{wiki_page.id}_page[text]"
+
+      expect_and_dismiss_flash(message: "Successful update.")
 
       # Edit again
       click_on "Edit"

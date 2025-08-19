@@ -18,7 +18,7 @@ et:
         open_version: 'Open version'
         lock_version: 'Lock version'
         unlock_version: 'Unlock version'
-        edit_version: 'Edit version'
+        edit_version: 'Muuda versiooni'
         show_version: 'Show version'
         locked: 'Lukus'
         closed: 'Suletud'

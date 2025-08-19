@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -93,11 +95,11 @@ class UsersController < ApplicationController
       flash[:notice] = I18n.t(:notice_successful_create)
       redirect_to(params[:continue] ? new_user_path : helpers.allowed_management_user_profile_path(@user))
     else
-      render action: "new"
+      render action: :new, status: :unprocessable_entity
     end
   end
 
-  def update
+  def update # rubocop:disable Metrics/AbcSize, Metrics/PerceivedComplexity
     update_params = build_user_update_params
     call = ::Users::UpdateService.new(model: @user, user: current_user).call(update_params)
 
@@ -125,7 +127,7 @@ class UsersController < ApplicationController
       respond_to do |format|
         format.html do
           flash[:notice] = I18n.t(:notice_successful_update)
-          render action: :edit
+          redirect_to action: :edit
         end
       end
     else
@@ -136,7 +138,7 @@ class UsersController < ApplicationController
 
       respond_to do |format|
         format.html do
-          render action: :edit
+          render action: :edit, status: :unprocessable_entity
         end
       end
     end
@@ -148,17 +150,17 @@ class UsersController < ApplicationController
     render_400 unless %i(activate lock unlock).include? @status_change
   end
 
-  def change_status
+  def change_status # rubocop:disable Metrics/AbcSize, Metrics/PerceivedComplexity
     if @user.id == current_user.id
       # user is not allowed to change own status
-      redirect_back_or_default(action: "edit", id: @user)
+      redirect_back_or_default({ action: "edit", id: @user })
       return
     end
 
     if (params[:unlock] || params[:activate]) && user_limit_reached?
       show_user_limit_error!
 
-      return redirect_back_or_default(action: "edit", id: @user)
+      return redirect_back_or_default({ action: "edit", id: @user })
     end
 
     if params[:unlock]
@@ -184,10 +186,10 @@ class UsersController < ApplicationController
       flash[:error] = I18n.t("user.error_status_change_failed",
                              errors: @user.errors.full_messages.join(", "))
     end
-    redirect_back_or_default(action: "edit", id: @user)
+    redirect_back_or_default({ action: "edit", id: @user })
   end
 
-  def resend_invitation
+  def resend_invitation # rubocop:disable Metrics/AbcSize
     status = Principal.statuses[:invited]
     @user.update status: status if @user.status != status
 
@@ -286,7 +288,7 @@ class UsersController < ApplicationController
     false
   end
 
-  def build_user_update_params
+  def build_user_update_params # rubocop:disable Metrics/AbcSize
     pref_params = permitted_params.pref.to_h
     update_params = permitted_params
       .user_create_as_admin(@user.uses_external_authentication?, @user.change_password_allowed?)
@@ -303,10 +305,8 @@ class UsersController < ApplicationController
         force_password_change: true
       )
     elsif set_password? params
-      update_params.merge!(
-        password: params[:user][:password],
-        password_confirmation: params[:user][:password_confirmation]
-      )
+      update_params[:password] = params[:user][:password]
+      update_params[:password_confirmation] = params[:user][:password_confirmation]
     end
 
     update_params

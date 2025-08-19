@@ -77,7 +77,7 @@ export class FileLinksResourceService extends ResourceStoreService<IFileLink> {
         switchMap((collection) => from(collection._embedded.elements)),
         groupBy(
           (fileLink) => fileLink._links.storage.href,
-          (fileLink) => fileLink,
+          { element: (fileLink) => fileLink },
         ),
         mergeMap((group$) => {
           const seed = { storage: group$.key, fileLinks: [] as IFileLink[] };
@@ -88,7 +88,7 @@ export class FileLinksResourceService extends ResourceStoreService<IFileLink> {
         }),
         tap((fileLinkCollections) => {
           const storageId = idFromLink(fileLinkCollections.storage);
-          const collectionKey = `${fileLinksSelfLink}?filters=[{"storage":{"operator":"=","values":["${storageId}"]}}]`;
+          const collectionKey = `${fileLinksSelfLink}?pageSize=-1&filters=[{"storage":{"operator":"=","values":["${storageId}"]}}]`;
           const collection = { _embedded: { elements: fileLinkCollections.fileLinks } } as IHALCollection<IFileLink>;
           insertCollectionIntoState(this.store, collection, collectionKey);
         }),

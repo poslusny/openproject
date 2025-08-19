@@ -57,12 +57,12 @@ module OpenProject::Bim
                    dependencies: %i[view_ifc_models],
                    contract_actions: { ifc_models: %i[create update destroy] }
         permission :view_linked_issues,
-                   { "bim/bcf/issues": %i[index] },
+                   {},
                    permissible_on: :project,
                    dependencies: %i[view_work_packages],
                    contract_actions: { bcf: %i[read] }
         permission :manage_bcf,
-                   { "bim/bcf/issues": %i[index upload prepare_import configure_import perform_import] },
+                   { "bim/bcf/issues": %i[upload prepare_import configure_import perform_import] },
                    permissible_on: :project,
                    dependencies: %i[view_linked_issues
                                     view_work_packages
@@ -124,6 +124,11 @@ module OpenProject::Bim
     patch_with_namespace :DemoData, :ProjectSeeder
     patch_with_namespace :DemoData, :WorkPackageSeeder
     patch_with_namespace :DemoData, :WorkPackageBoardSeeder
+
+    config.to_prepare do
+      # needed for `#bcf_issue?` calls in the work package representer
+      ::API::V3::WorkPackages::WorkPackageRepresenter.to_eager_load << :bcf_issue
+    end
 
     extend_api_response(:v3, :work_packages, :work_package) do
       include API::Bim::Utilities::PathHelper

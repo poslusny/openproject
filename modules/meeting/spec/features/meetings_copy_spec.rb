@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -28,13 +29,13 @@
 
 require "spec_helper"
 
-RSpec.describe "Meetings copy", :js, :with_cuprite do
+RSpec.describe "Meetings copy", :js do
   shared_let(:project) { create(:project, enabled_module_names: %w[meetings]) }
   shared_let(:permissions) { %i[view_meetings create_meetings] }
   shared_let(:user) do
     create(:user,
            member_with_permissions: { project => permissions }).tap do |u|
-      u.pref[:time_zone] = "UTC"
+      u.pref[:time_zone] = "Etc/UTC"
 
       u.save!
     end
@@ -49,6 +50,7 @@ RSpec.describe "Meetings copy", :js, :with_cuprite do
   shared_let(:agenda_text) { "We will talk" }
   shared_let(:meeting) do
     create(:meeting,
+           :author_participates,
            author: user,
            project:,
            title: "Awesome meeting!",
@@ -62,11 +64,11 @@ RSpec.describe "Meetings copy", :js, :with_cuprite do
 
   shared_let(:twelve_hour_format) { "%I:%M %p" }
   shared_let(:copied_meeting_time_heading) do
-    date = (start_time + 1.week).strftime("%m/%d/%Y")
+    date = (start_time + 1.day).strftime("%m/%d/%Y")
     start_of_meeting = start_time.strftime(twelve_hour_format)
     end_of_meeting = (start_time + meeting.duration.hours).strftime(twelve_hour_format)
 
-    "Start time: #{date} #{start_of_meeting} - #{end_of_meeting} (GMT+00:00) UTC"
+    "Start time: #{date} #{start_of_meeting} - #{end_of_meeting} UTC+00:00"
   end
 
   before do
@@ -90,7 +92,7 @@ RSpec.describe "Meetings copy", :js, :with_cuprite do
     expect(page)
       .to have_field "Duration",   with: meeting.duration
     expect(page)
-      .to have_field "Start date", with: (start_time + 1.week).strftime("%Y-%m-%d")
+      .to have_field "Start date", with: (start_time + 1.day).strftime("%Y-%m-%d")
     expect(page)
       .to have_field "Time",       with: start_time.strftime("%H:%M")
 

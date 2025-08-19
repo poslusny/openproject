@@ -26,7 +26,16 @@
 // See COPYRIGHT and LICENSE files for more details.
 //++
 
-import { ChangeDetectionStrategy, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { PathHelperService } from 'core-app/core/path-helper/path-helper.service';
 import { HalResource } from 'core-app/features/hal/resources/hal-resource';
 import { HalResourceService } from 'core-app/features/hal/services/hal-resource.service';
@@ -71,6 +80,20 @@ export class CkeditorAugmentedTextareaComponent extends UntilDestroyedMixin impl
   @Input() public editorType:ICKEditorType = 'full';
 
   @Input() public showAttachments = true;
+
+  // Output save requests (ctrl+enter and cmd+enter)
+  @Output() saveRequested = new EventEmitter<string>();
+
+  @Output() editorEscape = new EventEmitter<string>();
+
+  // Output keyup events
+  @Output() editorKeyup = new EventEmitter<void>();
+
+  // Output blur events
+  @Output() editorBlur = new EventEmitter<void>();
+
+  // Output focus events
+  @Output() editorFocus = new EventEmitter<void>();
 
   // Which template to include
   public element:HTMLElement;
@@ -154,11 +177,8 @@ export class CkeditorAugmentedTextareaComponent extends UntilDestroyedMixin impl
       });
   }
 
-  public markEdited() {
-    window.OpenProject.pageWasEdited = true;
-  }
-
   public async saveForm(evt?:SubmitEvent):Promise<void> {
+    this.saveRequested.emit(); // Provide a hook for the parent component to do something before the form is submitted
     this.inFlight = true;
 
     this.syncToTextarea();
@@ -170,7 +190,10 @@ export class CkeditorAugmentedTextareaComponent extends UntilDestroyedMixin impl
       }
 
       if (this.turboMode) {
-        navigator.submitForm(this.formElement, evt?.submitter || undefined);
+        // If the form has a stimulus action defined, we ONLY want to submit it via stimulus
+        if (!this.formElement.dataset.action) {
+          navigator.submitForm(this.formElement, evt?.submitter || undefined);
+        }
       } else {
         this.formElement.requestSubmit(evt?.submitter);
       }
@@ -193,7 +216,9 @@ export class CkeditorAugmentedTextareaComponent extends UntilDestroyedMixin impl
     return editor;
   }
 
-  private syncToTextarea() {
+  public syncToTextarea() {
+    window.OpenProject.pageWasEdited = true;
+
     try {
       this.wrappedTextArea.value = this.ckEditorInstance.getTransformedContent(true);
     } catch (e) {

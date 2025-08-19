@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -45,14 +46,14 @@ class MeetingAgendaItem::MeetingForm < ApplicationForm
       MeetingAgendaItems::CreateContract
         .assignable_meetings(User.current)
         .where("meetings.start_time + (interval '1 hour' * meetings.duration) >= ?", Time.zone.now)
-        .reorder("meetings.start_time ASC")
+        .order("meetings.start_time")
         .includes(:project)
         .each do |meeting|
           select.option(
             label: "#{meeting.project.name}: " \
                    "#{meeting.title} " \
                    "#{format_date(meeting.start_time)} " \
-                   "#{format_time(meeting.start_time, false)}",
+                   "#{format_time(meeting.start_time, include_date: false)}",
             value: meeting.id
           )
         end

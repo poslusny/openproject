@@ -28,11 +28,12 @@
 
 require "spec_helper"
 
-RSpec.describe "Homescreen", "index", :with_cuprite do
+RSpec.describe "Homescreen", "index" do
   let(:admin) { create(:admin) }
   let(:user) { build_stubbed(:user) }
   let!(:project) { create(:public_project, identifier: "public-project") }
   let(:general_settings_page) { Pages::Admin::SystemSettings::General.new }
+  let(:global_html_title) { Components::HtmlTitle.new }
 
   it "is reachable by the global menu" do
     login_as user
@@ -71,7 +72,7 @@ RSpec.describe "Homescreen", "index", :with_cuprite do
       welcome_text_editor.click_and_type_slowly("Hello! ")
 
       general_settings_page.press_save_button
-      general_settings_page.expect_and_dismiss_toaster
+      expect_and_dismiss_flash(message: "Successful update.")
 
       visit root_url
       expect(page)

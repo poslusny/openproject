@@ -70,6 +70,20 @@ colors:
     t_name: Black
     hexcode: "#000000"
 
+project_phase_colors:
+  - reference: :default_color_pm2_orange
+    t_name: PM2 Orange
+    hexcode: "#F7983A"
+  - reference: :default_color_pm2_red
+    t_name: PM2 Red
+    hexcode: "#F05823"
+  - reference: :default_color_pm2_magenta
+    t_name: PM2 Magenta
+    hexcode: "#EC038A"
+  - reference: :default_color_pm2_green_yellow
+    t_name: PM2 Green Yellow
+    hexcode: "#B1D13A"
+
 document_categories:
   - t_name: Documentation
     position: 1
@@ -361,6 +375,9 @@ project_roles:
       - :copy_work_packages
       - :add_work_package_attachments
       - :view_project_attributes
+      - :view_comments_with_restricted_visibility
+      - :add_comments_with_restricted_visibility
+      - :edit_own_comments_with_restricted_visibility
   - reference: :default_role_reader
     t_name: Reader
     position: 4
@@ -398,3 +415,8 @@ global_roles:
       - :create_user
       - :manage_user
       - :manage_placeholder_user
+  - reference: :default_role_standard_global
+    t_name: Standard global role
+    position: 7
+    builtin: :standard_global
+    permissions: []

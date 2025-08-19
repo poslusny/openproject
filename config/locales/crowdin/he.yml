@@ -24,6 +24,26 @@ he:
   activities:
     index:
       no_results_title_text: בפרק זמן זה לא הייתה כל פעילות עבור הפרויקט.
+    work_packages:
+      activity_tab:
+        no_results_title_text: No activity to display
+        no_results_description_text: 'Choose "Show everything" to show all activity and comments'
+        label_activity_show_all: "Show everything"
+        label_activity_show_only_comments: "Show comments only"
+        label_activity_show_only_changes: "Show changes only"
+        label_sort_asc: "Newest at the bottom"
+        label_sort_desc: "Newest on top"
+        label_type_to_comment: "Add a comment. Type @ to notify people."
+        label_submit_comment: "Submit comment"
+        label_who: Who?
+        changed_on: "changed on"
+        created_on: "created this on"
+        changed: "changed"
+        created: "created"
+        commented: "commented"
+        restrict_visibility: Restrict visibility
+        restricted_journal: Restricted comments are visible to a limited group of members.
+        unsaved_changes_confirmation_message: You have unsaved changes. Are you sure you want to close the editor?
   admin:
     plugins:
       no_results_title_text: There are currently no plugins installed.
@@ -39,16 +59,9 @@ he:
         accent-color: "Accent"
         header-bg-color: "Header background"
         header-item-bg-hover-color: "Header background on hover"
-        header-item-font-color: "Header font"
-        header-item-font-hover-color: "Header font on hover"
-        header-border-bottom-color: "Header border"
         main-menu-bg-color: "Main menu background"
         main-menu-bg-selected-background: "Main menu when selected"
         main-menu-bg-hover-background: "Main menu on hover"
-        main-menu-font-color: "Main menu font"
-        main-menu-selected-font-color: "Main menu font when selected"
-        main-menu-hover-font-color: "Main menu font on hover"
-        main-menu-border-color: "Main menu border"
       custom_colors: "צבעים מותאמים אישית"
       customize: "Customize your OpenProject installation with your own logo and colors."
       enterprise_notice: "As a special 'Thank you!' for their financial contribution to develop OpenProject, this tiny add-on is only available for Enterprise edition support subscribers."
@@ -120,7 +133,7 @@ he:
     back_to_index: "Click here to go back to the list of connection."
     technical_warning_html: |
       This LDAP form requires technical knowledge of your LDAP / Active Directory setup.
-      <br/>
+      <br>
       <a href="https://www.openproject.org/help/administration/manage-ldap-authentication/">Please visit our documentation for detailed instructions</a>.
     attribute_texts:
       name: Arbitrary name of the LDAP connection
@@ -130,7 +143,7 @@ he:
       admin_map_html: "Optional: The attribute key in LDAP that <strong>if present</strong> marks the OpenProject user an admin. Leave empty when in doubt."
       system_user_dn_html: |
         Enter the DN of the system user used for read-only access.
-        <br/>
+        <br>
         Example: uid=openproject,ou=system,dc=example,dc=com
       system_user_password: Enter the bind password of the system user
       base_dn: |
@@ -170,7 +183,7 @@ he:
     tls_options:
       verify_peer: "Verify SSL certificate"
       verify_peer_description_html: >
-        Enables strict SSL verification of the certificate trusted chain. <br/> <strong>Warning:</strong> Unchecking this option disables SSL verification of the LDAP server certificate. This exposes your connection to Man in the Middle attacks.
+        Enables strict SSL verification of the certificate trusted chain. <br> <strong>Warning:</strong> Unchecking this option disables SSL verification of the LDAP server certificate. This exposes your connection to Man in the Middle attacks.
       tls_certificate_description: "If the LDAP server certificate is not in the trust sources of this system, you can add it manually here. Enter a PEM X509 certifiate string."
   forums:
     show:
@@ -209,8 +222,33 @@ he:
     admin:
       custom_field_projects:
         is_for_all_blank_slate:
-          heading: For all projects
+          heading: עבור כל הפרוייקטים
           description: This custom field is enabled in all projects since the "For all projects" option is checked. It cannot be deactivated for individual projects.
+      items:
+        actions: "Item actions"
+        blankslate:
+          root:
+            title: "Your list of items is empty"
+            description: "Start by adding items to the custom field of type hierarchy. Each item can be used to create a hierarchy bellow it. To navigate and create sub-items inside a hierarchy click on the created item."
+          item:
+            title: This item doesn't have any hierarchy level below
+            description: Add items to this list to create sub-items inside another one
+        delete_dialog:
+          title: "Delete custom field item"
+          heading: "Delete custom field item?"
+          description: "This action will irreversibly remove the item and all its sub-items. Any assigned values will be permanently deleted. If this field is required, removing items may cause existing work packages to become invalid."
+        placeholder:
+          label: "Item label"
+          short: "Short name"
+      notice:
+        remember_items_and_projects: "Remember to set items and projects in the respective tabs for this custom field."
+      hierarchy:
+        subitems:
+          zero: no sub-items
+          one: 1 sub-item
+          other: "%{count} sub-items"
+    upsale:
+      custom_field_format_hierarchy: "Need a hierarchy in your custom fields for work packages?"
     text_add_new_custom_field: >
       To add new custom fields to a project you first need to create them before you can add them to this project.
     is_enabled_globally: "Is enabled globally"
@@ -219,10 +257,12 @@ he:
     confirm_destroy_option: "Deleting an option will delete all of its occurrences (e.g. in work packages). Are you sure you want to delete it?"
     reorder_alphabetical: "Reorder values alphabetically"
     reorder_confirmation: "Warning: The current order of available values will be lost. Continue?"
+    placeholder_version_select: "Work package or project selection is required first"
     instructions:
       is_required: "Mark the custom field as required. This will make it mandatory to fill in the field when creating new or updating existing resources."
       is_required_for_project: "Check to enable this attribute and make it required in all projects. It cannot be deactived for individual projects."
       is_for_all: "Mark the custom field as available in all existing and new projects."
+      multi_select: "Allows the user to assign multiple values to this custom field."
       searchable: "Include the field values when using the global search functionality."
       searchable_for_project: "Check to make this attribute available as a filter in project lists."
       editable: "Allow the field to be editable by users themselves."
@@ -234,6 +274,29 @@ he:
       no_results_content_text: Create a new custom field
   concatenation:
     single: "או"
+  dry_validation:
+    errors:
+      int?: "must be an integer."
+      filled?: "must be filled."
+      greater_or_equal_zero: "must be greater or equal to 0."
+      not_found: "not found."
+      rules:
+        item:
+          root_item: "cannot be a root item."
+          not_persisted: "must be an already existing item."
+        label:
+          not_unique: "must be unique within the same hierarchy level."
+        short:
+          not_unique: "must be unique within the same hierarchy level."
+        parent:
+          not_descendant: "must be a descendant of the hierarchy root."
+    rules:
+      depth: "Depth"
+      item: "Item"
+      label: "Label"
+      short: "Short name"
+      parent: "אב"
+      blueprint: "Pattern blueprint"
   global_search:
     placeholder: "Search in %{app_title}"
     overwritten_tabs:
@@ -287,9 +350,13 @@ he:
         placeholder: "New project list"
       delete_modal:
         title: "Delete project list"
+        heading: "Delete this project list?"
         text: "This action will not delete any project the list contains. Are you sure you want to delete this project list?"
     settings:
       change_identifier: Change identifier
+      actions:
+        label_enable_all: "Enable all"
+        label_disable_all: "Disable all"
       activities:
         no_results_title_text: There are currently no activities available.
       forums:
@@ -300,18 +367,26 @@ he:
         no_results_content_text: Create a new work package category
       custom_fields:
         no_results_title_text: אין כרגע שדות מותאמים אישית.
+      life_cycle:
+        header:
+          title: "Project life cycle"
+          description_html: "The active project phases define this project's life cycle and are defined in the <a href=%{admin_settings_url} target=\"_blank\">administration settings</a>. Enabled phases will be displayed in your <a href=%{overview_url} target=\"_blank\">project overview</a>."
+        non_defined: "No phases are currently defined."
+        section_header: "Phases"
+        step:
+          use_in_project: "Use %{step} in this project"
+        filter:
+          label: "Search project phase"
       project_custom_fields:
         header:
           title: "Project attributes"
-          description: 'These project attributes will be displayed in your <a href=%{overview_url} target="_blank">project overview page</a> under their respective sections. You can enable or disable individual attributes. Project attributes and sections are defined in the <a href=%{admin_settings_url} target="_blank">administration settings</a> by the administrator of the instance. '
+          description_html: 'These project attributes will be displayed in your <a href=%{overview_url} target="_blank">project overview page</a> under their respective sections. You can enable or disable individual attributes. Project attributes and sections are defined in the <a href=%{admin_settings_url} target="_blank">administration settings</a> by the administrator of the instance. '
         filter:
           label: "Search project attribute"
         actions:
           label_enable_single: "Active in this project, click to disable"
           label_disable_single: "Inactive in this project, click to enable"
           remove_from_project: "Remove from project"
-          label_enable_all: "Enable all"
-          label_disable_all: "Disable all"
         is_required_blank_slate:
           heading: Required in all projects
           description: This project attribute is activated in all projects since the "Required in all projects" option is checked. It cannot be deactivated for individual projects.
@@ -324,6 +399,14 @@ he:
         no_results_content_text: Create a new version
       storage:
         no_results_title_text: There is no additional recorded disk space consumed by this project.
+      work_package_priorities:
+        new_label: "New priority"
+  project_phase:
+    working_days_count:
+      one: "Duration: %{count} working day"
+      two: "Duration: %{count} working days"
+      many: "Duration: %{count} working days"
+      other: "Duration: %{count} working days"
   lists:
     create:
       success: "The modified list has been saved as a new list"
@@ -413,6 +496,7 @@ he:
   my:
     access_token:
       create_dialog:
+        title: Token generated
         header: The %{type} token has been generated
         warning: Note that this is the only time you will see this token, make sure to copy it now.
       errors:
@@ -456,8 +540,12 @@ he:
     groups:
       member_in_these_groups: "This user is currently a member of the following groups:"
       no_results_title_text: This user is currently not a member in any group.
+      summary_with_more: Member of %{names} and %{count_link}.
+      more: "%{count} more"
+      summary: Member of %{names}.
     memberships:
       no_results_title_text: This user is currently not a member of a project.
+    open_profile: "Open profile"
   page:
     text: "טקסט"
   placeholder_users:
@@ -479,23 +567,40 @@ he:
       priority_color_text: |
         Click to assign or change the color of this priority.
         It can be used for highlighting work packages in the table.
+  reactions:
+    action_title: "React"
+    add_reaction: "Add reaction"
+    react_with: "React with %{reaction}"
+    and_user: "and %{user}"
+    and_others:
+      one: and 1 other
+      two: and %{count} others
+      many: and %{count} others
+      other: and %{count} others
+    reaction_by: "%{reaction} by"
   reportings:
     index:
       no_results_title_text: There are currently no status reportings.
       no_results_content_text: להוסיף דיווח מצב
   statuses:
     edit:
-      status_readonly_html: |
-        Check this option to mark work packages with this status as read-only.
-        No attributes can be changed with the exception of the status.
-        <br/>
-        <strong>Note</strong>: Inherited values (e.g., from children or relations) will still apply.
-      status_excluded_from_totals_text: |-
-        Check this option to exclude work packages with this status from totals of Work,
-        Remaining work, and % Complete in a hierarchy.
       status_color_text: |
         Click to assign or change the color of this status.
         It is shown in the status button and can be used for highlighting work packages in the table.
+      status_default_text: |-
+        New work packages are by default set to this type. They cannot be read-only.
+      status_excluded_from_totals_text: |-
+        Check this option to exclude work packages with this status from totals of Work,
+        Remaining work, and % Complete in a hierarchy.
+      status_percent_complete_text: |-
+        In <a href="%{href}">status-based progress calculation mode</a>, the % Complete of a work
+        package is automatically set to this value when this status is selected.
+        Ignored in work-based mode.
+      status_readonly_html: |
+        Check this option to mark work packages with this status as read-only.
+        No attributes can be changed with the exception of the status.
+        <br>
+        <strong>Note</strong>: Inherited values (e.g., from children or relations) will still apply.
     index:
       no_results_title_text: There are currently no work package statuses.
       no_results_content_text: להוסיף סטטוס חדש
@@ -505,7 +610,7 @@ he:
         is_readonly: "Read-only"
         excluded_from_totals: "Excluded from totals"
   themes:
-    dark: "Dark (Beta)"
+    dark: "Dark"
     light: "Light"
     light_high_contrast: "Light high contrast"
   types:
@@ -513,18 +618,40 @@ he:
       no_results_title_text: There are currently no types.
       no_results_content_text: ליצור סוג חדש
     edit:
-      settings: "הגדרות"
-      form_configuration: "Form configuration"
+      form_configuration:
+        tab: "Form configuration"
       more_info_text_html: >
         Enterprise edition allows you to customize form configuration with these additional add-ons: <br> <ul class="%{list_styling_class}"> <li><b>Add new attribute groups</b></li> <li><b>Rename attribute groups</b></li> <li><b>Add a table of related work packages</b></li> </ul>
-      projects: "פרויקטים"
-      enabled_projects: "Enabled projects"
-      edit_query: "Edit table"
-      query_group_placeholder: "Give the table a name"
-      reset: "Reset to defaults"
-      type_color_text: |
-        The selected color distinguishes different types
-        in Gantt charts or work packages tables. It is therefore recommended to use a strong color.
+      projects:
+        tab: "פרויקטים"
+        enabled_projects: "Enabled projects"
+      settings:
+        tab: "הגדרות"
+        type_color_text: The selected color distinguishes different types in Gantt charts or work packages tables. It is therefore recommended to use a strong color.
+      subject_configuration:
+        tab: "Subject configuration"
+        manually_editable_subjects:
+          label: "Manually editable subjects"
+          caption: "Users can manually enter and edit work package subjects without restrictions."
+        automatically_generated_subjects:
+          label: "Automatically generated subjects"
+          caption: "Define a pattern using referenced attributes and text to automatically generate work package subjects. Users will not be able to manually edit subjects."
+        pattern:
+          label: "Subject pattern"
+          caption: "Add text or type / to search for an attribute. You can add spaces to separate them."
+          headings:
+            work_package: "חבילת עבודה"
+            parent: "אב"
+            project: "פרוייקט"
+          insert_as_text: "No attributes found. Add as text: \"%{word}\""
+      export_configuration:
+        tab: "Generate PDF"
+        intro: "Select which templates from those that are available you would like to enable for this type. The template determines the design and attributes visible in the exported PDF of a work package using this type. The first template on the list is selected by default."
+        pdf_export_templates:
+          label: "PDF Export templates"
+          actions:
+            label_enable_all: "Enable all"
+            label_disable_all: "Disable all"
   versions:
     overview:
       work_packages_in_archived_projects: "The version is shared with archived projects which still have work packages assigned to this version. These are counted, but will not appear in the linked views."
@@ -539,6 +666,47 @@ he:
     index:
       no_results_title_text: There are currently no workflows.
   work_packages:
+    datepicker_modal:
+      banner:
+        description:
+          automatic_mobile: "Start date derived."
+          click_on_show_relations_to_open_gantt: 'Click on "%{button_name}" for Gantt overview.'
+          manual_mobile: "Ignoring relations."
+          manual_gap_between_predecessors: "There is a gap between this and all predecessors."
+          manual_overlap_with_predecessors: "Overlaps with at least one predecessor."
+          manual_with_children: "This has child work packages but their start dates are ignored."
+        title:
+          automatic_mobile: "Automatically scheduled."
+          automatic_with_children: "The dates are determined by child work packages."
+          automatic_with_predecessor: "The start date is set by a predecessor."
+          manual_mobile: "Manually scheduled."
+          manually_scheduled: "Manually scheduled. Dates not affected by relations."
+      blankslate:
+        title: "No predecessors"
+        description: "To enable automatic scheduling, this work package needs to have at least one predecessor. It will then automatically be scheduled to start after the closest predecessor."
+      ignore_non_working_days:
+        title: "Working days only"
+      mode:
+        title: "Scheduling mode"
+        automatic: "Automatic"
+        manual: "Manual"
+      show_relations: "Show relations"
+      tabs:
+        aria_label: "Datepicker tabs"
+        children: "ילדים"
+        dates: "תאריכים"
+        predecessors: "Predecessors"
+        successors: "Successors"
+        blankslate:
+          predecessors:
+            title: "No predecessors"
+            description: "This work package does not have any predecessors."
+          successors:
+            title: "No successors"
+            description: "This work package does not have any successors."
+          children:
+            title: "No children"
+            description: "This work package does not have any children."
     x_descendants:
       one: "One descendant work package"
       two: "%{count} work package descendants"
@@ -550,7 +718,7 @@ he:
       could_not_be_saved: "The following work packages could not be saved:"
       none_could_be_saved: "None of the %{total} work packages could be updated."
       x_out_of_y_could_be_saved: "%{failing} out of the %{total} work packages could not be updated while %{success} could."
-      selected_because_descendants: "While %{selected} work packages where selected, in total %{total} work packages are affected which includes descendants."
+      selected_because_descendants: "While %{selected} work packages were selected, in total %{total} work packages are affected which includes descendants."
       descendant: "descendant of selected"
     move:
       no_common_statuses_exists: "There is no status available for all selected work packages. Their status cannot be changed."
@@ -564,6 +732,7 @@ he:
         title: "Workflow missing for work package sharing"
         message: "No workflow is configured for the 'Work package editor' role. Without a workflow, the shared with user cannot alter the status of the work package. Workflows can be copied. Select a source type (e.g. 'Task') and source role (e.g. 'Member'). Then select the target types. To start with, you could select all the types as targets. Finally, select the 'Work package editor' role as the target and press 'Copy'. After having thus created the defaults, fine tune the workflows as you do for every other role."
         link_message: "Configure the workflows in the administration."
+    templated_subject_hint: Automatically generated through type %{type}
     summary:
       reports:
         category:
@@ -580,6 +749,77 @@ he:
           no_results_title_text: There are currently no types available.
         version:
           no_results_title_text: There are currently no versions available.
+  work_package_relations_tab:
+    index:
+      action_bar_title: "Add relations to other work packages to create a link between them."
+      no_results_title_text: There are currently no relations available.
+      blankslate_heading: "No relations"
+      blankslate_description: "This work package does not have any relations yet."
+    label_add_child_button: "Child"
+    label_add_x: "Add %{x}"
+    label_edit_x: "Edit %{x}"
+    label_add_description: "Add description"
+    lag:
+      subject: "Lag"
+      caption: "The minimum number of working days to keep in between the two work packages."
+    relations:
+      label_new_child_created: "New work package created and added as a child"
+      label_relates_singular: "related to"
+      label_relates_plural: "related to"
+      label_relates_to_singular: "related to"
+      label_relates_to_plural: "related to"
+      relates_description: "Creates a visible link between the two work packages with no additional effect"
+      relates_to_description: "Creates a visible link between the two work packages with no additional effect"
+      label_precedes_singular: "successor (after)"
+      label_precedes_plural: "successors (after)"
+      precedes_description: "The related work package necessarily needs to start after this one finishes"
+      label_follows_singular: "predecessor (before)"
+      label_follows_plural: "predecessors (before)"
+      follows_description: "The related work package necessarily needs to finish before this one can start"
+      label_child_singular: "child"
+      label_child_plural: "children"
+      new_child: "Create new child"
+      new_child_text: "Creates a related work package as a sub-item of the current (parent) work package"
+      child: "Child"
+      child_description: "Makes the related work package a sub-item of the current (parent) work package"
+      label_closest: "Closest"
+      label_blocks_singular: "בלוקים"
+      label_blocks_plural: "בלוקים"
+      blocks_description: "The related work package cannot be closed until this one is closed first"
+      label_blocked_singular: "חסום על ידי"
+      label_blocked_plural: "חסום על ידי"
+      label_blocked_by_singular: "חסום על ידי"
+      label_blocked__by_plural: "חסום על ידי"
+      blocked_description: "This work package cannot be closed until the related one is closed first"
+      blocked_by_description: "This work package cannot be closed until the related one is closed first"
+      label_duplicates_singular: "פריטים כפולים"
+      label_duplicates_plural: "פריטים כפולים"
+      duplicates_description: "This is a copy of the related work package"
+      label_duplicated_singular: "משוכפל על-ידי"
+      label_duplicated_plural: "משוכפל על-ידי"
+      label_duplicated_by_singular: "משוכפל על-ידי"
+      label_duplicated_by_plural: "משוכפל על-ידי"
+      duplicated_by_description: "The related work package is a copy of this"
+      duplicated_description: "The related work package is a copy of this"
+      label_includes_singular: "includes"
+      label_includes_plural: "includes"
+      includes_description: "Marks the related work package as including this one with no additional effect"
+      label_partof_singular: "part of"
+      label_partof_plural: "part of"
+      label_part_of_singular: "part of"
+      label_part_of_plural: "part of"
+      partof_description: "Marks the related work package as being part of this one with no additional effect"
+      part_of_description: "Marks the related work package as being part of this one with no additional effect"
+      label_requires_singular: "requires"
+      label_requires_plural: "requires"
+      requires_description: "Marks the related work package as a requirement to this one"
+      label_required_singular: "required by"
+      label_required_plural: "required by"
+      required_description: "Marks this work package as being a requirement to the related one"
+      label_parent_singular: "parent"
+      label_parent_plural: "parent"
+      ghost_relation_title: "חבילת עבודה קשורה"
+      ghost_relation_description: "This is not visible to you due to permissions."
   label_invitation: Invitation
   account:
     delete: "מחק חשבון"
@@ -619,6 +859,7 @@ he:
       attachment:
         attachment_content: "Attachment content"
         attachment_file_name: "Attachment file name"
+        content_type: "Content-type"
         downloads: "הורדות"
         file: "קובץ"
         filename: "קובץ"
@@ -626,10 +867,10 @@ he:
       attribute_help_text:
         attribute_name: "תכונה"
         help_text: "Help text"
+      capability:
+        context: "Context"
       changeset:
         repository: "Repository"
-      color:
-        hexcode: "קוד hex"
       comment:
         commented: "תגובות" #an object that this comment belongs to
       custom_action:
@@ -640,9 +881,11 @@ he:
         editable: "ניתן לעריכה"
         field_format: "תצורה"
         is_filter: "משמש כמסנן"
+        is_for_all: "עבור כל הפרוייקטים"
         is_required: "נדרש"
         max_length: "אורך מירבי"
         min_length: "אורך מינימלי"
+        content_right_to_left: "Right-to-Left content"
         multi_value: "Allow multi-select"
         possible_values: "הערכים האפשריים"
         regexp: "ביטוי רגולרי"
@@ -655,12 +898,15 @@ he:
         secret: "Client secret"
         owner: "Owner"
         builtin: "Builtin"
-        enabled: "Active"
+        enabled: "פעיל"
         redirect_uri: "Redirect URI"
         client_credentials_user_id: "Client Credentials User ID"
         scopes: "Scopes"
         confidential: "Confidential"
+      emoji_reaction:
+        reactable: "Reacted on"
       enterprise_token:
+        domain: "Domain"
         starts_at: "Valid since"
         subscriber: "Subscriber"
         encoded_token: "Enterprise support token"
@@ -672,12 +918,15 @@ he:
         widgets: "ווידג'טים"
       journal:
         notes: "הערות"
+        cause_type: "Cause type"
       ldap_auth_source:
         account: "חשבון"
         attr_firstname: "תכונת שם פרטי"
         attr_lastname: "תכונת שם משפחה"
         attr_login: "Username attribute"
         attr_mail: "תכונת דואר אלקטרוני"
+        filter_string: "Filter string"
+        admin: "מנהל מערכת"
         base_dn: "תכנון אלמנט"
         host: "שרת"
         onthefly: "Automatic user creation"
@@ -685,14 +934,17 @@ he:
         tls_certificate_string: "LDAP server SSL certificate"
       member:
         roles: "תפקידים"
+      notification:
+        read_ian: "Read in-app"
+        resource: "Resource"
       oauth_client:
         client: "Client ID"
-      planning_element_type_color:
-        hexcode: קוד hex
       project:
         active_value:
           true: "unarchived"
           false: "archived"
+        description: "תיאור"
+        enabled_modules: "Enabled modules"
         identifier: "מזהה"
         latest_activity_at: "Latest activity at"
         parent: "תת פרוייקט של"
@@ -702,7 +954,6 @@ he:
           false: "private"
         queries: "שאילתות"
         status_code: "מצב הפרוייקט"
-        description: "תיאור"
         status_explanation: "Project status description"
         status_codes:
           not_started: "Not started"
@@ -721,17 +972,53 @@ he:
       project_custom_field:
         is_required: "Required for all projects"
         custom_field_section: Section
+      project/phase:
+        date_range: "טווח תאריכים"
+        definition: "Definition"
+      project/phase_definition:
+        name: "שם"
+        color: "צבע"
+        start_gate: "Start phase gate"
+        start_gate_name: "Start phase gate name"
+        finish_gate: "Finish phase gate"
+        finish_gate_name: "Finish phase gate name"
       query:
+        sums: "Sums"
+        columns: "עמודות"
         column_names: "עמודות"
         relations_to_type_column: "Relations to %{type}"
         relations_of_type_column: "%{type} relations"
+        child_work_packages: "Child work packages"
         group_by: "קיבוץ תוצאות לפי"
+        sort_by: "Sort results by"
         filters: "מסננים"
         timeline_labels: "Timeline labels"
+        timeline_visible: "Show Gantt chart"
+        timeline_zoom_level: "Gantt chart zoom level"
+        timestamps: "Baseline timestamps"
+        sort_criteria: "Sort criteria"
+        highlighted_attributes: "Highlighted attributes"
+        highlighting_mode: "Highlight mode"
+        display_representation: "Display mode"
+        show_hierarchies: "Display mode"
+        starred: "Favorite"
+        hidden: "Hidden"
+        manual_sorting: "Manual sort order"
+        ordered_work_packages: "Work packages order"
+        include_subprojects: "Include subprojects"
+        results: "תוצאות"
       relation:
         lag: "Lag"
-        from: "חבילת עבודה"
+        from: "חבילת עבודה קשורה"
         to: "חבילת עבודה קשורה"
+        relation_type: "Relation type"
+      reminder:
+        remindable: "Reminded object"
+        remind_at: "Remind at"
+        remind_at_date: "תאריך"
+        remind_at_time: "זמן"
+      reminder_notification:
+        notification: "Notification"
       repository:
         url: "כתובת URL"
       role:
@@ -741,6 +1028,9 @@ he:
         is_readonly: "Work package read-only"
         excluded_from_totals: "Exclude from calculation of totals in hierarchy"
         default_done_ratio: "% Complete"
+      token/ical:
+        calendar: "לוח שנה"
+        ical_token_query_assignment: "Query assignment"
       time_entry:
         activity: "פעילות"
         hours: "שעות"
@@ -754,6 +1044,11 @@ he:
         is_default: "Activated for new projects by default"
         is_milestone: "Is milestone"
         color: "צבע"
+        patterns: "Patterns"
+      remote_identity:
+        auth_source: "Auth Source"
+        integration: "Integration"
+        user: "משתמש"
       user:
         admin: "מנהל מערכת"
         auth_source: "Authentication source"
@@ -763,18 +1058,23 @@ he:
         force_password_change: "לאכוף שינוי סיסמה בכניסה הבאה"
         language: "שפה"
         last_login_on: "כניסה אחרונה"
+        failed_login_count: "Failed login attempts"
+        first_name: "שם פרטי"
+        last_name: "שם משפחה"
+        first_login: "First login"
         new_password: "סיסמה חדשה"
         password_confirmation: "אימות"
         consented_at: "Consented at"
       user_preference:
         comments_sorting: "הצג הערות"
-        hide_mail: "הסתר את כתובת הדוא״ל שלי"
         impaired: "מצב נגישות"
-        time_zone: "איזור זמן"
         auto_hide_popups: "Auto-hide success notifications"
         warn_on_leaving_unsaved: "Warn me when leaving a work package with unsaved changes"
         theme: "Mode"
+        time_zone: "איזור זמן"
         mode_guideline: "Some modes will overwrite custom theme colours for accessibility and legibility. For the full custom theme, please select Light mode."
+        daily_reminders: "Daily reminders"
+        workdays: "Working days"
       version:
         effective_date: "Finish date"
         sharing: "שיתוף"
@@ -783,7 +1083,9 @@ he:
       wiki_page:
         parent_title: "דף אב"
         redirect_existing_links: "ניתוב מחדש של קישורים קיימים"
+        text: "Page content"
       work_package:
+        ancestor: "Descendants of" #used for filtering of work packages that are descendants of a given work package
         begin_insertion: "Begin of the insertion"
         begin_deletion: "Begin of the deletion"
         children: "Subelements"
@@ -799,6 +1101,7 @@ he:
           title: "Working days"
           false: "working days only"
           true: "include non-working days"
+        journal_restricted: Restricted Journal
         notify: "Notify" #used in custom actions
         parent: "אב"
         parent_issue: "אב"
@@ -821,6 +1124,7 @@ he:
       messages:
         accepted: "must be accepted."
         after: "must be after %{date}."
+        after_today: "must be in the future."
         after_or_equal_to: "must be after or equal to %{date}."
         before: "must be before %{date}."
         before_or_equal_to: "must be before or equal to %{date}."
@@ -841,6 +1145,7 @@ he:
         empty: "can't be empty."
         even: "must be even."
         exclusion: "is reserved."
+        feature_disabled: is not available.
         file_too_large: "is too large (maximum size is %{count} Bytes)."
         filter_does_not_exist: "filter does not exist."
         format: "does not match the expected format '%{expected}'."
@@ -858,13 +1163,16 @@ he:
         not_available: "is not available due to a system configuration."
         not_deletable: "cannot be deleted."
         not_current_user: "זה לא המשתמש הנכון."
+        not_found: "not found."
         not_a_date: "is not a valid date."
         not_a_datetime: "is not a valid date time."
         not_a_number: "is not a number."
         not_allowed: "is invalid because of missing permissions."
+        not_json: "is not a valid JSON object."
         not_an_integer: "is not an integer."
         not_an_iso_date: "is not a valid date. Required format: YYYY-MM-DD."
         not_same_project: "doesn't belong to the same project."
+        datetime_must_be_in_future: "must be in the future."
         odd: "must be odd."
         regex_match_failed: "does not match the regular expression %{expression}."
         regex_invalid: "could not be validated with the associated regular expression."
@@ -974,6 +1282,12 @@ he:
           attributes:
             project_ids:
               blank: "Please select a project."
+        project/phase:
+          attributes:
+            date_range:
+              start_date_must_be_before_finish_date: "start date must be before the finish date."
+              non_continuous_dates: "can't be earlier than the previous phase's end date."
+              incomplete: "is incomplete."
         query:
           attributes:
             project:
@@ -1012,12 +1326,16 @@ he:
           typed_dag:
             circular_dependency: "The relationship creates a circle of relationships."
           attributes:
-            to:
-              error_not_found: "work package in `to` position not found or not visible"
-              error_readonly: "an existing relation's `to` link is immutable"
-            from:
-              error_not_found: "work package in `from` position not found or not visible"
-              error_readonly: "an existing relation's `from` link is immutable"
+            to_id:
+              error_not_found: "not found or not visible."
+              error_readonly: "cannot be changed for existing relations."
+            from_id:
+              error_not_found: "not found or not visible."
+              error_readonly: "cannot be changed for existing relations."
+            lag:
+              greater_than_or_equal_to:
+                zero: "cannot be negative."
+              less_than_or_equal_to: "is too high."
         repository:
           not_available: "SCM vendor is not available"
           not_whitelisted: "is not allowed by the configuration."
@@ -1069,6 +1387,10 @@ he:
         work_package:
           is_not_a_valid_target_for_time_entries: "חבילת עבודה #%{id} אינה יעד אפשרי לשיוך של ערכי הזמן."
           attributes:
+            id:
+              format: "%{message}"
+              cannot_add_child_because_of_lack_of_permission: "Cannot add child because you don't have permissions to edit the selected work package."
+              blank: "ID can't be blank."
             assigned_to:
               format: "%{message}"
             done_ratio:
@@ -1085,6 +1407,7 @@ he:
               smaller_than_dates: "is smaller than the interval between the start and the finish date."
               not_available_for_milestones: "is not available for milestone typed work packages."
               cannot_be_null: "can not be set to null as start date and finish date are known."
+              not_an_integer: "is not a valid duration."
             parent:
               cannot_be_milestone: "cannot be a milestone."
               cannot_be_self_assigned: "cannot be assigned to itself."
@@ -1125,6 +1448,8 @@ he:
               duplicate_group: "The group name '%{group}' is used more than once. Group names must be unique."
               query_invalid: "The embedded query '%{group}' is invalid: %{details}"
               group_without_name: "Unnamed groups are not allowed."
+            patterns:
+              invalid_tokens: "One or more attributes inside the field are not valid. Please, fix the attributes before saving."
         user:
           attributes:
             base:
@@ -1134,7 +1459,7 @@ he:
               confirmation: "Password confirmation does not match password."
               format: "%{message}"
             password:
-              weak: "Must contain characters of the following classes (at least %{min_count} of %{all_count}): %{rules}"
+              weak: "חייב להכיל תווים של המחלקות הבאות (לפחות %{min_count} מתוך %{all_count}): %{rules}"
               lowercase: "אותיות קטנות (למשל 'a')"
               uppercase: "אותיות רישיות (למשל ' A')"
               numeric: "מספריים (למשל ' 1')"
@@ -1187,6 +1512,11 @@ he:
       forum: "פורום"
       global_role: "Global role"
       group: "קבוצה"
+      issue_priority:
+        one: "עדיפות"
+        two: "Priorities"
+        many: "Priorities"
+        other: "Priorities"
       member: "חבר"
       news: "חדשות"
       notification:
@@ -1202,6 +1532,7 @@ he:
         many: "Project lists"
         other: "Project lists"
       query: "שאילתה מותאמת אישית"
+      reminder: "Reminder"
       role:
         one: "תפקיד"
         two: "תפקידים"
@@ -1267,71 +1598,115 @@ he:
       changeset: "שינויים"
       message: "פורומים"
       news: "חדשות"
-      project_attribute: "Project attributes"
+      project_details: "פרטי הפרויקט"
       subproject: "Include subprojects"
       time_entry: "זמן שבוזבז"
       wiki_edit: "ויקי"
       work_package: "חבילת עבודה"
+    project_phase:
+      activated: "activated"
+      deactivated: "deactivated"
+      added_date: "set to %{date}"
+      changed_date: "changed from %{from} to %{to}"
+      removed_date: "date deleted %{date}"
+      phase_and_one_gate: "%{phase_message}. %{gate_message}"
+      phase_and_both_gates: "%{phase_message}. %{start_gate_message}, and %{finish_gate_message}"
   #common attributes of all models
   attributes:
     active: "פעיל"
     assigned_to: "משויך אל"
     assignee: "משויך אל"
     attachments: "קבצים מצורפים"
+    actor: "Actor"
+    action: "Action"
     author: "מחבר"
+    avatar: "Avatar"
     base: "שגיאה כללית:"
+    body: "Body"
     blocks_ids: "המזהים של חבילות עבודה חסומים"
     category: "קטגוריה"
     comment: "תגובה"
     comments: "תגובה"
     content: "תוכן"
     color: "צבע"
+    creator: "Creator"
     created_at: "נוצר ב-"
+    custom_field: "שדה מותאם אישית"
     custom_options: "הערכים האפשריים"
     custom_values: "שדות מותאמים אישית"
     date: "תאריך"
+    dates_interval: "טווח תאריכים"
     default_columns: "עמודות ברירת המחדל"
     description: "תיאור"
     derived_due_date: "Derived finish date"
     derived_estimated_hours: "Total work"
     derived_start_date: "Derived start date"
+    direction: "Direction"
     display_sums: "הצג סכומים"
     due_date: "Finish date"
     estimated_hours: "Work"
     estimated_time: "Work"
+    email: "אימייל"
+    entity_type: "Entity"
     expires_at: "Expires at"
     firstname: "שם פרטי"
+    filter: "סינון"
     group: "קבוצה"
     groups: "קבוצות"
+    hexcode: "קוד hex"
     id: "מזהה"
     is_default: "ערך ברירת המחדל"
     is_for_all: "עבור כל הפרוייקטים"
     public: "ציבורי"
+    principal: "User or group"
     #kept for backwards compatibility
     issue: "חבילת עבודה"
+    journal: "Journal"
+    journal_notes: "תגובה"
     lastname: "שם משפחה"
     login: "Username"
+    lock_version: "נעילת גרסה"
     mail: "אימייל"
     name: "שם"
+    note: "Note"
+    notes: "הערות"
+    number: "Number"
+    options: "אפשריות"
+    operator: "מפעיל"
     password: "סיסמה"
     priority: "עדיפות"
     project: "פרוייקט"
+    project_ids: "Project IDs"
+    reason: "Reason"
     responsible: "Accountable"
+    required: "נדרש"
+    recipient: "Recipient"
     role: "תפקיד"
     roles: "תפקידים"
+    search: "חיפוש"
     start_date: "תאריך התחלה"
     status: "מצב"
+    state: "State"
     subject: "נושא"
+    slug: "Slug"
     summary: "פירוט"
+    time_zone: "איזור זמן"
+    text: "טקסט"
     title: "כותרת"
     type: "סוג"
+    typeahead: "Autocomplete"
     updated_at: "עודכן בתאריך"
     updated_on: "עודכן בתאריך"
     uploader: "Uploader"
     user: "משתמש"
+    username: "Username"
+    unit: "יחידות"
     value: "ערך"
+    values: "Values"
     version: "גירסה"
+    visible: "נראה"
     work_package: "חבילת עבודה"
+    work_package_id: "חבילת עבודה"
   backup:
     failed: "Backup failed"
     label_backup_token: "Backup token"
@@ -1363,6 +1738,9 @@ he:
   button_actions: "Actions"
   button_add: "הוספה"
   button_add_comment: "הוסף תגובה"
+  button_add_item_above: "Add item above"
+  button_add_item_below: "Add item below"
+  button_add_sub_item: "Add sub-item"
   button_add_member: Add member
   button_add_watcher: "הוספת צופה"
   button_annotate: "באר"
@@ -1386,8 +1764,9 @@ he:
   button_copy_and_follow: "העתק ועקוב"
   button_create: "צור"
   button_create_and_continue: "צור והמשך"
-  button_delete: "מחק"
   button_decline: "Decline"
+  button_delete: "מחק"
+  button_delete_permanently: "Delete permanently"
   button_delete_watcher: "מחק את הצופה %{name}"
   button_download: "הורד"
   button_duplicate: "שכפל"
@@ -1396,6 +1775,7 @@ he:
   button_expand_all: "הרחב הכל"
   button_favorite: "Add to favorites"
   button_filter: "סינון"
+  button_finish_setup: "Finish setup"
   button_generate: "Generate"
   button_list: "רשימה"
   button_lock: "נעול"
@@ -1405,6 +1785,7 @@ he:
   button_print: "Print"
   button_quote: "צטט"
   button_remove: Remove
+  button_remove_reminder: "Remove reminder"
   button_rename: "שינוי שם"
   button_replace: "Replace"
   button_revoke: "Revoke"
@@ -1415,6 +1796,7 @@ he:
   button_save_as: "שמירה בשם"
   button_apply_changes: "Apply changes"
   button_save_back: "Save and back"
+  button_set_reminder: "Set reminder"
   button_show: "הצג"
   button_sort: "מיין"
   button_submit: "שלח"
@@ -1623,6 +2005,11 @@ he:
         two: "שעות"
         many: "שעות"
         other: "שעות"
+      day:
+        one: "day"
+        two: "ימים"
+        many: "ימים"
+        other: "ימים"
   description_active: "פעיל?"
   description_attachment_toggle: "הצג/הסתר קבצים מצורפים"
   description_autocomplete: >
@@ -1656,15 +2043,21 @@ he:
   direction: משמאל לימין
   ee:
     upsale:
+      title: "Enterprise add-on"
+      link_title: "More information"
+      automatic_subject_generation:
+        description: "Create automatically generated subjects using referenced attributes and text."
+      customize_life_cycle:
+        description: "Create and organize different project phases than the ones provided by PM2 project cycle planning."
       form_configuration:
         description: "Customize the form configuration with these additional add-ons:"
         add_groups: "Add new attribute groups"
         rename_groups: "Rename attributes groups"
-      project_filters:
-        description_html: "Filtering and sorting on custom fields is an Enterprise edition add-on."
   enumeration_activities: "Time tracking activities"
   enumeration_work_package_priorities: "עדיפויות חבילת עבודה"
   enumeration_reported_project_statuses: "סטטוסים של הפרויקט המדווח"
+  enumeration_caption_order_changed: "Order successfully changed."
+  enumeration_could_not_be_moved: "Enumeration could not be moved."
   error_auth_source_sso_failed: "Single Sign-On (SSO) for user '%{value}' failed"
   error_can_not_archive_project: "This project cannot be archived: %{errors}"
   error_can_not_delete_entry: "Unable to delete entry"
@@ -1694,6 +2087,7 @@ he:
   error_pdf_export_too_many_columns: "Too many columns selected for the PDF export. Please reduce the number of columns."
   error_pdf_failed_to_export: "The PDF export could not be saved: %{error}"
   error_token_authenticity: "Unable to verify Cross-Site Request Forgery token. Did you try to submit data on multiple browsers or tabs? Please close all tabs and try again."
+  error_reminder_not_found: "The reminder was not found or was already notified about."
   error_work_package_not_found_in_project: "חבילת העבודה לא נמצאה או לא שייכת לפרוייקט זה"
   error_work_package_id_not_found: "The work package was not found."
   error_must_be_project_member: "חייב להיות חבר בפרוייקט"
@@ -1724,7 +2118,7 @@ he:
     changeset: "אוסף שינוים נערך"
     message: ההודעה נערכה
     news: חדשות
-    project_attributes: "Project attributes edited"
+    project_details: "Project details edited"
     project: "הפרויקט נערך"
     projects: "הפרויקט נערך"
     reply: הושב
@@ -1738,8 +2132,8 @@ he:
       subproject: "Subproject: %{name}"
   export:
     dialog:
-      title: "Export"
-      submit: "Export"
+      title: "ייצוא"
+      submit: "ייצוא"
       format:
         label: "File format"
         options:
@@ -1753,6 +2147,7 @@ he:
         input_label_report: "Add columns to attribute table"
         input_caption_report: "By default all attributes added as columns in the work package list are selected. Long text fields are not available in the attribute table, but can be displayed below it."
         input_caption_table: "By default all attributes added as columns in the work package list are selected. Long text fields are not available in table based exports."
+        input_caption_required: "It is not possible to export the view without any column. Please add at least one column."
       pdf:
         export_type:
           label: "PDF export type"
@@ -1761,7 +2156,7 @@ he:
               label: "Table"
               caption: "Export the work packages list in a table with the desired columns."
             report:
-              label: "Report"
+              label: "דו״ח"
               caption: "Export the work package on a detailed report of all work packages in the list."
             gantt:
               label: "Gantt chart"
@@ -1773,8 +2168,8 @@ he:
           label: "Zoom levels"
           caption: "Select what is the zoom level for dates displayed in the chart."
           options:
-            days: "Days"
-            weeks: "Weeks"
+            days: "ימים"
+            weeks: "שבועות"
             months: "Months"
             quarters: "Quarters"
         column_width:
@@ -1802,6 +2197,8 @@ he:
     your_work_packages_export: "Work packages are being exported"
     succeeded: "Export completed"
     failed: "An error has occurred while trying to export the work packages: %{message}"
+    errors:
+      embedded_table_with_too_many_columns: "This embedded work package table could not fit on the page, please reduce the number of columns."
     format:
       atom: "אטום"
       csv: "CSV"
@@ -1821,6 +2218,37 @@ he:
     units:
       hours: h
       days: d
+  pdf_generator:
+    page_nr_footer: "Page %{page} of %{total}"
+    template_attributes:
+      label: "Attributes and description"
+      caption: All the attributes present in the current form configuration using the default template.
+    template_contract:
+      label: "Contract"
+      caption: Work package details formatted to the standard German contract form.
+    dialog:
+      title: Generate PDF
+      submit: הורד
+      templates:
+        label: "Template"
+        none_enabled: "No template has been enabled for this work package type"
+      footer_center:
+        label: Footer text
+        caption: This text will appear on every page at the center of the footer.
+      footer_right:
+        label: Footer text
+        caption: This text will appear on every page at the right of the footer.
+      hyphenation:
+        label: Hyphenation
+        caption: Break line between words for better layout and justification.
+      hyphenation_language:
+        label: Language and hyphenation
+      page_orientation:
+        label: Page orientation
+        caption: Select the orientation of the pages in the PDF document.
+        options:
+          portrait: Portrait
+          landscape: Landscape
   extraction:
     available:
       pdftotext: "Pdftotext available (optional)"
@@ -1873,6 +2301,7 @@ he:
       progress_mode_changed_to_status_based: "Progress calculation updated"
       status_changed: "Status '%{status_name}'"
       system_update: "OpenProject system update:"
+      work_package_duplicate_closed: "Duplicate work package updated:"
       total_percent_complete_mode_changed_to_work_weighted_average: "Calculation of % Complete totals now weighted by Work."
       total_percent_complete_mode_changed_to_simple_average: "Calculation of % Complete totals now based on a simple average of only % Complete values."
     cause_descriptions:
@@ -1880,6 +2309,7 @@ he:
       work_package_parent_changed_times: by changes to parent %{link}
       work_package_children_changed_times: by changes to child %{link}
       work_package_related_changed_times: by changes to related %{link}
+      work_package_duplicate_closed: The status was automatically updated by the duplicated work package %{link}
       unaccessable_work_package_changed: by changes to a related work package
       working_days_changed:
         changed: "by changes to working days (%{changes})"
@@ -1900,6 +2330,8 @@ he:
           Progress calculation automatically <a href="%{href}" target="_blank">set to work-based mode and adjusted with version update</a>.
         progress_calculation_adjusted: >-
           Progress calculation automatically <a href="%{href}" target="_blank">adjusted with version update</a>.
+        scheduling_mode_adjusted: >-
+          Scheduling mode automatically adjusted with version update.
         totals_removed_from_childless_work_packages: >-
           Work and progress totals automatically removed for non-parent work packages with <a href="%{href}" target="_blank">version update</a>. This is a maintenance task and can be safely ignored.
       total_percent_complete_mode_changed_to_work_weighted_average: >-
@@ -1920,8 +2352,6 @@ he:
       api_and_webhooks: "API and webhooks"
     quick_add:
       label: "Open quick add menu"
-    breadcrumb:
-      nested_element: "%{section_header}: <b>%{title}</b>"
   my_account:
     access_tokens:
       no_results:
@@ -1968,6 +2398,7 @@ he:
       responsible: "Accountable"
       shared: "Shared"
       watched: "צופה"
+      reminder: "Reminder"
     facets:
       unread: "Unread"
       unread_title: "Show unread"
@@ -2001,6 +2432,7 @@ he:
   label_add_subtask: "הוסף תת משימה"
   label_added: "התווסף"
   label_added_by: "Added by %{author}"
+  label_added_by_on: "Added by %{author} on %{date}"
   label_added_time_by: "נוסף על ידי %{author} לפני %{age}"
   label_additional_workflow_transitions_for_assignee: "מעברים נוספים מותר כאשר המשתמש הוא מקבל ההקצאה"
   label_additional_workflow_transitions_for_author: "מעברים נוספים מותר כאשר המשתמש הוא המחבר"
@@ -2025,6 +2457,7 @@ he:
   label_ical_access_key_generation_hint: "Automatically generated when subscribing to a calendar."
   label_ical_access_key_latest: "latest"
   label_ical_access_key_revoke: "Revoke"
+  label_add_column: "Add column"
   label_applied_status: "מצב יישומית"
   label_archive_project: "Archive project"
   label_ascending: "סדר עולה"
@@ -2051,6 +2484,7 @@ he:
   label_api_doc: "API documentation"
   label_backup: "Backup"
   label_backup_code: "Backup code"
+  label_basic_details: "Basic details"
   label_between: "between"
   label_blocked_by: "חסום על ידי"
   label_blocks: "בלוקים"
@@ -2069,6 +2503,7 @@ he:
   label_calendars_and_dates: "Calendars and dates"
   label_calendar_show: "הצג לוח שנה"
   label_category: "קטגוריה"
+  label_completed: Completed
   label_consent_settings: "User Consent"
   label_wiki_menu_item: פריט ויקי בתפריט
   label_select_main_menu_item: בחר פריט תפריט ראשי חדש
@@ -2088,7 +2523,6 @@ he:
   label_check_uncheck_all_in_row: "Check/Uncheck all in row"
   label_child_element: "Child element"
   label_choices: "Choices"
-  label_chronological_order: "Oldest first"
   label_close_versions: "סגור גרסאות שהושלמו"
   label_closed_work_packages: "סגור"
   label_collapse: "צמצם"
@@ -2133,13 +2567,16 @@ he:
   label_default: "ברירת מחדל"
   label_delete_user: "Delete user"
   label_delete_project: "Delete project"
+  label_delete: "מחק"
   label_deleted: "נמחק"
   label_deleted_custom_field: "(למחוק שדה מותאם אישית)"
+  label_deleted_custom_item: "(deleted item)"
   label_deleted_custom_option: "(deleted option)"
   label_empty_element: "(empty)"
   label_missing_or_hidden_custom_option: "(missing value or lacking permissions to access)"
   label_descending: "סדר יורד"
   label_details: "פרטים"
+  label_defaults: "Defaults"
   label_development_roadmap: "Development roadmap"
   label_diff: "הפרש"
   label_diff_inline: "בתוך השורה"
@@ -2171,10 +2608,10 @@ he:
   label_enterprise_active_users: "%{current}/%{limit} booked active users"
   label_enterprise_edition: "Enterprise edition"
   label_enterprise_support: "Enterprise support"
-  label_enterprise_addon: "Enterprise add-on"
   label_environment: "סביבה"
   label_estimates_and_progress: "Estimates and progress"
   label_equals: "הינו"
+  label_equals_with_descendants: "is any with descendants"
   label_everywhere: "everywhere"
   label_example: "דוגמה"
   label_experimental: "Experimental"
@@ -2193,8 +2630,10 @@ he:
   label_feeds_access_key_created_on: "RSS access key created %{value} ago"
   label_feeds_access_key_type: "RSS"
   label_file_plural: "קבצים"
-  label_filter_add: "Add filter"
   label_filter: "מסננים"
+  label_filter_add: "Add filter"
+  label_filter_by: "Filter by"
+  label_filter_any_name_attribute: "Name attributes"
   label_filter_plural: "מסננים"
   label_filters_toggle: "Show/hide filters"
   label_float: "Float"
@@ -2217,6 +2656,7 @@ he:
   label_here: here
   label_hide: "הסתר"
   label_history: "היסטוריה"
+  label_hierarchy: "Hierarchy"
   label_hierarchy_leaf: "Hierarchy leaf"
   label_home: "דף הבית"
   label_subject_or_id: "Subject or ID"
@@ -2228,6 +2668,7 @@ he:
   label_inactive: "Inactive"
   label_incoming_emails: "הודעות דואר נכנסות"
   label_includes: "includes"
+  label_incomplete: Incomplete
   label_include_sub_projects: Include sub-projects
   label_index_by_date: "Index by date"
   label_index_by_title: "Index by title"
@@ -2238,6 +2679,8 @@ he:
   label_internal: "פנימי"
   label_introduction_video: "Introduction video"
   label_invite_user: "Invite user"
+  label_item: "Item"
+  label_item_plural: "Items"
   label_share: "שתף"
   label_share_project_list: "Share project list"
   label_share_work_package: "Share work package"
@@ -2279,6 +2722,7 @@ he:
   label_custom_favicon: "Custom favicon"
   label_custom_touch_icon: "Custom touch icon"
   label_logout: "התנתק"
+  label_mapping_for: "Mapping for: %{attribute}"
   label_main_menu: "תפריט צד"
   label_manage: "ניהול"
   label_manage_groups: "Manage groups"
@@ -2313,8 +2757,10 @@ he:
   label_months_from: "months from"
   label_more: "עוד"
   label_more_than_ago: "more than days ago"
+  label_move_column_left: "להעביר את העמודה שמאלה"
+  label_move_column_right: "הזזת עמודה ימינה"
   label_move_work_package: "Move work package"
-  label_my_account: "החשבון שלי"
+  label_my_account: "Account settings"
   label_my_activity: "My activity"
   label_my_account_data: "My account data"
   label_my_avatar: "My avatar"
@@ -2337,15 +2783,17 @@ he:
   label_no_change_option: "(ללא שינוי)"
   label_no_data: "אין נתונים להצגה"
   label_no_due_date: "no finish date"
-  label_no_start_date: "no start date"
+  label_no_start_date: "אין תאריך התחלה"
   label_no_parent_page: "No parent page"
   label_nothing_display: "Nothing to display"
   label_nobody: "nobody"
+  label_not_configured: "Not configured"
   label_not_found: "not found"
   label_none: "none"
   label_none_parentheses: "(none)"
   label_not_contains: "doesn't contain"
   label_not_equals: "is not"
+  label_life_cycle_step_plural: "Project life cycle"
   label_on: "פועל"
   label_operator_all: "is not empty"
   label_operator_none: "is empty"
@@ -2403,10 +2851,11 @@ he:
   label_project_latest: "Latest projects"
   label_project_default_type: "Allow empty type"
   label_project_hierarchy: "Project hierarchy"
-  label_project_mappings: "Enabled in projects"
+  label_project_mappings: "פרויקטים"
   label_project_new: "פרוייקט חדש"
   label_project_plural: "פרויקטים"
   label_project_list_plural: "Project lists"
+  label_project_life_cycle: "Project life cycle"
   label_project_attributes_plural: "Project attributes"
   label_project_custom_field_plural: "Project attributes"
   label_project_settings: "הגדרות הפרוייקט"
@@ -2430,10 +2879,14 @@ he:
   label_related_work_packages: "Related work packages"
   label_relates: "related to"
   label_relates_to: "related to"
+  label_relation: "Relation"
+  label_relation_actions: "Relation actions"
   label_relation_delete: "Delete relation"
+  label_relation_edit: "Edit relation"
   label_relation_new: "New relation"
   label_release_notes: "Release notes"
   label_remaining_work: "Remaining work"
+  label_remove_column: "Remove column"
   label_remove_columns: "Remove selected columns"
   label_renamed: "renamed"
   label_reply_plural: "Replies"
@@ -2444,12 +2897,12 @@ he:
   label_reporting: "Reporting"
   label_reporting_plural: "Reportings"
   label_repository: "Repository"
+  label_repository_remove: "Remove repository"
   label_repository_root: "Repository root"
   label_repository_plural: "Repositories"
   label_required: "required"
   label_requires: "requires"
   label_result_plural: "תוצאות"
-  label_reverse_chronological_order: "Newest first"
   label_revision: "Revision"
   label_revision_id: "Revision %{value}"
   label_revision_plural: "Revisions"
@@ -2460,6 +2913,7 @@ he:
   label_roadmap_overdue: "%{value} late"
   label_role_and_permissions: "Roles and permissions"
   label_role_new: "New role"
+  label_role_grantable: "Grantable role"
   label_role_plural: "תפקידים"
   label_role_search: "Assign role to new members"
   label_scm: "SCM"
@@ -2475,8 +2929,10 @@ he:
   label_show_completed_versions: "Show completed versions"
   label_columns: "עמודות"
   label_sort: "מיין"
+  label_sort_ascending: "מיין בסדר עולה"
   label_sort_by: "Sort by %{value}"
   label_sorted_by: "sorted by %{value}"
+  label_sort_descending: "מיין בסדר יורד"
   label_sort_higher: "Move up"
   label_sort_highest: "Move to top"
   label_sort_lower: "Move down"
@@ -2505,11 +2961,16 @@ he:
   label_this_month: "החודש"
   label_this_week: "השבוע"
   label_this_year: "this year"
+  label_time: "זמן"
   label_time_entry_plural: "זמן שבוזבז"
   label_time_entry_activity_plural: "Spent time activities"
   label_title: "כותרת"
   label_projects_menu: "פרויקטים"
   label_today: "today"
+  label_token_version: "Token Version"
+  label_today_as_start_date: "Select today as start date."
+  label_today_as_due_date: "Select today as finish date."
+  label_today_as_date: "Select today as date."
   label_top_menu: "Top Menu"
   label_topic_plural: "Topics"
   label_total: "סה\"כ"
@@ -2540,6 +3001,7 @@ he:
   label_user_settings: "User settings"
   label_users_settings: "Users settings"
   label_version_new: "גרסה חדשה"
+  label_version_edit: "ערוך גרסה"
   label_version_plural: "גירסאות"
   label_version_sharing_descendants: "With subprojects"
   label_version_sharing_hierarchy: "With project hierarchy"
@@ -2621,7 +3083,7 @@ he:
   label_global_role: "Global role"
   label_not_changeable: "(not changeable)"
   label_global: "Global"
-  label_seeded_from_env_warning: This record has been created through a setting / environment variable. It is not editable through UI.
+  label_seeded_from_env_warning: This record has been created through a setting environment variable. It is not editable through UI.
   macro_execution_error: "Error executing the macro %{macro_name}"
   macro_unavailable: "Macro %{macro_name} cannot be displayed."
   macros:
@@ -2679,8 +3141,13 @@ he:
         prefix: "Received because of the notification setting: %{reason}"
         date_alert_start_date: "Date alert"
         date_alert_due_date: "Date alert"
+        reminder: "Reminder"
       see_all: "See all"
       updated_at: "Updated at %{timestamp} by %{user}"
+    reminder_notifications:
+      subject: "Reminder: %{note}"
+      heading: "You have a new reminder"
+      note: "Note: “%{note}”"
     sharing:
       work_packages:
         allowed_actions: "You may %{allowed_actions} this work package. This can change depending on your project role and permissions."
@@ -2828,6 +3295,9 @@ he:
   notice_locking_conflict: "Information has been updated by at least one other user in the meantime."
   notice_locking_conflict_additional_information: "The update(s) came from %{users}."
   notice_locking_conflict_reload_page: "Please reload the page, review the changes and reapply your updates."
+  notice_locking_conflict_warning: "This page has been updated by someone else. To not lose your edits, copy them locally and reload to view the updated version."
+  notice_locking_conflict_danger: "Could not save your changes because of conflicting modifications. To not lose your edits, copy them locally and reload to view the updated version."
+  notice_locking_conflict_action_button: "Discard changes and reload"
   notice_member_added: Added %{name} to the project.
   notice_members_added: Added %{number} users to the project.
   notice_member_removed: "Removed %{user} from project."
@@ -2836,6 +3306,7 @@ he:
   notice_bad_request: "בקשה שגויה."
   notice_not_authorized: "You are not authorized to access this page."
   notice_not_authorized_archived_project: "The project you're trying to access has been archived."
+  notice_requires_enterprise_token: "Enterprise token missing or doesn't allow access to this page."
   notice_password_confirmation_failed: "Your password is not correct. Cannot continue."
   notice_principals_found_multiple: "There are %{number} results found. \n Tab to focus the first result."
   notice_principals_found_single: "There is one result. \n Tab to focus it."
@@ -2844,13 +3315,11 @@ he:
   notice_successful_connection: "Successful connection."
   notice_successful_create: "Successful creation."
   notice_successful_delete: "Successful deletion."
+  notice_successful_cancel: "Successful cancellation."
   notice_successful_update: "Successful update."
   notice_successful_update_custom_fields_added_to_project: |
     Successful update. The custom fields of the activated types are automatically activated
     on the work package form. <a href="%{url}" target="_blank">See more</a>.
-  notice_successful_update_custom_fields_added_to_type: |
-    Successful update. The active custom fields are automatically activated for
-    the associated projects of this type.
   notice_to_many_principals_to_display: "There are too many results.\nNarrow down the search by typing in the name of the new member (or group)."
   notice_user_missing_authentication_method: User has yet to choose a password or another way to sign in.
   notice_user_invitation_resent: An invitation has been sent to %{email}.
@@ -2888,12 +3357,13 @@ he:
     text_getting_started_description: "Get a quick overview of project management and team collaboration with OpenProject. You can restart this video from the help menu."
     welcome: "Welcome to %{app_title}"
     select_language: "Please select your language"
-  permission_add_work_package_notes: "הוסף הערות"
+  permission_add_work_package_notes: "Add comments"
   permission_add_work_packages: "Add work packages"
   permission_add_messages: "Post messages"
   permission_add_project: "Create projects"
   permission_add_work_package_attachments: "Add attachments"
   permission_add_work_package_attachments_explanation: "Allows adding attachments without Edit work packages permission"
+  permission_add_comments_with_restricted_visibility: "Write comments with restricted visibility"
   permission_archive_project: "Archive project"
   permission_create_user: "Create users"
   permission_manage_user: "Edit users"
@@ -2918,14 +3388,19 @@ he:
   permission_delete_timelines: "Delete timelines"
   permission_delete_wiki_pages: "Delete wiki pages"
   permission_delete_wiki_pages_attachments: "Delete attachments"
-  permission_edit_work_package_notes: "ערוך הערות"
+  permission_edit_work_package_notes: "Moderate comments"
+  permission_edit_work_package_notes_explanation: "Caution: Users with this permission are able to edit anyone's comment."
   permission_edit_work_packages: "Edit work packages"
   permission_edit_messages: "עריכת הודעות"
-  permission_edit_own_work_package_notes: "Edit own notes"
+  permission_edit_own_comments_with_restricted_visibility: "Edit own comments with restricted visibility"
+  permission_edit_own_work_package_notes: "Edit own comments"
   permission_edit_own_messages: "Edit own messages"
   permission_edit_own_time_entries: "Edit own time logs"
+  permission_edit_others_comments_with_restricted_visibility: "Moderate comments with restricted visibility"
+  permission_edit_others_comments_with_restricted_visibility_explanation: "Caution: Users with this permission are able to edit other users' comments with restricted visibility."
   permission_edit_project: "Edit project"
   permission_edit_project_attributes: "Edit project attributes"
+  permission_edit_project_phases: "Edit project phases"
   permission_edit_reportings: "Edit reportings"
   permission_edit_time_entries: "Edit time logs for other users"
   permission_edit_timelines: "Edit timelines"
@@ -2955,11 +3430,15 @@ he:
   permission_search_project: "Search project"
   permission_select_custom_fields: "Select custom fields"
   permission_select_project_custom_fields: "Select project attributes"
+  permission_select_project_phases: "Select project phases"
+  permission_select_project_phases_explanation: "Activate/Deactivate the phases in a project. Enables the user to select the life cycle appropriate for the project as inactive phases will not be visible in the project overview page nor the project list."
   permission_select_project_modules: "Select project modules"
   permission_share_work_packages: "Share work packages"
   permission_manage_types: "Select types"
+  permission_manage_own_reminders: "Create own reminders"
   permission_view_project: "View projects"
   permission_view_changesets: "View repository revisions in OpenProject"
+  permission_view_comments_with_restricted_visibility: "View comments with restricted visibility"
   permission_view_commit_author_statistics: "View commit author statistics"
   permission_view_dashboards: "View dashboards"
   permission_view_work_package_watchers: "View watchers list"
@@ -2971,12 +3450,14 @@ he:
   permission_view_shared_work_packages: "View work package shares"
   permission_view_time_entries: "View spent time"
   permission_view_timelines: "View timelines"
+  permission_view_user_email: "View users' mail addresses"
   permission_view_wiki_edits: "View wiki history"
   permission_view_wiki_pages: "View wiki"
   permission_work_package_assigned: "Become assignee/responsible"
   permission_work_package_assigned_explanation: "Work packages can be assigned to users and groups in possession of this role in the respective project"
   permission_view_project_activity: "View project activity"
   permission_view_project_attributes: "View project attributes"
+  permission_view_project_phases: "View project phases"
   permission_save_bcf_queries: "Save BCF queries"
   permission_manage_public_bcf_queries: "Manage public BCF queries"
   permission_edit_attribute_help_texts: "Edit attribute help texts"
@@ -2986,6 +3467,13 @@ he:
   placeholders:
     default: "-"
   project:
+    archive:
+      are_you_sure: "Are you sure you want to archive the project '%{name}'?"
+      archived: "Archived"
+    count:
+      zero: "0 projects"
+      one: "פרוייקט אחד"
+      other: "%{count} פרויקטים"
     destroy:
       confirmation: "If you continue, the project %{identifier} will be permanently destroyed. To confirm this action please introduce the project name in the field below, this will:"
       project_delete_result_1: "Delete all related data."
@@ -2994,23 +3482,21 @@ he:
       project_verification: "Enter the project's name %{name} to verify the deletion."
       subprojects_confirmation: "Its subproject(s): %{value} will also be deleted."
       title: "Delete the project %{name}"
+    filters:
+      project_phase: "Project phase: %{phase}"
+      project_phase_any: "Project phase: Any"
+      project_phase_gate: "Project phase gate: %{gate}"
     identifier:
       warning_one: Members of the project will have to relocate the project's repositories.
       warning_two: Existing links to the project will no longer work.
       title: Change the project's identifier
+    not_available: "Project N/A"
     template:
       copying: >
         Your project is being created from the selected template project. You will be notified by mail as soon as the project is available.
       use_template: "Use template"
       make_template: "Set as template"
       remove_from_templates: "Remove from templates"
-    archive:
-      are_you_sure: "Are you sure you want to archive the project '%{name}'?"
-      archived: "Archived"
-    count:
-      zero: "0 Projects"
-      one: "1 Project"
-      other: "%{count} Projects"
   project_module_activity: "פעילות"
   project_module_forums: "פורומים"
   project_module_work_package_tracking: "חבילת עבודה"
@@ -3141,9 +3627,19 @@ he:
     warnings:
       cannot_annotate: "This file cannot be annotated."
   scheduling:
-    activated: "activated"
-    deactivated: "deactivated"
+    manual: "set to Manual"
+    automatic: "set to Automatic"
   search_input_placeholder: "Search ..."
+  setting_allowed_link_protocols: "Allowed link protocols"
+  setting_allowed_link_protocols_text_html: >-
+    Allow these protocols to be rendered as links in work package descriptions, long text fields and comments. For example, %{tel_code} or %{element_code}. Enter one protocol per line. <br/> Protocols %{http_code}, %{https_code}, and %{mailto_code} are always allowed.
+  setting_after_first_login_redirect_url: "First login redirect"
+  setting_after_first_login_redirect_url_text_html: >
+    Set a path to redirect users after their first login. If empty, redirects to the home page for the onboarding tour. <br/> Example: <code>/my/page</code>
+  setting_after_login_default_redirect_url: "After login redirect"
+  setting_after_login_default_redirect_url_text_html: >
+    Set a default path to redirect users after login, if no back link was provided. Redirects to home page if not set. <br/> Example: <code>/my/page</code>
+  setting_apiv3_cors_title: "Cross-Origin Resource Sharing (CORS)"
   setting_apiv3_cors_enabled: "Enable CORS"
   setting_apiv3_cors_origins: "API V3 Cross-Origin Resource Sharing (CORS) allowed origins"
   setting_apiv3_cors_origins_text_html: >
@@ -3201,7 +3697,9 @@ he:
   setting_default_language: "Default language"
   setting_default_projects_modules: "Default enabled modules for new projects"
   setting_default_projects_public: "New projects are public by default"
+  setting_disable_password_login: "Disable password authentication"
   setting_diff_max_lines_displayed: "Max number of diff lines displayed"
+  setting_omniauth_direct_login_provider: "Direct login SSO provider"
   setting_display_subprojects_work_packages: "Display subprojects work packages on main projects by default"
   setting_duration_format: "Duration format"
   setting_duration_format_hours_only: "Hours only"
@@ -3263,7 +3761,6 @@ he:
   setting_registration_footer: "Registration footer"
   setting_repositories_automatic_managed_vendor: "Automatic repository vendor type"
   setting_repositories_encodings: "Repositories encodings"
-  setting_repository_authentication_caching_enabled: "Enable caching for authentication request of version control software"
   setting_repository_storage_cache_minutes: "Repository disk size cache"
   setting_repository_checkout_display: "Show checkout instructions"
   setting_repository_checkout_base_url: "Checkout base URL"
@@ -3298,6 +3795,10 @@ he:
   setting_work_package_list_default_highlighted_attributes: "Default inline highlighted attributes"
   setting_working_days: "Working days"
   settings:
+    authentication:
+      single_sign_on: "Single Sign-On"
+      omniauth_direct_login_hint_html: >
+        If this option is active, login requests will redirect to the configured omniauth provider. The login dropdown and sign-in page will be disabled. <br/> <strong>Note:</strong> Unless you also disable password logins, with this option enabled, users can still log in internally by visiting the <code>%{internal_path}</code> login page.
     attachments:
       whitelist_text_html: >
         Define a list of valid file extensions and/or mime types for uploaded files. <br/> Enter file extensions (e.g., <code>%{ext_example}</code>) or mime types (e.g., <code>%{mime_example}</code>). <br/> Leave empty to allow any file type to be uploaded. Multiple values allowed (one line for each value).
@@ -3364,6 +3865,27 @@ he:
       new:
         heading: "New attribute"
         description: "Changes to this project attribute will be reflected in all projects where it is enabled. Required attributes cannot be disabled on a per-project basis."
+    project_phase_definitions:
+      heading: "Project life cycle"
+      heading_description: "Project life cycle define the project phases that can be used for your project planning and will appear in the overview page of each project. These attributes can be enabled or disabled but not re-ordered at a project level."
+      label_add: "הוספה"
+      label_add_description: "Add life cycle definition"
+      filter:
+        label: "Search project phase"
+      section_header: "Phases"
+      non_defined: "No phases are currently defined."
+      phase_gates: "Phase gates"
+      new:
+        description: "Changes to this project phase will be reflected in all projects where it is enabled."
+        heading: "New Phase"
+      edit:
+        heading: "Edit Phase"
+      both_gate: "Start and finish gate"
+      no_gate: "No gate"
+      start_gate: "Start gate"
+      start_gate_caption: "Add a gate with the start date of the phase"
+      finish_gate: "Finish gate"
+      finish_gate_caption: "Add a gate with the end date of the phase"
     projects:
       missing_dependencies: "Project module %{module} was checked which depends on %{dependencies}. You need to check these dependencies as well."
       section_new_projects: "Settings for new projects"
@@ -3376,6 +3898,8 @@ he:
     working_days:
       section_work_week: "Work week"
       section_holidays_and_closures: "Holidays and closures"
+    work_packages:
+      not_allowed_text: "You do not have the necessary permissions to view this page."
   text_formatting:
     markdown: "Markdown"
     plain: "Plain text"
@@ -3397,6 +3921,7 @@ he:
   text_are_you_sure_continue: "Are you sure you want to continue?"
   text_are_you_sure_with_children: "Delete work package and all child work packages?"
   text_are_you_sure_with_project_custom_fields: "Deleting this attribute will also delete its values in all projects. Are you sure you want to do this?"
+  text_are_you_sure_with_project_life_cycle_step: "Deleting this phase will also delete its usages in all projects. Are you sure you want to do this?"
   text_assign_to_project: "Assign to the project"
   text_form_configuration: >
     You can customize which fields will be displayed in work package forms. You can freely group the fields to reflect the needs for your domain.
@@ -3476,6 +4001,7 @@ he:
   text_notice_security_badge_displayed_html: >
     Note: if enabled, this will display a badge with your installation status in the <a href="%{information_panel_path}">%{information_panel_label}</a> administration panel, and on the home page. It is displayed to administrators only. <br/> The badge will check your current OpenProject version against the official OpenProject release database to alert you of any updates or known vulnerabilities. For more information on what the check provides, what data is needed to provide available updates, and how to disable this check, please visit <a href="%{more_info_url}">the configuration documentation</a>.
   text_own_membership_delete_confirmation: "You are about to remove some or all of your permissions and may no longer be able to edit this project after that.\nAre you sure you want to continue?"
+  text_permanent_delete_confirmation_checkbox_label: "I understand that this deletion cannot be reversed"
   text_plugin_assets_writable: "Plugin assets directory writable"
   text_powered_by: "Powered by %{link}"
   text_project_identifier_info: "Only lower case letters (a-z), numbers, dashes and underscores are allowed, must start with a lower case letter."
@@ -3493,6 +4019,7 @@ he:
   text_unallowed_characters: "Unallowed characters"
   text_user_invited: The user has been invited and is pending registration.
   text_user_wrote: "%{value} wrote:"
+  text_wrote: "wrote"
   text_warn_on_leaving_unsaved: "The work package contains unsaved text that will be lost if you leave this page."
   text_what_did_you_change_click_to_add_comment: "What did you change? Click to add comment"
   text_wiki_destroy_confirmation: "Are you sure you want to delete this wiki and all its content?"
@@ -3654,6 +4181,12 @@ he:
       edit_description: "Can view, comment and edit this work package."
       view: "תצוגה"
       view_description: "Can view this work package."
+    reminders:
+      label_remind_at: "תאריך"
+      note_placeholder: "Why are you setting this reminder?"
+      success_creation_message: "Reminder set successfully. You will receive a notification for this work package at the chosen time."
+      success_update_message: "Reminder updated successfully."
+      success_deletion_message: "Reminder deleted successfully."
   sharing:
     count:
       zero: "0 users"
@@ -3740,7 +4273,6 @@ he:
   nothing_to_preview: "Nothing to preview"
   api_v3:
     attributes:
-      lock_version: "גרסת מנעול"
       property: "Property"
     errors:
       code_400: "Bad request: %{message}"
@@ -3840,6 +4372,8 @@ he:
       builtin: Built-in instance application
       confidential: Confidential
       singular: "OAuth application"
+      scopes: "Scopes"
+      client_credentials: "Client credentials"
       plural: "OAuth applications"
       named: "OAuth application '%{name}'"
       new: "New OAuth application"
@@ -3898,6 +4432,7 @@ he:
       connected: "Connected"
       error: "שגיאה"
       failed_authorization: "Authorization failed"
+      not_connected: "Not connected"
     labels:
       label_oauth_integration: "OAuth2 integration"
       label_redirect_uri: "Redirect URI"
@@ -3948,3 +4483,29 @@ he:
   plugin_openproject_auth_saml:
     name: "OmniAuth SAML / Single-Sign On"
     description: "Adds the OmniAuth SAML provider to OpenProject"
+  enterprise_plans:
+    legacy_enterprise: "Enterprise Plan"
+  enterprise_features:
+    baseline_comparison: Baseline Comparison
+    board_view: Board View
+    conditional_highlighting: Conditional Highlighting
+    custom_actions: Custom Actions
+    custom_field_hierarchies: Custom Field Hierarchies
+    customize_life_cycle: Customize Life Cycle
+    date_alerts: Date Alerts
+    define_custom_style: Define Custom Style
+    edit_attribute_groups: Edit Attribute Groups
+    gantt_pdf_export: Gantt PDF Export
+    grid_widget_wp_graph: Grid Widget Work Package Graph
+    ldap_groups: LDAP Groups
+    one_drive_sharepoint_file_storage: OneDrive/SharePoint File Storage
+    placeholder_users: Placeholder Users
+    project_list_sharing: Project List Sharing
+    readonly_work_packages: Readonly Work Packages
+    sso_auth_providers: SSO Auth Providers
+    team_planner_view: Team Planner View
+    two_factor_authentication: Two-Factor Authentication
+    virus_scanning: Attachment Virus Scanning
+    work_package_query_relation_columns: Work Package Query Relation Columns
+    work_package_sharing: Work Package Sharing
+    work_package_subject_generation: Work Package Subject Generation

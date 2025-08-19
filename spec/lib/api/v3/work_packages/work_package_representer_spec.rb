@@ -1233,15 +1233,13 @@ RSpec.describe API::V3::WorkPackages::WorkPackageRepresenter do
         end
 
         before do
-          scope = instance_double(ActiveRecord::Relation)
+          scope = double(ActiveRecord::Relation, # rubocop:disable RSpec/VerifiedDoubles
+                         visible: instance_double(ActiveRecord::Relation,
+                                                  includes: [relation]))
 
           allow(work_package)
-            .to receive(:visible_relations)
-                  .with(current_user)
+            .to receive(:relations)
                   .and_return(scope)
-          allow(scope)
-            .to receive(:includes)
-                  .and_return([relation])
         end
 
         it "embeds a collection" do
@@ -1267,7 +1265,8 @@ RSpec.describe API::V3::WorkPackages::WorkPackageRepresenter do
         end
       end
 
-      describe "fileLinks" do
+      describe "fileLinks",
+               skip: "test setup broken - remove embedding with https://community.openproject.org/wp/59468" do
         let(:storage) { build_stubbed(:nextcloud_storage) }
         let(:file_link) { build_stubbed(:file_link, storage:, container: work_package) }
 

@@ -211,7 +211,6 @@ class PermittedParams
   def user_create_as_admin(external_authentication,
                            change_password_allowed,
                            additional_params = [])
-
     additional_params << :ldap_auth_source_id unless external_authentication
 
     if current_user.admin?
@@ -263,7 +262,7 @@ class PermittedParams
   end
 
   def pref
-    params.fetch(:pref, {}).permit(:hide_mail, :time_zone, :theme,
+    params.fetch(:pref, {}).permit(:time_zone, :theme,
                                    :comments_sorting, :warn_on_leaving_unsaved,
                                    :auto_hide_popups)
   end
@@ -288,6 +287,12 @@ class PermittedParams
     end
 
     whitelist.merge(custom_field_values(:project))
+  end
+
+  def project_phases
+    params.require(:project).permit(
+      available_phases_attributes: %i[id date date_range]
+    )
   end
 
   def project_custom_field_project_mapping
@@ -474,7 +479,6 @@ class PermittedParams
           :searchable,
           :admin_only,
           :default_value,
-          :possible_values,
           :multi_value,
           :content_right_to_left,
           :custom_field_section_id,

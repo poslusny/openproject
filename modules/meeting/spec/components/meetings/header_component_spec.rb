@@ -36,7 +36,7 @@ RSpec.describe Meetings::HeaderComponent, type: :component do
   let(:user) { build_stubbed(:user) }
 
   subject do
-    render_inline(described_class.new(meeting:, project:))
+    render_inline(described_class.new(meeting:))
     page
   end
 
@@ -52,19 +52,19 @@ RSpec.describe Meetings::HeaderComponent, type: :component do
         end
       end
 
-      context 'when open' do
+      context "when open" do
         let(:meeting) { build_stubbed(:meeting, project:, state: :open) }
 
         it "renders the mail invitation" do
-          expect(subject).to have_text I18n.t('meeting.label_mail_all_participants')
+          expect(subject).to have_text I18n.t("meeting.label_mail_all_participants")
         end
       end
 
-      context 'when closed' do
+      context "when closed" do
         let(:meeting) { build_stubbed(:meeting, project:, state: :closed) }
 
         it "does not render the mail invitation" do
-          expect(subject).not_to have_text I18n.t('meeting.label_mail_all_participants')
+          expect(subject).to have_no_text I18n.t("meeting.label_mail_all_participants")
         end
       end
     end
@@ -73,7 +73,7 @@ RSpec.describe Meetings::HeaderComponent, type: :component do
       let(:meeting) { build_stubbed(:meeting, project:, state: :open) }
 
       it "does not render the mail invitation" do
-        expect(subject).not_to have_text I18n.t('meeting.label_mail_all_participants')
+        expect(subject).to have_no_text I18n.t("meeting.label_mail_all_participants")
       end
     end
   end

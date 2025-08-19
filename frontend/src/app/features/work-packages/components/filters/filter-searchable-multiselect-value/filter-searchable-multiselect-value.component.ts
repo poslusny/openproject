@@ -64,6 +64,12 @@ export class FilterSearchableMultiselectValueComponent extends UntilDestroyedMix
 
   itemTracker = (item:HalResource):string => item.href || item.id || item.name;
 
+  groupByFn = (item:HalResource):string|null => {
+    if (!this.isVersionResource) return null;
+    const project = item.definingProject as HalResource | undefined;
+    return project?.name || this.I18n.t('js.project.not_available');
+  };
+
   compareByHref = compareByHref;
 
   resourceType:string|null = null;
@@ -109,17 +115,27 @@ export class FilterSearchableMultiselectValueComponent extends UntilDestroyedMix
         switchMap((initialLoad) => {
           // If we already loaded all values, just compare in the frontend
           if (initialLoad.count === initialLoad.total) {
-            return this.matchingItems(initialLoad.elements, matching);
+            return this.matchingItems(this.filterEmptyElements(initialLoad.elements), matching);
           }
 
           // Otherwise, request the matching API call
           return this
             .loadCollection(matching)
             .pipe(
-              switchMap((collection) => this.withMeValue(matching, collection.elements)),
+              switchMap(
+                (collection) =>
+                  this.withMeValue(
+                    matching,
+                    this.filterEmptyElements(collection.elements),
+                  ),
+              ),
             );
         }),
       );
+  }
+
+  private filterEmptyElements(elements:HalResource[]):HalResource[] {
+    return elements.filter((element) => element.name.trim().length !== 0);
   }
 
   matchingItems(elements:HalResource[], matching:string):Observable<HalResource[]> {
@@ -199,5 +215,10 @@ export class FilterSearchableMultiselectValueComponent extends UntilDestroyedMix
   private get isUserResource() {
     const type = _.get(this.filter.currentSchema, 'values.type', null) as string;
     return type && type.indexOf('User') > 0;
+  }
+
+  private get isVersionResource() {
+    const type = _.get(this.filter.currentSchema, 'values.type', null) as string;
+    return type && type.indexOf('Version') > 0;
   }
 }

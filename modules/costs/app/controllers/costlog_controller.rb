@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -57,7 +59,7 @@ class CostlogController < ApplicationController
       flash[:notice] = t(:notice_cost_logged_successfully)
       redirect_back_or_default work_package_path(@cost_entry.work_package)
     else
-      render action: "edit"
+      render action: :edit, status: :unprocessable_entity
     end
   end
 
@@ -102,9 +104,6 @@ class CostlogController < ApplicationController
     elsif params[:work_package_id]
       @work_package = WorkPackage.find(params[:work_package_id])
       @project = @work_package.project
-    elsif params[:work_package_id]
-      @work_package = WorkPackage.find(params[:work_package_id])
-      @project = @work_package.project
     elsif params[:project_id]
       @project = Project.find(params[:project_id])
     else
@@ -120,21 +119,21 @@ class CostlogController < ApplicationController
     @user = if @cost_entry.present? && @cost_entry.user_id == user_id
               @cost_entry.user
             else
-              User.find_by_id(user_id)
+              User.find_by(id: user_id)
             end
 
     work_package_id = cost_entry_params.delete(:work_package_id)
     @work_package = if @cost_entry.present? && @cost_entry.work_package_id == work_package_id
                       @cost_entry.work_package
                     else
-                      WorkPackage.find_by_id(work_package_id)
+                      WorkPackage.find_by(id: work_package_id)
                     end
 
     cost_type_id = cost_entry_params.delete(:cost_type_id)
     @cost_type = if @cost_entry.present? && @cost_entry.cost_type_id == cost_type_id
                    @cost_entry.cost_type
                  else
-                   CostType.find_by_id(cost_type_id)
+                   CostType.find_by(id: cost_type_id)
                  end
   end
 
@@ -143,7 +142,7 @@ class CostlogController < ApplicationController
       ce.project = @project
       ce.work_package = @work_package
       ce.user = User.current
-      ce.spent_on = Date.today
+      ce.spent_on = Time.zone.today
       # notice that cost_type is set to default cost_type in the model
     end
   end

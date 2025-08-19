@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -31,11 +32,12 @@ class BaseErrorsComponent < ApplicationComponent
   include OpTurbo::Streamable
   include OpPrimer::ComponentHelpers
 
-  def initialize(object, keys: %w[base])
+  def initialize(object, keys: %w[base], **system_arguments)
     super
 
     @errors = object.errors
     @keys = keys
+    @system_arguments = system_arguments
   end
 
   def render?
@@ -43,7 +45,7 @@ class BaseErrorsComponent < ApplicationComponent
   end
 
   def call
-    render(Primer::Alpha::Banner.new(scheme: :danger, icon: :stop, spacious: true)) do
+    render(Primer::Alpha::Banner.new(scheme: :danger, icon: :stop, spacious: true, **@system_arguments)) do
       joined_messages
     end
   end

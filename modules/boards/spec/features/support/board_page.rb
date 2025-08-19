@@ -91,6 +91,7 @@ module Pages
       subject.send_keys :enter
 
       sleep 1
+      wait_for_network_idle
 
       expect_card(list_name, card_title)
     end
@@ -239,6 +240,10 @@ module Pages
       expect(page).to have_no_css(".boards-list--item", wait: 10)
     end
 
+    def expect_not_any_card
+      expect(page).to have_no_css('[data-test-selector="op-wp-single-card"]')
+    end
+
     def remove_list(name)
       click_list_dropdown name, "Delete list"
 
@@ -284,7 +289,7 @@ module Pages
       click_dropdown_entry "Delete"
 
       accept_alert_dialog!
-      expect_and_dismiss_toaster message: I18n.t("js.notice_successful_delete")
+      expect_and_dismiss_flash message: I18n.t("js.notice_successful_delete")
     end
 
     def back_to_index

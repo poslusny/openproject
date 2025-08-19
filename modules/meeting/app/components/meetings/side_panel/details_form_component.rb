@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -36,20 +37,21 @@ module Meetings
       super
 
       @meeting = meeting
+      @project = meeting.project
     end
 
     def render?
-      User.current.allowed_in_project?(:edit_meetings, @meeting.project)
+      User.current.allowed_in_project?(:edit_meetings, @project)
     end
 
     private
 
     def start_date_initial_value
-      @meeting.start_time&.strftime("%Y-%m-%d")
+      format_time_as_date(@meeting.start_time, format: "%Y-%m-%d")
     end
 
     def start_time_initial_value
-      @meeting.start_time&.strftime("%H:%M")
+      format_time(@meeting.start_time, include_date: false, format: "%H:%M")
     end
   end
 end

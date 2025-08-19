@@ -84,6 +84,8 @@ RSpec.describe "Work package copy", :js, :selenium do
           project:)
   end
 
+  let(:relations_tab) { Components::WorkPackages::Relations.new(original_work_package) }
+
   before do
     login_as(user)
     original_work_package.save!
@@ -109,7 +111,7 @@ RSpec.describe "Work package copy", :js, :selenium do
     expect(copied_work_package).not_to eql original_work_package
 
     work_package_page = Pages::FullWorkPackage.new(copied_work_package, project)
-
+    activity_tab = Components::WorkPackages::Activities.new(copied_work_package)
     work_package_page.ensure_page_loaded
     work_package_page.expect_attributes Subject: original_work_package.subject,
                                         Description: "Copied WP Description",
@@ -118,13 +120,16 @@ RSpec.describe "Work package copy", :js, :selenium do
                                         Assignee: original_work_package.assigned_to.name,
                                         Responsible: original_work_package.responsible.name
 
-    work_package_page.expect_activity user, number: 1
+    activity_tab.expect_journal_details_header(text: user.name)
     work_package_page.expect_current_path
 
     work_package_page.visit_tab! :relations
     expect_angular_frontend_initialized
-    expect(page).to have_css(".relation-group--header", text: "RELATED TO", wait: 20)
-    expect(page).to have_test_selector("op-relation--row-subject", text: original_work_package.subject)
+    work_package_page.expect_subject
+    loading_indicator_saveguard
+
+    relations_tab.expect_relation_group(:relates)
+    relations_tab.expect_relation_by_text(original_work_package.subject)
   end
 
   describe "when source work package has an attachment" do
@@ -147,6 +152,7 @@ RSpec.describe "Work package copy", :js, :selenium do
 
   it "on split screen page" do
     original_work_package_page = Pages::SplitWorkPackage.new(original_work_package, project)
+    activity_tab = Components::WorkPackages::Activities.new(original_work_package)
     to_copy_work_package_page = original_work_package_page.visit_copy!
 
     to_copy_work_package_page.expect_current_path
@@ -164,6 +170,7 @@ RSpec.describe "Work package copy", :js, :selenium do
     work_package_page = Pages::SplitWorkPackage.new(copied_work_package, project)
 
     work_package_page.ensure_page_loaded
+
     work_package_page.expect_attributes Subject: original_work_package.subject,
                                         Description: "Copied WP Description",
                                         Version: original_work_package.version,
@@ -171,12 +178,19 @@ RSpec.describe "Work package copy", :js, :selenium do
                                         Assignee: original_work_package.assigned_to,
                                         Responsible: original_work_package.responsible
 
-    work_package_page.expect_activity user, number: 1
+    work_package_page.switch_to_tab(tab: :activity)
+    activity_tab.expect_journal_details_header(text: user.name)
+
+    work_package_page.switch_to_tab(tab: :overview)
+
     work_package_page.expect_current_path
 
     work_package_page.visit_tab!("relations")
     expect_angular_frontend_initialized
-    expect(page).to have_css(".relation-group--header", text: "RELATED TO", wait: 20)
-    expect(page).to have_test_selector("op-relation--row-subject", text: original_work_package.subject)
+    work_package_page.expect_subject
+    loading_indicator_saveguard
+
+    relations_tab.expect_relation_group(:relates)
+    relations_tab.expect_relation_by_text(original_work_package.subject)
   end
 end

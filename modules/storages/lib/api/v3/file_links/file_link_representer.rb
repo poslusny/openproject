@@ -91,7 +91,7 @@ module API::V3::FileLinks
     link :status, uncacheable: true do
       next if represented.origin_status.nil?
 
-      PERMISSION_LINKS[represented.origin_status]
+      PERMISSION_LINKS[represented.origin_status.to_sym]
     end
 
     link :staticOriginOpen do
@@ -138,7 +138,11 @@ module API::V3::FileLinks
     private
 
     def user_allowed_to_manage?(model)
-      model.container.present? && current_user.allowed_in_project?(:manage_file_links, model.project)
+      if model.container.present?
+        current_user.allowed_in_project?(:manage_file_links, model.project)
+      else
+        current_user == model.creator
+      end
     end
 
     def make_origin_data(model)

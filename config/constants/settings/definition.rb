@@ -40,9 +40,14 @@ module Settings
         default: nil
       },
       after_login_default_redirect_url: {
-        description: "Override URL to which logged in users are redirected instead of the My page",
+        description: "Override URL to which logged in users are redirected instead of the Home page",
         format: :string,
         default: nil
+      },
+      allowed_link_protocols: {
+        format: :array,
+        description: "Allowed protocols for links in the WYSIWYG editor and formatted texts",
+        default: []
       },
       apiv3_cors_enabled: {
         description: "Enable CORS headers for APIv3 server responses",
@@ -463,7 +468,7 @@ module Settings
       },
       enterprise_plan: {
         description: "Default EE selected plan",
-        default: "enterprise-on-premises---euro---1-year",
+        default: "enterprise-on-premises---basic---euro---1-year",
         writable: false
       },
       feeds_enabled: {
@@ -537,7 +542,7 @@ module Settings
       },
       host_name: {
         format: :string,
-        default: "localhost:3000",
+        default: -> { "#{ENV.fetch('HOST', 'localhost')}:#{ENV.fetch('PORT', 3000)}" },
         default_by_env: {
           # We do not want to set a localhost host name in production
           production: nil
@@ -701,8 +706,8 @@ module Settings
         default: 60000
       },
       oauth_allow_remapping_of_existing_users: {
-        description: "When set to false, prevent users from other identity providers to take over accounts connected " \
-                     "to another identity provider.",
+        description: "When set to false, prevent users from other identity providers to take over accounts " \
+                     "that exist in OpenProject.",
         default: true
       },
       omniauth_direct_login_provider: {
@@ -877,9 +882,6 @@ module Settings
         default: nil,
         format: :string
       },
-      repository_authentication_caching_enabled: {
-        default: true
-      },
       repository_checkout_data: {
         default: {
           "git" => { "enabled" => 0 },
@@ -926,6 +928,12 @@ module Settings
         default: "https://releases.openproject.com/v1/check.svg",
         writable: false
       },
+      seed_admin_user_locked: {
+        description: "Lock the created admin user after seeding, so it can not be used for logging in. " \
+                     "If set to true, an admin user has to be created manually or through an SSO provider.",
+        default: false,
+        writable: false
+      },
       seed_admin_user_password: {
         description: 'Password to set for the initially created admin user (Login remains "admin").',
         default: "admin",
@@ -952,6 +960,19 @@ module Settings
         default: nil,
         format: :hash,
         string_values: true
+      },
+      seed_design: {
+        description: "Seed enterprise-edition theme colors and logos through ENV",
+        writable: false,
+        default: nil,
+        format: :hash,
+        string_values: true
+      },
+      seed_enterprise_token: {
+        description: "Seed enterprise-edition token through ENV",
+        writable: false,
+        format: :string,
+        default: nil
       },
       self_registration: {
         default: 2

@@ -45,9 +45,13 @@ declare module '@hotwired/turbo' {
 
   export interface StreamElement {
     templateElement:HTMLTemplateElement;
+    templateContent:DocumentFragment;
   }
 
   export function start():void;
+
+  export function setProgressBarDelay(delay:number):void;
+
 }
 
 declare global {

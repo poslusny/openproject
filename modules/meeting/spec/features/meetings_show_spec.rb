@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -52,7 +53,7 @@ RSpec.describe "Meetings", :js do
     it "can visit the meeting" do
       visit meetings_path(project)
 
-      find("td.title a", text: "Awesome meeting!", wait: 10).click
+      find("div.title a", text: "Awesome meeting!", wait: 10).click
       expect(page).to have_css("h2", text: "Meeting: Awesome meeting!")
 
       expect(page).to have_test_selector("op-meeting--meeting_agenda",
@@ -126,7 +127,7 @@ RSpec.describe "Meetings", :js do
 
           field.submit_by_enter
 
-          show_page.expect_and_dismiss_toaster message: "Successful update"
+          expect_and_dismiss_flash(message: "Successful update")
 
           meeting.reload
 

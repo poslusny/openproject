@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -32,8 +33,7 @@ require_relative "../../support/pages/meetings/new"
 require_relative "../../support/pages/structured_meeting/show"
 
 RSpec.describe "Structured meetings links caught by turbo",
-               :js,
-               :with_cuprite do
+               :js do
   include Rails.application.routes.url_helpers
 
   shared_let(:project) { create(:project, enabled_module_names: %w[meetings]) }
@@ -42,7 +42,7 @@ RSpec.describe "Structured meetings links caught by turbo",
            lastname: "First",
            member_with_permissions: { project => %i[view_meetings create_meetings edit_meetings delete_meetings manage_agendas
                                                     view_work_packages] }).tap do |u|
-      u.pref[:time_zone] = "utc"
+      u.pref[:time_zone] = "Etc/UTC"
 
       u.save!
     end
@@ -65,7 +65,7 @@ RSpec.describe "Structured meetings links caught by turbo",
 
   it "can link to the other meeting" do
     click_link_or_button "Meeting link"
-    expect(page).to have_current_path meeting_path(meeting2)
+    expect(page).to have_current_path project_meeting_path(project, meeting2)
     expect(page).to have_css("#content", text: "Other meeting", visible: :visible)
   end
 end

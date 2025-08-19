@@ -59,6 +59,7 @@ RSpec.describe API::V3::Users::UserSqlRepresenter, "rendering" do
         name: current_user.name,
         firstname: current_user.firstname,
         lastname: current_user.lastname,
+        email: current_user.mail,
         _links: {
           self: {
             href: api_v3_paths.user(current_user.id),
@@ -98,7 +99,7 @@ RSpec.describe API::V3::Users::UserSqlRepresenter, "rendering" do
       it_behaves_like "name property depending on user format setting"
     end
 
-    context "when user_format is set to lastname_coma_firstname", with_settings: { user_format: :lastname_coma_firstname } do
+    context "when user_format is set to lastname_comma_firstname", with_settings: { user_format: :lastname_comma_firstname } do
       it_behaves_like "name property depending on user format setting"
     end
 
@@ -183,6 +184,45 @@ RSpec.describe API::V3::Users::UserSqlRepresenter, "rendering" do
               lastname: rendered_user.lastname
             }.to_json
           )
+      end
+    end
+  end
+
+  describe "email property" do
+    let(:select) { { "email" => {} } }
+
+    context "when the user is the current user" do
+      it "renders the email" do
+        expect(json)
+          .to be_json_eql(
+            {
+              email: rendered_user.mail
+            }.to_json
+          )
+      end
+    end
+
+    context "when the user has view_user_email permission" do
+      let(:current_user) { create(:user, global_permissions: [:view_user_email]) }
+      let(:rendered_user) { create(:user) }
+
+      it "renders the email" do
+        expect(json)
+          .to be_json_eql(
+            {
+              email: rendered_user.mail
+            }.to_json
+          )
+      end
+    end
+
+    context "when the user has no view_user_email permission" do
+      let(:current_user) { create(:user, global_permissions: []) }
+      let(:rendered_user) { create(:user) }
+
+      it "hides the email" do
+        expect(json)
+          .to be_json_eql({}.to_json)
       end
     end
   end

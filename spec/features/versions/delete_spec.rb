@@ -28,7 +28,7 @@
 
 require "spec_helper"
 
-RSpec.describe "version delete", :js, :with_cuprite do
+RSpec.describe "version delete", :js do
   let!(:project) { create(:project, name: "Parent") }
   let!(:archived_child) { create(:project, name: "Archived child", parent: project, active: false) }
 
@@ -47,13 +47,11 @@ RSpec.describe "version delete", :js, :with_cuprite do
     # from the version show page
     visit version_path(version)
 
-    within ".toolbar" do
-      accept_confirm do
-        click_link "Delete"
-      end
+    accept_confirm do
+      page.find_test_selector("version-delete-button").click
     end
 
-    expect(page).to have_css(".op-toast.-error", text: I18n.t(:error_can_not_delete_in_use_archived_undisclosed))
+    expect_flash(type: :error, message: I18n.t(:error_can_not_delete_in_use_archived_undisclosed))
     expect(page).to have_no_css("a", text: "Archived child")
 
     user.update!(admin: true)
@@ -61,13 +59,11 @@ RSpec.describe "version delete", :js, :with_cuprite do
     # from the version show page
     visit version_path(version)
 
-    within ".toolbar" do
-      accept_confirm do
-        click_link "Delete"
-      end
+    accept_confirm do
+      page.find_test_selector("version-delete-button").click
     end
 
-    expect(page).to have_css(".op-toast.-error", text: "There are also work packages in archived projects.")
+    expect_flash(type: :error, message: "There are also work packages in archived projects.")
     expect(page).to have_css("a", text: "Archived child")
   end
 end

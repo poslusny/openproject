@@ -30,9 +30,11 @@ el:
         overridden_costs: "Παράκαμπψη κόστους"
         spent: "Δαπανήθηκε"
         spent_on: "Ημερομηνία"
+        logged_by: "Logged by"
       cost_type:
         unit: "Όνομα μονάδας"
         unit_plural: "Πληθυντικός ονόματος μονάδας"
+        default: "Cost type by default"
       work_package:
         costs_by_type: "Δαπανημένες μονάδες"
         labor_costs: "Κόστος εργασίας"
@@ -44,13 +46,35 @@ el:
         rate: "Αμοιβή"
       user:
         default_rates: "Προεπιλεγμένη αμοιβή"
+      time_entry:
+        project: Έργο
+        user: Χρήστης
+        work_package: Εργασία
+        hours: Ώρες
+        comments: Σχόλιο
+        activity: Δραστηριότητα
+        spent_on: Ημερομηνία
+        start_time: Start time
+        end_time: Finish time
     models:
+      time_entry:
+        one: "Καταχώρηση χρόνου"
+        other: "Time entries"
+      cost_entry:
+        one: "Καταχώρηση κόστους"
+        other: "Cost entries"
       cost_type:
         one: "Τύπος κόστους"
         other: "Τύποι κόστους"
+      time_entry_activity:
+        one: "Time tracking activity"
+        other: "Δραστηριότητες καταγραφής χρόνου"
       rate: "Αμοιβή"
     errors:
       models:
+        time_entry:
+          invalid_time: "must be between 00:00 and 23:59."
+          cannot_log_for_this_work_package: "Cannot log time for this work package."
         work_package:
           is_not_a_valid_target_for_cost_entries: "Το πακέτο εργασίας #%{id} δεν είναι έγκυρος στόχος για ανάθεση των καταχωρήσεων κόστους."
           nullify_is_not_valid_for_cost_entries: "Οι καταχωρίσεις κόστους δεν μπορούν να ανατεθούν σε ένα έργο."
@@ -65,6 +89,8 @@ el:
     fixed_date: "Καθορισμένη ημερομηνία"
   button_add_rate: "Προσθήκη αμοιβής"
   button_log_costs: "Καταγραφή κόστους μονάδας"
+  button_log_time: "Log"
+  button_add_activity: "Δραστηριότητα"
   caption_booked_on_project: "Κλείστηκαν στο έργο"
   caption_default: "Προεπιλογή"
   caption_default_rate_history_for: "Προεπιλεγμένο ιστορικό αμοιβής για %{user}"
@@ -76,7 +102,10 @@ el:
   caption_save_rate: "Αποθηκεύση αμοιβής"
   caption_set_rate: "Ορίστε την τρέχουσα αμοιβή"
   caption_show_locked: "Εμφάνιση κλειδωμένων τύπων"
+  caption_log_time_dialog: "Καταγραφή χρόνου"
   description_date_for_new_rate: "Ημερομηνία για νέα αμοιβή"
+  description_costs_settings: "Define the desired format for the costs in all projects."
+  description_time_settings: "Define which fields are mandatory to fill when logging time in all projects."
   group_by_others: "δεν είναι σε καμία ομάδα"
   label_between: "μεταξύ"
   label_cost_filter_add: "Προσθήκη φίλτρου καταχώρησης κόστους"
@@ -85,8 +114,6 @@ el:
   label_cost_type_plural: "Τύποι κόστους"
   label_cost_type_specific: "Τύπος κόστους #%{id}: %{name}"
   label_costs_per_page: "Κόστος ανά σελίδα"
-  label_currency: "Νόμισμα"
-  label_currency_format: "Μορφοποίηση του νομίσματος"
   label_current_default_rate: "Τρέχουσα προεπιλεγμένη αμοιβή"
   label_date_on: "σε"
   label_deleted_cost_types: "Διαγραμμένοι τύποι κόστους"
@@ -105,21 +132,30 @@ el:
   label_kind: "Τύπος"
   label_less_or_equal: "<="
   label_log_costs: "Καταγραφή κόστους μονάδας"
+  label_new_time_entry_activity: "New time entry activity"
+  label_time_entry_activity_form_description: "Changes to this time entry activity will be reflected in all projects where it is enabled."
   label_no: "Όχι"
   label_option_plural: "Επιλογές"
   label_overall_costs: "Συνολικό κόστος"
   label_rate: "Αμοιβή"
   label_rate_plural: "Αμοιβές"
   label_status_finished: "Ολοκληρωμένο"
+  label_show: "Εμφάνιση"
   label_units: "Μονάδες κόστους"
   label_user: "Χρήστης"
   label_until: "μέχρι"
   label_valid_from: "Έγκυρο από"
   label_yes: "Ναι"
+  label_time: "Ώρα"
+  label_cost: "Cost"
+  label_costs: "Κόστος"
+  label_mandatory_fields: "Mandatory fields"
+  placeholder_activity_select_work_package_first: Work package selection is required first
   notice_something_wrong: "Κάτι πήγε στραβά. Παρακαλούμε προσπαθήστε ξανά."
   notice_successful_restore: "Επιτυχής επαναφορά."
   notice_successful_lock: "Κλειδώθηκε επιτυχώς."
-  notice_cost_logged_successfully: 'Η μονάδα κόστους καταγράφηκε επιτυχώς.'
+  notice_cost_logged_successfully: "Η μονάδα κόστους καταγράφηκε επιτυχώς."
+  notice_different_time_zones: "This user has a different time zone (%{tz}). Time will be logged using their time zone."
   permission_edit_cost_entries: "Επεξεργασία κλεισμένου κόστους μονάδας"
   permission_edit_own_cost_entries: "Επεξεργασία δικού μου κλεισμένου κόστους μονάδας"
   permission_edit_hourly_rates: "Επεξεργασία ωριαίων αμοιβών"
@@ -134,6 +170,10 @@ el:
   permission_view_own_hourly_rate: "Εμφάνιση των δικών μου ωριαίων αμοιβών"
   permission_view_own_time_entries: "Προβολή του δικού μου χρόνου που δαπανήθηκε"
   project_module_costs: "Χρόνος και κόστος"
+  setting_allow_tracking_start_and_end_times: "Allow users to track start and end time on time records"
+  setting_costs_currency: "Νόμισμα"
+  setting_costs_currency_format: "Μορφοποίηση του νομίσματος"
+  setting_enforce_tracking_start_and_end_times: "Force users to set start and end time on time records"
   text_assign_time_and_cost_entries_to_project: "Ανάθεση αναφερόμενων ωρών και κόστους στο έργο"
   text_destroy_cost_entries_question: "%{cost_entries} αναφέρθηκαν στα πακέτα εργασίας που πρόκειται να διαγράψετε. Τι θέλετε να κάνετε;"
   text_destroy_time_and_cost_entries: "Διαγραφή αναφερόμενων ωρών και κόστους"
@@ -141,5 +181,7 @@ el:
   text_reassign_time_and_cost_entries: "Επανάθεση αναφερόμενων ωρών και κόστους σε αυτό το πακέτο εργασίας:"
   text_warning_hidden_elements: "Μερικές καταχωρήσεις μπορεί να έχουν εξαιρεθεί από την συνάθροιση."
   week: "εβδομάδα"
-  js:
-    text_are_you_sure: "Είστε σίγουρος/η;"
+  api_v3:
+    errors:
+      validation:
+        start_time_different_date: "Date part of startTime (%{start_time}) must be the same as the spentOn (%{spent_on}) date."

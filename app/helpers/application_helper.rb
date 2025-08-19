@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -124,7 +126,7 @@ module ApplicationHelper
   end
 
   def project_nested_ul(projects, &)
-    s = ""
+    s = +""
     if projects.any?
       ancestors = []
       Project.project_tree(projects) do |project, _level|
@@ -189,13 +191,10 @@ module ApplicationHelper
     I18n.t(label, author: link_to_user(author), age: time_tag(created)).html_safe
   end
 
-  def authoring_at(created, author)
+  def authoring_at(creation_date, author)
     return if author.nil?
 
-    I18n.t(:"js.label_added_time_by",
-           author: html_escape(author.name),
-           age: created,
-           authorLink: user_path(author)).html_safe
+    I18n.t(:label_added_by_on, author: link_to_user(author), date: creation_date).html_safe
   end
 
   def time_tag(time)
@@ -284,16 +283,30 @@ module ApplicationHelper
   end
 
   def theme_options_for_select
-    options = [
+    [
       [t("themes.light"), "light"],
       [t("themes.light_high_contrast"), "light_high_contrast"],
       [t("themes.dark"), "dark"]
     ]
   end
 
+  def body_data_attributes(local_assigns)
+    {
+      controller: "application hover-card-trigger",
+      relative_url_root: root_path,
+      overflowing_identifier: ".__overflowing_body",
+      rendered_at: Time.zone.now.iso8601,
+      turbo: local_assigns[:turbo_opt_out] ? "false" : nil
+    }.merge(user_theme_data_attributes)
+     .compact
+  end
+
   def user_theme_data_attributes
     mode, _theme_suffix = User.current.pref.theme.split("_", 2)
-    "data-color-mode=#{mode} data-#{mode}-theme=#{User.current.pref.theme}"
+    {
+      color_mode: mode,
+      "#{mode}_theme": User.current.pref.theme
+    }
   end
 
   def highlight_default_language(lang_options)
@@ -310,6 +323,12 @@ module ApplicationHelper
     options.reverse_merge!(builder: TabularFormBuilder, html: {})
     options[:html][:class] = "form" unless options[:html].has_key?(:class)
     form_for(record, options, &)
+  end
+
+  def labelled_tabular_form_with(model: false, scope: nil, url: nil, format: nil, **options, &)
+    options.reverse_merge!(builder: TabularFormBuilder, html: {})
+    options[:html][:class] = "form" unless options[:html].has_key?(:class)
+    form_with(model:, scope:, url:, format:, **options, &)
   end
 
   def back_url_hidden_field_tag(use_referer: true)
@@ -375,9 +394,9 @@ module ApplicationHelper
   end
 
   def calendar_for(*_args)
-    ActiveSupport::Deprecation.warn(
+    ActiveSupport::Deprecation.new.warn(
       "calendar_for has been removed. Please use the opce-basic-single-date-picker angular component instead",
-      caller
+      caller_locations
     )
   end
 
@@ -417,8 +436,8 @@ module ApplicationHelper
 
   def initial_menu_classes(side_displayed, show_decoration)
     classes = "can-hide-navigation"
-    classes << " nosidebar" unless side_displayed
-    classes << " nomenus" unless show_decoration
+    classes += " nosidebar" unless side_displayed
+    classes += " nomenus" unless show_decoration
 
     classes
   end
@@ -451,13 +470,11 @@ module ApplicationHelper
   end
 
   def link_to_content_update(text, url_params = {}, html_options = {})
-    link_to(text, url_params, html_options)
+    link_to(text, url_params, html_options.reverse_merge(target: "_top"))
   end
 
   def password_complexity_requirements
     rules = OpenProject::Passwords::Evaluator.rules_description
-    # use 0..0, so this doesn't fail if rules is an empty string
-    rules[0] = rules[0..0].upcase
 
     s = raw "<em>" + OpenProject::Passwords::Evaluator.min_length_description + "</em>"
     s += raw "<br /><em>" + rules + "</em>" unless rules.empty?

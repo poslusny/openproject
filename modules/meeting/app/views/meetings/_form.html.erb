@@ -27,12 +27,12 @@ See COPYRIGHT and LICENSE files for more details.
 
 ++#%>
 
-<%= error_messages_for 'meeting' %>
+<%= error_messages_for "meeting" %>
 
 <section class="form--section">
 
   <div class="form--field -required">
-    <%= f.text_field :title, :required => true, :size => 60, container_class: '-wide' %>
+    <%= f.text_field :title, required: true, size: 60, container_class: "-wide" %>
   </div>
 
   <% copy_from = local_assigns[:copy_from] %>
@@ -40,107 +40,58 @@ See COPYRIGHT and LICENSE files for more details.
     <%= f.hidden_field :type, value: copy_from.type %>
     <%= hidden_field_tag "copied_from_meeting_id", copy_from.id %>
     <div class="form--field">
-      <%= styled_label_tag 'copy_agenda', t('meeting.copy.agenda') %>
+      <%= styled_label_tag "copy_agenda", t("meeting.copy.agenda") %>
       <div class="form--field-container">
-        <%= styled_check_box_tag 'copy_agenda',
+        <%= styled_check_box_tag "copy_agenda",
                                  1,
                                  true,
                                  no_label: true,
-                                 class: 'radio-button' %>
+                                 class: "radio-button" %>
       </div>
       <div class="form--field-instructions">
-        <%= t('meeting.copy.agenda_text') %>
+        <%= t("meeting.copy.agenda_text") %>
       </div>
     </div>
     <div class="form--field">
-      <%= styled_label_tag 'copy_attachments', t('meeting.copy.attachments') %>
+      <%= styled_label_tag "copy_attachments", t("meeting.copy.attachments") %>
       <div class="form--field-container">
-        <%= styled_check_box_tag 'copy_attachments',
+        <%= styled_check_box_tag "copy_attachments",
                                  1,
                                  false,
                                  no_label: true,
-                                 class: 'radio-button' %>
+                                 class: "radio-button" %>
       </div>
       <div class="form--field-instructions">
-        <%= t('meeting.copy.attachments_text') %>
+        <%= t("meeting.copy.attachments_text") %>
       </div>
     </div>
   <% elsif @meeting.new_record? %>
-    <div class="form--field -required -align-start">
-      <label class="form--label" for="meeting_type"><%= Meeting.human_attribute_name(:type) %></label>
-      <div class="form--field-container">
-        <div class="op-tile-block">
-          <label class="op-tile-block--tile form--radio-button-container -wide"
-                 for="meeting_type_StructuredMeeting"
-                 data-test-selector="op-tile-block">
-            <div class="op-tile-block--content">
-              <%= styled_radio_button_tag 'meeting[type]',
-                                          'StructuredMeeting',
-                                          true,
-                                          no_label: true,
-                                          class: 'radio-button' %>
-              <div>
-              <span data-test-selector="op-tile-block-title" class="op-tile-block--title">
-                <%= t('meeting.types.structured') %>
-              </span>
-                <p class="op-tile-block--description">
-                  <%= t('meeting.types.structured_text') %>
-                  <% if local_assigns[:copy] %>
-                    <br/>
-                    <strong><%= t('meeting.types.structured_text_copy') %></strong>
-                  <% end %>
-                </p>
-              </div>
-            </div>
-          </label>
-          <label class="op-tile-block--tile form--radio-button-container -wide"
-                 for="meeting_type_Meeting"
-                 data-test-selector="op-tile-block">
-            <div class="op-tile-block--content">
-              <%= styled_radio_button_tag 'meeting[type]',
-                                          'Meeting',
-                                          false,
-                                          no_label: true,
-                                          class: 'radio-button' %>
-              <div>
-              <span data-test-selector="op-tile-block-title" class="op-tile-block--title">
-                <%= t('meeting.types.classic') %>
-              </span>
-                <p class="op-tile-block--description">
-                  <%= t('meeting.types.classic_text') %>
-                </p>
-              </div>
-            </div>
-          </label>
-        </div>
-      </div>
-    </div>
+    <%= f.hidden_field :type, value: "Meeting" %>
   <% end %>
 
   <% if global_meeting_create_context? %>
     <div class="form--field -required">
       <label class="form--label" for="project_id"><%= Meeting.human_attribute_name(:project) %>:</label>
       <div class="form--field-container">
-        <%= angular_component_tag 'opce-project-autocompleter',
+        <%= angular_component_tag "opce-project-autocompleter",
                                   inputs: {
-                                    filters: [{ name: 'user_action', operator: '=', values: ['meetings/create'] }],
-                                    inputName: 'project_id',
+                                    filters: [{ name: "user_action", operator: "=", values: ["meetings/create"] }],
+                                    inputName: "project_id",
                                     inputValue: @project&.id,
-                                    appendTo: 'body',
-                                    hiddenFieldAction: 'change->refresh-on-form-changes#triggerTurboStream',
+                                    appendTo: "body",
+                                    hiddenFieldAction: "change->refresh-on-form-changes#triggerTurboStream"
                                   },
-                                  id: 'project_id',
-                                  class: 'form--select-container -wide remote-field--input',
+                                  id: "project_id",
+                                  class: "form--select-container -wide remote-field--input",
                                   data: {
-                                    'test-selector': 'project_id'
-                                  }
-        %>
+                                    "test-selector": "project_id"
+                                  } %>
       </div>
     </div>
   <% end %>
 
   <div class="form--field">
-    <%= f.text_field :location, :size => 60, container_class: '-wide' %>
+    <%= f.text_field :location, size: 60, container_class: "-wide" %>
   </div>
 
   <div class="form--field -required">
@@ -152,25 +103,24 @@ See COPYRIGHT and LICENSE files for more details.
 
     <div class="form--field-container -visible-overflow">
       <%= f.date_picker :start_date,
-                        id: 'meeting-form-start-date',
+                        id: "meeting-form-start-date",
                         required: true,
-                        no_label: true
-      %>
+                        no_label: true %>
       <label for="meeting-form-start-time" class="hidden-for-sighted">
         <%= Meeting.human_attribute_name(:start_time) %>
         <label lang="en">
           <%= t(:label_time_zone) %>
-          <%= Time.zone.to_s %>
+          <%= formatted_time_zone_offset %>
         </label>
       </label>
       <%= f.text_field :start_time_hour,
-                       id: 'meeting-form-start-time',
+                       id: "meeting-form-start-time",
                        required: true,
-                       type: 'time',
+                       type: "time",
                        no_label: true,
                        step: 5.minutes,
-                       suffix: Time.zone.to_s,
-                       container_class: '-xslim' %>
+                       suffix: formatted_time_zone_offset,
+                       container_class: "-xslim" %>
     </div>
   </div>
 
@@ -178,7 +128,7 @@ See COPYRIGHT and LICENSE files for more details.
     <label for="meeting-form-duration" class="form--label"><%= Meeting.human_attribute_name(:duration) %></label>
     <div class="form--field-container">
       <%= f.number_field :duration,
-                         id: 'meeting-form-duration',
+                         id: "meeting-form-duration",
                          required: true,
                          size: 5,
                          no_label: true,
@@ -186,16 +136,16 @@ See COPYRIGHT and LICENSE files for more details.
                          step: 0.25,
                          max: 168,
                          suffix: t(:text_in_hours),
-                         container_class: '-xslim' %>
+                         container_class: "-xslim" %>
     </div>
   </div>
 
-  <%= render partial: 'meetings/participants_section' %>
+  <%= render partial: "meetings/participants_section" %>
 
   <div class="form--field">
-    <%= styled_label_tag 'send_notfications', t(:"meeting.email.send_emails") %>
+    <%= styled_label_tag "send_notfications", t(:"meeting.email.send_emails") %>
     <div class="form--field-container">
-      <%= styled_check_box_tag 'send_notifications',
+      <%= styled_check_box_tag "send_notifications",
                                1,
                                false %>
     </div>

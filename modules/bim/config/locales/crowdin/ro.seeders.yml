@@ -256,7 +256,7 @@ ro:
 
                     *   Create a useful overview of the results
                     *   Check what has been done and summarize the results
-                    *   Communicate all the relevant results with the customer
+                    *   Communicate all the relevant results with the customer
                     *   Identify the fundamental boundary conditions of the project
 
                     ## Description
@@ -271,7 +271,7 @@ ro:
 
                     *   Create a useful overview of the results
                     *   Check what has been done and summarize the results
-                    *   Communicate all the relevant results with the customer
+                    *   Communicate all the relevant results with the customer
                     *   Identify the fundamental boundary conditions of the project
 
                     ## Description
@@ -490,16 +490,16 @@ ro:
                 item_1:
                   subject: Creating the BIM execution plan
                   description: |-
-                    # Goal
+                    # Obiectivul
 
-                    *   A BIM execution plan will be defined according to the exchange requirements specifications (ERS)
-                    *   All team members and partners have a plan on how to reach each of the project goals
+                    * Un plan de execuție BIM va fi definit în conformitate cu specificațiile privind cerințele de schimb (ERS)
+                    * Toți membrii echipei și partenerii au un plan privind modul de atingere a fiecăruia dintre obiectivele proiectului
 
-                    # Description
+                    # Descriere
 
-                    *   Depending on the identifies use cases, the individual Information Delivery Manuals will be defined
-                    *   To handle the technological interfaces, a software topology will be defined and analyzed and verified
-                    *   ...
+                    * În funcție de cazurile de utilizare a identificării, Manualele individuale de livrare a informațiilor vor fi definite
+                    * Pentru a gestiona interfețele tehnologice, un software topologie va fi definit și analizat și verificat
+                    * ...
                 item_2:
                   subject: Completion of the BIM execution plan
                   description: This type is hierarchically a parent of the types &quot;Clash&quot; and &quot;Request&quot;, thus represents a general note.
@@ -636,16 +636,16 @@ ro:
                 item_1:
                   subject: Construct the building
                   description: |-
-                    ## Goal
+                    ## Obiectiv
 
-                    *   New issues realized on construction site will be handled model based
-                    *   Issues will be documented by using the BCF files and the BIM model
+                    * Probleme noi realizate pe site-ul de construcție vor fi gestionate de modelul
+                    * Problemele vor fi documentate folosind fișierele BCF și modelul BIM
 
-                    ## Description
+                    ## Descriere
 
-                    *   New issues will be documented using BCF files as sticky notes for the model
-                    *   The BCF files will be used to assign, track and correct issues
-                    *   ...
+                    * Probleme noi vor fi documentate folosind fișierele BCF ca note sticky pentru modelul
+                    * Fișierele BCF vor fi folosite pentru atribuire, urmărește și corectează problemele
+                    * ...
                 item_2:
                   subject: Finish construction
             item_12:

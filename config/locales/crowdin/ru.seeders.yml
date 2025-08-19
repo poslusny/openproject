@@ -34,6 +34,15 @@ ru:
           name: Темно-серый
         item_13:
           name: Чёрный
+      project_phase_colors:
+        item_0:
+          name: PM2 Оранжевый
+        item_1:
+          name: PM2 Красный
+        item_2:
+          name: PM2 Пурпурный
+        item_3:
+          name: PM2 Зелено-жёлтый
       document_categories:
         item_0:
           name: Документация
@@ -55,7 +64,7 @@ ru:
           name: Просмотрщик пакета работ
       project_roles:
         item_0:
-          name: Неучастник
+          name: Новый участник
         item_1:
           name: Аноним
         item_2:
@@ -66,17 +75,31 @@ ru:
           name: Администратор проекта
       global_roles:
         item_0:
-          name: Персонал и менеджер проектов
+          name: Менеджер по персоналу и проектам
+        item_1:
+          name: Стандартная глобальная роль
     standard:
+      project_phases:
+        item_0:
+          name: Запуск
+        item_1:
+          name: Планирование
+          start_gate: Готово к планированию
+        item_2:
+          name: Выполнение
+          start_gate: Готово к выполнению
+        item_3:
+          name: Завершение
+          start_gate: Готово к завершению
       priorities:
         item_0:
-          name: Низкое
+          name: Низкий
         item_1:
-          name: Обычное
+          name: Обычный
         item_2:
-          name: Высокое
+          name: Высокий
         item_3:
-          name: Срочно
+          name: Немедленно
       projects:
         demo-project:
           name: Демо-проект
@@ -216,7 +239,7 @@ ru:
               wiki:
                 title: Спринт 1
                 content: |
-                  ### Встреча по планированию спринта
+                  ### Совещание по планированию спринта
 
                   _Пожалуйста, документируйте здесь темы на встречу по планированию спринта_
 
@@ -260,7 +283,7 @@ ru:
 
                   * Время (3 ч).
                   * После просмотра спринта, будет модерироваться Scrum Master.
-                  * Команда обсуждает весну: что пошло хорошо, что должно быть улучшено, чтобы быть более продуктивным для следующего спринта или даже весело.
+                  * Команда обсуждает спринт: что пошло хорошо, что должно быть улучшено, чтобы быть более продуктивным для следующего спринта или даже весело.
             item_3:
               name: Спринт 2
           categories:
@@ -297,18 +320,20 @@ ru:
                 options:
                   name: Приступая к работе
                   text: |
-                    Мы рады, что вы присоединились! Мы рекомендуем попробовать несколько вещей, чтобы начать работу в OpenProject.
+                    Мы рады, что Вы присоединились! Мы предлагаем попробовать несколько вещей, чтобы начать работу с OpenProject.
 
-                    _Попробуйте следующие шаги:_[Backlogs]. *Пригласите новых участников к вашему проекту*: &rightarrow; Перейдите к [Members]({{opSetting:base_url}}/projects/your-scrum-project/members) в навигации по проекту.
-                    2. *Просмотр бэклога продукта и бэклогов Sprint *: &rightarrow; Перейти к [Backlogs]({{opSetting:base_url}}/projects/your-scrum-project/backlogs) в навигации по проекту.
-                    *Просмотр вашей панели задач*: &rightarrow; Перейдите на [Backlogs] ({{opSetting:base_url}}/projects/your-scrum-project/backlogs) &rightarrow; Нажмите на правую стрелку на Sprint &rightarrow; Выберите [Целевую панель](##sprint:scrum_project__version__sprint_1).
-                    4. *Создать новый пакет работ*: &rightarrow; Перейдите к [Пакеты работ &rightarrow; Create]({{opSetting:base_url}}/projects/your-scrum-project/work_packages/new).
-                    5. *Создать и обновить план проекта*: &rightarrow; Перейдите к [плану проекта](##query:scrum_project__query__project_plan) в навигации по проекту.
-                    6. *Создайте вики спринта*: &rightarrow; Перейдите в [Backlogs]({{opSetting:base_url}}/projects/your-scrum-project/backlogs) и откройте вики спринта из правого выпадающего меню в спринте. Вы можете редактировать [шаблон вики]({{opSetting:base_url}}/projects/your-scrum-project/wiki/) на основе ваших потребностей.
-                    7. *Активировать дальнейшие модули*: &rightarrow; Перейдите к [настройкам проекта &rightarrow; Модулей]({{opSetting:base_url}}/projects/your-scrum-project/settings/modules).
+                    _Попробуйте выполнить следующие шаги:_
 
-                    Здесь вы найдете наши [руководства пользователя](https://www. penproject.org/docs/user-guide/).
-                    Пожалуйста, сообщите нам, если у вас есть какие-либо вопросы или нужна поддержка. Свяжитесь с нами: [support[at]openproject.com](mailto:support@openproject.com).
+                    1. *Пригласите новых участников в свой проект*: &rightarrow; Перейдите к [Участники]({{opSetting:base_url}}/projects/your-scrum-project/members) в меню проекта.
+                    2. *Просмотрите бэклог Вашего продукта и бэклог спринта*: &rightarrow; Перейдите к [Бэклог]({{opSetting:base_url}}/projects/your-scrum-project/backlogs) в меню проекта.
+                    3. *Просмотрите Вашу доску задач*: &rightarrow; Перейдите к [Бэклоги]({{opSetting:base_url}}/projects/your-scrum-project/backlogs) &rightarrow; Нажмите стрелку вправо на Этапы &rightarrow; Выберите [Панель задач](##sprint:scrum_project__version__sprint_1).
+                    4. *Создайте новый рабочий пакет*: &rightarrow; Перейдите в раздел [Рабочие пакеты &rightarrow; Создать]({{opSetting:base_url}}/projects/your-scrum-project/work_packages/new).
+                    5. *Создайте и обновите план проекта*: &rightarrow; Перейдите к разделу [План проекта](##query:scrum_project__query__project_plan) в меню проекта.
+                    6. *Создайте вики спринта*: &rightarrow; Перейдите в раздел [Бэклоги]({{opSetting:base_url}}/projects/your-scrum-project/backlogs) и откройте вики спринта из правого выпадающего меню в спринте. Вы можете отредактировать шаблон [wiki]({{opSetting:base_url}}/projects/your-scrum-project/wiki/) в соответствии со своими потребностями.
+                    7. *Активируйте дополнительные модули*: &rightarrow; Перейдите в раздел [Настройки проекта &rightarrow; Модули]({{opSetting:base_url}}/projects/your-scrum-project/settings/modules).
+
+                    Здесь Вы найдете наши [руководства пользователя](https://www.openproject.org/docs/user-guide/).
+                    Пожалуйста, сообщите нам, если у Вас возникнут вопросы или Вам понадобится поддержка. Свяжитесь с нами: [support[at]openproject.com](mailto:support@openproject.com).
               item_5:
                 options:
                   name: Пакеты работ
@@ -456,11 +481,11 @@ ru:
           name: Другие
       types:
         item_0:
-          name: Задание
+          name: Задача
         item_1:
           name: Веха
         item_2:
-          name: Фаза
+          name: Сводка задачи
         item_3:
           name: Функция
         item_4:

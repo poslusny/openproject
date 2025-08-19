@@ -11,7 +11,7 @@ keywords: forum, forums
 In the forum in OpenProject you can discuss topics in a project with the team: post questions, comment on it and document answers.
 
 <div class="glossary">
-**Forum** is defined as a module used to display forums and forum entries. The module has to be activated in the project settings and a forum has to be created in the forums tab in the project settings to be displayed in the side navigation.
+**Forum** is defined as a module used to display forums and forum entries. The module has to be activated in the project settings and a forum has to be created in the Forums tab in the project settings to be displayed in the side navigation.
 </div>
 
 | Topic                                                    | Content                                                                      |
@@ -78,8 +78,7 @@ The **new forum message has been created**.
 
 ![New forum message in OpenProject](openproject_user_guide_forums_new_message_created.png)
 
-> [!TIP] 
->
+> [!TIP]
 > Changes you made are saved locally. If you navigated away from page or  could not save your changes due to a technical difficulty, you can  access latest changes via the editor toolbar.
 
 ![Locally saved draft in OpenProject forum message](openproject_user_guide_forums_draft_saved_locally.png)
@@ -108,7 +107,7 @@ You will get a list of all messages within this forum.
 
 Click the **Watch** icon in the top right corner of the forum.
 
-You will then be notified via e-mail according to your [e-mail notifications](../../user-guide/my-account/#notifications-settings) about new messages and replies in a forum.
+You will then be notified via e-mail according to your [e-mail notifications](../../user-guide/account-settings/#notifications-settings) about new messages and replies in a forum.
 
 ![Watch a forum in OpenProject](openproject_user_guide_forums_watch.png)
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -51,11 +53,7 @@ class TypesController < ApplicationController
     if params[:tab].blank?
       redirect_to tab: :settings
     else
-      type = ::Type
-             .includes(:projects,
-                       :custom_fields)
-             .find(params[:id])
-
+      type = ::Type.includes(:projects, :custom_fields).find(params[:id])
       render_edit_tab(type)
     end
   end
@@ -63,17 +61,15 @@ class TypesController < ApplicationController
   def create
     CreateTypeService
       .new(current_user)
-      .call(permitted_type_params, copy_workflow_from: params[:copy_workflow_from]) do |call|
+      .call(permitted_type_params, copy_workflow_from: params.dig(:type, :copy_workflow_from)) do |call|
       @type = call.result
 
       call.on_success do
         redirect_to_type_tab_path(@type, t(:notice_successful_create))
       end
 
-      call.on_failure do |result|
-        flash[:error] = result.errors.full_messages.join("\n")
-        load_projects_and_types
-        render action: "new"
+      call.on_failure do
+        render action: :new, status: :unprocessable_entity
       end
     end
   end
@@ -82,14 +78,8 @@ class TypesController < ApplicationController
     UpdateTypeService
       .new(@type, current_user)
       .call(permitted_type_params) do |call|
-      call.on_success do
-        redirect_to_type_tab_path(@type, update_success_message)
-      end
-
-      call.on_failure do |result|
-        flash[:error] = result.errors.full_messages.join("\n")
-        render_edit_tab(@type)
-      end
+      call.on_success { redirect_to_type_tab_path(@type, t(:notice_successful_update)) }
+      call.on_failure { render_edit_tab(@type, status: :unprocessable_entity) }
     end
   end
 
@@ -99,7 +89,7 @@ class TypesController < ApplicationController
       redirect_to types_path
     else
       flash.now[:error] = I18n.t(:error_type_could_not_be_saved)
-      render action: "edit"
+      render action: :edit, status: :unprocessable_entity
     end
   end
 
@@ -135,28 +125,19 @@ class TypesController < ApplicationController
 
   def redirect_to_type_tab_path(type, notice)
     tab = params["tab"] || "settings"
-    redirect_to(edit_type_tab_path(type, tab:),
-                notice:)
+    redirect_to(edit_tab_type_path(type, tab:), notice:, status: :see_other)
   end
 
-  def render_edit_tab(type)
+  def render_edit_tab(type, status: :ok)
     @tab = params[:tab]
     @projects = Project.all
     @type = type
 
-    render action: "edit"
+    render action: :edit, status:
   end
 
   def show_local_breadcrumb
     false
-  end
-
-  def update_success_message
-    if params[:tab].in?(%w[form_configuration projects])
-      t(:notice_successful_update_custom_fields_added_to_type)
-    else
-      t(:notice_successful_update)
-    end
   end
 
   def destroy_error_message

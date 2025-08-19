@@ -1,14 +1,15 @@
 #English strings go here for Rails i18n
 ja:
   plugin_openproject_bim:
-    name: "OpenProject BIM and BCF functionality"
-    description: "This OpenProject plugin introduces BIM and BCF functionality."
+    name: "OpenProject BIMとBCFの機能"
+    description: "このOpenProjectプラグインはBIMとBCF機能を提供します。"
   bim:
     label_bim: 'BIM'
   bcf:
     label_bcf: 'BCF'
     label_imported_failed: 'BCFトピックのインポートに失敗しました'
     label_imported_successfully: 'BCFトピックを正常にインポートしました'
+    label_bcf_issue_associated: "BCF チケット関連"
     issues: "チケット"
     recommended: '推奨'
     not_recommended: '非推奨'
@@ -83,6 +84,12 @@ ja:
         ifc_attachment: "IFCファイル"
         is_default: "デフォルトモデル"
         attachments: "IFCファイル"
+      bim/bcf/issue:
+        bcf_comment: "BCF コメント"
+        bim_snippet: "BIMスニペット（BIM）"
+        reference_links: "参照リンク"
+        stage: "ステージ"
+        viewpoint: "ビューポイント"
     errors:
       models:
         bim/ifc_models/ifc_model:

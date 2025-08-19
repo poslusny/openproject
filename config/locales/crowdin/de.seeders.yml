@@ -34,6 +34,15 @@ de:
           name: Grau (dunkel)
         item_13:
           name: Schwarz
+      project_phase_colors:
+        item_0:
+          name: PM2 Orange
+        item_1:
+          name: PM2 Rot
+        item_2:
+          name: PM2 Magenta
+        item_3:
+          name: PM2 Grüngelb
       document_categories:
         item_0:
           name: Dokumentation
@@ -67,7 +76,21 @@ de:
       global_roles:
         item_0:
           name: Mitarbeiter und Projektmanager
+        item_1:
+          name: Globale Standardrolle
     standard:
+      project_phases:
+        item_0:
+          name: Initiierung
+        item_1:
+          name: Planung
+          start_gate: Bereit für Planung
+        item_2:
+          name: Durchführung
+          start_gate: Bereit für Durchführung
+        item_3:
+          name: Abschluss
+          start_gate: Bereit für Abschluss
       priorities:
         item_0:
           name: Niedrig
@@ -462,7 +485,7 @@ de:
         item_1:
           name: Meilenstein
         item_2:
-          name: Phase
+          name: Sammelvorgang
         item_3:
           name: Feature
         item_4:

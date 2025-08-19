@@ -20,6 +20,20 @@
 #See COPYRIGHT and LICENSE files for more details.
 #++
 nl:
+  attributes:
+    additions_count: "Number of additions"
+    deletions_count: "Number of deletions"
+    comments_count: "Comments count"
+    github_html_url: "Pull Request URL"
+    github_app_owner_avatar_url: "Owner avatar URL"
+    review_comments_count: "Review comments count"
+    github: "GitHub identifer"
+    github_avatar_url: "Avatar URL"
+    github_updated_at: "Updated at"
+    github_login: "GitHub login"
+    labels: "Labels"
+    repository: "Repository"
+    changed_files_count: "Changed files"
   button_add_deploy_target: Add deploy target
   label_deploy_target: Deploy target
   label_deploy_target_new: New deploy target
@@ -37,4 +51,4 @@ nl:
     Tot nu toe ondersteunen we alleen OpenProject zelf.
   text_deploy_target_api_key_info: >
     An OpenProject [API key](docs_url) belonging to a user who has the global introspection permission.
-  text_pull_request_deployed_to: "%{pr_link} deployed to %{deploy_target_link}"
+  text_pull_request_deployed_to: "%{pr_link} Ingezet op %{deploy_target_link}"

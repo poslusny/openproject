@@ -103,8 +103,8 @@ vi:
     button_settings: "Cài đặt"
     button_uncheck_all: "Bỏ chọn tất cả"
     button_update: "Cập nhật"
-    button_export-pdf: "Tải xuống PDF"
     button_export-atom: "Tải xuống Atom"
+    button_generate_pdf: "Generate PDF"
     button_create: "Tạo"
     card:
       add_new: "Thêm thẻ mới"
@@ -221,6 +221,8 @@ vi:
             label_maximum_users: "Số người dùng hoạt động tối đa"
             label_starts_at: "Bắt đầu từ"
             label_expires_at: "Hết hạn vào"
+            label_plan: "Gói dịch vụ"
+            label_additional_features: "Additional features"
             receive_newsletter: Tôi muốn nhận <a target="_blank" href="%{link}">bản tin</a> của OpenProject.
             taken_domain: Chỉ có thể có một bản dùng thử hoạt động cho mỗi miền.
             domain_mismatch: Tên máy chủ yêu cầu hiện tại không khớp với tên máy chủ đã cấu hình. Vui lòng kiểm tra lại cài đặt hệ thống của bạn.
@@ -356,10 +358,10 @@ vi:
           learn_about: "Tìm hiểu thêm về các tính năng mới"
           #Include the version to invalidate outdated translations in other locales.
           #Otherwise, e.g. chinese might still have the translations for 10.0 in the 12.0 release.
-          "14_6":
+          "15_5":
             standard:
               new_features_html: >
-                The release brings various features and improvements for you, e.g. <br> <ul class="%{list_styling_class}"> <li>Benefit from more flexible progress reporting – thanks to user feedback.</li> <li>Receive an update notification with reload option for meetings.</li> <li>Enable a custom field for multiple projects at once.</li> <li>Use relative work package attribute macros.</li> <li>Show empty lines in saved rich text.</li> <li>See past meetings included in the number next to the Meetings tab.</li> </ul>
+                The release brings various features and improvements for you, e.g. <br> <ul class="%{list_styling_class}"> <li>Filter for descendants (children and grandchildren) of work packages.</li> <li>Benefit from advanced accessibility in the date picker.</li> <li>See % Complete included in work package table sums.</li> <li>Include a column for children in work package tables.</li> <li>Better use the date picker in mobile screens.</li> <li>PDF exports matching configured form layout.</li> </ul>
     ical_sharing_modal:
       title: "Đăng ký lịch"
       inital_setup_error_message: "Đã xảy ra lỗi khi lấy dữ liệu."
@@ -575,7 +577,7 @@ vi:
         members: "Mời <b>thành viên mới</b> tham gia dự án của bạn."
         quick_add_button: "Nhấp vào biểu tượng cộng (+) trong thanh điều hướng tiêu đề để <b>tạo một dự án mới</b> hoặc <b>mời đồng nghiệp</b>."
         sidebar_arrow: "Sử dụng mũi tên trở lại ở góc trên bên trái để quay lại <b>menu chính</b> của dự án."
-        welcome: "Tham gia tour giới thiệu ba phút để tìm hiểu những <b>tính năng quan trọng</b> nhất. <br> Chúng tôi khuyến nghị bạn hoàn thành các bước cho đến cuối. Bạn có thể khởi động lại tour bất kỳ lúc nào."
+        welcome: "Take a three-minute introduction tour to learn the most <b>important features</b>. <br> We recommend completing the steps until the end. You can restart the tour any time."
         wiki: "Trong <b>wiki</b>, bạn có thể tài liệu hóa và chia sẻ kiến thức cùng với nhóm của bạn."
         backlogs:
           overview: "Quản lý công việc của bạn trong chế độ xem <b>backlogs</b>."
@@ -612,7 +614,7 @@ vi:
         assigned: "người được giao"
         #The enum value is named 'responsible' in the database and that is what is transported through the API
         #up to the frontend.
-        responsible: "Accountable"
+        responsible: "Trách nhiệm"
         created: "được tạo"
         scheduled: "được lên lịch"
         commented: "bình luận"
@@ -620,14 +622,15 @@ vi:
         prioritized: "được ưu tiên"
         dateAlert: "Cảnh báo ngày"
         shared: "được chia sẻ"
+        reminder: "Reminder"
       date_alerts:
         milestone_date: "Ngày mốc"
         overdue: "Quá hạn"
-        overdue_since: "kể từ %{difference_in_days}"
-        property_today: "là hôm nay"
-        property_is: "là trong %{difference_in_days}"
-        property_was: "đã là %{difference_in_days} trước"
-        property_is_deleted: "đã bị xóa"
+        overdue_since: "since %{difference_in_days}."
+        property_today: "is today."
+        property_is: "is in %{difference_in_days}."
+        property_was: "was %{difference_in_days} ago."
+        property_is_deleted: "is deleted."
         upsale:
           title: "Cảnh báo ngày"
           description: "Với cảnh báo ngày, bạn sẽ được thông báo về các ngày bắt đầu hoặc kết thúc sắp tới để không bao giờ bỏ lỡ hoặc quên hạn chót quan trọng."
@@ -651,6 +654,8 @@ vi:
         new_notifications:
           message: "Có thông báo mới."
           link_text: "Nhấp vào đây để tải chúng."
+      reminders:
+        note: "Note: “%{note}”"
       settings:
         change_notification_settings: 'Bạn có thể thay đổi <a target="_blank" href="%{url}">cài đặt thông báo</a> của mình để đảm bảo không bỏ lỡ cập nhật quan trọng nào.'
         title: "Cài đặt thông báo"
@@ -713,18 +718,18 @@ vi:
       description: "Mô tả: Nhấp để chỉnh sửa..."
       relation_description: "Nhấp để thêm mô tả cho mối quan hệ này"
     project:
-      required_outside_context: >
-        Vui lòng chọn một dự án để tạo gói công việc nhằm xem tất cả các thuộc tính. Bạn chỉ có thể chọn các dự án mà loại trên đã được kích hoạt.
-      details_activity: "Hoạt động chi tiết dự án"
-      context: "Ngữ cảnh dự án"
-      click_to_switch_to_project: "Dự án: %{projectname}"
-      confirm_template_load: "Việc chuyển đổi mẫu sẽ tải lại trang và bạn sẽ mất tất cả dữ liệu đã nhập vào biểu mẫu này. Tiếp tục?"
-      use_template: "Sử dụng mẫu"
-      no_template_selected: "(Không có)"
-      copy:
-        copy_options: "Tùy chọn sao chép"
       autocompleter:
         label: "Hoàn tất tự động dự án"
+      click_to_switch_to_project: "Dự án: %{projectname}"
+      confirm_template_load: "Việc chuyển đổi mẫu sẽ tải lại trang và bạn sẽ mất tất cả dữ liệu đã nhập vào biểu mẫu này. Tiếp tục?"
+      context: "Ngữ cảnh dự án"
+      copy:
+        copy_options: "Tùy chọn sao chép"
+      not_available: "Project N/A"
+      no_template_selected: "(Không có)"
+      required_outside_context: >
+        Vui lòng chọn một dự án để tạo gói công việc nhằm xem tất cả các thuộc tính. Bạn chỉ có thể chọn các dự án mà loại trên đã được kích hoạt.
+      use_template: "Sử dụng mẫu"
     reminders:
       settings:
         daily:
@@ -739,6 +744,7 @@ vi:
         immediate:
           title: "Gửi cho tôi nhắc nhở email"
           mentioned: "Ngay lập tức khi ai đó nhắc đến tôi"
+          personal_reminder: "Immediately when I receive a personal reminder"
         alerts:
           title: "Cảnh báo email cho các mục khác (không phải gói công việc)"
           explanation: >
@@ -770,10 +776,6 @@ vi:
         upgrade_to_ee_text: "Wow! Nếu bạn cần tiện ích bổ sung này, bạn là một chuyên gia tuyệt vời! Bạn có thể hỗ trợ chúng tôi, các nhà phát triển OpenSource, bằng cách trở thành khách hàng của phiên bản Enterprise không?"
         more_information: "Thông tin thêm"
         nevermind: "Không sao"
-      edit:
-        form_configuration: "Cấu hình Biểu mẫu"
-        projects: "Dự án"
-        settings: "Cài đặt"
     time_entry:
       work_package_required: "Yêu cầu chọn một gói công việc trước."
       title: "Ghi thời gian"
@@ -796,6 +798,7 @@ vi:
       typeahead_placeholder: Tìm kiếm người có thể theo dõi
     relation_labels:
       parent: "Cha"
+      child: "Child"
       children: "Con"
       relates: "Liên quan đến"
       duplicates: "Trùng lặp"
@@ -825,7 +828,7 @@ vi:
       add_new_child: "Tạo con mới"
       create_new: "Tạo mới"
       add_existing: "Thêm hiện có"
-      add_existing_child: "Thêm con hiện có"
+      add_existing_child: "Add child"
       remove_child: "Xóa con"
       add_new_relation: "Tạo quan hệ mới"
       add_existing_relation: "Thêm quan hệ hiện có"
@@ -851,8 +854,6 @@ vi:
       select_branch: "Chọn nhánh"
     field_value_enter_prompt: "Nhập giá trị cho '%{field}'"
     project_menu_details: "Chi tiết"
-    scheduling:
-      manual: "Lên lịch thủ công"
     sort:
       sorted_asc: "Sắp xếp tăng dần đã được áp dụng, "
       sorted_dsc: "Sắp xếp giảm dần đã được áp dụng, "
@@ -900,15 +901,6 @@ vi:
       comment_send_failed: "Đã xảy ra lỗi. Không thể gửi bình luận."
       comment_updated: "Bình luận đã được cập nhật thành công."
       confirm_edit_cancel: "Bạn có chắc chắn muốn hủy chỉnh sửa gói công việc không?"
-      datepicker_modal:
-        automatically_scheduled_parent: "Lên lịch tự động. Ngày được suy ra từ các mối quan hệ."
-        manually_scheduled: "Lên lịch thủ công đã được kích hoạt, tất cả các mối quan hệ bị bỏ qua."
-        start_date_limited_by_relations: "Ngày bắt đầu và kết thúc có sẵn bị giới hạn bởi các mối quan hệ."
-        changing_dates_affects_follow_relations: "Thay đổi những ngày này sẽ ảnh hưởng đến ngày của các gói công việc liên quan."
-        click_on_show_relations_to_open_gantt: 'Nhấp vào "%{button_name}" để xem tổng quan GANTT.'
-        show_relations: "Hiển thị các mối quan hệ"
-        ignore_non_working_days:
-          title: "Chỉ ngày làm việc"
       description_filter: "Lọc"
       description_enter_text: "Nhập văn bản"
       description_options_hide: "Ẩn tùy chọn"
@@ -1042,6 +1034,12 @@ vi:
           not_found: "Không có chế độ xem như vậy"
           duplicate_query_title: "Tên của chế độ xem này đã tồn tại. Thay đổi bất chấp?"
         text_no_results: "Không tìm thấy chế độ xem phù hợp."
+      reminders:
+        button_label: "Set reminder"
+        title:
+          new: "Set reminder"
+          edit: "Edit reminder"
+        subtitle: "You will receive a notification for this work package at the chosen time."
       scheduling:
         is_parent: "Ngày của gói công việc này được suy ra tự động từ các con của nó. Kích hoạt 'Lên lịch thủ công' để đặt ngày."
         is_switched_from_manual_to_automatic: "Ngày của gói công việc này có thể cần phải được tính toán lại sau khi chuyển từ lên lịch thủ công sang tự động do mối quan hệ với các gói công việc khác."
@@ -1342,5 +1340,3 @@ vi:
       waiting_subtitle:
         network_off: "Có vấn đề về mạng."
         network_on: "Mạng đã trở lại. Chúng tôi đang thử lại."
-        timeout: >
-          OpenProject không thể cung cấp cho bạn quyền truy cập vào thư mục dự án trong khoảng thời gian dự kiến. Vui lòng thử lại.<br><br> Nếu vấn đề vẫn tiếp tục, vui lòng liên hệ với quản trị viên OpenProject của bạn để kiểm tra <a href="https://www.openproject.org/docs/system-admin-guide/files/external-file-storages/file-storage-troubleshooting/">tình trạng sức khỏe của cài đặt lưu trữ tệp</a>.

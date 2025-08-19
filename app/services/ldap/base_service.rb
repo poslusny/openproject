@@ -88,7 +88,7 @@ module Ldap
       if OpenProject::Configuration.ldap_users_sync_status?
         Rails.logger.info { "Activating #{user.login} due to it being synced from LDAP #{ldap.name}." }
         user.update_column(:status, Principal.statuses[:active])
-      else
+      elsif !user.active?
         Rails.logger.info do
           "Would activate #{user.login} through #{ldap.name} but ignoring due to ldap_users_sync_status being unset."
         end
@@ -124,7 +124,7 @@ module Ldap
           filter: ldap.login_filter(login),
           attributes: ldap.search_attributes
         )
-        .map { |entry| ldap.get_user_attributes_from_ldap_entry(entry).except(:dn) }
+        &.map { |entry| ldap.get_user_attributes_from_ldap_entry(entry).except(:dn) } || []
     end
 
     def new_ldap_connection

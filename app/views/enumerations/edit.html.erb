@@ -32,16 +32,20 @@ See COPYRIGHT and LICENSE files for more details.
 <%=
   render(Primer::OpenProject::PageHeader.new) do |header|
     header.with_title { h @enumeration.name }
-    header.with_breadcrumbs([{ href: admin_index_path, text: t(:label_administration) },
-                             { href: enumerations_path, text: t(:label_enumerations) },
-                             I18n.t("menus.breadcrumb.nested_element", section_header: t(@enumeration.option_name), title: h(@enumeration.name)).html_safe],
-                            selected_item_font_weight: :normal)
+    header.with_breadcrumbs(
+      [
+        { href: admin_index_path, text: t(:label_administration) },
+        { href: enumerations_path, text: t(:label_enumerations) },
+        nested_breadcrumb_element(t(@enumeration.option_name), @enumeration.name)
+      ],
+      selected_item_font_weight: :normal
+    )
   end
 %>
 
 <%= labelled_tabular_form_for @enumeration do |f| %>
-  <%= render partial: 'form', locals: { f: f } %>
-  <%= styled_button_tag t(:button_save), class: '-primary -with-icon icon-checkmark' %>
+  <%= render partial: "form", locals: { f: f } %>
+  <%= styled_button_tag t(:button_save), class: "-primary -with-icon icon-checkmark" %>
 <% end %>
 
 <%= styled_form_tag(enumeration_path(@enumeration), method: :delete) do %>

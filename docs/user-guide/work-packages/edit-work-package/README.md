@@ -13,6 +13,7 @@ keywords: edit work packages
 | [Update a work package](#update-a-work-package)              | How to make a change to an existing work package.            |
 | [Update a work package in a table view](#update-a-work-package-in-a-work-package-table-view) | How to use the quick context menu in the work package table view. |
 | [Attach files to work packages](#attach-files-to-work-packages) | How to manually attach files to work packages.               |
+| [Set work package reminders](#work-package-reminders)        | How to set a reminder for a work package.                    |
 | [Watchers](#watchers)                                        | How to add or remove watchers from a work package.           |
 | [Export work packages](#export-work-packages)                | How to export work packages.                                 |
 | [Bulk edit work packages](#bulk-edit-work-packages)          | How to edit several work packages as once.                   |
@@ -21,7 +22,10 @@ keywords: edit work packages
 
 To edit a work package, double-click a work package row in [table view](../../work-packages/work-package-views/#table-view) or open the [split screen view](../../work-packages/work-package-views/#split-screen-view) to see the details.
 
-In the work package details, you can click in any field to update it, e.g. change the description, status, priority, assignee, or add a comment.
+In the work package details, you can click in any field to update it, e.g. change the description, status, priority, assignee, or add a comment. 
+
+> [!TIP]
+> You can also insert a page break into the description field if you intend to [export a work package in PDF format](../exporting/#pdf-report) and want to the description to be displayed on separate pages of a PDF report.
 
 To save changes in the description, click the **checkmark** icon.
 
@@ -33,13 +37,12 @@ The green message on top of the work package indicates a successful update.
 
 ![Successful update message in OpenProject work package](openproject_user_guide_wp_update_message.png)
 
-> [!TIP] 
->
+> [!TIP]
 > Changes you made are saved locally. If you navigated away from page or could not save your changes due to a technical difficulty, you can access latest changes via the editor toolbar.
 
 ![Restore local backups in text editor in OpenProject](openproject_user_guide_wp_autosave_icon.png)
 
-All changes of a work package are documented in the work package tab [Activity](../../../getting-started/work-packages-introduction/#activity-of-work-packages).
+All changes of a work package are documented in the work package [Activity](../../../getting-started/work-packages-introduction/#activity-of-work-packages) tab.
 
 > [!NOTE]
 > There is no possibility to undo changes to work packages by using Ctrl+Z combination.
@@ -61,17 +64,39 @@ Please note, the status may differ from work package type. They can be configure
 
 ### How to add comments to a work package
 
-To add a comment to a work package, open the [details view](../../work-packages/work-package-views/#full-screen-view) or the [split screen view](../../work-packages/work-package-views/#split-screen-view) of a work package. On the tab [Activity](../../../getting-started/work-packages-introduction/#activity-of-work-packages) tab you have a comment field at the bottom (or on top depending on your [My account settings](../../../user-guide/my-account/)).
+To add a comment to a work package, open the [details view](../../work-packages/work-package-views/#full-screen-view) or the [split screen view](../../work-packages/work-package-views/#split-screen-view) of a work package. Under [Activity](../../../getting-started/work-packages-introduction/#activity-of-work-packages) tab you have a comment field at the bottom.
 
-**Split screen view:**
+> [!TIP] 
+>
+> For narrower screens such as mobiles and tablets, the comment field may be displayed on the top, depending on your [Account settings](../../../user-guide/account-settings/).
 
 ![Comment on work packages in OpenProject](openproject_user_guide_wp_activity_tab_comment.png)
 
+#### Quote a comment in a work package
+
+You can also reply to a specific comment and quote it in your reply text. To do that click the **More (three dots)** icon at the right side of the comment and select **Quote this comment**.
+
+![Edit a work package comment in OpenProject](openproject_user_guide_wp_edit_comment.png)
+
+The author of the quoted comment will automatically be [@mentioned](#-notification-mention) and notified of the reply to their comment.
+
+![Quote reply to a comment in an OpenProject work package](openproject_user_guide_wp_quote_comment_mentioned.png)
+
+#### Edit a comment in a work package
+
+To edit a work package comment click the **More (three dots)** icon at the right side of the comment and select **Edit this comment**. Depending on your rights, you may be able to edit other users comments.
+
+![Edit a comment in a work package in OpenProject](openproject_user_guide_wp_edit_comment_icon.png)
+
+#### Copy a work package comment link
+
+You can copy a direct link to a specific work package comment in OpenProject. To do that, click the **More (three dots)** icon at the right side of the comment and select **Copy link to clipboard**. 
+
+![Copy a link to a work package comment in OpenProject](openproject_user_guide_wp_edit_comment_copy_link.png)
+
 ### @ notification (mention)
 
-You can mention and notify team members via [@notification](../../notifications/). They will receive a notification in OpenProject about the updates (according to their [notification settings](../../../user-guide/notifications/) in the **My account** settings).
-
-**Full-screen view**:
+You can mention and notify team members via [@notification](../../notifications/). They will receive a notification in OpenProject about the updates (according to their [notification settings](../../../user-guide/notifications/) in the **Account settings**).
 
 ![Leave a comment in OpenProject work packages](openproject_user_guide_wp_activity_tab_comment_update.png)
 
@@ -86,15 +111,43 @@ Starting with OpenProject 13.0 you can add emojis to all text editors. Type a co
 > [!IMPORTANT]
 > Please note, that this option needs to activated by your project administrator under [*Project settings*](../../projects/project-settings/files/).
 
-You can manually upload files to work packages directly under the tab **Files** in the work package detailed view. You can either attach files by dragging and dropping or by using the **+Attach files** option.
+You can manually upload files to work packages directly under the *Files* tab in the work package detailed view. You can either attach files by dragging and dropping or by using the **+Attach files** option.
 
 ![Manual attachment upload in an OpenProject work package](openproject_user_guide_wp_file_upload.png)
 
-Under the **Files** tab you will see the list of the all previously uploaded attachments, including file names, as well as which user uploaded an attachment and when. If no files were attached yet, the list will be empty.
+Under the *Files* tab you will see the list of the all previously uploaded attachments, including file names, as well as which user uploaded an attachment and when. If no files were attached yet, the list will be empty.
 
 You can remove an attachment by hovering over it and clicking the **Delete** icon.
 
 ![Delete a work package attachment in OpenProject](openproject_user_guide_wp_file_delete.png)
+
+## Work package reminders
+
+If you want to be reminded about a work package at a later point in time, you can use the **Reminder** function. Click the **Reminder** (alarm clock) icon in the work package detailed view.
+
+![Work package reminder icon in OpenProject](openproject_user_guide_wp_reminder_icon.png)
+
+Specify the time and date on which you would like to be reminded and optionally add a note for more context. Then click the **Set reminder** button.
+
+![Set reminder in OpenProject work packages](openproject_user_guide_wp_set_reminder.png)
+
+Once you set a reminder, you will see a confirmation message. The reminder icon will now show a badge to indicate that a reminder has been set. Clicking on the reminder icon again will let you modify the existing one.
+
+![A badge to indicate a set reminder in OpenProject work package](openproject_user_guide_wp_reminder_badge.png)
+
+At the configured date and time, you will receive the reminder in [Notification center](../../notifications/#access-in-app-notifications). 
+
+![Work package reminder in OpenProject notification center](openproject_user_guide_wp_set_reminder_notification.png)
+
+>  [!NOTE] 
+>
+> If multiple notifications exist for a single work package, the reminder will take precedence, showing the reminder note at the bottom of the  page. 
+>
+> In case a work package has both a reminder and date alert  notification set up, then the date alert is combined with the reminder note, so that both are visible.
+
+> [!TIP]
+>
+> You can set to receive immediate notifications via e-mail for personal reminders. To do that, adjust your [account settings](../../account-settings/#email-reminders) accordingly.
 
 ## Watchers
 
@@ -104,7 +157,7 @@ You can remove an attachment by hovering over it and clicking the **Delete** ico
 **Watchers** can be added to a work package in order to notify members about changes. They will receive notifications according to their notification settings if changes are made to the respective work package.
 </div>
 
-To add watchers, open the work package [detailed view](../../work-packages/work-package-views/#full-screen-view), select the tab watchers on the right hand side and choose the members you want to add with the drop-down menu or by starting to type their name.
+To add watchers, open the work package [detailed view](../../work-packages/work-package-views/#full-screen-view), select the *Watchers* tab on the right hand side and choose the members you want to add with the drop-down menu or by starting to type their name.
 
 It is also possible to add oneself as watcher (if you have sufficient permissions).
 
@@ -112,8 +165,8 @@ It is also possible to add oneself as watcher (if you have sufficient permission
 
 ### How to remove watchers from a work package
 
-To remove watchers, navigate to the work package [details view](../../work-packages/work-package-views/#full-screen-view) and select the tab Watchers. Hover over the name of the watcher you want to remove and click the cross icon next to the watcher name.
-The user will no longer get notifications in OpenProject about changes to this work package according to their notification settings. However, if he/she is the author, assignee or accountable of the work package there still might be notifications. Read [here](../../../user-guide/my-account/#notifications-settings) for more information.
+To remove watchers, navigate to the work package [details view](../../work-packages/work-package-views/#full-screen-view) and select the *Watchers* tab. Hover over the name of the watcher you want to remove and click the cross icon next to the watcher name.
+The user will no longer get notifications in OpenProject about changes to this work package according to their notification settings. However, if he/she is the author, assignee or accountable of the work package there still might be notifications. Read [here](../../../user-guide/account-settings/#notifications-settings) for more information.
 
 ![Remove watchers from OpenProject work packages](openproject_user_guide_wp_watchers_remove.png)
 
@@ -168,8 +221,7 @@ You have the following options:
 - **Indent hierarchy** - creates a child-parent relationship with the work package directly above. The work package you selected become the child work package. The work package directly above becomes the parent work package.
 - **Create new child** - opens a new work package on the right side of the screen. This new work package already has a child relationship to the work package you selected.  
 
-> [!TIP]  
->
+> [!TIP]
 > In OpenProject 14.5 the term *Copy a work package* was replaced by *Duplicate a work package*. *Change project* was replaced by *Move to another project*.
 
 If you have opened the quick context menu for a work package that has a parent work package, you will also see:

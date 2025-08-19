@@ -103,8 +103,8 @@ pl:
     button_settings: "Ustawienia"
     button_uncheck_all: "Odznacz wszystko"
     button_update: "Aktualizacja"
-    button_export-pdf: "Pobierz plik PDF"
     button_export-atom: "Pobierz Atom"
+    button_generate_pdf: "Wygeneruj PDF"
     button_create: "Utwórz"
     card:
       add_new: "Dodaj nową kartę"
@@ -221,6 +221,8 @@ pl:
             label_maximum_users: "Maksymalna liczba aktywnych użytkowników"
             label_starts_at: "Data rozpoczęcia"
             label_expires_at: "Wygasa"
+            label_plan: "Plan"
+            label_additional_features: "Dodatkowe funkcje"
             receive_newsletter: Chcę otrzymywać <a target="_blank" href="%{link}">biuletyn </a> OpenProject.
             taken_domain: W każdej domenie może być aktywna tylko jedna wersja próbna.
             domain_mismatch: Obecna nazwa hosta żądania nie pasuje do skonfigurowanej nazwy hosta. Sprawdź dokładnie ustawienia systemu.
@@ -356,10 +358,10 @@ pl:
           learn_about: "Dowiedz się więcej o nowych funkcjach"
           #Include the version to invalidate outdated translations in other locales.
           #Otherwise, e.g. chinese might still have the translations for 10.0 in the 12.0 release.
-          "14_6":
+          "15_5":
             standard:
               new_features_html: >
-                Ta wersja wprowadza różne funkcje i ulepszenia m.in. <br> <ul class="%{list_styling_class}"> <li>Korzystaj z bardziej elastycznej sprawozdawczości o postępach – dzięki opiniom użytkowników.</li> <li>Otrzymuj powiadomienia o aktualizacjach z opcją przeładowania spotkań.</li> <li>Włączaj pole niestandardowe dla wielu projektów jednocześnie.</li> <li>Używaj makr dla względnego atrybutu pakietu roboczego.</li> <li>Wyświetlaj puste linie w zapisanym formatowanym tekście.</li> <li>Oglądaj wcześniejsze spotkania znajdujące się na karcie Spotkania.</li> </ul>
+                Wersja zawiera różne nowe funkcje i ulepszenia, np. <br> <ul class="%{list_styling_class}"> <li>Filtr elementów potomnych (podrzędnych i ich elementów podrzędnych) pakietów roboczych.</li> <li>Korzystaj z zaawansowanej dostępności w selektorze dat.</li> <li>Wyświetlanie % ukończenia w tabeli pakietów roboczych.</li> <li>Dołącz kolumnę elementów podrzędnych w tabelach pakietów roboczych.</li> <li>Poprawione używanie selektora dat na ekranach urządzeń mobilnych.</li> <li>Eksport w formacie PDF pasujący do skonfigurowanego układu formularza.</li> </ul>
     ical_sharing_modal:
       title: "Subskrybuj kalendarz"
       inital_setup_error_message: "Podczas pobierania danych wystąpił błąd."
@@ -620,14 +622,15 @@ pl:
         prioritized: "Ma priorytet"
         dateAlert: "Alert dotyczący daty"
         shared: "Udostępniono"
+        reminder: "Przypomnienie"
       date_alerts:
         milestone_date: "Data  kamienia milowego"
         overdue: "Przekroczony termin"
-        overdue_since: "od %{difference_in_days}"
-        property_today: "jest dzisiaj"
-        property_is: "jest za %{difference_in_days}"
-        property_was: "była %{difference_in_days} temu"
-        property_is_deleted: "usunięto"
+        overdue_since: "od %{difference_in_days}."
+        property_today: "jest dzisiaj."
+        property_is: "jest za %{difference_in_days}."
+        property_was: "była %{difference_in_days} temu."
+        property_is_deleted: "została usunięta."
         upsale:
           title: "Alerty dotyczące dat"
           description: "Dzięki alertom dotyczącym dat będziesz otrzymywać powiadomienia o zbliżających się terminach rozpoczęcia lub zakończenia pracy, dzięki czemu nigdy nie przegapisz ani nie zapomnisz ważnego terminu."
@@ -654,6 +657,8 @@ pl:
         new_notifications:
           message: "Masz nowe powiadomienia."
           link_text: "Kliknij tutaj, aby je załadować."
+      reminders:
+        note: "Uwaga: „%{note}”"
       settings:
         change_notification_settings: 'Możesz zmodyfikować <a target="_blank" href="%{url}">ustawienia powiadomień</a>, aby upewnić się, że nigdy nie przegapisz ważnej aktualizacji.'
         title: "Ustawienia powiadomień"
@@ -716,18 +721,18 @@ pl:
       description: "Opis: Kliknij, aby edytować..."
       relation_description: "Kliknij, aby dodać opis do tej relacji"
     project:
-      required_outside_context: >
-        Wybierz projekt, w którym chcesz utworzyć pakiet roboczy, aby zobaczyć wszystkie atrybuty. Możesz wybrać tylko projekty, które mają aktywowany powyższy typ.
-      details_activity: "Szczegóły projektu"
-      context: "Kontekst projektu"
-      click_to_switch_to_project: "Projekt: %{projectname}"
-      confirm_template_load: "Przełączenie szablonu spowoduje ponowne załadowanie strony i utracisz wszystkie dane wprowadzone do tego formularza. Kontynuować?"
-      use_template: "Użyj szablonu"
-      no_template_selected: "(Brak)"
-      copy:
-        copy_options: "Opcje kopiowania"
       autocompleter:
         label: "Autouzupełnianie projektu"
+      click_to_switch_to_project: "Projekt: %{projectname}"
+      confirm_template_load: "Przełączenie szablonu spowoduje ponowne załadowanie strony i utracisz wszystkie dane wprowadzone do tego formularza. Kontynuować?"
+      context: "Kontekst projektu"
+      copy:
+        copy_options: "Opcje kopiowania"
+      not_available: "Projekt niedostępny"
+      no_template_selected: "(Brak)"
+      required_outside_context: >
+        Wybierz projekt, w którym chcesz utworzyć pakiet roboczy, aby zobaczyć wszystkie atrybuty. Możesz wybrać tylko projekty, które mają aktywowany powyższy typ.
+      use_template: "Użyj szablonu"
     reminders:
       settings:
         daily:
@@ -742,6 +747,7 @@ pl:
         immediate:
           title: "Wyślij mi przypomnienie e-mail"
           mentioned: "Natychmiast, gdy pojawi się @wzmianka o mnie"
+          personal_reminder: "Natychmiast po otrzymaniu osobistego przypomnienia"
         alerts:
           title: "Powiadomienia e-mail dla innych elementów (które nie są pakietami roboczymi)"
           explanation: >
@@ -773,10 +779,6 @@ pl:
         upgrade_to_ee_text: "Znakomicie! Jeśli potrzebujesz tego dodatku, jesteś superprofesjonalistą! Może wesprzesz nas jako deweloperów OpenSource, zostając nabywcą wersji Enterprise?"
         more_information: "Więcej informacji"
         nevermind: "Nieważne"
-      edit:
-        form_configuration: "Konfiguracja formularza"
-        projects: "Projekty"
-        settings: "Ustawienia"
     time_entry:
       work_package_required: "Wymaga wybrania najpierw pakietu roboczego."
       title: "Rejestruj czas pracy"
@@ -799,6 +801,7 @@ pl:
       typeahead_placeholder: Szukaj możliwych obserwatorów
     relation_labels:
       parent: "Rodzic"
+      child: "Element podrzędny"
       children: "Dzieci"
       relates: "Powiązany z"
       duplicates: "Duplikaty"
@@ -828,7 +831,7 @@ pl:
       add_new_child: "Utwórz nowy podrzędny"
       create_new: "Utwórz nową"
       add_existing: "Dodaj istniejącą"
-      add_existing_child: "Dodaj istniejący podrzędny"
+      add_existing_child: "Dodaj element podrzędny"
       remove_child: "Usuń podrzędny"
       add_new_relation: "Utwórz nową relację"
       add_existing_relation: "Dodaj istniejącą relację"
@@ -854,8 +857,6 @@ pl:
       select_branch: "Wybierz gałąź"
     field_value_enter_prompt: "Wprowadź wartość dla '%{field}'"
     project_menu_details: "Szczegóły"
-    scheduling:
-      manual: "Planowanie ręczne"
     sort:
       sorted_asc: "Zastosowano sortowanie rosnące, "
       sorted_dsc: "Zastosowano sortowanie malejące, "
@@ -903,15 +904,6 @@ pl:
       comment_send_failed: "Wystąpił błąd. Nie można zamieścić komentarza."
       comment_updated: "Komentarz zaktualizowano pomyślnie."
       confirm_edit_cancel: "Czy na pewno chcesz anulować edycję pakietu pracy?"
-      datepicker_modal:
-        automatically_scheduled_parent: "Automatycznie zaplanowano. Daty pochodzą z relacji."
-        manually_scheduled: "Włączono ręczne planowanie, tym samym wszystkie relacje zostają zignorowane."
-        start_date_limited_by_relations: "Dostępne daty rozpoczęcia i zakończenia są ograniczone relacjami."
-        changing_dates_affects_follow_relations: "Zmiana tych dat wpłynie na daty powiązanych pakietów roboczych."
-        click_on_show_relations_to_open_gantt: 'Kliknij "%{button_name}", aby wyświetlić wykres GANTTa.'
-        show_relations: "Pokaż relacje"
-        ignore_non_working_days:
-          title: "Tylko dni robocze"
       description_filter: "Filtr"
       description_enter_text: "Wpisz tekst"
       description_options_hide: "Ukryj opcje"
@@ -1045,6 +1037,12 @@ pl:
           not_found: "Nie ma takiego widoku"
           duplicate_query_title: "Nazwa tego widoku już istnieje. Zmienić mimo to?"
         text_no_results: "Nie znaleziono żadnych pasujących widoków."
+      reminders:
+        button_label: "Ustaw przypomnienie"
+        title:
+          new: "Ustaw przypomnienie"
+          edit: "Edytuj przypomnienie"
+        subtitle: "W wybranym terminie otrzymasz powiadomienie dotyczące tego pakietu roboczego."
       scheduling:
         is_parent: "Daty tego pakietu roboczego są automatycznie odejmowane od jego elementów podrzędnych. Włącz funkcję Planowanie ręczne, aby ustawić daty."
         is_switched_from_manual_to_automatic: "Po przełączeniu planowania z ręcznego na automatyczne konieczne może być ponowne obliczenie dat tego pakietu roboczego ze względu na jego powiązania z innymi pakietami roboczymi."
@@ -1354,5 +1352,3 @@ pl:
       waiting_subtitle:
         network_off: "Występuje problem z siecią."
         network_on: "Sieć znów działa. Staramy się."
-        timeout: >
-          OpenProject nie mógł Ci zapewnić dostępu do folderu projektu w oczekiwanym czasie. Spróbuj ponownie.<br><br> Jeśli problem nie ustąpi, skontaktuj się z administratorem OpenProject w celu sprawdzenia <a href="https://www.openproject.org/docs/system-admin-guide/files/external-file-storages/file-storage-troubleshooting/">stanu konfiguracji magazynu plików</a>.

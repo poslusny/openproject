@@ -33,7 +33,6 @@ end
 
 RSpec.configure do |config|
   Capybara.default_max_wait_time = 4
-  Capybara.javascript_driver = :chrome_en
 
   port = ENV.fetch("CAPYBARA_SERVER_PORT", ParallelHelper.port_for_app).to_i
   if port > 0
@@ -85,7 +84,11 @@ RSpec.configure do |config|
 end
 
 # silence puma if we're using it
-Capybara.server = :puma, { Silent: true }
+puma_options = { Silent: true }
+# use `CAPYBARA_PUMA_THREADS=1:1` to use only 1 puma thread, which is useful
+# when using irb/pry in server code.
+puma_options[:Threads] = ENV["CAPYBARA_PUMA_THREADS"] if ENV.key?("CAPYBARA_PUMA_THREADS")
+Capybara.server = :puma, puma_options
 
 Rails.application.config do
   config.middleware.use RackSessionAccess::Middleware

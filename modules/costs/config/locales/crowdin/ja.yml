@@ -22,7 +22,7 @@
 ja:
   plugin_costs:
     name: "時間とコスト"
-    description: "This module adds features for planning and tracking costs of projects."
+    description: "このモジュールは、プロジェクトの計画と追跡の機能を追加します。"
   activerecord:
     attributes:
       cost_entry:
@@ -30,9 +30,11 @@ ja:
         overridden_costs: "オーバーライドされたコスト"
         spent: "使用済"
         spent_on: "日付"
+        logged_by: "によって記録"
       cost_type:
         unit: "単位名"
         unit_plural: "単位名"
+        default: "デフォルトのコストタイプ"
       work_package:
         costs_by_type: "使用済単価"
         labor_costs: "作業員コスト"
@@ -44,12 +46,31 @@ ja:
         rate: "原価率"
       user:
         default_rates: "デフォルト原価率"
+      time_entry:
+        project: プロジェクト
+        user: ユーザー
+        work_package: ワークパッケージ
+        hours: ' 時間'
+        comments: コメント
+        activity: 活動
+        spent_on: 日付
+        start_time: 開始時間
+        end_time: 終了時間
     models:
+      time_entry:
+        other: "Time entries"
+      cost_entry:
+        other: "Cost entries"
       cost_type:
         other: "コスト種類"
+      time_entry_activity:
+        other: "タイムトラッキングアクティビティ"
       rate: "原価率"
     errors:
       models:
+        time_entry:
+          invalid_time: "00:00 から 23:59 の間で設定してください。"
+          cannot_log_for_this_work_package: "Cannot log time for this work package."
         work_package:
           is_not_a_valid_target_for_cost_entries: "コストを再割り当てるには、作業項目#%{id}は対象外である。"
           nullify_is_not_valid_for_cost_entries: "コストエントリをプロジェクトに割り当てることはできません。"
@@ -64,6 +85,8 @@ ja:
     fixed_date: "固定日付"
   button_add_rate: "原価率を追加"
   button_log_costs: "単価を記録"
+  button_log_time: "ログ"
+  button_add_activity: "活動"
   caption_booked_on_project: "プロジェクトの予約"
   caption_default: "デフォルト"
   caption_default_rate_history_for: "%{user} のデフォルト率の履歴"
@@ -75,7 +98,10 @@ ja:
   caption_save_rate: "進捗の保存"
   caption_set_rate: "現在の進捗を設定する"
   caption_show_locked: "ロックの種類を表示します。"
+  caption_log_time_dialog: "時間を記録"
   description_date_for_new_rate: "新しいレートの日付"
+  description_costs_settings: "Define the desired format for the costs in all projects."
+  description_time_settings: "Define which fields are mandatory to fill when logging time in all projects."
   group_by_others: "どのグループにもない"
   label_between: "次の範囲内"
   label_cost_filter_add: "コストフィルタの追加"
@@ -84,8 +110,6 @@ ja:
   label_cost_type_plural: "コスト種類"
   label_cost_type_specific: "コスト種類 #%{id}: %{name}"
   label_costs_per_page: "1ページあたりのコスト"
-  label_currency: "通貨"
-  label_currency_format: "通貨の形式"
   label_current_default_rate: "現在のデフォルトレート"
   label_date_on: "オン"
   label_deleted_cost_types: "削除されたコストタイプ"
@@ -104,21 +128,30 @@ ja:
   label_kind: "種別"
   label_less_or_equal: "以下"
   label_log_costs: "単価を記録"
+  label_new_time_entry_activity: "New time entry activity"
+  label_time_entry_activity_form_description: "Changes to this time entry activity will be reflected in all projects where it is enabled."
   label_no: "いいえ"
   label_option_plural: "オプション"
   label_overall_costs: "集計コスト"
   label_rate: "原価率"
   label_rate_plural: "レート"
   label_status_finished: "完了しました"
+  label_show: "表示"
   label_units: "単価"
   label_user: "ユーザ"
   label_until: "まで"
   label_valid_from: "から有効"
   label_yes: "はい"
+  label_time: "時間"
+  label_cost: "Cost"
+  label_costs: "コスト"
+  label_mandatory_fields: "Mandatory fields"
+  placeholder_activity_select_work_package_first: まずワークパッケージを選択してください。
   notice_something_wrong: "エラーが発生しました。再試行してください。"
   notice_successful_restore: "復元処理が成功します。"
   notice_successful_lock: "ロックに成功しました。"
-  notice_cost_logged_successfully: '単価が正常に記録されました。'
+  notice_cost_logged_successfully: "単価が正常に記録されました。"
+  notice_different_time_zones: "このユーザーは異なるタイムゾーン(%{tz})を使用しています。時間は異なるタイムゾーンで記録されます。"
   permission_edit_cost_entries: "予約単価の編集"
   permission_edit_own_cost_entries: "自分が予約した単価の編集"
   permission_edit_hourly_rates: "時給の編集"
@@ -133,6 +166,10 @@ ja:
   permission_view_own_hourly_rate: "自分の時給の表示"
   permission_view_own_time_entries: "自分の使用済み時間の表示"
   project_module_costs: "時間とコスト"
+  setting_allow_tracking_start_and_end_times: "ユーザーが開始時刻と終了時刻を追跡できるようにする。"
+  setting_costs_currency: "通貨"
+  setting_costs_currency_format: "通貨の書式"
+  setting_enforce_tracking_start_and_end_times: "ユーザーに開始時刻と終了時刻の設定を強制する"
   text_assign_time_and_cost_entries_to_project: "報告された時間とコストをプロジェクトに割り当てる"
   text_destroy_cost_entries_question: "削除しようとしている作業項目が%{cost_entries} 件報告されました。どうしますか？"
   text_destroy_time_and_cost_entries: "報告された時間とコストを削除する"
@@ -140,5 +177,7 @@ ja:
   text_reassign_time_and_cost_entries: "報告された時間とコストをこの作業項目に再割り当てください。"
   text_warning_hidden_elements: "いくつかのエントリは、集計から除外されている可能性があります。"
   week: "週間"
-  js:
-    text_are_you_sure: "よろしいですか？"
+  api_v3:
+    errors:
+      validation:
+        start_time_different_date: "Date part of startTime (%{start_time}) must be the same as the spentOn (%{spent_on}) date."

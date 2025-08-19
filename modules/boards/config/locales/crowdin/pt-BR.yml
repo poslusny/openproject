@@ -13,7 +13,7 @@ pt-BR:
     label_board_type: "Tipo de quadro"
     board_types:
       free: Básico
-      action: "Quadro de ação (%{attribute})"
+      action: "Quadro de ações (%{attribute})"
     board_type_attributes:
       assignee: Atribuição
       status: Status
@@ -31,7 +31,7 @@ pt-BR:
       version: >
         Quadro com colunas automatizadas baseado no atributo da versão. Ideal para planejar desenvolvimento de produto.
       subproject: >
-        Quadro com colunas automatizadas para subprojetos. Arrastar pacotes de trabalho para outras listas atualiza os (sub)projetos de acordo.
+        Quadro com colunas automatizadas para subprojetos. Arrastar pacotes de trabalho para outras listas atualiza os (sub)projetos de acordo. 
       subtasks: >
         Quadro com colunas automatizadas para subelementos. Arrastar pacotes de trabalho para outras listas atualiza os pais de acordo.
     upsale:

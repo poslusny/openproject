@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -204,8 +205,8 @@ class Activities::MeetingEventMapper < Activities::EventMapper
     end_time = start_time + data[:meeting_duration].to_f.hours
 
     fstart_with = format_date start_time
-    fstart_without = format_time start_time, false
-    fend_without = format_time end_time, false
+    fstart_without = format_time start_time, include_date: false
+    fend_without = format_time end_time, include_date: false
 
     "#{I18n.t(:label_meeting)}: #{data[:meeting_title]} (#{fstart_with} #{fstart_without}-#{fend_without})"
   end

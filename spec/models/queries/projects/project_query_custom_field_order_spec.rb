@@ -58,12 +58,18 @@ RSpec.describe ProjectQuery, "order using CustomFieldOrder" do
 
     before { projects }
 
+    project_attributes = ->(project) do
+      {
+        id: project.id,
+        values: project.custom_values.map(&:value).sort
+      }
+    end
+
     context "in ascending order" do
       let(:direction) { :asc }
 
       it "returns the correctly sorted result" do
-        expect(query_results.map(&:id))
-          .to eq projects.map(&:id)
+        expect(query_results).to eq_array(projects, &project_attributes)
       end
     end
 
@@ -71,8 +77,7 @@ RSpec.describe ProjectQuery, "order using CustomFieldOrder" do
       let(:direction) { :desc }
 
       it "returns the correctly sorted result" do
-        expect(query_results.map(&:id))
-          .to eq projects_desc.map(&:id)
+        expect(query_results).to eq_array(projects_desc, &project_attributes)
       end
     end
   end
@@ -111,9 +116,9 @@ RSpec.describe ProjectQuery, "order using CustomFieldOrder" do
 
       let(:projects) do
         [
+          project_without_cf_value,
           project_with_cf_value("6"),
-          project_with_cf_value("16"),
-          project_without_cf_value # TODO: should be at index 0
+          project_with_cf_value("16")
         ]
       end
     end
@@ -125,9 +130,9 @@ RSpec.describe ProjectQuery, "order using CustomFieldOrder" do
 
       let(:projects) do
         [
+          project_without_cf_value,
           project_with_cf_value("6.25"),
-          project_with_cf_value("16"),
-          project_without_cf_value # TODO: should be at index 0
+          project_with_cf_value("16")
         ]
       end
     end
@@ -172,11 +177,11 @@ RSpec.describe ProjectQuery, "order using CustomFieldOrder" do
 
         let(:projects) do
           [
+            project_without_cf_value,
             # sorting is done by position, and not by value
             project_with_cf_value(id_by_value.fetch("100")),
             project_with_cf_value(id_by_value.fetch("3")),
             project_with_cf_value(id_by_value.fetch("20")),
-            project_without_cf_value # TODO: should be at index 0
           ]
         end
       end
@@ -189,15 +194,26 @@ RSpec.describe ProjectQuery, "order using CustomFieldOrder" do
         let(:projects) do
           [
             project_without_cf_value,
-            # TODO: sorting is done by values sorted by position and joined by `.`, why?
-            project_with_cf_value(*id_by_value.fetch_values("100")),            # => 100
-            project_with_cf_value(*id_by_value.fetch_values("20", "100")),      # => 100.20
-            project_with_cf_value(*id_by_value.fetch_values("3", "100")),       # => 100.3
-            project_with_cf_value(*id_by_value.fetch_values("100", "3", "20")), # => 100.3.20
-            project_with_cf_value(*id_by_value.fetch_values("20")),             # => 20
-            project_with_cf_value(*id_by_value.fetch_values("3")),              # => 3
-            project_with_cf_value(*id_by_value.fetch_values("3", "20"))         # => 3.20
+            project_with_cf_value(*id_by_value.fetch_values("100")),            # 100
+            project_with_cf_value(*id_by_value.fetch_values("3", "100")),       # 100, 3
+            project_with_cf_value(*id_by_value.fetch_values("3", "20", "100")), # 100, 3, 20
+            project_with_cf_value(*id_by_value.fetch_values("3", "100", "20")), # 100, 3, 20
+            project_with_cf_value(*id_by_value.fetch_values("20", "3", "100")), # 100, 3, 20
+            project_with_cf_value(*id_by_value.fetch_values("20", "100", "3")), # 100, 3, 20
+            project_with_cf_value(*id_by_value.fetch_values("100", "3", "20")), # 100, 3, 20
+            project_with_cf_value(*id_by_value.fetch_values("100", "20", "3")), # 100, 3, 20
+            project_with_cf_value(*id_by_value.fetch_values("20", "100")),      # 100, 20
+            project_with_cf_value(*id_by_value.fetch_values("3")),              # 3
+            project_with_cf_value(*id_by_value.fetch_values("3", "20")),        # 3, 20
+            project_with_cf_value(*id_by_value.fetch_values("20")),             # 20
           ]
+        end
+
+        let(:projects_desc) do
+          indexes = projects.each_index.to_a
+          # order of work packages with same values in different order falls back on next column (id asc)
+          indexes[3...9] = indexes[3...9].reverse
+          projects.values_at(*indexes.reverse)
         end
       end
     end
@@ -206,10 +222,10 @@ RSpec.describe ProjectQuery, "order using CustomFieldOrder" do
   context "for user format" do
     shared_let(:users) do
       [
-        create(:user, lastname: "B", firstname: "B", login: "bb1"),
-        create(:user, lastname: "B", firstname: "B", login: "bb2"),
-        create(:user, lastname: "B", firstname: "A", login: "ba"),
-        create(:user, lastname: "A", firstname: "X", login: "ax")
+        create(:user, lastname: "B", firstname: "B", login: "bb1", mail: "bb1@o.p"),
+        create(:user, lastname: "B", firstname: "B", login: "bb2", mail: "bb2@o.p"),
+        create(:user, lastname: "B", firstname: "A", login: "ba", mail: "ba@o.p"),
+        create(:user, lastname: "A", firstname: "X", login: "ax", mail: "ax@o.p")
       ]
     end
     shared_let(:id_by_login) { users.to_h { [_1.login, _1.id] } }
@@ -232,11 +248,11 @@ RSpec.describe ProjectQuery, "order using CustomFieldOrder" do
 
         let(:custom_field_values) do
           [
+            nil,
             id_by_login.fetch("ax"),
             id_by_login.fetch("ba"),
             id_by_login.fetch("bb1"),
             id_by_login.fetch("bb2"),
-            nil # TODO: should be at index 0
           ]
         end
 
@@ -256,12 +272,13 @@ RSpec.describe ProjectQuery, "order using CustomFieldOrder" do
 
         let(:custom_field_values) do
           [
-            id_by_login.fetch_values("ax"),
-            id_by_login.fetch_values("ba"),
-            # TODO: second user is ignored
-            id_by_login.fetch_values("bb1", "ba"),
-            id_by_login.fetch_values("bb1", "ax"),
-            [] # TODO: should be at index 0
+            [],
+            id_by_login.fetch_values("ax"),        # ax
+            id_by_login.fetch_values("bb1", "ax"), # ax, bb1
+            id_by_login.fetch_values("ax", "bb1"), # ax, bb1
+            id_by_login.fetch_values("ba"),        # ba
+            id_by_login.fetch_values("bb1", "ba"), # ba, bb1
+            id_by_login.fetch_values("ba", "bb2"), # ba, bb2
           ]
         end
 
@@ -271,8 +288,12 @@ RSpec.describe ProjectQuery, "order using CustomFieldOrder" do
           end
         end
 
-        # TODO: second user is ignored, so order due to falling back on id asc
-        let(:projects_desc) { projects.values_at(4, 2, 3, 1, 0) }
+        let(:projects_desc) do
+          indexes = projects.each_index.to_a
+          # order of work packages with same values in different order falls back on next column (id asc)
+          indexes[2...4] = indexes[2...4].reverse
+          projects.values_at(*indexes.reverse)
+        end
       end
     end
   end
@@ -295,11 +316,11 @@ RSpec.describe ProjectQuery, "order using CustomFieldOrder" do
 
         let(:projects) do
           [
-            project_with_cf_value(id_by_name.fetch("10.10.10")),
-            project_with_cf_value(id_by_name.fetch("10.10.2")),
-            project_with_cf_value(id_by_name.fetch("10.2")),
+            project,
             project_with_cf_value(id_by_name.fetch("9")),
-            project # TODO: should be at index 0
+            project_with_cf_value(id_by_name.fetch("10.2")),
+            project_with_cf_value(id_by_name.fetch("10.10.2")),
+            project_with_cf_value(id_by_name.fetch("10.10.10")),
           ]
         end
       end
@@ -311,17 +332,22 @@ RSpec.describe ProjectQuery, "order using CustomFieldOrder" do
 
         let(:projects) do
           [
-            project_with_cf_value(*id_by_name.fetch_values("10.10.10")),
-            project_with_cf_value(*id_by_name.fetch_values("10.10.2")),
-            # TODO: second version is ignored
-            project_with_cf_value(*id_by_name.fetch_values("9", "10.10.2")),
-            project_with_cf_value(*id_by_name.fetch_values("9", "10.10.10")),
-            project # TODO: should be at index 0
+            project,
+            project_with_cf_value(*id_by_name.fetch_values("10.10.2", "9")),    # 9, 10.10.2
+            project_with_cf_value(*id_by_name.fetch_values("10.10.10", "9")),   # 9, 10.10.10
+            project_with_cf_value(*id_by_name.fetch_values("9", "10.10.10")),   # 9, 10.10.10
+            project_with_cf_value(*id_by_name.fetch_values("10.2", "10.10.2")), # 10.2, 10.10.2
+            project_with_cf_value(*id_by_name.fetch_values("10.10.2")),         # 10.10.2
+            project_with_cf_value(*id_by_name.fetch_values("10.10.10"))         # 10.10.10
           ]
         end
 
-        # TODO: second version is ignored, so order due to falling back on id asc
-        let(:projects_desc) { projects.values_at(4, 2, 3, 1, 0) }
+        let(:projects_desc) do
+          indexes = projects.each_index.to_a
+          # order of work packages with same values in different order falls back on next column (id asc)
+          indexes[2...4] = indexes[2...4].reverse
+          projects.values_at(*indexes.reverse)
+        end
       end
     end
   end

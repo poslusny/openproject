@@ -28,7 +28,7 @@
 
 require "spec_helper"
 
-RSpec.describe "Enterprise token", :js, :with_cuprite do
+RSpec.describe "Enterprise token", :js do
   include Redmine::I18n
 
   shared_let(:admin) { create(:admin) }
@@ -60,9 +60,8 @@ RSpec.describe "Enterprise token", :js, :with_cuprite do
       submit_button.click
 
       # Error output
-      expect(page).to have_css(".errorExplanation",
-                               text: "Enterprise support token can't be read. " \
-                                     "Are you sure it is a support token?")
+      expect_flash(type: :error,
+                   message: "Enterprise support token can't be read. Are you sure it is a support token?")
 
       within "span.errorSpan" do
         expect(page).to have_css("#enterprise_token_encoded_token")
@@ -78,13 +77,21 @@ RSpec.describe "Enterprise token", :js, :with_cuprite do
         textarea.set "foobar"
         submit_button.click
 
-        expect(page).to have_css(".op-toast.-success", text: I18n.t(:notice_successful_update))
+        expect_flash(message: I18n.t(:notice_successful_update))
         expect(page).to have_test_selector("op-enterprise--active-token")
 
         expect(page.all(".attributes-key-value--key").map(&:text))
-          .to eq ["Subscriber", "Email", "Domain", "Maximum active users", "Starts at", "Expires at"]
+          .to eq ["Subscriber", "Email", "Domain", "Maximum active users", "Starts at", "Expires at", "Plan"]
         expect(page.all(".attributes-key-value--value").map(&:text))
-          .to eq ["Foobar", "foo@example.org", Setting.host_name, "Unlimited", format_date(Time.zone.today), "Unlimited"]
+          .to eq [
+            "Foobar",
+            "foo@example.org",
+            Setting.host_name,
+            "Unlimited",
+            format_date(Time.zone.today),
+            "Unlimited",
+            "Enterprise Plan (Token Version #{token_object.version})"
+          ]
 
         expect(page).to have_css(".button.icon-delete", text: I18n.t(:button_delete))
 
@@ -101,7 +108,7 @@ RSpec.describe "Enterprise token", :js, :with_cuprite do
 
         wait_for_reload
 
-        expect(page).to have_css(".op-toast.-success", text: I18n.t(:notice_successful_update))
+        expect_flash(message: I18n.t(:notice_successful_update))
 
         # Assume next request
         RequestStore.clear!
@@ -109,13 +116,14 @@ RSpec.describe "Enterprise token", :js, :with_cuprite do
 
         # Remove token
         click_on "Delete"
+        wait_for_network_idle
 
         # Expect modal
         find_test_selector("confirmation-modal--confirmed").click
 
         wait_for_reload
 
-        expect(page).to have_css(".op-toast.-success", text: I18n.t(:notice_successful_delete))
+        expect_flash(message: I18n.t(:notice_successful_delete))
 
         # Assume next request
         RequestStore.clear!

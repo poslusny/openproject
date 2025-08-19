@@ -26,20 +26,21 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 See COPYRIGHT and LICENSE files for more details.
 
 ++#%>
-<% breadcrumb_paths(nil) %>
-<h2 class="headline--application">
-  <span><%= organization_icon %></span>
-  <%= organization_name %>
-</h2>
+<%=
+  render(Primer::OpenProject::PageHeader.new) do |header|
+    header.with_title { I18n.t("label_home") }
+    header.with_breadcrumbs([{ href: home_path, text: organization_name }, I18n.t(:label_home)])
+  end
+%>
 
-<%= render partial: 'announcements/show' %>
+<%= render partial: "announcements/show" %>
 
 <% if @homescreen[:blocks].any? %>
   <section class="widget-boxes -flex">
   <% @homescreen[:blocks].each do |block| %>
     <% if block[:if].nil? || instance_eval(&block[:if]) %>
       <div class="widget-box <%= block[:partial] %>">
-      <%= render partial: "homescreen/blocks/#{block[:partial]}", locals: (block[:locals] || {}) %>
+      <%= render partial: "homescreen/blocks/#{block[:partial]}", locals: block[:locals] || {} %>
       </div>
     <% end %>
   <% end %>
@@ -50,7 +51,7 @@ See COPYRIGHT and LICENSE files for more details.
   <section class="homescreen--links">
 
   <% @homescreen[:links].each do |link| %>
-    <% title = I18n.t(link[:label], scope: 'homescreen.links') %>
+    <% title = I18n.t(link[:label], scope: "homescreen.links") %>
     <a class="homescreen--links--item" href="<%= link[:url] %>" target="_blank" title="<%= title %>">
       <%= op_icon(link[:icon]) %>
       <%= title %>

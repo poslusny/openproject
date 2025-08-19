@@ -106,8 +106,9 @@ directory will not end up with files owned by root.
 
 You also will want to create a `docker-compose.override.yml` file, which can contain the port exposure for your
 containers. Those are excluded from the main compose file `docker-compose.yml` for sanity reasons. If any port is
-already in use, `docker compose` won't start and as you cannot disable the exposed port in
-the `docker-compose.override.yml` file, you would have to alter the original `docker-compose.yml`.
+already in use, `docker compose` won't start and will require explicit override in the `docker-compose.override.yml`
+file (see instructions for [!reset](https://docs.docker.com/reference/compose-file/merge/#reset-value) and
+[!override](https://docs.docker.com/reference/compose-file/merge/#replace-value)).
 
 There is an example you can use out of the box.
 
@@ -216,6 +217,18 @@ Tests are ran within Selenium containers, on a small local Selenium grid. You ca
 you want to see what the browsers are doing. `gvncviewer` or `vinagre` on Linux is a good tool for this. Set any port in
 the `docker-compose.override.yml` to access a container of a specific browser. As a default, the `chrome` container is
 exposed on port 5900. The password is `secret` for all.
+
+Adding additional external docker networks to the test services like `backend-test` (e.g. inside the
+`docker-compose.override.yml`) breaks the functionality of the Selenium service. This results in failing tests running
+inside a Selenium context, like feature and UI tests.
+
+```
+Selenium::WebDriver::Error::UnknownError:
+  unknown error: net::ERR_CONNECTION_REFUSED
+    (Session info: chrome=130.0.6723.91)
+```
+
+If this happens just comment out the network overrides.
 
 ## TLS support
 
@@ -465,7 +478,7 @@ Once the keycloak service is started and running, you can access the keycloak in
 and login with initial username and password as `admin`.
 
 Keycloak being an OpenID connect provider, we need to setup an OIDC integration for OpenProject.
-[Setup OIDC (keycloak) integration for OpenProject](../../../installation-and-operations/misc/custom-openid-connect-providers/#keycloak)
+[Setup OIDC (keycloak) integration for OpenProject](../../../system-admin-guide/authentication/openid-providers/)
 
 Once the above setup is completed, In the root `docker-compose.override.yml` file, uncomment all the environment in `backend` service for keycloak and set the values according to configuration done in keycloak for OpenProject Integration.
 

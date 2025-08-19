@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -38,6 +39,10 @@ module MeetingAgendaItems
       @meeting = meeting
       @form_hidden = form_hidden
       @form_type = form_type
+    end
+
+    def empty?
+      @meeting.agenda_items.empty? && @meeting.sections.empty?
     end
 
     private

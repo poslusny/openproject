@@ -8,7 +8,7 @@ info:
 
     ## Introduction
 
-    The documentation for the APIv3 is written according to the [OpenAPI 3.0 Specification](https://swagger.io/specification/).
+    The documentation for the APIv3 is written according to the [OpenAPI 3.1 Specification](https://swagger.io/specification/).
     You can either view the static version of this documentation on the [website](https://www.openproject.org/docs/api/introduction/)
     or the interactive version, rendered with [OpenAPI Explorer](https://github.com/Rhosys/openapi-explorer/blob/main/README.md),
     in your OpenProject installation under `/api/docs`.
@@ -186,6 +186,12 @@ paths:
     "$ref": "./paths/custom_action.yml"
   "/api/v3/custom_actions/{id}/execute":
     "$ref": "./paths/custom_action_execute.yml"
+  "/api/v3/custom_fields/{id}/items":
+    "$ref": "./paths/custom_field_items.yml"
+  "/api/v3/custom_field_items/{id}":
+    "$ref": "./paths/custom_field_item.yml"
+  "/api/v3/custom_field_items/{id}/branch":
+    "$ref": "./paths/custom_field_item_branch.yml"
   "/api/v3/custom_options/{id}":
     "$ref": "./paths/custom_option.yml"
   "/api/v3/days/non_working":
@@ -386,6 +392,8 @@ paths:
     "$ref": "./paths/storage_files.yml"
   "/api/v3/storages/{id}/files/prepare_upload":
     "$ref": "./paths/storage_files_prepare_upload.yml"
+  "/api/v3/storages/{id}/folders":
+    "$ref": "./paths/storage_folders.yml"
   "/api/v3/storages/{id}/oauth_client_credentials":
     "$ref": "./paths/storage_oauth_client_credentials.yml"
   "/api/v3/storages/{id}/open":
@@ -472,6 +480,8 @@ paths:
     "$ref": "./paths/work_package_revisions.yml"
   "/api/v3/work_packages/{id}/relations":
     "$ref": "./paths/work_package_relations.yml"
+  "/api/v3/work_packages/{id}/reminders":
+    "$ref": "./paths/work_package_reminders.yml"
   "/api/v3/work_packages/{id}/watchers":
     "$ref": "./paths/work_package_watchers.yml"
   "/api/v3/work_packages/{id}/watchers/{user_id}":
@@ -489,6 +499,12 @@ components:
       $ref: "./components/examples/grid-simple-response.yml"
     GroupResponse:
       $ref: "./components/examples/group-response.yml"
+    HierarchyItemCollectionFilteredResponse:
+      $ref: "./components/examples/hierarchy_item_collection_filtered_response.yml"
+    HierarchyItemCollectionResponse:
+      $ref: "./components/examples/hierarchy_item_collection_response.yml"
+    HierarchyItemResponse:
+      $ref: "./components/examples/hierarchy_item_response.yml"
     MembershipCreateRequestCustomMessage:
       $ref: "./components/examples/membership-create-request-custom-message.yml"
     MembershipCreateRequestGlobalRole:
@@ -533,6 +549,8 @@ components:
       $ref: "./components/examples/status_response.yml"
     StorageNextcloudResponse:
       $ref: "./components/examples/storage-nextcloud-response.yml"
+    StorageCreateFolderRequestBody:
+      $ref: "./components/examples/storage-create-folder-request-body.yml"
     StorageNextcloudResponseForCreation:
       $ref: "./components/examples/storage-nextcloud-response-for-creation.yml"
     StorageNextcloudUnauthorizedResponse:
@@ -673,6 +691,10 @@ components:
       "$ref": "./components/schemas/help_text_collection_model.yml"
     HelpTextModel:
       "$ref": "./components/schemas/help_text_model.yml"
+    HierarchyItemCollectionModel:
+      "$ref": "./components/schemas/hierarchy_item_collection_model.yml"
+    HierarchyItemReadModel:
+      "$ref": "./components/schemas/hierarchy_item_read_model.yml"
     Link:
       "$ref": "./components/schemas/link.yml"
     List_actionsModel:
@@ -779,6 +801,8 @@ components:
       "$ref": "./components/schemas/relation_read_model.yml"
     RelationWriteModel:
       "$ref": "./components/schemas/relation_write_model.yml"
+    ReminderModel:
+      "$ref": "./components/schemas/reminder_model.yml"
     RevisionModel:
       "$ref": "./components/schemas/revision_model.yml"
     RevisionsModel:
@@ -809,6 +833,8 @@ components:
       "$ref": "./components/schemas/storage_file_model.yml"
     StorageFilesModel:
       "$ref": "./components/schemas/storage_files_model.yml"
+    StorageFolderWriteModel:
+      "$ref": "./components/schemas/storage_folder_write_model.yml"
     StorageFileUploadPreparationModel:
       "$ref": "./components/schemas/storage_file_upload_preparation_model.yml"
     StorageFileUploadLinkModel:

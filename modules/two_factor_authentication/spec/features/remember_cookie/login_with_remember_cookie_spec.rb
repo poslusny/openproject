@@ -1,12 +1,16 @@
 require_relative "../../spec_helper"
-require_relative "../shared_2fa_examples"
+require_relative "../shared_two_factor_examples"
 
-RSpec.describe "Login with 2FA remember cookie", :js, with_settings: {
-  plugin_openproject_two_factor_authentication: {
-    active_strategies: [:developer],
-    allow_remember_for_days: 30
-  }
-} do
+RSpec.describe "Login with 2FA remember cookie",
+               :js,
+               with_settings: {
+                 plugin_openproject_two_factor_authentication: {
+                   active_strategies: [:developer],
+                   allow_remember_for_days: 30
+                 }
+               } do
+  include SharedTwoFactorExamples
+
   let(:user_password) do
     "user!user!"
   end
@@ -16,7 +20,7 @@ RSpec.describe "Login with 2FA remember cookie", :js, with_settings: {
   let!(:device) { create(:two_factor_authentication_device_sms, user:, active: true, default: true) }
 
   def login_with_cookie
-    page.driver.browser.manage.delete_all_cookies
+    page.driver.clear_cookies
 
     sms_token = nil
     allow_any_instance_of(OpenProject::TwoFactorAuthentication::TokenStrategy::Developer)
@@ -60,7 +64,7 @@ RSpec.describe "Login with 2FA remember cookie", :js, with_settings: {
       visit my_2fa_devices_path
 
       find(".two-factor-authentication--remove-remember-cookie-link").click
-      expect(page).to have_css(".op-toast.-success")
+      expect_flash(message: I18n.t("two_factor_authentication.remember.cookie_removed"))
       expect(page).to have_no_css(".two-factor-authentication--remove-remember-cookie-link")
 
       # Log out and in again

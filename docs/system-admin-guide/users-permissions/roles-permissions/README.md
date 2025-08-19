@@ -15,29 +15,6 @@ A user is any individual who can log into your OpenProject instance.
 
 Permissions control what users can see and do within OpenProject. Permission are granted to users by assigning one or more roles to the users.
 
-### File storages permissions
-
-Permissions related to the external file storages are part of the *Projects* and *Work packages and Gantt charts*:
-
-![Files storages permissions in OpenProject](openproject_user_guide_file_storages_permissions.png)
-
-Following are the permissions for file storages within OpenProject:
-
-- **View file links**: Allows a user to see file links to external storages in the Files tab of work packages
-- **Manage file links**: Allows a user to create and edit file links to work packages
-- **Manage files in project**: Allows a user to add or edit file storages for a project
-
-Following user permissions are set on files and folder in **External Storages**:
-
-- **Automatically managed folders: Read files (Nextcloud, OneDrive/SharePoint)**
-- **Automatically managed folders:  Write files (Nextcloud, OneDrive/SharePoint)**
-- **Automatically managed folders: Create files (Nextcloud)**
-- **Automatically managed folders: Delete files (Nextcloud)**
-- **Automatically managed folders: Share files (Nextcloud)**
-
-> [!NOTE]
-> Please note that not all file permissions are applicable to all storage providers.
-
 ## Roles
 
 A role bundles a collection of permissions. It is an convenient way of granting permissions to multiple users in your organization that need the same permissions or restrictions.
@@ -64,8 +41,8 @@ A user can have one or more roles which grant permissions on different levels.
 
 **A project role** is a set of **permissions** that can be assigned to any project member. Multiple roles can be assigned to the same project member.<br>
 
->[!NOTE]
->If a module is not enabled in a project it is not shown to a user despite having a permission for it.
+> [!NOTE]
+> If a module is not enabled in a project it is not shown to a user despite having a permission for it.
 
 | Scope of the role                                            | Permission examples                                          | Customization options                                        |
 | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
@@ -75,8 +52,8 @@ A user can have one or more roles which grant permissions on different levels.
 
 **Non member** is the default role of users of your OpenProject instance who have not been added to a project. This only applies if the project has been set as [public](../../../user-guide/projects/#set-a-project-to-public) in the project settings.<br>
 
->[!NOTE]
-The *Non-member* role cannot be deleted.
+> [!NOTE]
+> The *Non-member* role cannot be deleted.
 
 | Scope of the role                                            | Permission examples                                          | Customization options                                        |
 | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
@@ -86,12 +63,23 @@ The *Non-member* role cannot be deleted.
 
 OpenProject allows to share project information with **anonymous** users which are not logged in. This is helpful to communicate projects goals and activities with a public community.<br>
 
->[!NOTE]
+> [!NOTE]
 > This only applies if you disabled the need for authentication for your instance and if the project is set as **public**. The *Anonymous* role cannot be deleted.
 
 | Scope of the role                                            | Permission examples                                          | Customization options                                        |
 | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
 | Project-level: Permissions scoped to individual projects for users which are <u>not</u> logged in | - View work packages for users that are not logged in        | Assign different permissions to the role *Anonymous*         |
+
+### Standard
+
+**Standard** is the default role of users of your OpenProject instance. It is configured by administrators on the instance level. <br>
+
+> [!NOTE]
+> The *Standard* role cannot be deleted and it is applied to every user on the instance. Users cannot be assigned to, or unassigned from this role. Per default no permissions will be selected. Please adjust the permissions yourself.
+
+| Scope of the role                                            | Permission examples          | Customization options                               |
+| ------------------------------------------------------------ | ---------------------------- | --------------------------------------------------- |
+| Application-level: Permissions scoped to specific administrative tasks (not restricted to specific projects) | - View user's mail addresses | Assign different permissions to the role *Standard* |
 
 ## Customize roles with individual permissions
 
@@ -178,3 +166,33 @@ Global permissions are system wide. They are attached to **global roles** and co
 ### Can I convert a project role to a global role?
 
 No this is not possible. You need to create a new role instead.
+
+### What permissions exist for file storages?
+
+Permissions related to the external file storages are part of the *Projects* and *Work packages and Gantt charts*:
+
+![Files storages permissions in OpenProject](openproject_user_guide_file_storages_permissions.png)
+
+Following are the permissions for file storages within OpenProject:
+
+- **View file links**: Allows a user to see file links to external storages in the Files tab of work packages
+- **Manage file links**: Allows a user to create and edit file links to work packages
+- **Manage files in project**: Allows a user to add or edit file storages for a project
+
+Following user permissions are set on files and folder in **External Storages**:
+
+- **Automatically managed folders: Read files (Nextcloud, OneDrive/SharePoint)**
+
+- **Automatically managed folders:  Write files (Nextcloud, OneDrive/SharePoint)**
+
+- **Automatically managed folders: Create files (Nextcloud)**
+
+- **Automatically managed folders: Delete files (Nextcloud)**
+
+- **Automatically managed folders: Share files (Nextcloud)**
+
+  
+
+> [!NOTE]
+>
+> Please note that not all file permissions are applicable to all storage providers.

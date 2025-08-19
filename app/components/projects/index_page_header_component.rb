@@ -112,6 +112,7 @@ class Projects::IndexPageHeaderComponent < ApplicationComponent
 
   def breadcrumb_items
     [
+      { href: home_path, text: helpers.organization_name },
       { href: projects_path, text: t(:label_project_plural) },
       current_breadcrumb_element
     ]
@@ -121,7 +122,7 @@ class Projects::IndexPageHeaderComponent < ApplicationComponent
     return page_title if query.name.blank?
 
     if current_section && current_section.header.present?
-      I18n.t("menus.breadcrumb.nested_element", section_header: current_section.header, title: query.name).html_safe
+      helpers.nested_breadcrumb_element(current_section.header, query.name)
     else
       page_title
     end
@@ -130,9 +131,9 @@ class Projects::IndexPageHeaderComponent < ApplicationComponent
   def current_section
     return @current_section if defined?(@current_section)
 
-    projects_menu = Projects::Menu.new(controller_path:, params:, current_user:)
-
-    @current_section = projects_menu.menu_items.find { |section| section.children.any?(&:selected) }
+    @current_section = Projects::Menu
+      .new(controller_path:, params:, current_user:)
+      .selected_menu_group
   end
 
   def header_save_action(header:, message:, label:, href:, method: nil)

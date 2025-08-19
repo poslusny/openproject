@@ -5,8 +5,8 @@ ja:
       remove: 'ウィジェットを削除'
       configure: 'ウィジェットの設定'
       upsale:
-        text: "Some widgets, like the work package graph widget, are only available in the Enterprise edition."
-        link: 'Enterprise edition.'
+        text: "ワークパッケージグラフウィジェットなど、一部のウィジェットはEnterpriseエディションでのみ利用可能です。"
+        link: 'Enterprise edition'
       widgets:
         missing_permission: "このウィジェットを観覧するために必要な権限がありません。"
         custom_text:
@@ -27,9 +27,6 @@ ja:
         project_description:
           title: 'プロジェクトの説明'
           no_results: "説明はまだ記載されていません。 1つは「プロジェクト設定」で入力できます。"
-        project_details:
-          title: 'プロジェクトの詳細'
-          no_results: 'プロジェクトにカスタムフィールドが定義されていません。'
         project_status:
           title: 'プロジェクトの進捗状況'
           not_started: '未着手'

@@ -26,22 +26,37 @@
 // See COPYRIGHT and LICENSE files for more details.
 //++
 
+import { ChangeDetectionStrategy, Component, Input, TemplateRef, ViewChild } from '@angular/core';
 import {
-  ChangeDetectionStrategy,
-  Component,
-  Input,
-  TemplateRef,
-  ViewChild,
-} from '@angular/core';
-import { IAutocompleterTemplateComponent } from 'core-app/shared/components/autocompleter/op-autocompleter/op-autocompleter.component';
+  IAutocompleterTemplateComponent,
+} from 'core-app/shared/components/autocompleter/op-autocompleter/op-autocompleter.component';
+import { PathHelperService } from 'core-app/core/path-helper/path-helper.service';
+import { PrincipalLike } from 'core-app/shared/components/principal/principal-types';
+import { hrefFromPrincipal, typeFromHref } from 'core-app/shared/components/principal/principal-helper';
 
 @Component({
   templateUrl: './user-autocompleter-template.component.html',
+  styleUrls: ['./user-autocompleter-template.component.sass'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UserAutocompleterTemplateComponent implements IAutocompleterTemplateComponent {
   @Input() public inviteUserToProject:string|undefined;
+  @Input() public isOpenedInModal:boolean = false;
+  @Input() public hoverCards:boolean = true;
+
+  constructor(private readonly pathHelperService:PathHelperService) {}
 
   @ViewChild('optionTemplate') optionTemplate:TemplateRef<Element>;
   @ViewChild('footerTemplate') footerTemplate?:TemplateRef<Element>;
+
+  public getHoverCardUrl(principal:PrincipalLike) {
+    if (!this.hoverCards || !principal.id) { return ''; }
+
+    const type = typeFromHref(hrefFromPrincipal(principal));
+    if (!type || type !== 'user') {
+      return '';
+    }
+
+    return this.pathHelperService.userHoverCardPath(principal.id);
+  }
 }

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -31,15 +33,11 @@ require "support/pages/page"
 module Pages
   module Projects
     class Index < ::Pages::Page
+      include ::Components::Common::Filters
       include ::Components::Autocompleter::NgSelectAutocompleteHelpers
 
       def path(*)
         "/projects"
-      end
-
-      def expect_listed(*users)
-        rows = page.all "td.username"
-        expect(rows.map(&:text)).to eq(users.map(&:login))
       end
 
       def expect_projects_listed(*projects, archived: false)
@@ -180,6 +178,14 @@ module Pages
         expect(page).to have_css('[data-test-selector="filters-button-counter"]', text: count)
       end
 
+      def expect_filter_available(filter_name)
+        expect(page).to have_select("add_filter_select", with_options: [filter_name])
+      end
+
+      def expect_filter_not_available(filter_name)
+        expect(page).to have_no_select("add_filter_select", with_options: [filter_name])
+      end
+
       def expect_no_project_create_button
         expect(page).to have_no_css('[data-test-selector="project-new-button"]')
       end
@@ -196,6 +202,11 @@ module Pages
         column_names.each do |column_name|
           expect(page).to have_css("th", text: column_name.upcase)
         end
+      end
+
+      def expect_columns_in_order(*column_names)
+        columns = page.find_all("#project-table th .Button-label")
+        expect(column_names.map(&:upcase)).to eq(columns.map { |c| c.text.upcase })
       end
 
       def expect_no_columns(*column_names)
@@ -260,23 +271,55 @@ module Pages
       end
 
       def set_advanced_filter(name, human_name, human_operator = nil, values = [], send_keys: false)
-        select human_name, from: "add_filter_select"
-        selected_filter = page.find("li[data-filter-name='#{name}']")
-        select(human_operator, from: "operator") unless boolean_filter?(name)
+        selected_filter = select_filter(name, human_name)
+        apply_operator(name, human_operator)
 
         within(selected_filter) do
           return unless values.any?
 
           if boolean_filter?(name)
             set_toggle_filter(values)
-          elsif name == "created_at"
+          elsif autocomplete_filter?(selected_filter)
             select(human_operator, from: "operator")
-            set_created_at_filter(human_operator, values, send_keys:)
-          elsif /cf_\d+/.match?(name)
+            set_autocomplete_filter(values)
+          elsif date_filter?(selected_filter) || date_time_filter?(selected_filter)
             select(human_operator, from: "operator")
-            set_custom_field_filter(selected_filter, human_operator, values)
+            wait_for_network_idle
+            set_date_filter(human_operator, values, send_keys:)
           end
         end
+      end
+
+      def expect_autocomplete_options_for(custom_field, options, grouping: nil, results_selector: "body")
+        selected_filter = select_filter(custom_field.column_name, custom_field.name)
+
+        within(selected_filter) do
+          find('[data-filter-autocomplete="true"]').click
+        end
+
+        Array(options).each do |option|
+          expect_ng_option(selected_filter, option, grouping:, results_selector:)
+        end
+      end
+
+      def expect_user_autocomplete_options_for(custom_field, expected_options)
+        selected_filter = select_filter(custom_field.column_name, custom_field.name)
+
+        within(selected_filter) do
+          find('[data-filter-autocomplete="true"]').click
+        end
+        options = visible_user_auto_completer_options
+
+        expect(options).to eq(expected_options)
+      end
+
+      def apply_operator(name, human_operator)
+        select(human_operator, from: "operator") unless boolean_filter?(name)
+      end
+
+      def select_filter(name, human_name)
+        select human_name, from: "add_filter_select"
+        page.find("li[data-filter-name='#{name}']")
       end
 
       def remove_filter(name)
@@ -310,7 +353,7 @@ module Pages
         end
       end
 
-      def set_created_at_filter(human_operator, values, send_keys: false)
+      def set_date_filter(human_operator, values, send_keys: false)
         case human_operator
         when "on", "less than days ago", "more than days ago", "days ago"
           if send_keys
@@ -320,7 +363,7 @@ module Pages
           end
         when "between"
           if send_keys
-            find_field("from_value").send_keysvalues.first
+            find_field("from_value").send_keys values.first
             find_field("to_value").send_keys values.second
           else
             fill_in "from_value", with: values.first
@@ -329,21 +372,21 @@ module Pages
         end
       end
 
-      def set_custom_field_filter(selected_filter, human_operator, values, send_keys: false)
-        if selected_filter[:"data-filter-type"] == "list_optional"
-          if values.size == 1
-            value_select = find('.single-select select[name="value"]')
-            value_select.select values.first
-          end
-        elsif selected_filter[:"data-filter-type"] == "date"
-          if human_operator == "on"
-            if send_keys
-              find_field("value").send_keys values.first
-            else
-              fill_in "value", with: values.first
-            end
-          end
+      def set_autocomplete_filter(values, clear: true)
+        element = find('[data-filter-autocomplete="true"]')
+
+        ng_select_clear(element, raise_on_missing: false) if clear
+
+        Array(values).each do |query|
+          select_autocomplete element,
+                              query:,
+                              results_selector: "body"
         end
+      end
+
+      def set_list_filter(values)
+        value_select = find('.single-select select[name="value"]')
+        value_select.select values.first
       end
 
       def open_filters
@@ -389,15 +432,18 @@ module Pages
         within "dialog" do
           click_on "Apply"
         end
+
+        wait_for_network_idle
       end
 
-      def expect_no_config_columns(*columns)
+      def expect_no_config_columns(*columns, element_selector: ".op-draggable-autocomplete--input",
+                                   results_selector: ".ng-dropdown-panel-items")
         open_configure_view
 
         columns.each do |column|
-          expect_no_ng_option find(".op-draggable-autocomplete--input"),
+          expect_no_ng_option find(element_selector),
                               column,
-                              results_selector: ".ng-dropdown-panel-items"
+                              results_selector:
         end
 
         within "dialog" do
@@ -472,14 +518,52 @@ module Pages
         end
       end
 
-      def sort_by_via_table_header(column_name)
-        find(".generic-table--sort-header a", text: column_name.upcase).click
+      def click_table_header_to_open_action_menu(column_name)
+        find(".generic-table--sort-header #menu-#{column_name.downcase}-button").click
+      end
+
+      def sort_via_action_menu(column_name, direction:)
+        raise ArgumentError, "direction should be :asc or :desc" unless %i[asc desc].include?(direction)
+
+        find(".generic-table--sort-header a[data-test-selector='#{column_name.downcase}-sort-#{direction}']").click
+      end
+
+      def expect_no_sorting_option_in_action_menu(column_name)
+        expect(page).to have_no_css("[data-test-selector='#{column_name.downcase}-sort-asc']")
+        expect(page).to have_no_css("[data-test-selector='#{column_name.downcase}-sort-desc']")
+      end
+
+      def move_column_via_action_menu(column_name, direction:)
+        raise ArgumentError, "direction should be :left or :right" unless %i[left right].include?(direction)
+
+        find(".generic-table--sort-header a[data-test-selector='#{column_name.downcase}-move-col-#{direction}']").click
+      end
+
+      def remove_column_via_action_menu(column_name)
+        find(".generic-table--sort-header a[data-test-selector='#{column_name.downcase}-remove-column']").click
+      end
+
+      def click_add_column_in_action_menu(column_name)
+        find(".generic-table--sort-header a[data-test-selector='#{column_name.downcase}-add-column']").click
+      end
+
+      def expect_filter_option_in_action_menu(column_name)
+        expect(page).to have_css("[data-test-selector='#{column_name.downcase}-filter-by']",
+                                 text: I18n.t(:label_filter_by))
+      end
+
+      def expect_no_filter_option_in_action_menu(column_name)
+        expect(page).to have_no_css("[data-test-selector='#{column_name.downcase}-filter-by']")
+      end
+
+      def filter_by_column_via_action_menu(column_name)
+        page.find("[data-test-selector='#{column_name.downcase}-filter-by']", text: I18n.t(:label_filter_by)).click
       end
 
       def expect_sort_order_via_table_header(column_name, direction:)
         raise ArgumentError, "direction should be :asc or :desc" unless %i[asc desc].include?(direction)
 
-        find(".generic-table--sort-header .#{direction} a", text: column_name.upcase)
+        find(".generic-table--sort-header .#{direction} .Button-label", text: column_name.upcase)
       end
 
       def set_page_size(size)
@@ -585,6 +669,18 @@ module Pages
 
       def boolean_filter?(filter)
         %w[active member_of favored public templated].include?(filter.to_s)
+      end
+
+      def autocomplete_filter?(filter)
+        filter.has_css?('[data-filter-autocomplete="true"]', wait: 0)
+      end
+
+      def date_filter?(filter)
+        filter[:"data-filter-type"] == "date"
+      end
+
+      def date_time_filter?(filter)
+        filter[:"data-filter-type"] == "datetime_past"
       end
 
       def submenu

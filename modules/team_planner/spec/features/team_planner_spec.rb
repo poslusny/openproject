@@ -31,6 +31,7 @@ require_relative "shared_context"
 
 RSpec.describe "Team planner",
                :js,
+               :selenium,
                with_ee: %i[team_planner_view],
                with_settings: { start_of_week: 1 } do
   include_context "with team planner full access"
@@ -43,7 +44,7 @@ RSpec.describe "Team planner",
     end
 
     expect(page).to have_content "There is currently nothing to display."
-    click_on "Create", match: :first
+    page.find_test_selector("add-team-planner-button").click
 
     team_planner.expect_title
 

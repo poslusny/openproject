@@ -29,13 +29,13 @@
 require "digest/md5"
 
 class Attachment < ApplicationRecord
-  enum status: {
+  enum :status, {
     uploaded: 0,
     prepared: 1,
     scanned: 2,
     quarantined: 3,
     rescan: 4
-  }.freeze, _prefix: true
+  }, prefix: true
 
   belongs_to :container, polymorphic: true
   belongs_to :author, class_name: "User"
@@ -163,8 +163,12 @@ class Attachment < ApplicationRecord
     content_type == "application/pdf"
   end
 
+  def is_html?
+    content_type == "text/html"
+  end
+
   def is_text?
-    content_type.match?(/\Atext\/.+/)
+    content_type.match?(/\Atext\/.+/) && !is_html?
   end
 
   def is_diff?

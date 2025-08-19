@@ -14,11 +14,10 @@ installed first, which usually requires a recent operating system. Please see th
 
 ## Supported architectures
 
-Starting with OpenProject 12.5.6 we publish our containers for three architectures.
+Starting with OpenProject 12.5.6 we publish our containers for two architectures.
 
 1. AMD64 (x86)
 2. ARM64
-3. PPC64
 
 The OpenProject **BIM Edition** is only supported on AMD64, however.
 
@@ -76,7 +75,7 @@ docker run -it -p 8080:80 \
   -e OPENPROJECT_HOST__NAME=localhost:8080 \
   -e OPENPROJECT_HTTPS=false \
   -e OPENPROJECT_DEFAULT__LANGUAGE=en \
-  openproject/openproject:14
+  openproject/openproject:15
 ```
 
 Explanation of the used configuration values:
@@ -106,7 +105,7 @@ docker run -d -p 8080:80 \
   -e OPENPROJECT_SECRET_KEY_BASE=secret \
   -e OPENPROJECT_HOST__NAME=localhost:8080 \
   -e OPENPROJECT_HTTPS=false \
-  openproject/openproject:14
+  openproject/openproject:15
 ```
 
 **Note**: We've had reports of people being unable to start OpenProject this way
@@ -138,7 +137,7 @@ docker run -d -p 8080:80 --name openproject \
   -e OPENPROJECT_SECRET_KEY_BASE=secret \
   -v /var/lib/openproject/pgdata:/var/openproject/pgdata \
   -v /var/lib/openproject/assets:/var/openproject/assets \
-  openproject/openproject:14
+  openproject/openproject:15
 ```
 
 Please make sure you set the correct public facing hostname in `OPENPROJECT_HOST__NAME`. If you don't have a load-balancing or proxying web server in front of your docker container,
@@ -395,7 +394,7 @@ end
 **3. Create the `Dockerfile`** in the same folder. The contents have to look like this:
 
 ```dockerfile
-FROM openproject/openproject:14
+FROM openproject/openproject:15
 
 # If installing a local plugin (using `path:` in the `Gemfile.plugins` above),
 # you will have to copy the plugin code into the container here and use the
@@ -419,7 +418,7 @@ All the Dockerfile does is copy your custom plugins gemfile into the image, inst
 If you are using the `-slim` tag you will need to do the following to add your plugin.
 
 ```dockerfile
-FROM openproject/openproject:14 AS plugin
+FROM openproject/openproject:15 AS plugin
 
 # If installing a local plugin (using `path:` in the `Gemfile.plugins` above),
 # you will have to copy the plugin code into the container here and use the
@@ -434,7 +433,7 @@ COPY Gemfile.plugins /app/
 RUN bundle config unset deployment && bundle install && bundle config set deployment 'true'
 RUN ./docker/prod/setup/precompile-assets.sh
 
-FROM openproject/openproject:14-slim
+FROM openproject/openproject:15-slim
 
 COPY --from=plugin /usr/bin/git /usr/bin/git
 COPY --chown=$APP_USER:$APP_USER --from=plugin /app/vendor/bundle /app/vendor/bundle
@@ -458,7 +457,7 @@ The `-t` option is the tag for your image. You can choose what ever you want.
 **5. Run the image**
 
 You can run the image just like the normal OpenProject image (as shown [here](#quick-start)).
-You just have to use your chosen tag instead of `openproject/openproject:14`.
+You just have to use your chosen tag instead of `openproject/openproject:15`.
 To just give it a quick try you can run this:
 
 ```shell
@@ -480,10 +479,10 @@ sudo docker run -it -p 8080:80 \
   -e OPENPROJECT_DEFAULT__LANGUAGE=en \
   --mount type=bind,source=$(pwd)/my_root.crt,target=/tmp/my_root.crt \ #mount my_root.crt to /tmp
   -e SSL_CERT_FILE=/tmp/my_root.crt \ #set the SSL_CERT_FILE to the path of my_root.crt
-  openproject/openproject:14
+  openproject/openproject:15
 ```
 
-The second way would be to build a new image of the ```openproject/openproject:14``` or the ```-slim``` image.
+The second way would be to build a new image of the ```openproject/openproject:15``` or the ```-slim``` image.
 
 **1. Create a new folder** with any name, for instance `custom-openproject`. Change into that folder.
 
@@ -491,7 +490,7 @@ The second way would be to build a new image of the ```openproject/openproject:1
 
 **3. Create the `Dockerfile`** in the same folder. The contents have to look like this:
 ```dockerfile
-FROM openproject/openproject:14
+FROM openproject/openproject:15
 
 COPY ./my_root.crt /usr/local/share/ca-certificates/
 RUN update-ca-certificates
@@ -499,7 +498,7 @@ RUN update-ca-certificates
 
 If you are using the -slim tag, you will need to do the following to import your root certificate:
 ```dockerfile
-FROM openproject/openproject:14-slim
+FROM openproject/openproject:15-slim
 
 USER root
 COPY ./smtp.local_rootCA.crt /usr/local/share/ca-certificates/
@@ -516,7 +515,7 @@ The `-t` option is the tag for your image. You can choose what ever you want.
 
 **5. Run the image**
 
-You can run the image just like the normal OpenProject image (as shown [here](#quick-start)). You just have to use your chosen tag instead of ```openproject/openproject:14```
+You can run the image just like the normal OpenProject image (as shown [here](#quick-start)). You just have to use your chosen tag instead of ```openproject/openproject:15```
 
 ## Offline/air-gapped installation
 
@@ -528,7 +527,7 @@ The installation works the same as described above. The only difference is that 
 On a system that has access to the internet run the following.
 
 ```shell
-docker pull openproject/openproject:14 && docker save openproject/openproject:14 | gzip > openproject-12.tar.gz
+docker pull openproject/openproject:15 && docker save openproject/openproject:15 | gzip > openproject-stable.tar.gz
 ```
 
 This creates a compressed archive containing the latest OpenProject docker image.
@@ -729,12 +728,12 @@ Once this has finished you should see something like this when running `docker s
 docker service ls
 ID                  NAME                 MODE                REPLICAS            IMAGE                      PORTS
 kpdoc86ggema        openproject_cache    replicated          1/1                 memcached:latest
-qrd8rx6ybg90        openproject_cron     replicated          1/1                 openproject/openproject:14
+qrd8rx6ybg90        openproject_cron     replicated          1/1                 openproject/openproject:15
 cvgd4c4at61i        openproject_db       replicated          1/1                 postgres:13
-uvtfnc9dnlbn        openproject_proxy    replicated          1/1                 openproject/openproject:14   *:8080->80/tcp
-g8e3lannlpb8        openproject_seeder   replicated          0/1                 openproject/openproject:14
-canb3m7ilkjn        openproject_web      replicated          1/1                 openproject/openproject:14
-7ovn0sbu8a7w        openproject_worker   replicated          1/1                 openproject/openproject:14
+uvtfnc9dnlbn        openproject_proxy    replicated          1/1                 openproject/openproject:15   *:8080->80/tcp
+g8e3lannlpb8        openproject_seeder   replicated          0/1                 openproject/openproject:15
+canb3m7ilkjn        openproject_web      replicated          1/1                 openproject/openproject:15
+7ovn0sbu8a7w        openproject_worker   replicated          1/1                 openproject/openproject:15
 ```
 
 You can now access OpenProject under `http://0.0.0.0:8080`.
@@ -772,12 +771,12 @@ This will take a moment to converge. Once done you should see something like the
 docker service ls
 ID                  NAME                 MODE                REPLICAS            IMAGE                      PORTS
 kpdoc86ggema        openproject_cache    replicated          1/1                 memcached:latest
-qrd8rx6ybg90        openproject_cron     replicated          1/1                 openproject/openproject:14
+qrd8rx6ybg90        openproject_cron     replicated          1/1                 openproject/openproject:15
 cvgd4c4at61i        openproject_db       replicated          1/1                 postgres:10
-uvtfnc9dnlbn        openproject_proxy    replicated          2/2                 openproject/openproject:14   *:8080->80/tcp
-g8e3lannlpb8        openproject_seeder   replicated          0/1                 openproject/openproject:14
-canb3m7ilkjn        openproject_web      replicated          6/6                 openproject/openproject:14
-7ovn0sbu8a7w        openproject_worker   replicated          1/1                 openproject/openproject:14
+uvtfnc9dnlbn        openproject_proxy    replicated          2/2                 openproject/openproject:15   *:8080->80/tcp
+g8e3lannlpb8        openproject_seeder   replicated          0/1                 openproject/openproject:15
+canb3m7ilkjn        openproject_web      replicated          6/6                 openproject/openproject:15
+7ovn0sbu8a7w        openproject_worker   replicated          1/1                 openproject/openproject:15
 ```
 
 Docker swarm handles the networking necessary to distribute the load among the nodes.

@@ -67,6 +67,10 @@ RSpec.describe "My spent time widget with a negative time zone", :js,
   let!(:week_days) { week_with_saturday_and_sunday_as_weekend }
   let!(:non_working_day) { create(:non_working_day, date: tuesday) }
 
+  let!(:my_page_grid) do
+    create(:my_page, :empty, user:)
+  end
+
   before do
     login_as user
     my_page.visit!
@@ -77,6 +81,8 @@ RSpec.describe "My spent time widget with a negative time zone", :js,
     my_page.add_widget(1, 1, :within, "My spent time")
 
     my_page.expect_and_dismiss_toaster message: I18n.t(:notice_successful_update)
+
+    wait_for_network_idle
 
     expect(page)
       .to have_content time_entry.spent_on.strftime("%-m/%-d")
@@ -94,7 +100,7 @@ RSpec.describe "My spent time widget with a negative time zone", :js,
 
     aggregate_failures("when clicking a day, time entry day is set to the day clicked (Thursday)") do
       find(".fc-day-thu .te-calendar--add-entry", visible: false).click
-      time_logging_modal.has_field_with_value "spentOn", thursday.iso8601
+      time_logging_modal.has_field_with_value "spent_on", thursday.iso8601
     end
   end
 end

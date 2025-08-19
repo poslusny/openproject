@@ -5,13 +5,14 @@ sidebar_navigation:
 description: Integration to OpenProject.
 keywords: projects, integration, Jira
 ---
-# Integrations and community plugins
+# Integrations and Community plugins
 
 There are various integrations and Community plugins out there. Please [contact us](https://www.openproject.org/contact/) if you want to have your plugin to be added to this list.
 
 If you have previously worked with other tools and want to switch or need an integration to OpenProject, there is a way to do so for some applications.
 
-> **Note**:  We do not guarantee error-free and seamless use of the Community plugins. Installation and use is at your own risk.
+> [!IMPORTANT]
+> We do not guarantee error-free and seamless use of the Community plugins. Installation and use is at your own risk.
 
 ## Excel
 
@@ -27,7 +28,9 @@ OpenProject offers a GitLab integration, based on the [GitLab plugin contributed
 
 ## Jira
 
-Currently, there is no direct integration between OpenProject and Jira. Since OpenProject is an excellent open source alternative to Jira, we have prepared a way to import tickets from Jira to OpenProject. First, you can export your tasks from Jira into an Excel file and then import these tasks via an [Excel plugin into OpenProject](./excel-synchronization).
+We do not provide a direct integration between OpenProject and Jira ourselves. However, you can export your tasks from Jira into an Excel file and then import these tasks via an [Excel plugin into OpenProject](./excel-synchronization).
+
+If you want to migrate from Jira to OpenProject, please consult [this user-provided OpenProject Jira importer](https://github.com/dotnetfactory/openproject-jira-importer). Please note that it is not officially supported and that we do not take any liability when you use it. 
 
 If you would like to learn more about the features of **OpenProject vs Jira** please read [here](https://www.openproject.org/blog/open-source-jira-alternative/).
 
@@ -37,8 +40,7 @@ There is a user-provided integration with Mattermost. Please note that it is not
 
 ## Microsoft Project
 
-There is an integration between MS Project and OpenProject. However, the synch plugin is not actively maintained at this time. If you wish to find out more, please [contact us](https://www.openproject.org/contact/).
-To synchronize tasks from MS Project to OpenProject, you can export your MS Project file to Excel and then [synchronize it with OpenProject]( ./excel-synchronization/).
+To move tasks from MS Project to OpenProject, you can export your MS Project file to Excel and then [synchronize it with OpenProject]( ./excel-synchronization/).
 
 ## Nextcloud
 
@@ -48,14 +50,16 @@ OpenProject offers integration with Nextcloud for file storage and collaboration
 
 OpenProject offers an integration with OneDrive/Sharepoint for file storage and collaboration. You can find more information about [setting up the integration with OneDrive/SharePoint](./one-drive) and [using the integration](../../user-guide/file-management/one-drive-integration/).
 
-> **Note**: OneDrive/SharePoint integration is an Enterprise add-on and can only be used with [Enterprise cloud](../../enterprise-guide/enterprise-cloud-guide/) or [Enterprise on-premises](../../enterprise-guide/enterprise-on-premises-guide/). An upgrade from the free Community edition is easy and helps support OpenProject.
+> [!NOTE]
+> OneDrive/SharePoint integration is an Enterprise add-on and can only be used with [Enterprise cloud](../../enterprise-guide/enterprise-cloud-guide/) or [Enterprise on-premises](../../enterprise-guide/enterprise-on-premises-guide/). An upgrade from the free Community edition is easy and helps support OpenProject.
 
 
 ## SL2OP 
 
 SL2OP is an integration between SelectLine ERP and OpenProject. Please note that it was developed and is maintained by DAKO-IT, we do not provide any support for it. You can find more information [here](https://dako-it.com/captain-finn-software-fuer-selectline/schnittstelle-openproject-fuer-selectline/detail/80).
 
-> **Note**: it is currently only available in German. 
+> [!NOTE]
+> It is currently only available in German. 
 
 ## Slack
 

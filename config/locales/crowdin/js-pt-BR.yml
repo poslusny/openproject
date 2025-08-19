@@ -37,7 +37,7 @@ pt-BR:
       clear_all: "Remover tudo"
       loading: "Carregando..."
       not_found: "Nenhum item encontrado"
-      type_to_search: "Escreva para pesquisar"
+      type_to_search: "Digite para pesquisar"
     autocomplete_select:
       placeholder:
         multi: 'Adicionar "%{name}"'
@@ -103,8 +103,8 @@ pt-BR:
     button_settings: "Configurações"
     button_uncheck_all: "Desmarcar todos"
     button_update: "Atualizar"
-    button_export-pdf: "Baixar PDF"
     button_export-atom: "Baixar Atom"
+    button_generate_pdf: "Gerar PDF"
     button_create: "Criar"
     card:
       add_new: "Adicionar novo cartão"
@@ -220,6 +220,8 @@ pt-BR:
             label_maximum_users: "Máximo de usuários ativos"
             label_starts_at: "Começa em"
             label_expires_at: "Expira em"
+            label_plan: "Plano"
+            label_additional_features: "Funcionalidades adicionais"
             receive_newsletter: Quero receber o <a target="_blank" href="%{link}">boletim informativo</a> do OpenProject.
             taken_domain: Pode haver somente uma avaliação ativa por domínio.
             domain_mismatch: O nome do host da solicitação atual não corresponde ao nome do host configurado. Verifique novamente as configurações de seu sistema.
@@ -355,10 +357,10 @@ pt-BR:
           learn_about: "Saiba mais sobre os novos recursos"
           #Include the version to invalidate outdated translations in other locales.
           #Otherwise, e.g. chinese might still have the translations for 10.0 in the 12.0 release.
-          "14_6":
+          "15_5":
             standard:
               new_features_html: >
-                A nova versão traz diversas funcionalidades e melhorias para você, como: <br> <ul class="%{list_styling_class}"> <li>Aproveite um relatório de progresso mais flexível – graças ao feedback dos usuários.</li> <li>Receba uma notificação de atualização com opção de recarregar para as reuniões.</li> <li>Ative um campo personalizado para vários projetos ao mesmo tempo.</li> <li>Utilize macros de atributos relativos dos pacotes de trabalho.</li> <li>Mostre linhas em branco em textos enriquecidos salvos.</li> <li>Veja reuniões passadas incluídas no número ao lado da aba Reuniões.</li> </ul>
+                A nova versão traz várias funcionalidades e melhorias para você, por ex.: <br> <ul class="%{list_styling_class}"> <li>Filtro para descendentes (filhos e netos) de pacotes de trabalho.</li> <li>Aproveite a acessibilidade avançada no seletor de datas.</li> <li>Veja a % de Conclusão incluída nas somas da tabela de pacotes de trabalho.</li> <li>Inclua uma coluna para filhos nas tabelas de pacotes de trabalho.</li> <li>Melhor uso do seletor de datas em telas móveis.</li> <li>Exportações em PDF com o layout do formulário configurado.</li> </ul>
     ical_sharing_modal:
       title: "Assinar calendário"
       inital_setup_error_message: "Ocorreu um erro ao buscar dados."
@@ -574,14 +576,14 @@ pt-BR:
         members: "Convide novos <b>membros</b> para participar de seu projeto."
         quick_add_button: "Clique no ícone mais (+) no menu de navegação para <b>criar um novo projeto</b> ou para <b>convidar colegas de trabalho</b>."
         sidebar_arrow: "Use a seta de retorno no canto superior esquerdo para retornar ao <b>menu principal</b> do projeto."
-        welcome: "Acompanhe um tour de apresentação de 3 minutos para descobrir mais <b>recursos importantes</b>.<br> Recomendamos que você conclua as etapas até o final. Você pode reiniciar o tour a qualquer momento."
+        welcome: "Faça um tour de introdução de três minutos para conhecer os <b>principais recursos</b>. <br> Recomendamos que você siga todas as etapas até o final. O tour pode ser reiniciado a qualquer momento."
         wiki: "Na <b>wiki</b>, você pode documentar e compartilhar conhecimento junto com sua equipe. "
         backlogs:
           overview: "Gerencie seu trabalho na visão de <b>backlogs</b>."
-          sprints: "À direita você encontra o backlog do produto e de erros, à esquerda você encontra os respectivos sprints. Aqui você pode criar <b>épicos, histórias de usuário e bugs</b>, priorizar através de arrastar e soltar e adicioná-los a um sprint."
-          task_board_arrow: "Para ver o seu <b>quadro de tarefas</b>, abra o menu suspenso de sprint ... "
+          sprints: "À direita, você tem o backlog de produto e o backlog de erro, à esquerda, você tem as respectivas sprints. Aqui você pode criar <b>épicos, user stories e erros</b>, priorizar via arrastar e soltar e adicioná-los a uma sprint."
+          task_board_arrow: "Para ver o seu <b>quadro de tarefas</b>, abra o menu suspenso da sprint..."
           task_board_select: "... e selecione a entrada do <b>quadro de tarefas</b>. "
-          task_board: "O painel de tarefas visualiza o <b>progresso deste sprint</b>. Clique no ícone mais (+) ao lado de uma história de usuário para adicionar novas tarefas ou impedimentos. <br> A situação pode ser atualizada arrastando e soltando."
+          task_board: "O quadro de tarefas visualiza o <b>progresso desta sprint</b>. Clique no ícone de mais (+) ao lado de uma user story para adicionar novas tarefas ou impedimentos. <br> O status pode ser atualizado por arrastar e soltar."
         boards:
           overview: "Selecione <b>quadros</b> para mudar a visão e gerenciar seu projeto usando a exibição de quadros ágeis."
           lists_kanban: "Aqui você pode criar várias listas (colunas) dentro do seu painel. Este recurso permite que você crie um <b>Quadro Kanban</b>, por exemplo."
@@ -619,14 +621,15 @@ pt-BR:
         prioritized: "Priorizado"
         dateAlert: "Alerta de data"
         shared: "Compartilhado"
+        reminder: "Lembrete"
       date_alerts:
         milestone_date: "Data de marco"
         overdue: "Atrasado"
-        overdue_since: "desde %{difference_in_days}"
-        property_today: "é hoje"
-        property_is: "está em %{difference_in_days}"
-        property_was: "há %{difference_in_days}"
-        property_is_deleted: "foi excluído"
+        overdue_since: "desde %{difference_in_days}."
+        property_today: "é hoje."
+        property_is: "está em %{difference_in_days}."
+        property_was: "há %{difference_in_days}."
+        property_is_deleted: "foi excluído."
         upsale:
           title: "Alertas de data"
           description: "Com os alertas de data, você receberá uma notificação das futuras datas de início e conclusão, assim você nunca perderá ou esquecerá prazos importante. "
@@ -651,6 +654,8 @@ pt-BR:
         new_notifications:
           message: "Há novas notificações."
           link_text: "Clique aqui para carregá-las."
+      reminders:
+        note: "Nota: \"%{note}\""
       settings:
         change_notification_settings: 'Você pode modificar suas <a target="_blank" href="%{url}">configurações de notificação</a> para se certificar de nunca perder nenhuma atualização importante.'
         title: "Configurações de notificação"
@@ -713,18 +718,18 @@ pt-BR:
       description: "Descrição: Clique em editar..."
       relation_description: "Clique para adicionar a descrição para esta relação"
     project:
-      required_outside_context: >
-        Por favor, escolha o projeto onde vai criar o pacote de trabalho para visualizar todos os atributos. Você pode selecionar somente projetos que possuam o tipo acima ativado.
-      details_activity: "Atividade de detalhes do projeto"
-      context: "Contexto do projeto"
-      click_to_switch_to_project: "Projeto: %{projectname}"
-      confirm_template_load: "Mudar o modelo irá recarregar a página e todos os dados inseridos nesse formulário serão perdidos. Continuar?"
-      use_template: "Usar modelo"
-      no_template_selected: "(Nenhum)"
-      copy:
-        copy_options: "Opções de cópia"
       autocompleter:
         label: "Autocompletar projeto"
+      click_to_switch_to_project: "Projeto: %{projectname}"
+      confirm_template_load: "Mudar o modelo irá recarregar a página e todos os dados inseridos nesse formulário serão perdidos. Continuar?"
+      context: "Contexto do projeto"
+      copy:
+        copy_options: "Opções de cópia"
+      not_available: "Projeto N/A"
+      no_template_selected: "(Nenhum)"
+      required_outside_context: >
+        Por favor, escolha o projeto onde vai criar o pacote de trabalho para visualizar todos os atributos. Você pode selecionar somente projetos que possuam o tipo acima ativado.
+      use_template: "Usar modelo"
     reminders:
       settings:
         daily:
@@ -739,6 +744,7 @@ pt-BR:
         immediate:
           title: "Envie-me um lembrete por e-mail"
           mentioned: "Imediatamente quando alguém me @mencionar"
+          personal_reminder: "Imediatamente quando eu receber um lembrete pessoal"
         alerts:
           title: "Alertas por e-mail para outros itens (qua não sejam pacotes de trabalho)"
           explanation: >
@@ -770,10 +776,6 @@ pt-BR:
         upgrade_to_ee_text: "Uau! Se você precisa deste complemento, é porque é um super profissional! Gostaria de mostrar seu suporte aos desenvolvedores de código aberto tornando-se um cliente da edição Enterprise?"
         more_information: "Mais informações"
         nevermind: "Deixa pra lá"
-      edit:
-        form_configuration: "Configuração do formulário"
-        projects: "Projetos"
-        settings: "Configurações"
     time_entry:
       work_package_required: "É necessário selecionar primeiro um pacote de trabalho."
       title: "Registro de tempo"
@@ -796,6 +798,7 @@ pt-BR:
       typeahead_placeholder: Procurar possíveis observadores
     relation_labels:
       parent: "Pai"
+      child: "Filho"
       children: "Filhos"
       relates: "Relacionado a"
       duplicates: "Duplicados"
@@ -825,7 +828,7 @@ pt-BR:
       add_new_child: "Criar novo filho"
       create_new: "Criar novo"
       add_existing: "Adicionar existente"
-      add_existing_child: "Adicionar filho existente"
+      add_existing_child: "Adicionar filho"
       remove_child: "Remover filho"
       add_new_relation: "Criar nova relação"
       add_existing_relation: "Adicionar relação existente"
@@ -851,8 +854,6 @@ pt-BR:
       select_branch: "Selecionar ramificação"
     field_value_enter_prompt: "Insira um valor para '%{field}'"
     project_menu_details: "Detalhes"
-    scheduling:
-      manual: "Planejamento manual"
     sort:
       sorted_asc: "Ordenação crescente aplicada, "
       sorted_dsc: "Ordenação decrescente aplicada, "
@@ -900,15 +901,6 @@ pt-BR:
       comment_send_failed: "Ocorreu um erro. Não foi possível enviar o comentário."
       comment_updated: "O comentário foi atualizado com sucesso."
       confirm_edit_cancel: "Tem certeza que deseja cancelar a edição do pacote de trabalho?"
-      datepicker_modal:
-        automatically_scheduled_parent: "Planejado automaticamente. As datas são derivadas das relações."
-        manually_scheduled: "Planejamento manual habilitado, todas as relações são ignoradas."
-        start_date_limited_by_relations: "As datas de início e de conclusão disponíveis são limitadas pelas relações."
-        changing_dates_affects_follow_relations: "A alteração dessas datas afetará as datas de pacotes de trabalho relacionados."
-        click_on_show_relations_to_open_gantt: 'Clique em "%{button_name}" para ter uma visão geral do GANTT.'
-        show_relations: "Mostrar relações"
-        ignore_non_working_days:
-          title: "Apenas dias úteis"
       description_filter: "Filtro"
       description_enter_text: "Inserir texto"
       description_options_hide: "Ocultar opções"
@@ -974,7 +966,7 @@ pt-BR:
         createdAt: "Criado em"
         description: "Descrição"
         date: "Data"
-        percentComplete: "% concluído"
+        percentComplete: "% de conclusão"
         percentCompleteAlternative: "Progresso"
         dueDate: "Data de conclusão"
         duration: "Duração"
@@ -1042,6 +1034,12 @@ pt-BR:
           not_found: "Esta visão não existe"
           duplicate_query_title: "O nome desta visão já existe. Modificar assim mesmo?"
         text_no_results: "Nenhuma visão correspondente foi encontrada."
+      reminders:
+        button_label: "Definir lembrete"
+        title:
+          new: "Definir lembrete"
+          edit: "Editar lembrete"
+        subtitle: "Você receberá uma notificação para este pacote de trabalho no horário selecionado."
       scheduling:
         is_parent: "As datas deste pacote de trabalho são deduzidas automaticamente de seus filhos. Ative o 'Planejamento manual' para definir as datas."
         is_switched_from_manual_to_automatic: "As datas deste pacote de trabalho podem precisar ser recalculadas após a alteração de planejamento manual para automático devido a relações com outros pacotes de trabalho."
@@ -1298,7 +1296,7 @@ pt-BR:
       no_results: "Nenhum projeto corresponde ao seu critério de busca."
     baseline:
       toggle_title: "Linha base"
-      clear: "Limpar"
+      clear: "Remover"
       apply: "Aplicar"
       header_description: "Destaque as alterações realizadas nesta lista desde qualquer ponto no passado."
       enterprise_header_description: "Destaque as alterações realizadas nesta lista desde qualquer ponto no passado com a edição Enterprise."
@@ -1306,15 +1304,15 @@ pt-BR:
       baseline_comparison: "Comparação de linha base"
       help_description: "Fuso horário de referência para a linha base."
       time_description: "Em seu horário local: %{datetime}"
-      time: "Horário"
+      time: "Hora"
       from: "De"
       to: "Para"
       drop_down:
         none: "-"
         yesterday: "ontem"
         last_working_day: "último dia útil"
-        last_week: "última semana"
-        last_month: "último mês"
+        last_week: "semana passada"
+        last_month: "mês passado"
         a_specific_date: "uma data específica "
         between_two_specific_dates: "entre suas datas específicas"
       legends:
@@ -1341,9 +1339,7 @@ pt-BR:
         close: "Fechar o modal"
     open_project_storage_modal:
       waiting_title:
-        timeout: "Tempo de espera"
+        timeout: "Tempo limite"
       waiting_subtitle:
         network_off: "Ocorreu um problema de rede"
         network_on: "A rede voltou. Estamos tentando."
-        timeout: >
-          Não foi possível acessar a pasta do projeto no OpenProject dentro do prazo esperado. Tente novamente.<br><br> Se o problema persistir, entre em contato com seu administrador OpenProject para verificar o <a href="https://www.openproject.org/docs/system-admin-guide/files/external-file-storages/file-storage-troubleshooting/">status de integridade da configuração de armazenamento de arquivos</a>.
