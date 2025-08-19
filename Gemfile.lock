@@ -59,6 +59,11 @@ GIT
       rspec (>= 3.10)
 
 PATH
+  remote: ../plugins/openproject-example_plugin
+  specs:
+    openproject-example_plugin (0.0.1)
+
+PATH
   remote: modules/auth_plugins
   specs:
     openproject-auth_plugins (1.0.0)
@@ -1294,6 +1299,7 @@ DEPENDENCIES
   openproject-boards!
   openproject-calendar!
   openproject-documents!
+  openproject-example_plugin!
   openproject-gantt!
   openproject-github_integration!
   openproject-gitlab_integration!

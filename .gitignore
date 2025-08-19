@@ -142,3 +142,7 @@ acme.json
 
 # Generated seeders crowdin source file
 **/config/locales/en.seeders.yml
+
+# Custom plugin directories (private plugins not tracked in repository)
+../plugins/
+../third-party-plugins/
