@@ -2,7 +2,8 @@
 ru:
   js:
     team_planner:
-      add_existing: 'Добавить существующее'
+      add_existing: 'Добавить существующий'
+      label_team_planner_plural: 'Командные планировщики'
       add_existing_title: 'Добавить существующие пакеты работ'
       create_label: 'Командный планировщик'
       create_title: 'Создать новый командный планировщик'

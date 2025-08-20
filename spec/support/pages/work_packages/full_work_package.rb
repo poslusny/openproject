@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -31,7 +33,7 @@ require "support/pages/work_packages/abstract_work_package"
 module Pages
   class FullWorkPackage < Pages::AbstractWorkPackage
     def ensure_loaded
-      find(".work-packages--details--subject", match: :first)
+      first(".work-packages--details--subject")
     end
 
     def toolbar
@@ -73,6 +75,14 @@ module Pages
 
     def expect_no_reminder_button
       expect(page).not_to have_test_selector("op-wp-reminder-button")
+    end
+
+    def click_reminder_button_with_context_menu(menu_item: "At a particular date/time")
+      click_reminder_button
+
+      within "#reminder-dropdown-menu" do
+        click_link_or_button menu_item
+      end
     end
 
     def click_reminder_button

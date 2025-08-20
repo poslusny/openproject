@@ -18,7 +18,7 @@ pl:
       types:
         nextcloud: "Nextcloud"
         one_drive: "OneDrive/SharePoint"
-        default: "Magazyn"
+        default: "Magazyn danych"
       information:
         authentication_error: "Żądania do %{storageType} nie można uwierzytelnić, to jest błąd."
         connection_error: >

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -46,8 +48,9 @@ RSpec.describe WorkPackages::CopyService, "integration", type: :model do
     set_factory_default(:user, user)
   end
 
+  shared_let(:project_phase_definition) { create(:project_phase_definition) }
   shared_let(:work_package) do
-    create(:work_package, author: user, project:, type:)
+    create(:work_package, author: user, project:, type:, project_phase_definition:)
   end
 
   let(:instance) { described_class.new(work_package:, user:) }
@@ -101,6 +104,13 @@ RSpec.describe WorkPackages::CopyService, "integration", type: :model do
         it "copies the watcher and does not add the copying user as a watcher" do
           expect(copy.watcher_users)
             .to contain_exactly(watcher_user)
+        end
+      end
+
+      describe "#project_phase_definition" do
+        it "is the one of the copied work package" do
+          expect(copy.project_phase_definition)
+            .to eql project_phase_definition
         end
       end
     end
@@ -191,6 +201,13 @@ RSpec.describe WorkPackages::CopyService, "integration", type: :model do
 
         it "copies the % complete value over" do
           expect(copy.done_ratio).to eq(40)
+        end
+      end
+
+      describe "#project_phase_definition" do
+        it "is the one of the copied work package" do
+          expect(copy.project_phase_definition)
+            .to eql project_phase_definition
         end
       end
 

@@ -33,6 +33,18 @@ You can choose which columns will be displayed in the table (excluding long text
 
 Some formats such as PDF will limit the number of columns available due to limitations of the PDF rendering engine to avoid overflowing the available space.
 
+#### Save export format
+
+Export settings can be saved for custom (all non-default) work package queries. This allows you to easily share export settings with your team and save time in the future. 
+
+To save export settings adjust the export to your liking and check the **Save setting** checkbox before triggering an export. Clicking the **Export** button will trigger the adjustments to a work package query. The checkbox will remain checked for the next export.
+
+![Checkbox to save export settings in work packages export modal in OpenProject](openproject-user-guide-wp-export-settings-save-checkbox.png)
+
+> [!TIP]
+>
+> If the query is public, other users can edit it and save the export settings. If you want to prevent other users from adjusting the export settings, you need to create a private work package query. 
+
 ### Export format options
 
 OpenProject has multiple file format options for exporting work packages, including PDF, XLS and CSV. See below what each format entails.
@@ -40,6 +52,12 @@ OpenProject has multiple file format options for exporting work packages, includ
 ### PDF export
 
 OpenProject has multiple options for exporting work packages in PDF format. These include table, report and Gantt chart. 
+
+> [!TIP]
+>
+> OpenProject PDF export supports commonly used character sets, including multilingual fonts with different alphabets, various symbols (mathematical, technical) and emojis.
+>
+![Example of a PDF export in OpenProject that includes lorem ipsum text in multiple languages and mathematical symbols](openproject-user-guide-wp-export-multilingual-symbols-example.png)
 
 #### PDF Table
 
@@ -165,9 +183,8 @@ If you select **Generate PDF**, a modal will open, where you can adjust the foll
 
 - **Template** is a dropdown menu showing all of the options currently enabled. At moment possible template options include:
 
-   - *Attributes and description* - this template lists all the work package attributes [configured in the work package form](../../../system-admin-guide/manage-work-packages/work-package-types/#work-package-form-configuration-enterprise-add-on), regardless whether they are filled out or not.
-   - *Contract* - this template includes work package details formatted to the standard German contract form.
-
+  - *Attributes and description* - this template lists all the work package attributes [configured in the work package form](../../../system-admin-guide/manage-work-packages/work-package-types/#work-package-form-configuration-enterprise-add-on), regardless whether they are filled out or not.
+  - *Contract* - this template includes work package details formatted to the standard German contract form.
     
 > [!TIP] 
 > You can define which templates are enabled for specific work package types in the [administration settings](../../../system-admin-guide/manage-work-packages/work-package-types).

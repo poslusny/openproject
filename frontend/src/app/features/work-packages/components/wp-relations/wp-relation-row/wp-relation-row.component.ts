@@ -16,6 +16,7 @@ import { Highlighting } from 'core-app/features/work-packages/components/wp-fast
 @Component({
   selector: 'wp-relation-row',
   templateUrl: './wp-relation-row.template.html',
+  standalone: false,
 })
 export class WorkPackageRelationRowComponent extends UntilDestroyedMixin implements OnInit {
   @Input() public workPackage:WorkPackageResource;
@@ -122,7 +123,7 @@ export class WorkPackageRelationRowComponent extends UntilDestroyedMixin impleme
   }
 
   public handleDescriptionKey($event:JQuery.TriggeredEvent) {
-    if ($event.which === 27) {
+    if ($event.key === 'Escape') {
       this.cancelDescriptionEdit();
     }
   }

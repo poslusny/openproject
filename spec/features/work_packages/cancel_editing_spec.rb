@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # -- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -70,7 +72,7 @@ RSpec.describe "Cancel editing work package", :js, :selenium do
       find(".op-logo--link").click
     end
 
-    expect(page).to have_css("#projects-menu", text: "Select a project")
+    expect(page).to have_css("#projects-menu", text: "All projects")
   end
 
   it "does not show an alert when moving to other pages" do

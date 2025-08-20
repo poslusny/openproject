@@ -44,7 +44,7 @@ zh-CN:
       meeting_agenda_item:
         title: "标题"
         author: "作者"
-        duration_in_minutes: "分钟"
+        duration_in_minutes: "持续时间"
         description: "备注"
         presenter: "演讲者"
       meeting_section:
@@ -69,11 +69,9 @@ zh-CN:
         invalid_time_format: "不是有效时间。所需格式：HH:MM"
     models:
       recurring_meeting: "定期会议"
-      structured_meeting: "动态会议"
-      meeting: "会议"
+      meeting: "一次性会议"
       meeting_agenda_item: "议程项目"
       meeting_agenda: "议程"
-      meeting_minutes: "会议记录"
       meeting_section: "节"
   activity:
     filter:
@@ -100,6 +98,7 @@ zh-CN:
     meeting_agenda_opened: 会议议程已开启
     meeting_minutes: 会议记录已编辑
     meeting_minutes_created: 会议记录已建立
+  error_notification: "发送通知失败"
   error_notification_with_errors: "发送通知失败。无法通知下列收件人：%{recipients}"
   label_meeting: "会议"
   label_meeting_plural: "会议"
@@ -119,6 +118,7 @@ zh-CN:
   label_meeting_date_time: "日期/时间"
   label_meeting_date_and_time: "日期和时间"
   label_meeting_diff: "比较"
+  label_meeting_send_updates: "发送电子邮件日历更新"
   label_recurring_meeting: "定期会议"
   label_recurring_meeting_part_of: "会议系列的一部分"
   label_recurring_meeting_new: "新的定期会议"
@@ -180,6 +180,7 @@ zh-CN:
       agenda_items: "复制议程项目"
       agenda_text: "复制之前会议的议程"
       participants: "复制与会者列表"
+      to_clipboard: "复制到剪贴板"
     email:
       send_emails: "电子邮件参与者"
       send_invitation_emails: >
@@ -211,11 +212,8 @@ zh-CN:
         body: "会议 '%{title}' 已经由 %{actor} 重新安排。"
         old_date_time: "旧日期/时间"
         new_date_time: "新日期/时间"
-    label_mail_all_participants: "发送电子邮件给所有参与者"
+    label_mail_all_participants: "使用电子邮件向所有与会者发送日历邀请"
     types:
-      classic: "经典(不支持)"
-      classic_text: "注意：经典会议将在下一版 OpenProject 中删除。"
-      structured: "结构化"
       one_time: "动态"
       recurring: "定期"
       recurring_text: "为每次事件创建带有动态模板的会议系列。"
@@ -237,12 +235,79 @@ zh-CN:
     blankslate:
       title: "无会议显示"
       desc: "没有符合主动筛选条件的会议。"
+    label_export_pdf: "导出 PDF"
+    export:
+      your_meeting_export: "会议正在导出"
+    export_pdf_dialog:
+      title: 导出 PDF
+      description: 生成当前状态下此会议的可打印 PDF 文件。
+      include_participants:
+        label: 包含与会者名单
+        caption: 与会者名单将列在会议议程上方。
+      include_attachments:
+        label: 包含附件列表
+        caption: 附件的文件名清单将附加在结尾。
+      include_backlog:
+        label: 包含积压工作
+        caption: 积压工作元素通常不被视为会议事件的一部分，但您可以选择将它们包含在内。
+      include_outcomes:
+        label: 包含议程结果
+        caption: 如果您的议程结果包含机密信息，您可以选择不在导出内容中包括它们。
+      footer_text:
+        label: 页脚文本
+        caption: 此文本将出现在每一页的页脚中心。
+      submit_button: 下载
+    notifications:
+      sidepanel:
+        title: "电子邮件日历更新"
+        state:
+          disabled: "已禁用。"
+          enabled: "已启用。"
+        description:
+          disabled: "与会者不会收到向其通知更改的电子邮件。"
+          enabled: "所有与会者都将通过电子邮件收到更新的日历邀请，向其通知相关更改。"
+          change_via_template: "要更改此设置，请编辑系列模板。"
+        button:
+          disable: "禁用"
+          enable: "启用"
+      dialog:
+        title:
+          enable: "启用电子邮件日历更新？"
+          disable: "禁用电子邮件日历更新？"
+        message:
+          enable: >
+            每次会议日期、时间、地点或与会者更改时，所有与会者都将通过电子邮件收到更新日历的邀请。 一旦启用，将立即向所有参与者发送一封电子邮件。
+          disable: >
+            当会议日期、时间、地点或与会者发生更改时，与会者将不再通过电子邮件收到更新的日历邀请。如果他们已经收到过此次会议的邀请，则该邀请可能不再准确。
+        confirm_label:
+          enable: "启用电子邮件更新"
+          disable: "禁用电子邮件更新"
+      banner:
+        onetime:
+          enabled: >
+            所有与会者都将通过电子邮件收到更新的日历邀请，向其通知您所做的更改。
+          disabled: >
+            电子邮件日历更新已禁用。与会者不会收到向其通知您所做更改的电子邮件。
+        occurrence:
+          enabled: >
+            已对会议系列启用电子邮件日历更新。所有与会者都会收到更新的日历邀请，向其通知您对此次事件所做的更改。
+          disabled: >
+            已对会议系列禁用电子邮件日历更新。与会者将不会收到向其通知您对此次事件所做更改的电子邮件。
+        template:
+          enabled: >
+            已对会议系列启用电子邮件日历更新。所有与会者都会收到更新的日历邀请，向其通知您对此模板或各个事件所做的更改。
+          disabled: >
+            已对会议系列禁用电子邮件日历更新。与会者将不会收到向其通知您对此模板或各个事件所做更改的电子邮件。
   meeting_section:
     untitled_title: "无标题章节"
     delete_confirmation: "删除该属性也会删除其在所有项目中的值。您确定要这样做吗？"
     placeholder_title: "新建章节"
     empty_text: "拖动项目到此处或创建一个新项目"
   recurring_meeting:
+    time_zone_difference_banner:
+      title: "时差"
+      description: >
+        以下日期参考的是系列会议的时区 (%{actual_zone})，而不是您当地的时区 (%{user_zone})。
     ended_blankslate:
       title: "结束"
       message: "本系列会议已经结束，没有即将举行的会议。 "
@@ -318,23 +383,17 @@ zh-CN:
       confirm_button: "取消事件"
     end_series_dialog:
       title: "结束会议系列"
-  notice_successful_notification: "通知发送成功"
+  notice_successful_notification: "已向所有与会者发送电子邮件日历更新"
   notice_timezone_missing: 没有设定时区，预设时区为 %{zone}。要选择您的时区，请单击此处。
   notice_meeting_updated: "此页面已被其他人更新。重新加载以查看更改。"
   permission_create_meetings: "创建会议"
   permission_edit_meetings: "编辑会议"
   permission_delete_meetings: "删除会议"
   permission_view_meetings: "查看会议"
-  permission_create_meeting_agendas: "创建会议议程"
-  permission_create_meeting_agendas_explanation: "允许编辑经典会议的议程。"
   permission_manage_agendas: "管理议程"
-  permission_manage_agendas_explanation: "允许管理动态会议的议程项目。"
-  permission_close_meeting_agendas: "确定议程"
-  permission_send_meeting_agendas_notification: "发送议程审阅通知"
-  permission_create_meeting_minutes: "管理会议记录"
-  permission_send_meeting_minutes_notification: "发送会议记录审阅通知"
-  permission_meetings_send_invite: "邀请用户参加会议"
-  permission_send_meeting_agendas_icalendar: "将会议议程作为日历条目发送"
+  permission_manage_agendas_explanation: "允许创建、编辑和移除议程条目"
+  permission_manage_outcomes: "管理结果"
+  permission_send_meeting_invites_and_outcomes: "向与会者发送会议邀请和结果"
   project_module_meetings: "会议"
   text_duration_in_hours: "持续时间（单位：小时）"
   text_in_hours: "小时"
@@ -346,8 +405,8 @@ zh-CN:
   text_meeting_minutes_for_meeting: '“%{meeting}“会议记录'
   text_notificiation_invited: "此邮件包含以下会议的 ics 条目："
   text_meeting_empty_heading: "您的会议为空"
-  text_meeting_empty_description_1: "首先在下方添加议程条目。 每个条目都可以简单到只包含一个标题，但您也可以添加更多详细信息，例如持续时间和备注。"
-  text_meeting_empty_description_2: '您也可以添加引用到现有工作包。当您这样做时，相关的注释将自动可见于工作包的“会议”选项卡。'
+  text_meeting_empty_description1: "首先在下方添加议程条目。可以只包含一个标题，您也可以添加更多详细信息，例如持续时间和备注。"
+  text_meeting_empty_description2: '您也可以添加引用到现有工作包。当您这样做时，相关的注释将自动可见于工作包的“会议”选项卡。'
   label_meeting_empty_action: "添加议程项目"
   label_meeting_actions: "会议行动"
   label_meeting_edit_title: "编辑会议标题"
@@ -361,23 +420,47 @@ zh-CN:
   label_meeting_index_later: "下周及以后"
   label_agenda_items: "议程项目"
   label_agenda_items_reordered: "重新排序"
-  label_agenda_item_remove: "从议程中移除"
+  label_agenda_item_add: "添加议程项"
+  label_agenda_item_remove_from_agenda: "从议程中移除"
+  label_agenda_item_remove_from_backlog: "从积压工作中移除"
   label_agenda_item_undisclosed_wp: "工作包 #%{id} 不可见"
   label_agenda_item_deleted_wp: "已删除工作包引用"
   label_agenda_item_actions: "议程项目行动"
+  label_agenda_item_move_to_next_title: "Move to next meeting?"
+  label_agenda_item_move: "Move"
   label_agenda_item_move_to_next: "移动到下次会议"
+  label_agenda_item_move_to_backlog: "移动到待办事项"
+  label_agenda_item_move_to_current_meeting: "移动到当前会议"
   label_agenda_item_move_to_top: "移至顶部"
   label_agenda_item_move_to_bottom: "移至底部"
   label_agenda_item_move_up: "向上移动"
   label_agenda_item_move_down: "向下移动"
   label_agenda_item_add_notes: "添加备注"
   label_agenda_item_add_outcome: "添加成果"
+  label_agenda_item_work_package_add: "添加工作包"
   label_agenda_item_work_package: "议程项目工作包"
+  label_section_rename: "重命名章节"
   label_agenda_outcome: "成果"
   label_agenda_outcome_actions: "议程成果行动"
   label_agenda_outcome_edit: "编辑成果"
   label_agenda_outcome_delete: "删除成果"
   text_outcome_not_editable_anymore: "此成果已不可编辑。"
+  text_outcome_cannot_be_added: "无法再添加结果。"
+  label_backlog_clear: "清除待办事项"
+  label_backlog_clear_button: "全部清除"
+  text_backlog_clear_error: "清理待办事项时发生一个或多个错误。"
+  label_agenda_backlog: "议程待办事项"
+  text_agenda_backlog: >
+    此待办事项是这个一次性会议独有的。您可以拖动议程以添加或从会议中移除。
+  label_agenda_backlog_clear_title: "清除议程待办事项？"
+  text_agenda_backlog_clear_description: >
+    您确定要删除当前议程中的所有待办吗？此操作不可逆。
+  label_series_backlog: "系列待办事项"
+  text_series_backlog: >
+    此待办事项在该系列会议中共同存在。 您可以拖动以添加或从特定会议中移除。
+  label_series_backlog_clear_title: "清除系列待办事项？"
+  text_series_backlog_clear_description: >
+    此待办事项为系列会议待办事项，这将同时从此会议及其系列会议中删除。 您确定要继续吗？此操作不可逆。
   text_agenda_item_title: '议程项目 "%{title}"'
   text_agenda_work_package_deleted: '删除工作包的议程项目'
   text_deleted_agenda_item: '删除的议程项目'
@@ -415,9 +498,12 @@ zh-CN:
   text_add_work_package_to_meeting_description: "一个工作包可以添加到一个或多个会议供讨论。与此相关的任何说明也可在这里看到。"
   text_agenda_item_no_notes: "未提供备注"
   text_agenda_item_not_editable_anymore: "此议程项目已不可编辑。"
-  text_agenda_item_move_next_meeting: "您确定要将此移至 %{date} %{time} 的下一次会议吗？"
+  text_agenda_item_move_next_meeting: "This item will be moved to the next meeting on %{date} at %{time}."
   text_agenda_item_moved_to_next_meeting: "议程项目移至下次会议，日期 %{date}"
   text_work_package_has_no_upcoming_meeting_agenda_items: "该工作包尚未被安排到即将举行的会议议程中。"
   text_agenda_item_move_next_meeting_cancelled: "无法移动到下次会议，因为它已被取消。"
   text_work_package_add_to_meeting_hint: '使用"添加到会议"按钮将此工作包添加到即将举行的会议。'
   text_work_package_has_no_past_meeting_agenda_items: "在过往会议中没有提及过该工作包。"
+  text_email_updates_muted: "电子邮件日历更新已静音。当您进行更改时，与会者将不会通过电子邮件收到更新的邀请。"
+  text_email_updates_enabled: "电子邮件日历更新已启用。当您进行更改时，所有与会者都会通过电子邮件收到更新的邀请。"
+

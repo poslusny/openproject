@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -43,6 +45,10 @@ RSpec.describe "my routes" do
 
   it "/my/settings PATCH routes to my#update_account" do
     expect(patch("/my/settings")).to route_to("my#update_settings")
+  end
+
+  it "/my/interface GET routes to my#interface" do
+    expect(get("/my/interface")).to route_to("my#interface")
   end
 
   it "/my/notifications GET routes to my#notifications" do

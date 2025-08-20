@@ -36,10 +36,19 @@ module CustomFields
 
     alias_method :custom_field, :model
 
-    def has_no_items_or_projects?
+    def persisted_cf_has_no_items_or_projects?
+      custom_field.persisted? &&
       custom_field.field_format_hierarchy? &&
         custom_field.hierarchy_root.children.empty? &&
         custom_field.projects.empty?
+    end
+
+    def form_url
+      model.new_record? ? custom_fields_path : custom_field_path(model)
+    end
+
+    def form_method
+      model.new_record? ? :post : :put
     end
   end
 end

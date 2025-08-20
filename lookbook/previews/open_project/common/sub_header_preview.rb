@@ -9,8 +9,11 @@ module OpenProject
             button.with_trailing_visual_counter(count: "15")
             "Filter"
           end
-          component.with_action_button(scheme: :primary) do |button|
-            button.with_leading_visual_icon(icon: :plus)
+          component.with_action_button(
+            leading_icon: :plus,
+            label: "New item",
+            scheme: :primary
+          ) do
             "Create"
           end
         end
@@ -34,8 +37,11 @@ module OpenProject
           component.with_text { text } unless text.nil?
 
           if show_action_button
-            component.with_action_button(scheme: :primary) do |button|
-              button.with_leading_visual_icon(icon: :plus)
+            component.with_action_button(
+              leading_icon: :plus,
+              label: "New item",
+              scheme: :primary
+            ) do
               "Create"
             end
           end

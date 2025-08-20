@@ -34,7 +34,6 @@ See COPYRIGHT and LICENSE files for more details.
   <%= frontend_stylesheet_link_tag "backlogs.css" %>
 <% end %>
 
-<% content_controller "backlogs",
-                      dynamic: true %>
+<% content_controller "backlogs" %>
 
 <%= render template: "layouts/base", locals: local_assigns.merge(turbo_opt_out: true) %>

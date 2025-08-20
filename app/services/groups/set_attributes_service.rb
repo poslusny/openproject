@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -28,10 +30,13 @@
 
 module Groups
   class SetAttributesService < ::BaseServices::SetAttributes
+    include ::UserAuthProviderLinksSetter
+
     private
 
     def set_attributes(params)
       set_users(params) if params.key?(:user_ids)
+      set_user_auth_provider_links(params.delete(:identity_url))
       super
     end
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -116,10 +118,6 @@ class WorkPackages::BulkController < ApplicationController
 
   def user
     current_user
-  end
-
-  def default_breadcrumb
-    I18n.t(:label_work_package_plural)
   end
 
   def transform_attributes(attributes)

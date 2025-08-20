@@ -41,7 +41,10 @@ import { computePosition, flip, limitShift, shift } from '@floating-ui/dom';
 export default class HoverCardTriggerController extends ApplicationController {
   static targets = ['trigger', 'card'];
 
+  private readonly triggerTargets:HTMLElement[];
+
   private mouseInModal = false;
+  private mouseIsHoveringOverTrigger = false;
   private hoverTimeout:number|null = null;
   private closeTimeout:number|null = null;
   private previousTarget:HTMLElement|null = null;
@@ -101,6 +104,7 @@ export default class HoverCardTriggerController extends ApplicationController {
   private onMouseLeave() {
     this.clearHoverTimer();
     this.mouseInModal = false;
+    this.mouseIsHoveringOverTrigger = false;
     this.closeAfterTimeout();
   }
 
@@ -112,9 +116,20 @@ export default class HoverCardTriggerController extends ApplicationController {
     e.preventDefault();
     e.stopPropagation();
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const el = e.target as HTMLElement;
+    let el = e.target as HTMLElement;
     if (!el) { return; }
+
+    // If the trigger contains other elements, one of them might have triggered the event. We want to only refer to
+    // the original trigger as this makes event and state handling easier. Find the correct target element:
+    if (!this.triggerTargets.some((trigger) => trigger === el)) {
+      // If the element is not a trigger itself, one of its parents must be. Find the correct one.
+      const trigger = el.closest('[data-hover-card-trigger-target="trigger"]') as HTMLElement;
+      if (!trigger) { return; }
+
+      el = trigger;
+    }
+
+    this.mouseIsHoveringOverTrigger = true;
 
     if (this.previousTarget && this.previousTarget === el) {
       // Re-entering the trigger counts as hovering over the card:
@@ -145,6 +160,8 @@ export default class HoverCardTriggerController extends ApplicationController {
     if (!this.element.contains(el)) { return; }
     // Do not try to show two hover cards at the same time.
     if (this.isShowingHoverCard) { return; }
+    // The mouse might have left the trigger while we were waiting for the hover delay.
+    if (!this.mouseIsHoveringOverTrigger) { return; }
 
     this.loadAndShowHoverCard(el, turboFrameUrl);
   }
@@ -194,8 +211,6 @@ export default class HoverCardTriggerController extends ApplicationController {
       this.mouseInModal = false;
     }
 
-    // It is important to check if we are currently showing a hover card. If we closed the modal service without
-    // doing so, we might accidentally close another modal (e.g. share dialog).
     if (this.isShowingHoverCard && !this.mouseInModal) {
       this.getAndResetOverlay();
 

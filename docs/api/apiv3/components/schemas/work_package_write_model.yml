@@ -14,7 +14,10 @@ properties:
       - description: The work package description
   scheduleManually:
     type: boolean
-    description: If false (default) schedule automatically.
+    description: |-
+      Uses manual scheduling mode when true (default). Uses automatic scheduling
+      mode when false. Can be automatic only when predecessors or children are
+      present.
   startDate:
     type:
       - 'string'
@@ -41,9 +44,9 @@ properties:
     description: |-
       The amount of time in hours the work package needs to be completed. This value must be bigger or equal to `P1D`,
       and any the value will get floored to the nearest day.
-      
+
       The duration has no effect, unless either a start date or a due date is set.
-      
+
       Not available for milestone type of work packages.
   ignoreNonWorkingDays:
     type: boolean

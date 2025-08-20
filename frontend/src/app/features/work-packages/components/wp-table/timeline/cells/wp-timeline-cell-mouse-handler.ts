@@ -27,9 +27,8 @@
 //++
 
 import { Injector } from '@angular/core';
-import * as moment from 'moment';
+import moment, { Moment } from 'moment';
 import { IsolatedQuerySpace } from 'core-app/features/work-packages/directives/query-space/isolated-query-space';
-import { KeyCodes } from 'core-app/shared/helpers/keyCodes.enum';
 import { LoadingIndicatorService } from 'core-app/core/loading-indicator/loading-indicator.service';
 
 import { HalResourceEditingService } from 'core-app/shared/components/fields/edit/services/hal-resource-editing.service';
@@ -46,7 +45,6 @@ import {
 } from './timeline-cell-renderer';
 import { RenderInfo } from '../wp-timeline';
 import { WorkPackageTimelineTableController } from '../container/wp-timeline-container.directive';
-import Moment = moment.Moment;
 
 export function registerWorkPackageMouseHandler(this:void,
   injector:Injector,
@@ -128,7 +126,7 @@ export function registerWorkPackageMouseHandler(this:void,
 
   function keyPressFn(ev:JQuery.TriggeredEvent) {
     const kev:KeyboardEvent = ev.originalEvent as KeyboardEvent;
-    if (kev.keyCode === KeyCodes.ESCAPE) {
+    if (kev.key === 'Escape') {
       deactivate(null, true);
     }
   }

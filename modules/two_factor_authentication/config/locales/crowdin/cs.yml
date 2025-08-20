@@ -81,7 +81,7 @@ cs:
       text_2fa_enabled: "Při každém přihlášení bude tento uživatel požádán, aby zadal jednorázové heslo z jeho výchozího 2FA zařízení."
       text_2fa_disabled: "Uživatel si nenastavil 2FA zařízení prostřednictvím stránky 'Můj účet'"
       only_sms_allowed: "Pro ostatní uživatele lze nastavit pouze doručení SMS."
-    upsale:
+    upsell:
       title: "Dvoufázové ověření"
       description: "Posilte bezpečnost vaší OpenProject instance tím, že nabízíte (nebo vynucujte) dvoufaktorové ověřování všem členům projektu."
     backup_codes:
@@ -122,7 +122,7 @@ cs:
       2fa_from_webauthn: Uveďte prosím zařízení WebAuthn <strong>%{device_name}</strong>. Pokud je založeno na USB, nezapomeňte jej připojit a dotknout se jej. Poté klikněte na tlačítko Přihlásit se.
       webauthn:
         title: "WebAuthn"
-        description: Register a FIDO2 device (like YubiKey) or the secure encalve of your mobile device.
+        description: Register a FIDO2 device (like YubiKey) or the secure enclave of your mobile device.
         further_steps: Po zvolení jména můžete kliknout na tlačítko Pokračovat. Váš prohlížeč vás vyzve, abyste prezentovali vaše WebAuthn zařízení. Až tak učiníte, jste zařízení zaregistrovali.
       totp:
         title: "Autentifikátor založený na aplikaci"

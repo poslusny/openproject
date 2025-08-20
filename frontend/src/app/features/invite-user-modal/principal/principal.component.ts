@@ -48,6 +48,7 @@ function extractCustomFieldsFromSchema(schema:IOPFormSettings['_embedded']['sche
   templateUrl: './principal.component.html',
   styleUrls: ['./principal.component.sass'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class PrincipalComponent implements OnInit {
   @Input() principalData:PrincipalData;

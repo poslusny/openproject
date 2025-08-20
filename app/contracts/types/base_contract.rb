@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -44,6 +46,9 @@ module Types
     attribute :attribute_groups
     attribute :patterns
 
+    validates :name, presence: true, length: { maximum: 255 }
+    validates :is_default, :is_milestone, :is_in_roadmap, inclusion: { in: [true, false] }
+
     validate :validate_current_user_is_admin
     validate :validate_attribute_group_names
     validate :validate_attribute_groups
@@ -60,7 +65,7 @@ module Types
 
       seen = Set.new
       model.attribute_groups.each do |group|
-        errors.add(:attribute_groups, :group_without_name) unless group.key.present?
+        errors.add(:attribute_groups, :group_without_name) if group.key.blank?
         errors.add(:attribute_groups, :duplicate_group, group: group.key) if seen.add?(group.key).nil?
       end
     end
@@ -107,9 +112,9 @@ module Types
       return if blueprint.nil?
 
       valid_tokens = flat_valid_token_list
-      invalid_tokens = blueprint.scan(PatternResolver::TOKEN_REGEX)
+      invalid_tokens = blueprint.scan(::WorkPackageTypes::PatternResolver::TOKEN_REGEX)
                                 .reduce([]) do |acc, match|
-        token = Patterns::Token.build(match).key
+        token = ::WorkPackageTypes::Patterns::PatternToken.build(match).key
         valid_tokens.include?(token) ? acc : acc << token
       end
 
@@ -118,6 +123,6 @@ module Types
       end
     end
 
-    def flat_valid_token_list = Patterns::TokenPropertyMapper.new.tokens_for_type(model).values.map(&:keys).flatten
+    def flat_valid_token_list = ::WorkPackageTypes::Patterns::TokenPropertyMapper.new.tokens_for_type(model).map(&:key)
   end
 end

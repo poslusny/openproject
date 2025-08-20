@@ -20,6 +20,7 @@ import { HalResourceEditingService } from 'core-app/shared/components/fields/edi
     HalResourceEditingService,
     TimeEntryEditService,
   ],
+  standalone: false,
 })
 export class WidgetTimeEntriesProjectComponent extends WidgetTimeEntriesListComponent implements OnInit {
   constructor(readonly injector:Injector,

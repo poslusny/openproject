@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -54,6 +56,11 @@ module Components
         within(".op-project-list-modal--header") do
           find('[data-test-selector="spot-toggle--option"]', text: mode).click
         end
+      end
+
+      def expect_current_mode(mode)
+        expect(page).to have_css('[data-test-selector="spot-toggle--option"][data-qa-active-toggle="true"]',
+                                 text: mode)
       end
 
       def expect_current_project(name)

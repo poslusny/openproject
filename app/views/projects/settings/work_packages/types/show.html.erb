@@ -27,7 +27,7 @@ See COPYRIGHT and LICENSE files for more details.
 
 ++#%>
 
-<%= render(Settings::ProjectWorkPackages::HeaderComponent.new(@project, selected: :types)) %>
+<%= render(Settings::ProjectWorkPackages::HeaderComponent.new(@project)) %>
 
 <% if Type.any? %>
   <%= form_for @project,

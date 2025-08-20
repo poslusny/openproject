@@ -41,6 +41,7 @@ import { IToast, ToastService } from './toast.service';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'opce-toasts-container',
+  standalone: false,
 })
 export class ToastsContainerComponent extends UntilDestroyedMixin implements OnInit {
   public stack:IToast[] = [];

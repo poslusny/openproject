@@ -102,6 +102,10 @@ module Settings
         description: "Time in minutes to wait before uploaded files not attached to any container are removed",
         default: 180
       },
+      antivirus_scan_available: {
+        description: "Virus scanning option selectable in the UI",
+        default: true
+      },
       antivirus_scan_mode: {
         description: "Virus scanning option for files uploaded to OpenProject",
         format: :symbol,
@@ -329,6 +333,10 @@ module Settings
         description: "Default sort order for activities",
         default: "asc"
       },
+      disable_keyboard_shortcuts: {
+        description: "Whether keyboard short cuts should be disabled (e.g. for better screen reader support)",
+        default: false
+      },
       default_language: {
         default: "en",
         allowed: -> { Redmine::I18n.all_languages }
@@ -409,9 +417,13 @@ module Settings
         allowed: %w[standard bim]
       },
       ee_manager_visible: {
-        description: "Show or hide the Enterprise configuration page and enterprise banners",
+        description: "Show the Enterprise configuration page",
         default: true,
         writable: false
+      },
+      ee_hide_banners: {
+        description: "Hide the Enterprise enterprise banners",
+        default: false
       },
       enable_internal_assets_server: {
         description: "Serve assets through the Rails internal asset server",
@@ -609,6 +621,11 @@ module Settings
       },
       journal_aggregation_time_minutes: {
         default: 5
+      },
+      large_instance_wp_allowed_to_sql: {
+        description: "When querying for allowed work packages, use SQL better suited for instances " \
+                     "with a larger set of work packages, projects, members and users",
+        default: false
       },
       ldap_force_no_page: {
         description: "Force LDAP to respond as a single page, in case paged responses do not work with your server.",
@@ -975,7 +992,8 @@ module Settings
         default: nil
       },
       self_registration: {
-        default: 2
+        default: 2,
+        format: :integer
       },
       sendmail_arguments: {
         description: "Arguments to call sendmail with in case it is configured as outgoing email setup",
@@ -1151,9 +1169,10 @@ module Settings
         default: {
           "workers" => 2,
           "timeout" => Rails.env.production? ? 120 : 0,
-          "wait_timeout" => 10,
+          "wait_timeout" => 30,
           "min_threads" => 4,
-          "max_threads" => 16
+          "max_threads" => 16,
+          "term_on_timeout" => 1
         },
         writable: false
       },
@@ -1329,6 +1348,8 @@ module Settings
       # @param [nil] env_alias Alternative for the default env name to also look up. E.g. with the alias set to
       #  `OPENPROJECT_2FA` for a definition with the name `two_factor_authentication`, the value is fetched
       #  from the ENV OPENPROJECT_2FA as well.
+      # @param [TrueClass|FalseClass] disallow_override Disables the usual possibility of overriding the value
+      #   from ENV or configuration file.
       def add(name,
               default:,
               default_by_env: {},
@@ -1337,7 +1358,8 @@ module Settings
               writable: true,
               allowed: nil,
               env_alias: nil,
-              string_values: false)
+              string_values: false,
+              disallow_override: false)
         name = name.to_sym
         return if exists?(name)
 
@@ -1350,7 +1372,7 @@ module Settings
                          allowed:,
                          env_alias:,
                          string_values:)
-        override_value(definition)
+        override_value(definition) unless disallow_override
         all[name] = definition
       end
 

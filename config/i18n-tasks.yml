@@ -152,7 +152,9 @@ ignore_unused:
   - 'permission_*'
   - '{devise,kaminari,will_paginate}.*'
   - '*.permission_header_explanation'
+  - 'storages.upsell.*'
   - 'services.*'
+  - 'storages.health.connection_validation.{one_drive,nextcloud}.*'
 
 ## Exclude these keys from the `i18n-tasks eq-base' report:
 # ignore_eq_base:

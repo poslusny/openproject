@@ -49,6 +49,7 @@ import isNotNull from 'core-app/core/state/is-not-null';
 
 @Component({
   templateUrl: './wp-destroy.modal.html',
+  standalone: false,
 })
 export class WpDestroyModalComponent extends OpModalComponent implements OnInit {
   // When deleting multiple

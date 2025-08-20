@@ -6,14 +6,18 @@ cs:
     Byli jste odhlášeni. Obsah formuláře může být ztracen. Prosím, [přihlaste se].
   activerecord:
     attributes:
+      openid_connect/group_link:
+        oidc_group_name: OpenID group identifier
       openid_connect/provider:
         name: Název
         slug: Jedinečný identifikátor
         display_name: Zobrazovaný název
         client_id: ID klienta
         client_secret: Tajný klíč klienta
+        groups_claim: Groups claim
         secret: Tajné
         scope: Rozsah
+        sync_groups: Synchronize groups
         grant_types_supported: Podporované typy grantů
         limit_self_registration: Omezit vlastní registraci
         authorization_endpoint: Koncový bod autorizace
@@ -22,7 +26,7 @@ cs:
         end_session_endpoint: Ukončení koncového bodu relace
         post_logout_redirect_uri: URI přesměrování po odhlášení
         jwks_uri: JWKS URI
-        issuer: Vydavatel
+        issuer: Emitent
         tenant: Tenant
         metadata_url: URL metadat
         icon: Vlastní ikona
@@ -52,9 +56,14 @@ cs:
   openid_connect:
     menu_title: Poskytovatelé OpenID
     delete_title: "Odstranit OpenID Connect poskytovatele"
+    group_links_heading: OpenID Connect group links
     instructions:
       redirect_url: This is the redirect URL that the OpenID Connect provider should use to redirect back to OpenProject after a successful login.
       endpoint_url: The endpoint URL given to you by the OpenID Connect provider
+      group_regexes: One regular expression pattern per line. Please read [the documentation](docs_url) for more information on how to do this.
+      group_regexes_detail: Define patterns using regular expressions to match group names from the groups claim. For example, entering a pattern like <code>^Level1/Level2/([\w/]+)$</code> will extract the group “Groupname/SubGroup” from a response including “Level1/Level2/GroupName/SubGroup”.
+      group_sync: Automatically extract and synchronise group membership information from the identity provider.
+      groups_claim: Specify the name of the claim that's expected to indicate the group names that the user is a member of.
       metadata_none: Tyto informace nemám
       metadata_url: Mám adresu URL koncového bodu zjišťování
       client_id: This is the client ID given to you by your OpenID Connect provider
@@ -91,12 +100,15 @@ cs:
         name: Microsoft Entra
       custom:
         name: Vlastní
-      upsale:
+      upsell:
+        title: "Single Sign-On (SSO) with OpenID connect"
         description: Připojit OpenProject k poskytovateli OpenID připojení identity
       label_add_new: Přidat nového poskytovatele OpenID
       label_edit: Upravit poskytovatele OpenID %{name}
       label_empty_title: Zatím nejsou nakonfigurováni žádní poskytovatelé OpenID.
       label_empty_description: Přidejte poskytovatele, abyste je viděli zde.
+      label_group_mapping: Group mapping
+      label_group_regexes: Pattern (regular expression)
       label_metadata: OpenID Connect Discovery Endpoint
       label_automatic_configuration: Automatická konfigurace
       label_optional_configuration: Volitelná konfigurace
@@ -109,6 +121,7 @@ cs:
       plural: Poskytovatelé OpenID
       singular: Poskytovatel OpenID
       section_texts:
+        group_mapping: Map group names provided by the identity provider to groups in OpenProject.
         metadata: Pre-fill configuration using an OpenID Connect discovery endpoint URL
         metadata_form_banner: Editing the discovery endpoint may override existing pre-filled metadata values.
         metadata_form_title: OpenID Connect Discovery endpoint
@@ -118,6 +131,9 @@ cs:
         display_name: Zobrazované jméno viditelné pro uživatele.
         attribute_mapping: Configure the mapping of attributes between OpenProject and the OpenID Connect provider.
         claims: Request additional claims for the ID token or userinfo response.
+      side_panel:
+        information_component:
+          backchannel_logout_url: Backchannel logout URL
     setting_instructions:
       limit_self_registration: >
 

@@ -4,9 +4,6 @@ sl:
       add_widget: 'Dodaj gradnik'
       remove: 'Odstrani gradnik'
       configure: 'Oblikuj gradnik'
-      upsale:
-        text: "Some widgets, like the work package graph widget, are only available in the Enterprise edition."
-        link: 'Enterprise edition.'
       widgets:
         missing_permission: "You don't have the necessary permissions to view this widget."
         custom_text:

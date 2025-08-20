@@ -36,6 +36,7 @@ import { EditFormComponent } from 'core-app/shared/components/fields/edit/edit-f
   templateUrl: './wp-edit-actions-bar.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'wp-edit-actions-bar',
+  standalone: false,
 })
 export class WorkPackageEditActionsBarComponent {
   @Output('onSave') public onSave = new EventEmitter<void>();

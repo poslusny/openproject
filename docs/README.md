@@ -7,7 +7,8 @@ keywords: help, documentation
 --- 
 # OpenProject Documentation
 
-> **Note**: To better read our OpenProject Documentation, please go to [www.openproject.org/docs/](https://www.openproject.org/docs/).
+> [!NOTE]
+> For enhanced usability, access the OpenProject documentation at [www.openproject.org/docs/](https://www.openproject.org/docs).
 
 ## Installation
 

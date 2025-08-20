@@ -31,9 +31,11 @@ zh-TW:
       events:
         created: "已建立"
         updated: "已更新"
+        comment: "留言"
+        internal_comment: "內部留言"
       explanation:
         text: >
-          當建立或更新工作項目的"事件"發生時，OpenProject 將會傳送 POST 請求。 通常，事件是在 %{link} 過之後發送.。
+          當建立或更新工作套件的"事件"發生時，OpenProject 將會傳送 POST 請求。 通常，事件是在 %{link} 過之後發送。
         link: 設定的聚合週期
       status:
         enabled: 'Webhook 已啟用'

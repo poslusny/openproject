@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -84,6 +86,4 @@ class OmniAuthLoginController < ApplicationController
   def omniauth_back_url
     request.env["omniauth.origin"].presence || params[:RelayState]
   end
-
-  def default_breadcrumb; end
 end

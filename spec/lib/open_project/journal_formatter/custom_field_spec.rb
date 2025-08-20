@@ -398,12 +398,13 @@ RSpec.describe OpenProject::JournalFormatter::CustomField do
     end
   end
 
-  context "for hierarchy custom field" do
-    shared_let(:custom_field) { create(:hierarchy_wp_custom_field) }
-    shared_let(:service) { CustomFields::Hierarchy::HierarchicalItemService.new }
-    shared_let(:root) { custom_field.hierarchy_root }
-    shared_let(:luke) { service.insert_item(parent: root, label: "luke", short: "LS").value! }
-    shared_let(:mara) { service.insert_item(parent: luke, label: "mara").value! }
+  context "for hierarchy custom field", with_ee: [:custom_field_hierarchies] do
+    let!(:custom_field) { build_stubbed(:hierarchy_wp_custom_field) }
+
+    let!(:service) { CustomFields::Hierarchy::HierarchicalItemService.new }
+    let!(:root) { custom_field.hierarchy_root }
+    let!(:luke) { service.insert_item(parent: root, label: "luke", short: "LS").value! }
+    let!(:mara) { service.insert_item(parent: luke, label: "mara").value! }
 
     describe "first value being nil and second value a string" do
       let(:values) { [nil, mara.id.to_s] }

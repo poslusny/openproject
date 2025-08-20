@@ -24,6 +24,7 @@ interface NgSelectPrincipalOption {
   styleUrls: ['./principal-search.component.sass'],
   templateUrl: './principal-search.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class PrincipalSearchComponent extends UntilDestroyedMixin implements OnInit {
   @Input() spotFormBinding:UntypedFormControl;

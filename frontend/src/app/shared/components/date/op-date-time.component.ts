@@ -38,6 +38,7 @@ import { TimezoneService } from 'core-app/core/datetime/timezone.service';
       <span [textContent]="time"></span>
     </span>
   `,
+  standalone: false,
 })
 export class OpDateTimeComponent {
   @Input('dateTimeValue') dateTimeValue:any;

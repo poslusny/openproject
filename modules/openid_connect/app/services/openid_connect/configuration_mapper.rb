@@ -62,9 +62,9 @@ module OpenIDConnect
         "end_session_endpoint" => extract_url(options, "end_session_endpoint"),
         "jwks_uri" => extract_url(options, "jwks_uri"),
         "mapping_login" => options.dig("attribute_map", "login"),
-        "mapping_mail" => options.dig("attribute_map", "email"),
-        "mapping_firstname" => options.dig("attribute_map", "first_name"),
-        "mapping_lastname" => options.dig("attribute_map", "last_name"),
+        "mapping_email" => options.dig("attribute_map", "email"),
+        "mapping_first_name" => options.dig("attribute_map", "first_name"),
+        "mapping_last_name" => options.dig("attribute_map", "last_name"),
         "mapping_admin" => options.dig("attribute_map", "admin")
       }.compact
     end

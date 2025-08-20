@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # spec/rails_helper.rb
 require "view_component/test_helpers"
 require "view_component/system_test_helpers"

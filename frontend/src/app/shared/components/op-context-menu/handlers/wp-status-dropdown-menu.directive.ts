@@ -53,6 +53,7 @@ import { HalError } from "core-app/features/hal/services/hal-error";
 
 @Directive({
   selector: '[wpStatusDropdown]',
+  standalone: false,
 })
 export class WorkPackageStatusDropdownDirective extends OpContextMenuTrigger {
   @Input('wpStatusDropdown-workPackage') public workPackage:WorkPackageResource;

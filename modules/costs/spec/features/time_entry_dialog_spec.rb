@@ -30,7 +30,7 @@
 
 require_relative "../spec_helper"
 
-RSpec.describe "time entry dialog", :js, with_flag: :track_start_and_end_times_for_time_entries do
+RSpec.describe "time entry dialog", :js do
   include Redmine::I18n
 
   shared_let(:project) { create(:project_with_types) }
@@ -80,7 +80,11 @@ RSpec.describe "time entry dialog", :js, with_flag: :track_start_and_end_times_f
     end
 
     context "when start and end time is enforced",
-            with_settings: { allow_tracking_start_and_end_times: true, enforce_tracking_start_and_end_times: true } do
+            with_ee: %i[time_entry_time_restrictions],
+            with_settings: {
+              allow_tracking_start_and_end_times: true,
+              enforce_tracking_start_and_end_times: true
+            } do
       it "shows fields to track start and end times" do
         time_logging_modal.shows_field("start_time", true)
         time_logging_modal.requires_field("start_time")
@@ -214,7 +218,7 @@ RSpec.describe "time entry dialog", :js, with_flag: :track_start_and_end_times_f
 
   describe "when the user can edit time entries" do
     let(:permissions) { %i[log_own_time view_own_time_entries edit_own_time_entries view_work_packages] }
-    let!(:time_entry) { create(:time_entry, work_package: work_package_a, project: work_package_a.project, user: user) }
+    let!(:time_entry) { create(:time_entry, entity: work_package_a, project: work_package_a.project, user: user) }
 
     context "with work packages from different projects" do
       let(:other_project) { create(:project_with_types) }
@@ -235,7 +239,7 @@ RSpec.describe "time entry dialog", :js, with_flag: :track_start_and_end_times_f
         find("opce-time-entry-trigger-actions .icon-edit").click
 
         time_logging_modal.is_visible(true)
-        time_logging_modal.update_field("work_package_id", work_package_c.id)
+        time_logging_modal.update_field("entity_id", work_package_c.id)
         wait_for_network_idle # form refresh is happening here
         time_logging_modal.submit
         wait_for_network_idle
@@ -244,7 +248,7 @@ RSpec.describe "time entry dialog", :js, with_flag: :track_start_and_end_times_f
 
         # also check that everything is updated in the database
         time_entry.reload
-        expect(time_entry.work_package).to eq(work_package_c)
+        expect(time_entry.entity).to eq(work_package_c)
       end
     end
 
@@ -262,7 +266,7 @@ RSpec.describe "time entry dialog", :js, with_flag: :track_start_and_end_times_f
 
       expect do
         time_logging_modal.is_visible(true)
-        time_logging_modal.update_field("work_package_id", work_package_b.id)
+        time_logging_modal.update_field("entity_id", work_package_b.id)
         wait_for_network_idle # form refresh is happening here
         time_logging_modal.submit
         wait_for_network_idle
@@ -272,7 +276,7 @@ RSpec.describe "time entry dialog", :js, with_flag: :track_start_and_end_times_f
 
       # also check that everything is updated in the database
       time_entry.reload
-      expect(time_entry.work_package).to eq(work_package_b)
+      expect(time_entry.entity).to eq(work_package_b)
     end
   end
 end

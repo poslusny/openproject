@@ -17,6 +17,7 @@ export interface NotificationSettingProjectOption {
   templateUrl: './notification-setting-inline-create.component.html',
   styleUrls: ['./notification-setting-inline-create.component.sass'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class NotificationSettingInlineCreateComponent {
   @Input() userId:string;

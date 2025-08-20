@@ -34,8 +34,8 @@ RSpec.describe EnterpriseHelper do
   describe "#enterprise_token_plan_name" do
     let(:token) { instance_double(EnterpriseToken, plan: :legacy_enterprise, version: "4.0.0") }
 
-    it "returns the correct string" do
-      expect(helper.enterprise_token_plan_name(token)).to eq("Enterprise Plan (Token Version 4.0.0)")
+    it "returns the plan name" do
+      expect(helper.enterprise_token_plan_name(token)).to eq("Enterprise Plan")
     end
   end
 
@@ -52,7 +52,7 @@ RSpec.describe EnterpriseHelper do
       let(:token) { instance_double(EnterpriseToken, features: %i[baseline_comparison virus_scanning]) }
 
       it "returns translated names of features" do
-        expect(helper.enterprise_plan_additional_features(token)).to eq("Attachment Virus Scanning, Baseline Comparison")
+        expect(helper.enterprise_plan_additional_features(token)).to eq("Antivirus Scanning, Baseline Comparisons")
       end
     end
 
@@ -63,7 +63,7 @@ RSpec.describe EnterpriseHelper do
       end
 
       it "returns translated names of features and removes unknowns" do
-        expect(helper.enterprise_plan_additional_features(token)).to eq("Work Package Sharing")
+        expect(helper.enterprise_plan_additional_features(token)).to eq("Share work packages with external users")
       end
     end
   end

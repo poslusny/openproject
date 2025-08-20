@@ -44,23 +44,15 @@ require_relative "../../lib_static/open_project/feature_decisions"
 OpenProject::FeatureDecisions.add :built_in_oauth_applications,
                                   description: "Allows the display and use of built-in OAuth applications."
 
-OpenProject::FeatureDecisions.add :generate_work_package_subjects,
-                                  description: "Allows the configuration for work package types to have " \
-                                               "automatically generated work package subjects."
+OpenProject::FeatureDecisions.add :calculated_value_project_attribute,
+                                  description: "Allows the use of calculated values as a project attribute."
 
-OpenProject::FeatureDecisions.add :stages_and_gates,
-                                  description: "Enables the under construction feature of phases."
+OpenProject::FeatureDecisions.add :oidc_group_sync,
+                                  description: "Allows to synchronize groups from OpenID Connect providers"
 
-OpenProject::FeatureDecisions.add :oidc_token_exchange,
-                                  description: "Enables the under construction OAuth2 token exchange, allowing " \
-                                               "users to interact with storage providers without consenting " \
-                                               "in OAuth screens before first use."
+OpenProject::FeatureDecisions.add :scim_api,
+                                  description: "Enables SCIM API.",
+                                  force_active: true
 
-OpenProject::FeatureDecisions.add :work_package_comment_id_url,
-                                  description: "Introduced a new WP comment URL identifier structure " \
-                                               "`#comment-<journal-id>` replacing the old " \
-                                               "`#activity-<journal-sequence_number>`."
-
-OpenProject::FeatureDecisions.add :comments_with_restricted_visibility,
-                                  description: "Enables submitting comments that are restricted " \
-                                               "and only a subset of users can see"
+OpenProject::FeatureDecisions.add :block_note_editor,
+                                  description: "Enables the block note editor for rich text fields where available."

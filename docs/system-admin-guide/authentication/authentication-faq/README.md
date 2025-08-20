@@ -22,7 +22,7 @@ For on premises installations the functionality can be deactivated the same way 
 
 ## Can we ensure that passwords are secure / have a high strength?
 
-Password parameters for OpenProject can be configured on each OpenProject environment. Typically passwords require 10+ characters, as well as special characters. Please find the respective instruction [here](../authentication-settings/#configure-password-settings).
+Password parameters for OpenProject can be configured on each OpenProject environment. Typically passwords require 10+ characters, as well as special characters. Please find the respective instruction [here](../login-registration-settings/#password-settings).
 
 ## How can a user change his/her authentication method?
 

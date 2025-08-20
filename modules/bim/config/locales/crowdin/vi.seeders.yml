@@ -52,7 +52,7 @@ vi:
         item_0:
           form_configuration:
             item_0:
-              group_name: Cấp dưới
+              group_name: Con
       groups:
         item_0:
           name: Các kiến trúc sư
@@ -92,18 +92,18 @@ vi:
           description: Đây là một tóm tắt ngắn gọn về các mục tiêu của dự án xây dựng mẫu này.
           news:
             item_0:
-              title: Chào mừng đến với dự án mẫu của bạn
+              title: Chào mừng đến với dự án demo của bạn
               summary: |
                 Chúng tôi rất vui vì bạn đã tham gia.
-                Trong module này, bạn có thể truyền đạt tin tức dự án đến các thành viên trong nhóm của bạn.
-              description: Tin tức hiện tại
+                Trong mô-đun này, bạn có thể truyền đạt tin tức dự án đến các thành viên trong nhóm của bạn.
+              description: Tin tức thực tế
           categories:
-            item_0: Danh mục 1 (cần thay đổi trong Cài đặt Dự án)
+            item_0: Danh mục 1 (cần thay đổi trong cài đặt Dự án)
           queries:
             item_0:
               name: Kế hoạch dự án
             item_1:
-              name: Các cột mốc
+              name: Các mốc thời gian
             item_2:
               name: Nhiệm vụ
             item_3:
@@ -147,29 +147,29 @@ vi:
                   name: Gói công việc
               item_6:
                 options:
-                  name: Các cột mốc
+                  name: Các mốc thời gian
         demo-planning-constructing-project:
           name: "(Demo) Lập kế hoạch & xây dựng"
-          status_explanation: Tất cả các nhiệm vụ đang theo đúng tiến độ. Những người tham gia đều biết nhiệm vụ của mình. Hệ thống đã được thiết lập hoàn chỉnh.
+          status_explanation: Tất cả các nhiệm vụ đang theo đúng tiến độ. Những người liên quan biết nhiệm vụ của họ. Hệ thống đã được thiết lập hoàn chỉnh.
           description: Đây là một tóm tắt ngắn gọn về các mục tiêu của dự án lập kế hoạch và xây dựng demo này.
           news:
             item_0:
               title: Chào mừng đến với dự án demo của bạn
               summary: |
-                Chúng tôi rất vui khi bạn tham gia.
-                Trong mô-đun này, bạn có thể thông báo tin tức dự án cho các thành viên trong nhóm của mình.
-              description: Tin tức thực tế
+                Chúng tôi rất vui vì bạn đã tham gia.
+                Trong mô-đun này, bạn có thể truyền đạt tin tức dự án đến các thành viên trong nhóm của bạn.
+              description: Tin tức hiện tại
           categories:
-            item_0: Danh mục 1 (cần thay đổi trong cài đặt dự án)
+            item_0: Danh mục 1 (cần thay đổi trong cài đặt Dự án)
           queries:
             item_0:
               name: Kế hoạch dự án
             item_1:
-              name: Cột mốc
+              name: Các mốc thời gian
             item_2:
               name: Nhiệm vụ
             item_3:
-              name: Kế hoạch nhóm
+              name: Lịch trình nhóm
           project-overview:
             widgets:
               item_0:
@@ -202,7 +202,7 @@ vi:
                   name: Gói công việc
               item_6:
                 options:
-                  name: Cột mốc
+                  name: Các mốc thời gian
           work_packages:
             item_0:
               subject: Khởi động dự án xây dựng
@@ -408,22 +408,22 @@ vi:
           description: Đây là tóm tắt ngắn gọn về mục tiêu của dự án BIM demo này.
           news:
             item_0:
-              title: Chào mừng đến với dự án demo của bạn
+              title: Chào mừng đến với dự án mẫu của bạn
               summary: |
                 Chúng tôi rất vui vì bạn đã tham gia.
-                Trong mô-đun này, bạn có thể truyền đạt tin tức dự án đến các thành viên trong nhóm của bạn.
-              description: Tin tức hiện tại
+                Trong module này, bạn có thể truyền đạt tin tức dự án đến các thành viên trong nhóm của bạn.
+              description: Tin tức thực tế
           categories:
-            item_0: Danh mục 1 (cần thay đổi trong Cài đặt Dự án)
+            item_0: Danh mục 1 (cần thay đổi trong cài đặt Dự án)
           queries:
             item_0:
               name: Kế hoạch dự án
             item_1:
-              name: Cột mốc
+              name: Các mốc thời gian
             item_2:
               name: Nhiệm vụ
             item_3:
-              name: Kế hoạch nhóm
+              name: Lịch trình nhóm
           project-overview:
             widgets:
               item_0:
@@ -459,7 +459,7 @@ vi:
                   name: Gói công việc
               item_6:
                 options:
-                  name: Cột mốc
+                  name: Các mốc thời gian
           work_packages:
             item_0:
               subject: Khởi động dự án tạo mô hình BIM
@@ -669,7 +669,7 @@ vi:
               description: Tận hưởng tòa nhà của bạn :)
         demo-bcf-management-project:
           name: "(Demo) Quản lý BCF"
-          status_explanation: Tất cả các nhiệm vụ đang theo đúng tiến độ. Những người liên quan biết nhiệm vụ của họ. Hệ thống đã được thiết lập hoàn chỉnh.
+          status_explanation: Tất cả các nhiệm vụ đang theo đúng tiến độ. Những người tham gia đều biết nhiệm vụ của mình. Hệ thống đã được thiết lập hoàn chỉnh.
           description: Đây là một tóm tắt ngắn gọn về các mục tiêu của dự án quản lý BCF demo này.
           ifc_models:
             item_0:
@@ -679,10 +679,10 @@ vi:
             item_2:
               name: Bệnh viện - Cơ điện (cc-by-sa-3.0 Autodesk Inc.)
           categories:
-            item_0: Danh mục 1 (cần thay đổi trong cài đặt Dự án)
+            item_0: Danh mục 1 (cần thay đổi trong Cài đặt Dự án)
           queries:
             item_0:
-              name: Các vấn đề
+              name: Vấn đề
             item_1:
               name: Va chạm
             item_2:
@@ -692,7 +692,7 @@ vi:
             item_4:
               name: Kế hoạch dự án
             item_5:
-              name: Các mốc thời gian
+              name: Cột mốc
             item_6:
               name: Nhiệm vụ
             item_7:

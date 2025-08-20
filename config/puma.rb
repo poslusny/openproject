@@ -36,6 +36,12 @@ plugin :tmp_restart unless ENV["RAILS_ENV"] == "production"
 
 plugin :appsignal if ENV["APPSIGNAL_ENABLED"] == "true"
 
+if ENV["OPENPROJECT_PROMETHEUS_EXPORT"] == "true"
+  activate_control_app
+  plugin :yabeda
+  plugin :yabeda_prometheus
+end
+
 # activate statsd plugin only if a host is configured explicitly
 if OpenProject::Configuration.statsd_host.present?
   module ConfigurationViaOpenProject

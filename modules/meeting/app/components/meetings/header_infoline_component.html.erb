@@ -17,14 +17,14 @@
         t(:label_meeting_created_by)
       end
     %>
-    <%= helpers.primer_link_to_user(@meeting.author) %>.
+    <%= helpers.primer_link_to_user(@meeting.author, underline: true) %>.
   <% else %>
     <%=
       render(Primer::Beta::Text.new(mr: 1)) do
         t(:label_meeting_created_by)
       end
     %>
-    <%= helpers.primer_link_to_user(@meeting.author) %>.
+    <%= helpers.primer_link_to_user(@meeting.author, underline: true) %>.
   <% end %>
   <%=
     render(Primer::Beta::Text.new(ml: 1, mr: 1)) do

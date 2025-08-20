@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -37,8 +39,8 @@ RSpec.describe "Tabs navigation and content switching on the admin/design page" 
       visit custom_style_path(tab: "interface")
     end
 
-    it "redirects to upsale page" do
-      expect(page).to have_css(".upsale-notification")
+    it "redirects to upsell page" do
+      expect(page).to have_enterprise_banner(:basic)
     end
   end
 

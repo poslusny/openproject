@@ -37,7 +37,7 @@ class MeetingAgendaItem < ApplicationRecord
 
   enum :item_type, ITEM_TYPES
 
-  belongs_to :meeting, class_name: "StructuredMeeting"
+  belongs_to :meeting
   belongs_to :meeting_section, optional: false
   belongs_to :work_package, class_name: "::WorkPackage"
   has_one :project, through: :meeting
@@ -67,13 +67,13 @@ class MeetingAgendaItem < ApplicationRecord
             allow_nil: true
 
   before_validation :add_to_latest_meeting_section
-
-  after_create :trigger_meeting_agenda_item_time_slots_calculation
   after_save :trigger_meeting_agenda_item_time_slots_calculation, if: Proc.new { |item|
     item.duration_in_minutes_previously_changed? || item.position_previously_changed?
   }
+  before_save :update_meeting_to_match_section
+  after_update :delete_default_section_if_last_item_moved, if: :saved_change_to_meeting_section_id?
   after_destroy :trigger_meeting_agenda_item_time_slots_calculation
-  # after_destroy :delete_meeting_section_if_empty
+  after_destroy :delete_default_section_if_last_item_deleted
 
   def add_to_latest_meeting_section
     return if meeting.nil?
@@ -89,17 +89,35 @@ class MeetingAgendaItem < ApplicationRecord
     end
   end
 
+  def delete_default_section_if_last_item_deleted
+    return if meeting_section.nil? || meeting.sections.count > 1 || meeting_section.backlog?
+
+    check_and_destroy(meeting_section)
+  end
+
+  def delete_default_section_if_last_item_moved
+    old_section_id = saved_change_to_meeting_section_id.first
+    old_section = MeetingSection.find_by(id: old_section_id)
+    return if old_section.nil? || old_section.backlog?
+
+    check_and_destroy(old_section)
+  end
+
+  def check_and_destroy(section)
+    # Only destroy the auto created default section, discernible via the blank title
+    if section.agenda_items.empty? && section.title.blank?
+      section.destroy
+    end
+  end
+
+  def update_meeting_to_match_section
+    # TODO - see #63561
+    self.meeting = meeting_section.meeting
+  end
+
   def trigger_meeting_agenda_item_time_slots_calculation
     meeting.calculate_agenda_item_time_slots
   end
-
-  # def delete_meeting_section_if_empty
-  #   # we need to delete the last existing section if the last meeting agenda item is deleted
-  #   # as we don't render the section (including the section menu) if only one section exists
-  #   # thus the section would silently exist in the database when the very last agenda item was deleted
-  #   # which makes UI rendering inconsistent
-  #   meeting_section.destroy if meeting_section.agenda_items.empty? && meeting.sections.count == 1
-  # end
 
   def linked_work_package?
     item_type == "work_package" && work_package.present?
@@ -123,5 +141,9 @@ class MeetingAgendaItem < ApplicationRecord
 
   def copy_attributes
     attributes.except("id", "meeting_id")
+  end
+
+  def in_backlog?
+    meeting_section.backlog?
   end
 end

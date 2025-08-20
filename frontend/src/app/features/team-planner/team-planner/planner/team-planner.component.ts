@@ -38,7 +38,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { CalendarOptions, DateSelectArg, EventApi, EventDropArg, EventInput } from '@fullcalendar/core';
-import { BehaviorSubject, combineLatest, Subject } from 'rxjs';
+import { BehaviorSubject, combineLatest, Observable, Subject } from 'rxjs';
 import {
   debounceTime,
   distinctUntilChanged,
@@ -113,7 +113,7 @@ import {
   addBackgroundEvents,
   removeBackgroundEvents,
 } from 'core-app/features/team-planner/team-planner/planner/background-events';
-import * as moment from 'moment-timezone';
+import moment from 'moment-timezone';
 import allLocales from '@fullcalendar/core/locales-all';
 
 export type TeamPlannerViewOptionKey = 'resourceTimelineWorkWeek'|'resourceTimelineWeek'|'resourceTimelineTwoWeeks'|'resourceTimelineFourWeeks'|'resourceTimelineEightWeeks';
@@ -124,6 +124,7 @@ export type TeamPlannerViewOptions = { [K in TeamPlannerViewOptionKey]:RawOption
   templateUrl: './team-planner.component.html',
   styleUrls: ['./team-planner.component.sass'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class TeamPlannerComponent extends UntilDestroyedMixin implements OnInit, OnDestroy {
   @ViewChild(FullCalendarComponent) ucCalendar:FullCalendarComponent;
@@ -143,7 +144,7 @@ export class TeamPlannerComponent extends UntilDestroyedMixin implements OnInit,
 
   calendarOptions$ = new Subject<CalendarOptions>();
 
-  draggingItem$ = new BehaviorSubject<EventDragStartArg|undefined>(undefined);
+  draggingItem$:BehaviorSubject<EventDragStartArg|undefined> = new BehaviorSubject(undefined);
 
   globalDraggingItem$ = combineLatest([
     this.draggingItem$,
@@ -176,7 +177,7 @@ export class TeamPlannerComponent extends UntilDestroyedMixin implements OnInit,
       }),
     );
 
-  dropzone$ = combineLatest([
+  dropzone$:Observable<{ dragging:EventDragStartArg|undefined; isHovering:boolean; canDrop:boolean }> = combineLatest([
     this.draggingItem$,
     this.dropzoneHovered$,
     this.dropzoneAllowed$,

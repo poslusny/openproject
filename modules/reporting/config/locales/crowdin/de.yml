@@ -93,7 +93,9 @@ de:
       button: "Stundenzettel als PDF exportieren"
       timesheet: "Stundenzettel"
       time: "Zeit"
-      sum_hours: Summe
+      sums_hours: Summen
+      overview_per_user_total: "Übersicht: Gesamte Stunden pro Benutzer"
+      overview_per_user_day: "Übersicht: Stunden pro Benutzer pro Tag"
     cost_reports:
       title: "Kostenbericht als XLS-Export"
       start_time: "Startzeit"

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -62,7 +64,7 @@ class Queries::WorkPackages::Filter::VersionFilter <
     if project
       project.shared_versions
     else
-      Version.visible.or(Version.systemwide)
+      Version.visible
     end
   end
 end

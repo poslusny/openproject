@@ -35,6 +35,7 @@ import { WorkPackageResource } from 'core-app/features/hal/resources/work-packag
 
 @Component({
   templateUrl: './combined-date-edit-field.component.html',
+  standalone: false,
 })
 export class CombinedDateEditFieldComponent extends DatePickerEditFieldComponent implements OnInit {
   dates = '';

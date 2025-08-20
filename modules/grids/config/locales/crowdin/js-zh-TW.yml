@@ -4,9 +4,6 @@ zh-TW:
       add_widget: '新增小工具'
       remove: '移除小工具'
       configure: '設定小工具'
-      upsale:
-        text: "某些組件，如工作包圖組件，只在企業版提供。"
-        link: '企業版。'
       widgets:
         missing_permission: "您沒有必要的權限來檢視小工具。"
         custom_text:
@@ -49,19 +46,19 @@ zh-TW:
           title: '耗時（最近7天）'
           no_results: '過去7天沒有時間記錄。'
         work_packages_accountable:
-          title: "我負責的工作項目"
+          title: "我負責的工作套件"
         work_packages_assigned:
-          title: '分配給我的工作項目'
+          title: '分配給我的工作套件'
         work_packages_created:
-          title: '我所建立的工作項目'
+          title: '我所建立的工作套件'
         work_packages_watched:
-          title: '我所關注的工作項目'
+          title: '我所關注的工作套件'
         work_packages_table:
-          title: '工作項目表單'
+          title: '工作套件表單'
         work_packages_graph:
-          title: '工作項目圖'
+          title: '工作套件關聯圖'
         work_packages_calendar:
           title: '行事曆'
         work_packages_overview:
-          title: '工作項目總覽'
+          title: '工作套件總覽'
           placeholder: '點擊編輯'

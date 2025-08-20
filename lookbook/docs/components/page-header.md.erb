@@ -13,7 +13,8 @@ There are minor adjustments on how the composition of this component is defined 
 - **Desktop:** The content of the context bar will be a [breadcrumb](https://primer.style/components/breadcrumbs).
 - **Tablet:** The content of the context bar will be a [breadcrumb](https://primer.style/components/breadcrumbs).
 - **Mobile:**
-  - The content of the breadcrumb will collapse to a single element using the parent link style.
+  - The content of the breadcrumb will collapse to a single element using the parent link style. The text and href for that link will be taken from the second-last item of the breadcrumb, (which should be the parent of the current page).
+    The only exception to that behavior are index pages, where the parent link might lead to the page itself again. To avoid these kind of loops on mobile, we can exclude certain elements from being taken as a mobile back link. An example can be found the [component previews](../../inspect/primer/open_project/page_header/skip_breadcrumb_item).
   - All the PageHeader actions will merge into an [ActionMenu](https://primer.style/components/action-menu) triggered by a single [Icon button](https://primer.style/components/icon-button) in the context bar.
 
 **[Title bar](https://primer.style/components/page-header#title-bar):** The default (medium) size will be always used keeping the capability as optionals of adding leading and trailing visuals and actions.
@@ -105,6 +106,22 @@ class ModuleA::IndexPageHeaderComponent < ApplicationComponent
      "Bar"]
   end
 
+  def tabs
+   [
+      {
+        name: "id1",
+        path: "example_path",
+        label: "Tab 1"
+      },
+      {
+        name: "id2",
+        path: "another_example_path",
+        label: "Tab 1",
+        enterprise_feature: :some_key
+      }
+    ]
+  end
+
   def additional_logic
    # ...
   end
@@ -119,6 +136,8 @@ end
     render(Primer::OpenProject::PageHeader.new) do |header|
       header.with_title { 'Some title' }
       header.with_breadcrumbs(breadcrumb_items)
+
+      helpers.render_tab_header_nav(header, tabs)
 
       #... additional logic
     end

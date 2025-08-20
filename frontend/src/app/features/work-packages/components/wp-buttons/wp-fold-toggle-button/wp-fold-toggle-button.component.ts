@@ -40,6 +40,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'wp-fold-toggle-view-button',
+  standalone: false,
 })
 export class WorkPackageFoldToggleButtonComponent {
 }

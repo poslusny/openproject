@@ -81,15 +81,15 @@ tr:
     standard:
       project_phases:
         item_0:
-          name: Başlatılıyor
+          name: Başlatma
         item_1:
-          name: Planlanıyor
+          name: Planlama
           start_gate: Planlama için Hazır
         item_2:
-          name: Yürütülüyor
+          name: Yürütme
           start_gate: Yürütmeye Hazır
         item_3:
-          name: Kapatılıyor
+          name: Kapanış
           start_gate: Kapanışa Hazır
       priorities:
         item_0:
@@ -292,7 +292,7 @@ tr:
             item_0:
               name: Proje planı
             item_1:
-              name: Ürün bekleme süresi
+              name: Ürün iş listesi
             item_2:
               name: Koşu 1
             item_3:
@@ -301,7 +301,7 @@ tr:
             kanban:
               name: Kanban panosu
             basic:
-              name: Görev tahtası
+              name: Görev panosu
               lists:
                 item_0:
                   name: İstek listesi

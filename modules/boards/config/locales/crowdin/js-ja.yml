@@ -1,14 +1,15 @@
 #English strings go here
 ja:
+  ee:
+    upsell:
+      board_view:
+        description: 'ボードでワークフローを自動化しませんか？アドバンスボードはエンタープライズアドオンです。有料プランにアップグレードしてください。'
   js:
     boards:
-      create_new: '新しい掲示板を作成'
+      create_new: '新しいボードを作成'
       label_unnamed_board: '無題のボード'
       label_unnamed_list: '無題のリスト'
       label_board_type: 'ボードの形式'
-      upsale:
-        teaser_text: 'ボードでワークフローを自動化しませんか？アドバンスボードはエンタープライズアドオンです。有料プランにアップグレードしてください。'
-        upgrade: '今すぐアップグレード'
       lists:
         delete: 'リストを削除'
       version:
@@ -32,7 +33,7 @@ ja:
       text_hidden_list_warning: "権限がないため、すべてのリストが表示されるわけではありません。詳細については、管理者に問い合わせてください。"
       click_to_remove_list: "クリックしてこのリストを削除"
       board_type:
-        text: 'ボードの形式'
+        text: 'ボードの種類'
         free: '基本'
         select_board_type: '必要なボードの種類を選択してください。'
         free_text: >

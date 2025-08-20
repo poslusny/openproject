@@ -3,6 +3,7 @@
 if OpenProject::Configuration.web_workers >= 2
   service_timeout = OpenProject::Configuration.web_timeout
   wait_timeout = OpenProject::Configuration.web_wait_timeout
+  term_on_timeout = OpenProject::Configuration.term_on_timeout
 
   Rails.logger.debug { "Enabling Rack::Timeout (service=#{service_timeout}s wait=#{wait_timeout}s)" }
 
@@ -11,7 +12,7 @@ if OpenProject::Configuration.web_workers >= 2
     Rack::Timeout,
     service_timeout:, # time after which a request being served times out
     wait_timeout:, # time after which a request waiting to be served times out
-    term_on_timeout: 1, # shut down worker (gracefully) right away on timeout to be restarted
+    term_on_timeout:, # shut down worker (gracefully) right away on timeout to be restarted
     service_past_wait: true # Treat the service timeout as independent from the wait timeout
   )
 

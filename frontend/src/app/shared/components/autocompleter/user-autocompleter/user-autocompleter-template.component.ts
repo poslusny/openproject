@@ -38,6 +38,7 @@ import { hrefFromPrincipal, typeFromHref } from 'core-app/shared/components/prin
   templateUrl: './user-autocompleter-template.component.html',
   styleUrls: ['./user-autocompleter-template.component.sass'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class UserAutocompleterTemplateComponent implements IAutocompleterTemplateComponent {
   @Input() public inviteUserToProject:string|undefined;

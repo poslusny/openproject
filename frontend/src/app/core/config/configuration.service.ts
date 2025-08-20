@@ -27,7 +27,7 @@
 //++
 
 import { Injectable } from '@angular/core';
-import * as moment from 'moment';
+import moment from 'moment';
 
 import { ConfigurationResource } from 'core-app/features/hal/resources/configuration-resource';
 import { ApiV3Service } from 'core-app/core/apiv3/api-v3.service';
@@ -49,6 +49,10 @@ export class ConfigurationService {
 
   public commentsSortedInDescendingOrder():boolean {
     return this.userPreference('commentSortDescending');
+  }
+
+  public disableKeyboardShortcuts():boolean {
+    return this.userPreference('disableKeyboardShortcuts');
   }
 
   public warnOnLeavingUnsaved():boolean {
@@ -144,6 +148,14 @@ export class ConfigurationService {
 
   public get activeFeatureFlags():string[] {
     return this.systemPreference<string[]>('activeFeatureFlags');
+  }
+
+  public get availableFeatures():string[] {
+    return this.systemPreference<string[]>('availableFeatures');
+  }
+
+  public get triallingFeatures():string[] {
+    return this.systemPreference<string[]>('triallingFeatures');
   }
 
   private loadConfiguration() {

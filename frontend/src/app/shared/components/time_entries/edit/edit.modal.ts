@@ -10,6 +10,7 @@ import { TimeEntryBaseModal } from 'core-app/shared/components/time_entries/shar
 @Component({
   templateUrl: '../shared/modal/base.modal.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class TimeEntryEditModalComponent extends TimeEntryBaseModal implements OnInit {
   public modifiedEntry:TimeEntryResource;

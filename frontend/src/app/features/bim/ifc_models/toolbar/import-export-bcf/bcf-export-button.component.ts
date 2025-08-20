@@ -52,6 +52,7 @@ import { JobStatusModalService } from 'core-app/features/job-status/job-status-m
     </a>
   `,
   selector: 'bcf-export-button',
+  standalone: false,
 })
 export class BcfExportButtonComponent extends UntilDestroyedMixin implements OnInit, OnDestroy {
   public text = {

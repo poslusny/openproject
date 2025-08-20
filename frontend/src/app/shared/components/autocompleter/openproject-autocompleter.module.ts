@@ -1,4 +1,4 @@
-import { Injector, NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DynamicModule } from 'ng-dynamic-component';
@@ -52,6 +52,9 @@ import {
 import {
   TimeEntriesWorkPackageAutocompleterComponent,
 } from 'core-app/shared/components/autocompleter/time-entries-work-package-autocompleter/time-entries-work-package-autocompleter.component';
+import {
+  ProjectPhaseAutocompleterComponent,
+} from './project-phase-autocompleter/project-phase-autocompleter.component';
 
 export const OPENPROJECT_AUTOCOMPLETE_COMPONENTS = [
   CreateAutocompleterComponent,
@@ -63,6 +66,7 @@ export const OPENPROJECT_AUTOCOMPLETE_COMPONENTS = [
   UserAutocompleterTemplateComponent,
   ProjectAutocompleterComponent,
   ProjectAutocompleterTemplateComponent,
+  ProjectPhaseAutocompleterComponent,
   ColorsAutocompleterComponent,
   OpAutocompleterComponent,
   OpAutocompleterOptionTemplateDirective,
@@ -87,7 +91,4 @@ export const OPENPROJECT_AUTOCOMPLETE_COMPONENTS = [
   exports: OPENPROJECT_AUTOCOMPLETE_COMPONENTS,
   declarations: OPENPROJECT_AUTOCOMPLETE_COMPONENTS,
 })
-export class OpenprojectAutocompleterModule {
-  constructor(injector:Injector) {
-  }
-}
+export class OpenprojectAutocompleterModule {}

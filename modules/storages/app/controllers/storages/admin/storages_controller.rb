@@ -28,12 +28,12 @@
 # See COPYRIGHT and LICENSE files for more details.
 #++
 
-# Purpose: CRUD the global admin page of Storages (=Nextcloud servers)
 class Storages::Admin::StoragesController < ApplicationController
   using Storages::Peripherals::ServiceResultRefinements
 
   include FlashMessagesOutputSafetyHelper
   include OpTurbo::ComponentStream
+  include EnterpriseHelper
 
   # See https://guides.rubyonrails.org/layouts_and_rendering.html for reference on layout
   layout "admin"
@@ -68,9 +68,7 @@ class Storages::Admin::StoragesController < ApplicationController
       # See also: storages/services/storages/storages/set_attributes_services.rb
       # That service inherits from ::BaseServices::SetAttributes
       @storage = ::Storages::Storages::SetAttributesService
-                   .new(user: current_user,
-                        model: Storages::Storage.new(provider_type: @provider_type),
-                        contract_class: EmptyContract)
+                   .new(user: current_user, model: @provider_type.new, contract_class: EmptyContract)
                    .call
                    .result
     end
@@ -79,7 +77,11 @@ class Storages::Admin::StoragesController < ApplicationController
     @target_step = @wizard.prepare_next_step
   end
 
-  def upsale; end
+  def upsell; end
+
+  def edit
+    @wizard = storage_wizard(@storage)
+  end
 
   def create
     service_result = Storages::Storages::CreateService
@@ -109,10 +111,6 @@ class Storages::Admin::StoragesController < ApplicationController
     else
       redirect_to(edit_admin_settings_storage_path(@storage), status: :see_other)
     end
-  end
-
-  def edit
-    @wizard = storage_wizard(@storage)
   end
 
   def edit_host
@@ -146,7 +144,7 @@ class Storages::Admin::StoragesController < ApplicationController
     else
       origin_component = params[:origin_component].presence || "general_information"
       update_via_turbo_stream(
-        component: ::Storages::Peripherals::Registry.resolve("#{@storage}.components.forms.#{origin_component}").new(
+        component: ::Storages::Adapters::Registry.resolve("#{@storage}.components.forms.#{origin_component}").new(
           @storage,
           in_wizard: params[:continue_wizard].present?
         )
@@ -213,12 +211,6 @@ class Storages::Admin::StoragesController < ApplicationController
     end
   end
 
-  def default_breadcrumb; end
-
-  def show_local_breadcrumb
-    false
-  end
-
   private
 
   def prepare_storage_for_access_management_form
@@ -230,6 +222,7 @@ class Storages::Admin::StoragesController < ApplicationController
                  .result
   end
 
+  # rubocop:disable Metrics/AbcSize
   def ensure_valid_wizard_parameters
     if params[:continue_wizard].present?
       @storage = ::Storages::Storage.find(params[:continue_wizard])
@@ -237,29 +230,32 @@ class Storages::Admin::StoragesController < ApplicationController
     end
 
     short_provider_type = params[:provider]
-    if short_provider_type.blank? || (@provider_type = ::Storages::Storage::PROVIDER_TYPE_SHORT_NAMES[short_provider_type]).blank?
+    if short_provider_type.blank? || (@provider_type = ::Storages::Storage.provider_types[short_provider_type]).blank?
       flash[:error] = I18n.t("storages.error_invalid_provider_type")
       redirect_to admin_settings_storages_path
     end
   end
+  # rubocop:enable Metrics/AbcSize
 
   # Called by create and update above in order to check if the
   # update parameters are correctly set.
   def permitted_storage_params(model_parameter_name = storage_provider_parameter_name)
     params
-      .require(model_parameter_name)
-      .permit("name",
-              "provider_type",
-              "host",
-              "authentication_method",
-              "audience_configuration",
-              "storage_audience",
-              "oauth_client_id",
-              "oauth_client_secret",
-              "tenant_id",
-              "drive_id",
-              "automatic_management_enabled",
-              "health_notifications_enabled")
+      .expect(model_parameter_name => %i[
+                audience_configuration
+                authentication_method
+                automatic_management_enabled
+                drive_id
+                health_notifications_enabled
+                host
+                name
+                oauth_client_id
+                oauth_client_secret
+                provider_type
+                storage_audience
+                tenant_id
+                token_exchange_scope
+              ])
   end
 
   def storage_provider_parameter_name
@@ -267,20 +263,22 @@ class Storages::Admin::StoragesController < ApplicationController
       :storages_nextcloud_storage
     elsif params.key?(:storages_one_drive_storage)
       :storages_one_drive_storage
+    elsif params.key?(:storages_share_point_storage)
+      :storages_share_point_storage
     else
       :storages_storage
     end
   end
 
   def require_ee_token_for_one_drive
-    if ::Storages::Storage::one_drive_without_ee_token?(@provider_type)
-      redirect_to action: :upsale
+    if (@provider_type || @storage).disallowed_by_enterprise_token?
+      redirect_to action: :upsell
     end
   end
 
   def storage_wizard(storage)
-    ::Storages::Peripherals::Registry.resolve("#{storage}.components.setup_wizard")
-                                     .new(model: storage, user: current_user)
+    ::Storages::Adapters::Registry.resolve("#{storage}.components.setup_wizard")
+                                  .new(model: storage, user: current_user)
   end
 
   def redirect_to_wizard(storage)
@@ -291,6 +289,6 @@ class Storages::Admin::StoragesController < ApplicationController
     storage_name = storage.is_a?(String) ? ::Storages::Storage.shorten_provider_type(storage) : storage.to_s
     origin_component = params[:origin_component].presence || "general_information"
 
-    ::Storages::Peripherals::Registry.resolve("#{storage_name}.contracts.#{origin_component}")
+    ::Storages::Adapters::Registry.resolve("#{storage_name}.contracts.#{origin_component}")
   end
 end

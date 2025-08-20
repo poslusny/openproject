@@ -81,6 +81,7 @@ export interface WorkPackageFocusContext {
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'wp-table',
+  standalone: false,
 })
 export class WorkPackagesTableComponent extends UntilDestroyedMixin implements OnInit, TableEventComponent {
   @Input() projectIdentifier:string;

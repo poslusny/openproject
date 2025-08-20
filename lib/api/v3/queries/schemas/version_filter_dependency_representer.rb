@@ -37,7 +37,7 @@ module API
           end
 
           def href_callback
-            query_params = "sortBy=#{to_query [%i(semver_name asc)]}&pageSize=-1"
+            query_params = "sortBy=#{to_query [%i(name asc)]}&pageSize=-1"
 
             if filter.project.nil?
               "#{api_v3_paths.versions}?#{query_params}"

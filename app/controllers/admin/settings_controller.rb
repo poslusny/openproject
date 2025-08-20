@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -79,18 +81,6 @@ module Admin
       Setting["plugin_#{@plugin.id}"] = params[:settings].permit!.to_h
       flash[:notice] = I18n.t(:notice_successful_update)
       redirect_to action: :show_plugin, id: @plugin.id
-    end
-
-    def show_local_breadcrumb
-      false
-    end
-
-    def default_breadcrumb
-      if @plugin
-        @plugin.name
-      else
-        I18n.t(:label_setting_plural)
-      end
     end
 
     protected

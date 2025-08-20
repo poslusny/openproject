@@ -53,7 +53,7 @@ import {
 } from 'rxjs';
 import { TimeEntryResource } from 'core-app/features/hal/resources/time-entry-resource';
 import { HalResourceEditingService } from 'core-app/shared/components/fields/edit/services/hal-resource-editing.service';
-import * as moment from 'moment';
+import moment from 'moment';
 import { SchemaCacheService } from 'core-app/core/schemas/schema-cache.service';
 import { TimezoneService } from 'core-app/core/datetime/timezone.service';
 import { TimeEntryTimerService } from 'core-app/shared/components/time_entries/services/time-entry-timer.service';
@@ -68,7 +68,9 @@ import { TurboRequestsService } from 'core-app/core/turbo/turbo-requests.service
 @Component({
   selector: 'op-wp-timer-button',
   templateUrl: './wp-timer-button.component.html',
+  styleUrls: ['./wp-timer-button.component.sass'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class WorkPackageTimerButtonComponent extends UntilDestroyedMixin implements AfterViewInit, OnDestroy {
   @Input() public workPackage:WorkPackageResource;
@@ -119,7 +121,7 @@ export class WorkPackageTimerButtonComponent extends UntilDestroyedMixin impleme
   }
 
   activeForWorkPackage(entry:TimeEntryResource | null):boolean {
-    return !!entry && entry.workPackage.href === this.workPackage.href;
+    return !!entry && entry.entity.href === this.workPackage.href;
   }
 
   clear():void {

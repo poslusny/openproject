@@ -3,6 +3,7 @@ ko:
   js:
     team_planner:
       add_existing: '기존 항목 추가'
+      label_team_planner_plural: '팀 플래너'
       add_existing_title: '기존 작업 패키지 추가'
       create_label: '팀 플래너'
       create_title: '새로운 팀 플래너 만들기'

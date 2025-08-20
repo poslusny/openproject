@@ -32,7 +32,7 @@ require "spec_helper"
 
 RSpec.describe CustomField::OrderStatements do
   # integration tests at spec/models/query/results_cf_sorting_integration_spec.rb
-  context "when hierarchy" do
+  context "when hierarchy", with_ee: [:custom_field_hierarchies] do
     let(:service) { CustomFields::Hierarchy::HierarchicalItemService.new }
     let(:item) { custom_field.hierarchy_root }
 

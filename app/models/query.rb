@@ -43,6 +43,7 @@ class Query < ApplicationRecord
   has_many :ical_tokens,
            through: :ical_token_query_assignments,
            class_name: "Token::ICal"
+  has_many :export_settings, dependent: :destroy
   # no `dependent: :destroy` as the ical_tokens are destroyed in the following before_destroy callback
   # dependent: :destroy is not possible as this would only delete the ical_token_query_assignments
   before_destroy :destroy_ical_tokens
@@ -288,11 +289,6 @@ class Query < ApplicationRecord
                 .compact_blank
                 .map(&:to_sym)
 
-    # Set column_names to blank/nil if it is equal to the default columns
-    if col_names.map(&:to_s) == Setting.work_package_list_default_columns
-      col_names.clear
-    end
-
     write_attribute(:column_names, col_names)
   end
 
@@ -389,9 +385,11 @@ class Query < ApplicationRecord
 
   # Returns the journals
   # Valid options are :order, :offset, :limit
-  def work_package_journals(options = {})
+  # NOTE: Internal comments are NEVER included "FOR NOW". This is a stop gap measure before we
+  #       evaluate whether we want to maintain the journals atom export or not.
+  def work_package_journals(options = {}) # rubocop:disable Metrics/AbcSize
     Journal.includes(:user)
-           .where(journable_type: WorkPackage.to_s)
+           .where(journable_type: WorkPackage.to_s, restricted: false)
            .joins("INNER JOIN work_packages ON work_packages.id = journals.journable_id")
            .joins("INNER JOIN projects ON work_packages.project_id = projects.id")
            .joins("INNER JOIN users AS authors ON work_packages.author_id = authors.id")
@@ -418,6 +416,10 @@ class Query < ApplicationRecord
                                    "!*"
                                  end
     subproject_filter
+  end
+
+  def export_settings_for(format)
+    export_settings.where(format:).first_or_initialize
   end
 
   private

@@ -259,7 +259,7 @@ export class HalResource {
     });
   }
 
-  protected $loadResource(force = false):Promise<this> {
+  $loadResource(force = false):Promise<this> {
     if (!force) {
       if (this.$loaded) {
         return Promise.resolve(this);

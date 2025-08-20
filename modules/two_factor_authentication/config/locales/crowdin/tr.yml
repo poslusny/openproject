@@ -82,7 +82,7 @@ tr:
       text_2fa_enabled: "Her girişte bu kullanıcının varsayılan 2FA cihazından bir OTP belirtecini girmesi istenir."
       text_2fa_disabled: "Kullanıcı 'Hesabım sayfası' üzerinden bir 2FA cihazı ayarlamadı"
       only_sms_allowed: "Diğer kullanıcılar için yalnızca SMS gönderimi ayarlanabilir."
-    upsale:
+    upsell:
       title: "İki aşamalı kimlik doğrulama"
       description: "Tüm proje üyelerine iki faktörlü kimlik doğrulama sunarak (veya zorunlu kılarak) OpenProject bulut sunucunuzun güvenliğini güçlendirin."
     backup_codes:
@@ -123,7 +123,7 @@ tr:
       2fa_from_webauthn: Lütfen WebAuthn cihazını <strong>%{device_name}</strong> sağlayın. USB tabanlı ise cihazınız taktığınızdan ve dokunduğunuzdan emin olun. Ardından oturum açma düğmesine tıklayın.
       webauthn:
         title: "WebAuthn"
-        description: FIDO2 cihazı (YubiKey gibi) kayıt edin ya da mobil cihazınızdaki verilerin güvenliğini sağlayın.
+        description: Register a FIDO2 device (like YubiKey) or the secure enclave of your mobile device.
         further_steps: Bir isim seçtikten sonra Devam düğmesine tıklayabilirsiniz. Tarayıcınız sizden WebAuthn cihazınızı göstermenizi isteyecektir. Bunu yaptığınızda, cihazın kaydını tamamlamış olursunuz.
       totp:
         title: "Uygulama tabanlı kimlik doğrulayıcı"

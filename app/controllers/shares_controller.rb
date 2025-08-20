@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # -- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -28,7 +30,6 @@
 
 class SharesController < ApplicationController
   include OpTurbo::ComponentStream
-  include OpTurbo::DialogStreamHelper
   include MemberHelper
 
   before_action :load_entity

@@ -284,10 +284,8 @@ Developed features are bundled into a version that is released to the public via
 3. QA identifies important bugs to be fixed in the release.
 4. Developer fixes bugs from regression testing as well as bugs from former versions.
 5. Tester retests bugs
-
-  * Tester adjusts status on errors (status: “test failed").
-  * Tester adjusts status when no errors are found (status: “closed").
-
+   - Tester adjusts status on errors (status: “test failed").
+   - Tester adjusts status when no errors are found (status: “closed").
 6. Developer fixes bugs that were not fixed successfully.
 7. DevOps deploys release candidate on community.openproject.org.
 8. DevOps monitors for failures.

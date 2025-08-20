@@ -58,6 +58,7 @@ import { TimezoneService } from 'core-app/core/datetime/timezone.service';
   templateUrl: './progress-popover-edit-field.component.html',
   styleUrls: ['./progress-popover-edit-field.component.sass'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class ProgressPopoverEditFieldComponent extends ProgressEditFieldComponent implements OnInit {
   text = {

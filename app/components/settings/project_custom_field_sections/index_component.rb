@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -47,8 +49,7 @@ module Settings
 
       def wrapper_data_attributes
         {
-          controller: "generic-drag-and-drop",
-          "application-target": "dynamic"
+          controller: "generic-drag-and-drop"
         }
       end
 

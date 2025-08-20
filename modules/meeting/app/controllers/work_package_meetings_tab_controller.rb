@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -29,7 +30,6 @@
 
 class WorkPackageMeetingsTabController < ApplicationController
   include OpTurbo::ComponentStream
-  include OpTurbo::DialogStreamHelper
   include Meetings::WorkPackageMeetingsTabComponentStreams
 
   before_action :set_work_package
@@ -53,7 +53,7 @@ class WorkPackageMeetingsTabController < ApplicationController
   end
 
   def count
-    count = Meeting.visible.where(id: @work_package.meetings.select(:id)).count
+    count = Meeting.visible.not_templated.where(id: @work_package.meetings.select(:id)).count
     render json: { count: }
   end
 
@@ -61,14 +61,15 @@ class WorkPackageMeetingsTabController < ApplicationController
     respond_with_dialog WorkPackageMeetingsTab::AddWorkPackageToMeetingDialogComponent.new(work_package: @work_package)
   end
 
-  def add_work_package_to_meeting
+  def add_work_package_to_meeting # rubocop:disable Metrics/AbcSize
     call = ::MeetingAgendaItems::CreateService
       .new(user: current_user)
       .call(
         add_work_package_to_meeting_params.merge(
           work_package_id: @work_package.id,
           presenter_id: current_user.id,
-          item_type: MeetingAgendaItem::ITEM_TYPES[:work_package]
+          item_type: MeetingAgendaItem::ITEM_TYPES[:work_package],
+          meeting_section_id: backlog_id
         )
       )
 
@@ -76,18 +77,8 @@ class WorkPackageMeetingsTabController < ApplicationController
 
     if call.success?
       set_agenda_items(:upcoming) # always switch back to the upcoming tab after adding the work package to a meeting
-
-      # update the whole index component as we need to update the counters in the tabbed nav as well
-      update_index_component_via_turbo_stream(
-        direction: :upcoming,
-        agenda_items_grouped_by_meeting: @agenda_items_grouped_by_meeting,
-        upcoming_meetings_count: @upcoming_meetings_count,
-        past_meetings_count: @past_meetings_count
-      )
-
+      update_index_component
       replace_tab_counter_via_turbo_stream(work_package: @work_package)
-
-      # TODO: show success message?
     else
       # show errors in form
       update_add_to_meeting_form_component_via_turbo_stream(meeting_agenda_item:, base_errors: call.errors[:base])
@@ -101,12 +92,20 @@ class WorkPackageMeetingsTabController < ApplicationController
   def set_work_package
     @work_package = WorkPackage.find(params[:work_package_id])
     @project = @work_package.project # required for authorization via before_action
-  rescue ActiveRecord::RecordNotFound
-    render_404
   end
 
   def add_work_package_to_meeting_params
-    params.require(:meeting_agenda_item).permit(:meeting_id, :notes)
+    @add_work_package_to_meeting_params ||= params.require(:meeting_agenda_item).permit(:meeting_id, :notes)
+  end
+
+  def backlog_id
+    meeting_id = add_work_package_to_meeting_params[:meeting_id]
+    return if meeting_id.blank?
+
+    meeting = Meeting.find(meeting_id)
+    return if meeting.recurring?
+
+    meeting.backlog.id
   end
 
   def set_agenda_items(direction)
@@ -148,5 +147,15 @@ class WorkPackageMeetingsTabController < ApplicationController
     else
       raise ArgumentError, "Invalid direction: #{direction}. Must be one of :upcoming or :past."
     end
+  end
+
+  def update_index_component
+    # update the whole index component as we need to update the counters in the tabbed nav as well
+    update_index_component_via_turbo_stream(
+      direction: :upcoming,
+      agenda_items_grouped_by_meeting: @agenda_items_grouped_by_meeting,
+      upcoming_meetings_count: @upcoming_meetings_count,
+      past_meetings_count: @past_meetings_count
+    )
   end
 end

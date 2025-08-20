@@ -24,14 +24,14 @@ uk:
   plugin_openproject_meeting:
     name: "Зустріч OpenProject"
     description: >-
-      Цей модуль додає до OpenProject функції для підтримки зустрічей проєкту. Зустрічі можна планувати, вибираючи запрошених з одного проекту для участі у зустрічі. Можна створити порядок денний і надіслати його запрошеним. Після зустрічі можна вибрати учасників і створити протокол на основі порядку денного.  Наостанок, протокол можна надіслати всім учасникам і запрошеним.
+      Цей модуль додає в OpenProject функції для підтримки зустрічей щодо проєкту. Зустрічі можна планувати, вибираючи запрошених з одного проєкту для участі в нараді. Можна створити порядок денний і надіслати його запрошеним. Після зустрічі можна вибрати учасників і створити протокол на основі порядку денного. Наостанок протокол можна надіслати всім учасникам і запрошеним.
   activerecord:
     attributes:
       meeting:
         type: "Тип зустрічі"
         location: "Місцезнаходження"
         duration: "Тривалість"
-        notes: "Нотатки "
+        notes: "Примітки"
         participants: "Учасники"
         participant:
           one: "1 учасник"
@@ -47,7 +47,7 @@ uk:
       meeting_agenda_item:
         title: "Назва "
         author: "Автор"
-        duration_in_minutes: "хв"
+        duration_in_minutes: "Тривалість"
         description: "Примітки"
         presenter: "Доповідач"
       meeting_section:
@@ -72,11 +72,9 @@ uk:
         invalid_time_format: "не є допустимим часом. Необхідний формат: HH:MM"
     models:
       recurring_meeting: "Повторювана нарада"
-      structured_meeting: "Одноразова нарада"
-      meeting: "Нарада"
-      meeting_agenda_item: "Порядок денний"
+      meeting: "Одноразова нарада"
+      meeting_agenda_item: "Пункт порядку денного"
       meeting_agenda: "Порядок денний"
-      meeting_minutes: "Хвилини"
       meeting_section: "Розділ"
   activity:
     filter:
@@ -103,6 +101,7 @@ uk:
     meeting_agenda_opened: Порядок зустрічей був відкритий
     meeting_minutes: Відредаговані хвилини наради
     meeting_minutes_created: Створено протокол зустрічей
+  error_notification: "Не вдалося надіслати сповіщення."
   error_notification_with_errors: "Не вдалося надіслати сповіщення. Неможливо отримати сповіщення про таких одержувачів: %{recipients}"
   label_meeting: "Зустріч"
   label_meeting_plural: "Зустрічі"
@@ -122,6 +121,7 @@ uk:
   label_meeting_date_time: "Дата, час"
   label_meeting_date_and_time: "Дата й час"
   label_meeting_diff: "Відмінність"
+  label_meeting_send_updates: "Надсилати оновлення з календаря електронною поштою"
   label_recurring_meeting: "Повторювана нарада"
   label_recurring_meeting_part_of: "Частина серії нарад"
   label_recurring_meeting_new: "Нова повторювана нарада"
@@ -192,6 +192,7 @@ uk:
       agenda_items: "Копіювати пункти порядку денного"
       agenda_text: "Копіювати порядок денний старої наради"
       participants: "Копіювати список учасників"
+      to_clipboard: "Копіювати в буфер обміну"
     email:
       send_emails: "Надіслати електронні листи учасникам"
       send_invitation_emails: >
@@ -223,11 +224,8 @@ uk:
         body: "Запланований час наради «%{title}» змінив(-ла) %{actor}."
         old_date_time: "Стара дата/час"
         new_date_time: "Нова дата/час"
-    label_mail_all_participants: "Надіслати лист усім учасникам"
+    label_mail_all_participants: "Надсилати електронною поштою оновлення з календаря всім учасникам"
     types:
-      classic: "Класична (не підтримується)"
-      classic_text: "Примітка: класичні наради буде вилучено в наступній версії OpenProject."
-      structured: "Структурована"
       one_time: "Одноразова"
       recurring: "Повторювана"
       recurring_text: "Створюйте серії нарад на основі динамічного шаблона для кожної події."
@@ -249,12 +247,79 @@ uk:
     blankslate:
       title: "Немає нарад"
       desc: "Немає нарад, які відповідають критеріям активного фільтра."
+    label_export_pdf: "Експорт PDF"
+    export:
+      your_meeting_export: "Нарада експортується"
+    export_pdf_dialog:
+      title: Експорт PDF
+      description: Згенеруйте PDF-файл для друку з поточним змістом наради.
+      include_participants:
+        label: Включити список учасників
+        caption: Список учасників буде розміщено над порядком денним наради.
+      include_attachments:
+        label: Включити список вкладень
+        caption: Список з іменами файлів вкладень буде долучено в кінці.
+      include_backlog:
+        label: Включити чергу завдань
+        caption: Елементи черги завдань зазвичай не вважають такими, що належать до наради, але ви можете включити їх.
+      include_outcomes:
+        label: Включити результати порядку денного
+        caption: Якщо результати порядку денного містять конфіденційну інформацію, ви можете не включати її у файл експорту.
+      footer_text:
+        label: Текст нижнього колонтитула
+        caption: Цей текст з’явиться на кожній сторінці в центрі нижнього колонтитула.
+      submit_button: Завантажити
+    notifications:
+      sidepanel:
+        title: "Оновлення з календаря електронною поштою"
+        state:
+          disabled: "Вимкнено."
+          enabled: "Увімкнено."
+        description:
+          disabled: "Учасники не отримуватимуть електронних листів щодо змін."
+          enabled: "Усі учасники отримуватимуть електронною поштою оновлені запрошення з календаря, які інформуватимуть їх про зміни."
+          change_via_template: "Щоб змінити це, відредагуйте шаблон серії."
+        button:
+          disable: "Вимкнути"
+          enable: "Увімкнути"
+      dialog:
+        title:
+          enable: "Увімкнути оновлення з календаря електронною поштою?"
+          disable: "Вимкнути оновлення з календаря електронною поштою?"
+        message:
+          enable: >
+            Усі учасники отримуватимуть електронною поштою оновлені запрошення з календаря щоразу, коли мінятиметься дата, час, місце проведення або перелік учасників наради. Після ввімкнення всім учасникам буде негайно надіслано електронний лист.
+          disable: >
+            Учасникам більше не надходитимуть електронною поштою оновлені запрошення з календаря після внесення змін у дату, час, місце або перелік учасників наради. Через це інформація із запрошення на цю нараду, яке вони отримали раніше, може більше не бути точною.
+        confirm_label:
+          enable: "Увімкнути оновлення електронною поштою"
+          disable: "Вимкнути оновлення електронною поштою"
+      banner:
+        onetime:
+          enabled: >
+            Усі учасники отримуватимуть електронною поштою оновлені запрошення з календаря, що інформуватимуть їх про зміни, які ви вносите.
+          disabled: >
+            Надсилання електронною поштою оновлень із календаря вимкнено. Учасники не отримають листа з інформацією про зміни, які ви вносите.
+        occurrence:
+          enabled: >
+            Надсилання електронною поштою оновлень із календаря ввімкнено для цієї серії нарад. Усі учасники отримають оновлені запрошення з календаря, що міститимуть інформацію про зміни, які ви вносите в цю нараду серії.
+          disabled: >
+            Надсилання електронною поштою оновлень із календаря вимкнено для цієї серії нарад. Учасники не отримають листа з інформацією про зміни, які ви вносите в цю нараду серії.
+        template:
+          enabled: >
+            Надсилання електронною поштою оновлень із календаря ввімкнено для цієї серії нарад. Усі учасники отримають оновлені запрошення з календаря, що міститимуть інформацію про зміни, які ви вносите в цей шаблон або окремі наради серії.
+          disabled: >
+            Надсилання електронною поштою оновлень із календаря вимкнено для цієї серії нарад. Учасники не отримають електронного листа з інформацією про зміни, які ви вносите в цей шаблон або окремі наради серії.
   meeting_section:
     untitled_title: "Розділ без назви"
     delete_confirmation: "Видалення цього розділу також призведе до видалення його елементів порядку денного. Ви впевнені?"
     placeholder_title: "Новий розділ"
     empty_text: "Перетягніть елементи сюди або створіть новий"
   recurring_meeting:
+    time_zone_difference_banner:
+      title: "Різниця в датах через часовий пояс"
+      description: >
+        Дати, наведені нижче, указано з урахуванням часового поясу серії нарад (%{actual_zone}), а не вашого місцевого часового поясу (%{user_zone}).
     ended_blankslate:
       title: "Серія нарад завершилася"
       message: "Ця серія нарад завершилася. Запланованих нарад немає. "
@@ -336,23 +401,17 @@ uk:
       confirm_button: "Скасувати нараду"
     end_series_dialog:
       title: "Завершити серію нарад"
-  notice_successful_notification: "Повідомлення успішно надіслано"
+  notice_successful_notification: "Оновлення з календаря надіслано електронною поштою всім учасникам"
   notice_timezone_missing: Часовий пояс не встановлено і %{zone} передбачається. Щоб вибрати часовий пояс, натисніть тут.
   notice_meeting_updated: "Цю сторінку оновив інший користувач. Перезавантажте її, щоб побачити зміни."
   permission_create_meetings: "Створюйте зустрічі"
   permission_edit_meetings: "Редагувати зустрічі"
   permission_delete_meetings: "Видалити зустрічі"
   permission_view_meetings: "Переглянути зустрічі"
-  permission_create_meeting_agendas: "Створити план зустрічі "
-  permission_create_meeting_agendas_explanation: "Дає змогу редагувати вміст порядку денного класичної наради."
-  permission_manage_agendas: "Керувати програмами"
-  permission_manage_agendas_explanation: "Дає змогу налаштовувати пункти порядку денного динамічної наради."
-  permission_close_meeting_agendas: "Закрити порядок денний"
-  permission_send_meeting_agendas_notification: "Надіслати повідомлення про перегляд для порядку денного"
-  permission_create_meeting_minutes: "Керування хвилинами"
-  permission_send_meeting_minutes_notification: "Надішліть повідомлення про перегляд за хвилини"
-  permission_meetings_send_invite: "Запросити користувачів до зустрічей"
-  permission_send_meeting_agendas_icalendar: "Позначити план зустрічі записом у календарі"
+  permission_manage_agendas: "Керувати порядками денними"
+  permission_manage_agendas_explanation: "Дозволяє створювати, редагувати й видаляти пункти порядків денних"
+  permission_manage_outcomes: "Керування результатами"
+  permission_send_meeting_invites_and_outcomes: "Надсилайте запрошення на нараду і її результати учасникам"
   project_module_meetings: "Зустрічі"
   text_duration_in_hours: "Тривалість у годинах"
   text_in_hours: "у годинах"
@@ -364,13 +423,13 @@ uk:
   text_meeting_minutes_for_meeting: 'протокол засідання %{meeting}'
   text_notificiation_invited: "У цьому листі міститься запис ics для зустрічі нижче:"
   text_meeting_empty_heading: "Ваша нарада пуста"
-  text_meeting_empty_description_1: "Почніть із додавання пунктів розкладу нижче. Кожен елемент може бути таким простим, як назва, але ви також можете додати додаткові деталі, як-от тривалість і примітки."
-  text_meeting_empty_description_2: 'Ви також можете додати посилання на наявні пакети робіт. У такому разі пов’язані примітки автоматично з’являться на вкладці «Наради» пакета робіт.'
+  text_meeting_empty_description1: "Спочатку додайте пункти порядку денного нижче. Для кожного з них можна ввести лише назву, але також можна вказати додаткові відомості, наприклад тривалість і примітки."
+  text_meeting_empty_description2: 'Крім того, можна додати посилання на наявні пакети робіт. У такому разі пов’язані примітки автоматично з’являться на вкладці «Наради» пакета робіт.'
   label_meeting_empty_action: "Додати пункт порядку денного"
   label_meeting_actions: "Дії з нарадою"
   label_meeting_edit_title: "Редагувати назву зустрічі"
-  label_meeting_delete: "Видалити зустріч"
-  label_meeting_created_by: "Створено "
+  label_meeting_delete: "Видалити нараду"
+  label_meeting_created_by: "Створено"
   label_meeting_last_updated: "Востаннє оновлено"
   label_meeting_reload: "Перезавантажити"
   label_meeting_index_today: "Сьогодні"
@@ -379,23 +438,47 @@ uk:
   label_meeting_index_later: "Наступного тижня й пізніше"
   label_agenda_items: "Пункти порядку денного"
   label_agenda_items_reordered: "перевпорядковано"
-  label_agenda_item_remove: "Зняти з порядку денного"
+  label_agenda_item_add: "Додати пункт порядку денного"
+  label_agenda_item_remove_from_agenda: "Зняти з порядку денного"
+  label_agenda_item_remove_from_backlog: "Вилучити із черги завдань"
   label_agenda_item_undisclosed_wp: "Пакет робіт #%{id} не видимий"
   label_agenda_item_deleted_wp: "Посилання на видалений пакет робіт"
   label_agenda_item_actions: "Дії з пунктами порядку денного"
+  label_agenda_item_move_to_next_title: "Move to next meeting?"
+  label_agenda_item_move: "Move"
   label_agenda_item_move_to_next: "Перейти до наступної наради"
-  label_agenda_item_move_to_top: "Помістити на верх"
-  label_agenda_item_move_to_bottom: "Помістити в кінець"
-  label_agenda_item_move_up: "Рухатися вгору"
-  label_agenda_item_move_down: "Пересунути нижче"
-  label_agenda_item_add_notes: "Додати примітку "
+  label_agenda_item_move_to_backlog: "Перемістити в чергу завдань"
+  label_agenda_item_move_to_current_meeting: "Перемістити в поточну нараду"
+  label_agenda_item_move_to_top: "Перемістити на верх"
+  label_agenda_item_move_to_bottom: "Перемістити в кінець"
+  label_agenda_item_move_up: "Перемістити вгору"
+  label_agenda_item_move_down: "Перемістити вниз"
+  label_agenda_item_add_notes: "Додати примітки"
   label_agenda_item_add_outcome: "Додати результат"
+  label_agenda_item_work_package_add: "Додати пакет робіт"
   label_agenda_item_work_package: "Пакет робіт пункту порядку денного"
+  label_section_rename: "Перейменувати розділ"
   label_agenda_outcome: "Результат"
   label_agenda_outcome_actions: "Дії з результатами порядку денного"
   label_agenda_outcome_edit: "Редагувати результат"
   label_agenda_outcome_delete: "Вилучити результат"
   text_outcome_not_editable_anymore: "Цей результат більше не можна редагувати."
+  text_outcome_cannot_be_added: "Результат більше не можна додати."
+  label_backlog_clear: "Очистити чергу завдань"
+  label_backlog_clear_button: "Очистити все"
+  text_backlog_clear_error: "Під час очищення черги завдань сталася принаймні одна помилка."
+  label_agenda_backlog: "Черга завдань порядку денного"
+  text_agenda_backlog: >
+    Ця черга завдань стосується лише цієї одноразової наради. Ви можете додавати або вилучати елементи з порядку денного наради, перетягуючи їх.
+  label_agenda_backlog_clear_title: "Очистити чергу завдань порядку денного?"
+  text_agenda_backlog_clear_description: >
+    Справді вилучити всі поточні елементи із черги завдань порядку денного? Цю дію не можна відмінити.
+  label_series_backlog: "Черга завдань серії"
+  text_series_backlog: >
+    Черга завдань стосується всіх нарад цієї серії. Ви можете додавати або вилучати елементи з певної наради, перетягуючи їх.
+  label_series_backlog_clear_title: "Очистити чергу завдань серії?"
+  text_series_backlog_clear_description: >
+    Буде вилучено всі елементи черги завдань цієї серії, спільної для всіх нарад серії. Справді продовжити? Цю дію не можна відмінити.
   text_agenda_item_title: 'Пункт порядку денного «%{title}»'
   text_agenda_work_package_deleted: 'Пункт порядку денного для видаленого пакета робіт'
   text_deleted_agenda_item: 'Видалений пункт порядку денного'
@@ -404,7 +487,7 @@ uk:
   label_meeting_series_details: "Деталі серії нарад"
   label_meeting_details_edit: "Редагувати інформацію про зустріч"
   label_meeting_state: "Статус наради"
-  label_meeting_state_open: "Відкрити"
+  label_meeting_state_open: "Відкриті"
   label_meeting_state_closed: "Закрито"
   label_meeting_state_agenda_created: "Порядок денний створено"
   label_meeting_state_planned: "Заплановані"
@@ -415,7 +498,7 @@ uk:
   label_meeting_close_action: "Закрити зустріч"
   label_meeting_in_progress_action: "Почати нараду"
   text_meeting_open_description: "Це відкрита нарада. Ви можете додавати / вилучати пункти порядку денного й редагувати їх. Коли порядок денний буде готовий, позначте її як поточну в результатах документа."
-  text_meeting_closed_description: "Це закрита нарада. Ви більше не можете додати або вилучати пункти порядку денного."
+  text_meeting_closed_description: "Це закрита нарада. Ви більше не можете додавати або вилучати пункти порядку денного."
   text_meeting_in_progress_description: "Це поточна нарада. Ви можете документувати результати для кожного пункту порядку денного, перевпорядковувати їх і навіть додавати нові. Коли нараду буде завершено, позначте її як закриту, щоб заблокувати."
   text_meeting_open_dropdown_description: "Усі наявні результати будуть і надалі доступні, але користувачі не зможуть додавати нові."
   text_meeting_in_progress_dropdown_description: "Результати документа, такі як потреби в інформації або рішення, прийняті під час наради."
@@ -430,12 +513,15 @@ uk:
   label_add_work_package_to_meeting_dialog_title: "Додавання пакета робіт до наради"
   label_add_work_package_to_meeting_dialog_button: "Додати до наради"
   label_meeting_selection_caption: "Цей пакет робіт можна додати лише до майбутніх або поточних відкритих нарад."
-  text_add_work_package_to_meeting_description: "Пакет робіт можна додати до однієї або кількох нарад для обговорення. Тут також з’явдяться всі пов’яхані з ним примітки."
+  text_add_work_package_to_meeting_description: "Пакет робіт можна додати до однієї або кількох нарад для обговорення. Тут також з’являться всі пов’язані з ним примітки."
   text_agenda_item_no_notes: "Примітки не надано"
   text_agenda_item_not_editable_anymore: "Цей пункт порядку денного більше не можна редагувати."
-  text_agenda_item_move_next_meeting: "Справді перемістити в нову нараду, заплановану на %{date} о %{time}?"
+  text_agenda_item_move_next_meeting: "This item will be moved to the next meeting on %{date} at %{time}."
   text_agenda_item_moved_to_next_meeting: "Пункт порядку денного переміщено в нову нараду, що відбудеться %{date}"
   text_work_package_has_no_upcoming_meeting_agenda_items: "Цей пакет робіт ще не заплановано в порядку денному майбутньої наради."
   text_agenda_item_move_next_meeting_cancelled: "Не вдається перейти до наступної наради, оскільки її скасовано."
   text_work_package_add_to_meeting_hint: 'Натисніть кнопку «Додати до наради», щоб додати цей пакет робіт до майбутньої наради.'
   text_work_package_has_no_past_meeting_agenda_items: "Цей пакет робіт не згадано в минулій нараді."
+  text_email_updates_muted: "Надсилання електронною поштою оновлень із календаря тимчасово вимкнено. Учасники не отримають листи з оновленими запрошеннями після того, як ви внесете зміни."
+  text_email_updates_enabled: "Надсилання електронною поштою оновлень із календаря ввімкнено. Усі учасники отримають листи з оновленими запрошеннями після того, як ви внесете зміни."
+

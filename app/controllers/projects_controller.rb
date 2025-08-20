@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -32,11 +34,13 @@ class ProjectsController < ApplicationController
   menu_item :overview
   menu_item :roadmap, only: :roadmap
 
-  before_action :find_project, except: %i[index new export_list_modal]
+  before_action :find_project, except: %i[index new create export_list_modal]
   before_action :load_query_or_deny_access, only: %i[index export_list_modal]
-  before_action :authorize, only: %i[copy deactivate_work_package_attachments]
-  before_action :authorize_global, only: %i[new]
+  before_action :authorize, only: %i[copy_form copy deactivate_work_package_attachments]
+  before_action :authorize_global, only: %i[new create]
   before_action :require_admin, only: %i[destroy destroy_info]
+  before_action :find_optional_template, only: %i[new create]
+  before_action :find_optional_parent, only: :new
 
   no_authorization_required! :index, :export_list_modal
 
@@ -45,12 +49,15 @@ class ProjectsController < ApplicationController
   include QueriesHelper
   include ProjectsHelper
   include Queries::Loading
-  include OpTurbo::DialogStreamHelper
 
   helper_method :has_managed_project_folders?
 
   current_menu_item :index do
     :projects
+  end
+
+  current_menu_item :copy_form do
+    :settings_general
   end
 
   def index # rubocop:disable Metrics/AbcSize
@@ -89,11 +96,50 @@ class ProjectsController < ApplicationController
   end
 
   def new
-    render layout: "no_menu"
+    if from_template?
+      new_from_template
+    else
+      new_blank
+    end
   end
 
-  def copy
+  def create
+    if from_template?
+      create_from_template
+    else
+      create_blank
+    end
+  end
+
+  def copy_form
+    @copy_options = Projects::CopyOptions.new
+    @target_project = Projects::CopyService
+      .new(user: current_user, source: @project, contract_options: { validate_model: false })
+      .call(target_project_params: {}, attributes_only: true)
+      .result
+
     render
+  end
+
+  def copy # rubocop:disable Metrics/AbcSize
+    @copy_options = Projects::CopyOptions.new(permitted_params.copy_project_options)
+
+    service_call = Projects::EnqueueCopyService
+      .new(user: current_user, model: @project)
+      .call(
+        target_project_params: permitted_params.new_project.to_h,
+        only: @copy_options.dependencies,
+        send_notifications: @copy_options.send_notifications
+      )
+
+    if service_call.success?
+      job = service_call.result
+      redirect_to job_status_path(job.job_id)
+    else
+      @target_project = service_call.result
+      flash.now[:error] = I18n.t(:notice_unsuccessful_create_with_reason, reason: service_call.message)
+      render action: :copy_form, status: :unprocessable_entity
+    end
   end
 
   # Delete @project
@@ -134,6 +180,68 @@ class ProjectsController < ApplicationController
   end
 
   private
+
+  def from_template? = @template.present?
+
+  def new_blank
+    @new_project = @parent&.children&.build || Project.new
+
+    render layout: "no_menu"
+  end
+
+  def new_from_template
+    @copy_options = Projects::CopyOptions.new
+    @new_project = Projects::CopyService
+      .new(user: current_user, source: @template, contract_options: { validate_model: false })
+      .call(target_project_params: params.permit(:parent_id).to_h, attributes_only: true)
+      .result
+
+    render layout: "no_menu"
+  end
+
+  def create_blank
+    service_call = Projects::CreateService
+      .new(user: current_user)
+      .call(permitted_params.new_project)
+
+    @new_project = service_call.result
+
+    if service_call.success?
+      redirect_to project_path(@new_project), notice: I18n.t(:notice_successful_create)
+    else
+      flash.now[:error] = I18n.t(:notice_unsuccessful_create_with_reason, reason: service_call.message)
+      render action: :new, status: :unprocessable_entity
+    end
+  end
+
+  def create_from_template # rubocop:disable Metrics/AbcSize
+    @copy_options = Projects::CopyOptions.new(permitted_params.copy_project_options)
+
+    service_call = Projects::EnqueueCopyService
+      .new(user: current_user, model: @template)
+      .call(
+        target_project_params: permitted_params.new_project.to_h,
+        only: @copy_options.dependencies,
+        send_notifications: @copy_options.send_notifications
+      )
+
+    if service_call.success?
+      job = service_call.result
+      redirect_to job_status_path(job.job_id)
+    else
+      @new_project = service_call.result
+      flash.now[:error] = I18n.t(:notice_unsuccessful_create_with_reason, reason: service_call.message)
+      render action: :new, status: :unprocessable_entity
+    end
+  end
+
+  def find_optional_template
+    @template = Project.templated.visible(current_user).find(params[:template_id]) if params[:template_id].present?
+  end
+
+  def find_optional_parent
+    @parent = Project.visible(current_user).find(params[:parent_id]) if params[:parent_id].present?
+  end
 
   def has_managed_project_folders?(project)
     project.project_storages.any?(&:project_folder_automatic?)

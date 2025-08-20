@@ -39,7 +39,7 @@ module Projects
 
     private
 
-    def perform(params)
+    def perform
       call = test_copy(params)
 
       if call.success?

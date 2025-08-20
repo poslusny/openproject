@@ -10,7 +10,10 @@
 .op-meeting-outcome-notes
   display: grid
   grid-template-columns: auto fit-content(40px)
-  grid-template-areas: "title actions" "content ."
+  grid-template-areas: "title actions" "content content"
+
+  &--content
+    overflow: auto
 
 
 

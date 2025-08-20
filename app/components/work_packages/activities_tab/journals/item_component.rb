@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -56,31 +58,30 @@ module WorkPackages
         def wrapper_data_attributes
           {
             controller: "work-packages--activities-tab--item",
-            "application-target": "dynamic",
             "work-packages--activities-tab--item-activity-url-value": activity_url(journal)
           }
         end
 
         def container_classes
           [].tap do |classes|
-            if journal.restricted?
-              classes << "work-packages-activities-tab-journals-item-component--container__restricted-comment"
+            if journal.internal?
+              classes << "work-packages-activities-tab-journals-item-component--container__internal-comment"
             end
           end
         end
 
         def comment_header_classes
           [].tap do |classes|
-            if journal.restricted?
-              classes << "work-packages-activities-tab-journals-item-component--header__restricted-comment"
+            if journal.internal?
+              classes << "work-packages-activities-tab-journals-item-component--header__internal-comment"
             end
           end
         end
 
         def comment_body_classes
           ["work-packages-activities-tab-journals-item-component--journal-notes-body"].tap do |classes|
-            if journal.restricted?
-              classes << "work-packages-activities-tab-journals-item-component--journal-notes-body__restricted-comment"
+            if journal.internal?
+              classes << "work-packages-activities-tab-journals-item-component--journal-notes-body__internal-comment"
             end
           end
         end
@@ -112,7 +113,7 @@ module WorkPackages
         end
 
         def allowed_to_quote?
-          User.current.allowed_in_project?(:add_work_package_notes, journal.journable.project)
+          User.current.allowed_in_project?(:add_work_package_comments, journal.journable.project)
         end
 
         def copy_url_action_item(menu)
@@ -128,12 +129,20 @@ module WorkPackages
         end
 
         def edit_action_item(menu)
-          menu.with_item(label: t("js.label_edit_comment"),
+          menu.with_item(label: edit_action_label,
                          href: edit_work_package_activity_path(journal.journable, journal, filter:),
                          content_arguments: {
                            data: { turbo_stream: true, test_selector: "op-wp-journal-#{journal.id}-edit" }
                          }) do |item|
             item.with_leading_visual_icon(icon: :pencil)
+          end
+        end
+
+        def edit_action_label
+          if journal.user == User.current
+            t("js.label_edit_comment")
+          else
+            t("js.label_moderate_comment")
           end
         end
 
@@ -149,17 +158,16 @@ module WorkPackages
 
         def quote_action_data_attributes # rubocop:disable Metrics/AbcSize
           {
+            test_selector: "op-wp-journal-#{journal.id}-quote",
             controller: quote_comments_stimulus_controller,
-            "application-target": "dynamic",
             action: "click->#{quote_comments_stimulus_controller}#quote:prevent",
             quote_comments_stimulus_controller("-content-param") => journal.notes,
             quote_comments_stimulus_controller("-user-id-param") => journal.user_id,
             quote_comments_stimulus_controller("-user-name-param") => journal.user.name,
-            quote_comments_stimulus_controller("-is-restricted-param") => journal.restricted?,
+            quote_comments_stimulus_controller("-is-internal-param") => journal.internal?,
             quote_comments_stimulus_controller("-text-wrote-param") => I18n.t(:text_wrote),
-            quote_comments_stimulus_controller("-#{index_stimulus_controller}-outlet") => items_index_selector,
-            quote_comments_stimulus_controller("-#{restricted_comment_stimulus_controller}-outlet") => add_comment_selector,
-            test_selector: "op-wp-journal-#{journal.id}-quote"
+            quote_comments_stimulus_controller("-#{internal_comment_stimulus_controller}-outlet") => add_comment_component_dom_selector, # rubocop:disable Layout/LineLength
+            quote_comments_stimulus_controller("-#{editor_stimulus_controller}-outlet") => index_component_dom_selector
           }
         end
       end

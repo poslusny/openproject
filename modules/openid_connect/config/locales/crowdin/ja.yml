@@ -6,14 +6,18 @@ ja:
     ログアウトしています。送信したフォームの内容は失われる可能性があります。 [ログイン] してください。
   activerecord:
     attributes:
+      openid_connect/group_link:
+        oidc_group_name: OpenID group identifier
       openid_connect/provider:
         name: 名称
         slug: 一意な識別子
         display_name: 表示名
         client_id: クライアントID
         client_secret: クライアントシークレット
+        groups_claim: Groups claim
         secret: シークレット
         scope: スコープ
+        sync_groups: Synchronize groups
         grant_types_supported: サポートされている権限タイプ
         limit_self_registration: 自己登録を制限
         authorization_endpoint: 認証エンドポイント
@@ -40,22 +44,27 @@ ja:
               response_misses_required_attributes: " は必須属性を返しません。欠けている属性は次のとおりです: %{missing_attributes}."
   provider:
     delete_warning:
-      input_delete_confirmation: 確認のため、削;除するフィルタ名 %{name} を入力します。
+      input_delete_confirmation: 確認のため、削除するフィルタ名 %{name} を入力します。
       irreversible_notice: ワークパッケージの削除は復元できない操作です。
       provider: 'SSO プロバイダー %{name}を削除してもよろしいですか？ このアクションを確認するには、以下のフィールドにプロバイダの名前を入力してください。'
       delete_result_1: 利用可能なプロバイダのリストからプロバイダを削除します。
       delete_result_user_count:
         zero: 現在、このプロバイダを使用しているユーザーはいません。これ以上の操作は必要ありません。
         one: "1人のユーザーが現在このプロバイダーを使用しています。再招待または別のプロバイダーでログインする必要があります。"
-        other: "%{count} users are currently still using this provider. They will need to be re-invited or logging in with another provider."
+        other: "%{count}人のユーザーが現在このプロバイダーを使用しています。再招待または別のプロバイダーでログインする必要があります。"
       delete_result_direct: This provider is marked as a direct login provider. The setting will be removed and users will no longer be redirected to the provider for login.
   openid_connect:
     menu_title: OpenID プロバイダー
-    delete_title: "Delete OpenID Connect provider"
+    delete_title: "OpenID Connectプロバイダの削除"
+    group_links_heading: OpenID Connect group links
     instructions:
       redirect_url: これは、OpenID Connectプロバイダがログイン成功後にOpenProjectにリダイレクトするために使用するリダイレクトURLです。
       endpoint_url: The endpoint URL given to you by the OpenID Connect provider
-      metadata_none: I don't have this information
+      group_regexes: One regular expression pattern per line. Please read [the documentation](docs_url) for more information on how to do this.
+      group_regexes_detail: Define patterns using regular expressions to match group names from the groups claim. For example, entering a pattern like <code>^Level1/Level2/([\w/]+)$</code> will extract the group “Groupname/SubGroup” from a response including “Level1/Level2/GroupName/SubGroup”.
+      group_sync: Automatically extract and synchronise group membership information from the identity provider.
+      groups_claim: Specify the name of the claim that's expected to indicate the group names that the user is a member of.
+      metadata_none: この情報がありません
       metadata_url: I have a discovery endpoint URL
       client_id: This is the client ID given to you by your OpenID Connect provider
       client_secret: This is the client secret given to you by your OpenID Connect provider
@@ -91,12 +100,15 @@ ja:
         name: Microsoft Entra
       custom:
         name: Custom
-      upsale:
+      upsell:
+        title: "Single Sign-On (SSO) with OpenID connect"
         description: Connect OpenProject to an OpenID connect identity provider
       label_add_new: 新しい OpenID プロバイダーを追加
       label_edit: OpenID プロバイダー %{name} を編集
       label_empty_title: No OpenID providers configured yet.
       label_empty_description: Add a provider to see them here.
+      label_group_mapping: Group mapping
+      label_group_regexes: Pattern (regular expression)
       label_metadata: OpenID Connect Discovery Endpoint
       label_automatic_configuration: 自動設定
       label_optional_configuration: Optional configuration
@@ -109,6 +121,7 @@ ja:
       plural: OpenID プロバイダー
       singular: OpenID プロバイダー
       section_texts:
+        group_mapping: Map group names provided by the identity provider to groups in OpenProject.
         metadata: Pre-fill configuration using an OpenID Connect discovery endpoint URL
         metadata_form_banner: Editing the discovery endpoint may override existing pre-filled metadata values.
         metadata_form_title: OpenID Connect Discovery endpoint
@@ -116,8 +129,11 @@ ja:
         configuration_metadata: The information has been pre-filled using the supplied discovery endpoint. In most cases, they do not require editing.
         configuration: Configuration details of the OpenID Connect provider
         display_name: The display name visible to users.
-        attribute_mapping: Configure the mapping of attributes between OpenProject and the OpenID Connect provider.
+        attribute_mapping: OpenProject と OpenID Connect プロバイダ間の属性のマッピングを設定します。
         claims: Request additional claims for the ID token or userinfo response.
+      side_panel:
+        information_component:
+          backchannel_logout_url: バックチャンネルのログアウトURL
     setting_instructions:
       limit_self_registration: >
         有効にした場合、ユーザーは自己登録設定が許可されている場合にのみ、このプロバイダを使用して登録することができます。

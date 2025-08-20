@@ -39,6 +39,7 @@ import { ApiV3Service } from 'core-app/core/apiv3/api-v3.service';
   selector: 'wp-watcher-button',
   templateUrl: './wp-watcher-button.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class WorkPackageWatcherButtonComponent extends UntilDestroyedMixin implements OnInit {
   @Input('workPackage') public workPackage:WorkPackageResource;

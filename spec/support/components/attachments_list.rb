@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Handles attachments list generally found under the wysiwyg editor.
 module Components
   class AttachmentsList
@@ -41,7 +43,7 @@ module Components
     end
 
     def wait_until_visible
-      element.tap { scroll_to_element(_1) }
+      element.tap { scroll_to_element(it) }
     end
 
     def element

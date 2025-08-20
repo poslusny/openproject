@@ -23,6 +23,7 @@ import { Observable } from 'rxjs';
   styleUrls: ['./widget-project-favorites.component.sass'],
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class WidgetProjectFavoritesComponent extends AbstractWidgetComponent implements OnInit {
   @HostBinding('class.op-widget-project-favorites') className = true;
@@ -55,7 +56,7 @@ export class WidgetProjectFavoritesComponent extends AbstractWidgetComponent imp
     this.projects$ = this
       .apiV3Service
       .projects
-      .filtered(filters, { pageSize: '-1' })
+      .filtered(filters, { sortBy: '[["name","asc"]]', pageSize: '-1' })
       .getPaginatedResults();
   }
 

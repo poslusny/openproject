@@ -44,8 +44,6 @@ module API
 
     content_type :json, "application/json; charset=utf-8"
 
-    use OpenProject::Authentication::Manager
-
     helpers API::Caching::Helpers
     module Helpers
       include ::API::Helpers::RaiseQueryErrors

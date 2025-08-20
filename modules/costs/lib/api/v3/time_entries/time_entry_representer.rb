@@ -93,8 +93,16 @@ module API
 
         associated_resource :project
 
+        associated_resource :entity,
+                            getter: ::API::V3::TimeEntries::EntityRepresenterFactory.create_getter_lambda(:entity),
+                            setter: ::API::V3::TimeEntries::EntityRepresenterFactory.create_setter_lambda(:entity),
+                            link: ::API::V3::TimeEntries::EntityRepresenterFactory.create_link_lambda(:entity)
+
+        # TODO: DEPRECATED!
         associated_resource :work_package,
-                            link_title_attribute: :subject
+                            skip_render: ->(*) { represented.entity_type != "WorkPackage" },
+                            getter: ->(*) { represented.entity if represented.entity_type == "WorkPackage" },
+                            setter: ::API::V3::TimeEntries::EntityRepresenterFactory.create_setter_lambda(:entity)
 
         associated_resource :user
 
@@ -172,10 +180,7 @@ module API
           end
         end
 
-        self.to_eager_load = [:work_package,
-                              :user,
-                              :activity,
-                              { project: :enabled_modules }]
+        self.to_eager_load = [:user, :activity, { project: :enabled_modules }]
       end
     end
   end

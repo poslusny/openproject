@@ -55,7 +55,7 @@ export class ViewpointsService {
   public getViewPointResource(workPackage:WorkPackageResource, index:number):BcfViewpointPaths {
     const viewpointHref = (workPackage.bcfViewpoints as HalResource[])[index].href as string;
 
-    return this.bcfApi.parse<BcfViewpointPaths>(viewpointHref);
+    return this.bcfApi.parse<BcfViewpointPaths>(viewpointHref)!;
   }
 
   public getViewPoint$(workPackage:WorkPackageResource, index:number):Observable<BcfViewpointData> {
@@ -124,7 +124,7 @@ export class ViewpointsService {
     }
     const topicHref = (workPackage.bcfTopic as HalResource)?.href;
     const topicUUID$ = topicHref
-      ? of(this.bcfApi.parse<BcfViewpointPaths>(topicHref).id)
+      ? of(this.bcfApi.parse<BcfViewpointPaths>(topicHref)!.id)
       : this.createBcfTopic$(workPackage);
 
     return topicUUID$.pipe(

@@ -26,12 +26,9 @@
 // See COPYRIGHT and LICENSE files for more details.
 //++
 
-import { Inject, Injectable, Injector } from '@angular/core';
-import { DOCUMENT } from '@angular/common';
+import { Inject, Injectable, Injector, DOCUMENT } from '@angular/core';
 import { OpModalService } from 'core-app/shared/components/modal/modal.service';
 import { DynamicContentModalComponent } from 'core-app/shared/components/modals/modal-wrapper/dynamic-content.modal';
-
-const iframeSelector = '.iframe-target-wrapper';
 
 /**
  * This service takes modals that are rendered by the rails backend,
@@ -80,16 +77,10 @@ export class OpModalWrapperAugmentService {
   private show(element:JQuery) {
     // Set modal class name
     const modalClassName = element.data('modalClassName');
-    // Append CSP-whitelisted IFrame for onboarding
-    const iframeUrl = element.data('modalIframeUrl');
 
     // Set template from wrapped element
     const wrappedElement = element.find('.modal-delivery-element');
     let modalBody = wrappedElement.html();
-
-    if (iframeUrl) {
-      modalBody = this.appendIframe(wrappedElement, iframeUrl);
-    }
 
     this.opModalService.show(
       DynamicContentModalComponent,
@@ -99,20 +90,5 @@ export class OpModalWrapperAugmentService {
         modalClassName,
       },
     );
-  }
-
-  private appendIframe(body:JQuery<HTMLElement>, url:string) {
-    const iframe = jQuery('<iframe frameborder="0" height="350" allowfullscreen>></iframe>');
-    iframe.attr('src', url);
-
-    const iframeParent = body.find(iframeSelector);
-    if (iframeParent.find('iframe').length > 0) {
-      // Make sure we don't initialize the iframe multiple times
-      return body.html();
-    }
-
-    iframeParent.append(iframe);
-
-    return body.html();
   }
 }

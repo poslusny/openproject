@@ -59,6 +59,7 @@ import { filter, take } from 'rxjs/operators';
   styleUrls: ['./bcf-wp-attribute-group.component.sass'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [ViewpointsService],
+  standalone: false,
 })
 export class BcfWpAttributeGroupComponent extends UntilDestroyedMixin implements AfterViewInit, OnDestroy, OnInit {
   @Input() workPackage:WorkPackageResource;

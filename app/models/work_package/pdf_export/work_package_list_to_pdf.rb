@@ -42,19 +42,19 @@
 require "open3"
 
 class WorkPackage::PDFExport::WorkPackageListToPdf < WorkPackage::Exports::QueryExporter
-  include WorkPackage::PDFExport::Common::Common
-  include WorkPackage::PDFExport::Common::Logo
-  include WorkPackage::PDFExport::Common::Attachments
-  include WorkPackage::PDFExport::Export::Page
-  include WorkPackage::PDFExport::Export::MarkdownField
-  include WorkPackage::PDFExport::Export::Report::Detail
-  include WorkPackage::PDFExport::Export::Report::Styles
-  include WorkPackage::PDFExport::Export::Report::SumsTable
-  include WorkPackage::PDFExport::Export::Report::TableOfContents
-  include WorkPackage::PDFExport::Export::Report::Attributes
-  include WorkPackage::PDFExport::Export::WpTable
-  include WorkPackage::PDFExport::Export::Cover
-  include WorkPackage::PDFExport::Export::Gantt
+  include Exports::PDF::Common::Common
+  include Exports::PDF::Common::Logo
+  include Exports::PDF::Common::Attachments
+  include Exports::PDF::Components::Page
+  include Exports::PDF::Components::WpTable
+  include Exports::PDF::Components::Cover
+  include Exports::PDF::Components::Gantt
+  include WorkPackage::PDFExport::Common::MarkdownField
+  include WorkPackage::PDFExport::Report::Detail
+  include WorkPackage::PDFExport::Report::Styles
+  include WorkPackage::PDFExport::Report::SumsTable
+  include WorkPackage::PDFExport::Report::TableOfContents
+  include WorkPackage::PDFExport::Report::Attributes
 
   attr_accessor :pdf,
                 :options
@@ -300,13 +300,5 @@ class WorkPackage::PDFExport::WorkPackageListToPdf < WorkPackage::Exports::Query
 
   def get_total_sums
     query.display_sums? ? (query.results.all_total_sums || {}) : {}
-  end
-
-  def get_column_value_cell(work_package, column_name)
-    value = get_column_value(work_package, column_name)
-    return get_id_column_cell(work_package, value) if column_name == :id
-    return get_subject_column_cell(work_package, value) if wants_report? && column_name == :subject
-
-    escape_tags(value)
   end
 end

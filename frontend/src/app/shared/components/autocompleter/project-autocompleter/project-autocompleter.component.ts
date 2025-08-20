@@ -77,6 +77,7 @@ export interface IProjectAutocompleterData {
     useExisting: forwardRef(() => ProjectAutocompleterComponent),
     multi: true,
   }],
+  standalone: false,
 })
 export class ProjectAutocompleterComponent extends OpAutocompleterComponent<IProjectAutocompleterData> implements OnInit, ControlValueAccessor {
   @HostBinding('class.op-project-autocompleter') public className = true;

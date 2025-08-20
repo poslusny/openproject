@@ -17,6 +17,7 @@ import { distinctUntilChanged, map } from 'rxjs/operators';
   styleUrls: ['./in-app-notification-relative-time.component.sass'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
+  standalone: false,
 })
 export class InAppNotificationRelativeTimeComponent implements OnInit {
   @Input() notification:INotification;

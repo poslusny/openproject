@@ -63,6 +63,7 @@ const RECENT_TIME_ENTRIES_MAGIC_NUMBER = 30;
     // as otherwise the close event will be shared across all instances
     OpInviteUserModalService,
   ],
+  standalone: false,
 })
 export class TimeEntriesWorkPackageAutocompleterComponent extends OpAutocompleterComponent implements OnInit, ControlValueAccessor {
   public mode:TimeEntryWorkPackageAutocompleterMode = 'all';

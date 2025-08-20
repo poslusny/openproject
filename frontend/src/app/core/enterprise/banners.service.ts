@@ -26,20 +26,35 @@
 // See COPYRIGHT and LICENSE files for more details.
 //++
 
-import { Inject, Injectable } from '@angular/core';
-import { DOCUMENT } from '@angular/common';
+import { Inject, Injectable, DOCUMENT } from '@angular/core';
 import { enterpriseEditionUrl } from 'core-app/core/setup/globals/constants.const';
+import { ConfigurationService } from 'core-app/core/config/configuration.service';
 
 @Injectable({ providedIn: 'root' })
 export class BannersService {
-  private readonly _banners:boolean = true;
+  private readonly _bannersHidden:boolean = true;
 
-  constructor(@Inject(DOCUMENT) protected documentElement:Document) {
-    this._banners = documentElement.body.classList.contains('ee-banners-visible');
+  constructor(
+    @Inject(DOCUMENT) protected documentElement:Document,
+    protected configuration:ConfigurationService,
+  ) {
+    this._bannersHidden = documentElement.body.classList.contains('ee-banners-hidden');
   }
 
-  public get eeShowBanners():boolean {
-    return this._banners;
+  public showBannerFor(feature:string):boolean {
+    if (this._bannersHidden) {
+      return false;
+    }
+
+    return !this.allowsTo(feature) || this.trialling(feature);
+  }
+
+  public allowsTo(feature:string):boolean {
+    return this.configuration.availableFeatures.includes(feature);
+  }
+
+  public trialling(feature:string):boolean {
+    return this.configuration.triallingFeatures.includes(feature);
   }
 
   public getEnterPriseEditionUrl({ referrer, hash }:{ referrer?:string, hash?:string } = {}) {
@@ -55,11 +70,17 @@ export class BannersService {
     return url.toString();
   }
 
-  public conditional(bannersVisible?:() => void, bannersNotVisible?:() => void) {
-    this._banners ? this.callMaybe(bannersVisible) : this.callMaybe(bannersNotVisible);
+  public async conditional(feature:string, featureNotAvailable?:() => void, featureAvailable?:() => void) {
+    await this.configuration.initialize();
+
+    if (this.allowsTo(feature)) {
+      this.callMaybe(featureAvailable);
+    } else {
+      this.callMaybe(featureNotAvailable);
+    }
   }
 
-  private callMaybe(func?:Function) {
+  private callMaybe(func?:() => unknown) {
     func && func();
   }
 }

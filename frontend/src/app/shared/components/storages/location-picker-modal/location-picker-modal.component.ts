@@ -58,6 +58,7 @@ import { map } from 'rxjs/operators';
 @Component({
   templateUrl: 'location-picker-modal.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class LocationPickerModalComponent extends FilePickerBaseModalComponent {
   public submitted = false;

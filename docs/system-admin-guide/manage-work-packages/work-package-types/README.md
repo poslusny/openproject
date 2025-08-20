@@ -74,7 +74,7 @@ In this case, all attributes in the blue area on the left are displayed under th
 
 Watch the following video to see how you can customize your work packages with custom fields and configure the work package forms:
 
-<video src="https://openproject-docs.s3.eu-central-1.amazonaws.com/videos/OpenProject-Forms-and-Custom-Fields-1.mp4" type="video/mp4" controls="" style="width:100%"></video>
+<video src="https://openproject-docs.s3.eu-central-1.amazonaws.com/videos/OpenProject-Forms-and-Custom-Fields-1.mp4"></video>
 
 ## Add table of related work packages to a work package form (Enterprise add-on)
 
@@ -95,6 +95,14 @@ The embedded related work package table in the work package form will look like 
 
 ![Sys-admin-related-work-package-table](open_project_admin_related_wp_table.png)
 
+## Work package automatic subject configuration (Enterprise add-on)
+
+> [!NOTE]
+> Configuring automatically generated work package subjects is an Enterprise add-on and can only be used with [Enterprise cloud](../../../enterprise-guide/enterprise-cloud-guide/) or [Enterprise on-premises](../../../enterprise-guide/enterprise-on-premises-guide/). An upgrade from the free Community edition is easily possible.
+
+Please refer to [this guide](automatic-subjects) for a detailed description of automatically generated work packages subjects in OpenProject. 
+
+
 ## Activate work package types for projects
 
 Under *Administration -> Work packages -> Types* on the tab **Projects** you can select for which projects this work package type should be activated.
@@ -109,4 +117,6 @@ This can be also configured in the [project settings](../../../user-guide/projec
 Under the **Generate PDF** tab of  *Administration -> Work packages -> Types* you can select which templates from currently available ones should be enabled for the PDF export of this specific type. 
 
 The template determines the design and attributes visible in the exported PDF of a work package using this type. The first  template on the list is selected by default.
+
+![Generate PDF tab under work package types settings in OpenProject administration](openproject_system_guide_work_package_types_pdf_tab.png)
 

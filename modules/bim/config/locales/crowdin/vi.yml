@@ -125,9 +125,9 @@ vi:
     no_results: "Không có mô hình IFC đã được tải lên trong dự án này."
     conversion_status:
       label: 'Đang xử lý?'
-      pending: 'Chờ xử lý'
+      pending: 'Đang chờ'
       processing: 'Đang xử lý'
-      completed: 'Hoàn thành'
+      completed: 'Đã hoàn tất'
       error: 'Lỗi'
     processing_notice:
       processing_default: 'Các mô hình IFC mặc định sau đây vẫn đang được xử lý và do đó không có sẵn:'

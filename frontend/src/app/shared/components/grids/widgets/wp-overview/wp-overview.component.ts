@@ -32,6 +32,7 @@ import { AbstractWidgetComponent } from 'core-app/shared/components/grids/widget
 @Component({
   templateUrl: './wp-overview.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class WidgetWpOverviewComponent extends AbstractWidgetComponent {
 }

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -45,6 +47,7 @@ class MyController < ApplicationController
   no_authorization_required! :account,
                              :update_account,
                              :settings,
+                             :interface,
                              :update_settings,
                              :password,
                              :change_password,
@@ -60,6 +63,7 @@ class MyController < ApplicationController
 
   menu_item :account, only: [:account]
   menu_item :settings, only: [:settings]
+  menu_item :interface, only: [:interface]
   menu_item :password, only: [:password]
   menu_item :access_token, only: [:access_token]
   menu_item :notifications, only: [:notifications]
@@ -76,6 +80,8 @@ class MyController < ApplicationController
   def update_settings
     write_settings
   end
+
+  def interface; end
 
   # Manage user's password
   def password
@@ -201,14 +207,6 @@ class MyController < ApplicationController
   end
 
   private
-
-  def default_breadcrumb
-    I18n.t(:label_my_account)
-  end
-
-  def show_local_breadcrumb
-    false
-  end
 
   def redirect_if_password_change_not_allowed_for(user)
     unless user.change_password_allowed?

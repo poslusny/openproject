@@ -26,7 +26,7 @@ ru:
       work_packages:
         tab_name: "GitLab"
       tab_header_issue:
-        title: "Задачи"
+        title: "Замечания"
       tab_header_mr:
         title: "Объединение запросов"
         create_mr:
@@ -36,12 +36,12 @@ ru:
           label: Git-сниппеты
           description: Копировать сниппеты git в буфер обмена
         git_actions:
-          branch_name: Название ветки
-          commit_message: Сообщение коммита
+          branch_name: Имя ветки
+          commit_message: Описание коммита
           cmd: Создать ветку с пустым коммитом
           title: Быстрые сниппеты для Git
           copy_success: '✅ Скопировано!'
-          copy_error: '❌ Копирование не удалось!'
+          copy_error: '❌ Сбой копирования!'
       tab_issue:
         empty: 'Пока нет ни одного связанного вопроса. Свяжите существующий вопрос, используя код <code>OP#%{wp_id}</code> (или <code>PP#%{wp_id}</code> для частных ссылок) в названии/описании вопроса, или создайте новый вопрос.'
       tab_mrs:

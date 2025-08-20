@@ -38,6 +38,7 @@ import {
 @Component({
   templateUrl: './time-entries-work-package-autocompleter-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class TimeEntriesWorkPackageAutocompleterTemplateComponent implements IAutocompleterTemplateComponent {
   @Input() public mode:string|undefined;

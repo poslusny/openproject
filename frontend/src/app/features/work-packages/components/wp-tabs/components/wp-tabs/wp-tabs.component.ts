@@ -15,6 +15,7 @@ import { WorkPackageResource } from 'core-app/features/hal/resources/work-packag
   templateUrl: './wp-tabs.component.html',
   styleUrls: ['./wp-tabs.component.sass'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class WpTabsComponent implements OnInit {
   @Input() workPackage:WorkPackageResource;

@@ -4,8 +4,7 @@ module Components::Autocompleter
   module NgSelectAutocompleteHelpers
     def search_autocomplete(element, query:, results_selector: nil, wait_dropdown_open: true, wait_for_fetched_options: true)
       SeleniumHubWaiter.wait unless using_cuprite?
-      # Open the element
-      element.click
+      ng_click_autocompleter(element)
 
       # Wait for dropdown to open
       ng_find_dropdown(element, results_selector:) if wait_dropdown_open
@@ -31,6 +30,14 @@ module Components::Autocompleter
       dropdown_list = ng_find_dropdown(element, results_selector:)
       scroll_to_element(dropdown_list)
       dropdown_list
+    end
+
+    def ng_click_autocompleter(target)
+      if using_cuprite?
+        target.click
+      else
+        page.execute_script("arguments[0].click();", target.native)
+      end
     end
 
     def ng_find_dropdown(element, results_selector: nil)
@@ -149,7 +156,11 @@ module Components::Autocompleter
       text = select_text.presence || query
 
       # click the element to select it
-      target_dropdown.find(".ng-option", text:, match: :first, wait: 15).click
+      target_dropdown.first(".ng-option", text:, wait: 15).click
+    end
+
+    def expect_current_autocompleter_value(element, value)
+      expect(element).to have_css(".ng-value .ng-value-label", text: value, wait: 10)
     end
 
     # Finds the currently visible, expanded user auto completer and returns its dropdown menu options.
@@ -166,9 +177,11 @@ module Components::Autocompleter
     # The order of elements in the Array is equal to the visible order on the website.
     def visible_user_auto_completer_options
       find(".ng-dropdown-panel [role='listbox']").all(".ng-option[role='option']").filter_map do |opt|
-        name = opt.find(".op-user-autocompleter--name").text
-        email_element = opt.all(".op-autocompleter__option-principal-email").first
-        email = email_element&.text
+        name = opt.find(".op-user-autocompleter--name", wait: 0).text
+        email =
+          if opt.has_css?(".op-autocompleter__option-principal-email", wait: 0)
+            opt.find(".op-autocompleter__option-principal-email", wait: 0).text
+          end
 
         { name:, email: }
       rescue Capybara::ElementNotFound

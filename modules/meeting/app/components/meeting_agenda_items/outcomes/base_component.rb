@@ -57,5 +57,9 @@ module MeetingAgendaItems
     def show_outcome?
       @meeting.in_progress? || @meeting_outcome.present?
     end
+
+    def margin_top
+      @meeting_agenda_item.notes.present? ? 3 : 2
+    end
   end
 end

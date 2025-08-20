@@ -27,13 +27,13 @@ vi:
       tab_header:
         title: "Yêu cầu kéo"
         copy_menu:
-          label: Mã git
-          description: Sao chép mã git vào clipboard
+          label: Đoạn mã Git
+          description: Sao chép đoạn mã Git vào bảng tạm
         git_actions:
           branch_name: Tên nhánh
-          commit_message: Tin nhắn commit
+          commit_message: Thông điệp commit
           cmd: Tạo nhánh với commit trống
-          title: Mã nhanh cho Git
+          title: Đoạn mã nhanh cho Git
           copy_success: '✅ Đã sao chép!'
           copy_error: '❌ Sao chép thất bại!'
       tab_prs:

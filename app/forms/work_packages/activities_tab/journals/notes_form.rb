@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -33,7 +35,8 @@ module WorkPackages::ActivitiesTab::Journals
       notes_form.rich_text_area(
         classes: "ck-editor-primer-adjusted",
         name: :notes,
-        label: nil,
+        label: I18n.t("activities.work_packages.activity_tab.label_type_to_comment"),
+        visually_hide_label: true,
         rich_text_options: {
           showAttachments: false,
           resource:,
@@ -47,8 +50,8 @@ module WorkPackages::ActivitiesTab::Journals
     def resource
       return unless object
 
-      API::V3::WorkPackages::WorkPackageRepresenter
-        .create(object.journable, current_user: User.current, embed_links: false)
+      API::V3::Activities::ActivityRepresenter
+        .create(object, current_user: User.current, embed_links: true)
     end
   end
 end

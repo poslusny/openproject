@@ -10,6 +10,7 @@ import { I18nService } from 'core-app/core/i18n/i18n.service';
 @Component({
   selector: 'spot-filter-chip',
   templateUrl: './filter-chip.component.html',
+  standalone: false,
 })
 export class SpotFilterChipComponent {
   @HostBinding('class.spot-filter-chip') public className = true;

@@ -66,10 +66,13 @@ module API
       mount ::API::V3::Principals::PrincipalsAPI
       mount ::API::V3::Priorities::PrioritiesAPI
       mount ::API::V3::Projects::ProjectsAPI
+      mount ::API::V3::ProjectPhaseDefinitions::ProjectPhaseDefinitionsAPI
+      mount ::API::V3::ProjectPhases::ProjectPhasesAPI
       mount ::API::V3::Projects::Statuses::StatusesAPI
       mount ::API::V3::Queries::QueriesAPI
       mount ::API::V3::Render::RenderAPI
       mount ::API::V3::Relations::RelationsAPI
+      mount ::API::V3::Reminders::RemindersAPI
       mount ::API::V3::Repositories::RevisionsAPI
       mount ::API::V3::Roles::RolesAPI
       mount ::API::V3::Shares::SharesAPI

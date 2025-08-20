@@ -2,32 +2,7 @@
 
 class CreateGoodJobExecutions < ActiveRecord::Migration[7.0]
   def change
-    reversible do |dir|
-      dir.up do
-        # Ensure this incremental update migration is idempotent
-        # with monolithic install migration.
-        return if connection.table_exists?(:good_job_executions)
-      end
-    end
-
-    create_table :good_job_executions, id: :uuid do |t|
-      t.timestamps
-
-      t.uuid :active_job_id, null: false
-      t.text :job_class
-      t.text :queue_name
-      t.jsonb :serialized_params
-      t.datetime :scheduled_at
-      t.datetime :finished_at
-      t.text :error
-
-      t.index %i[active_job_id created_at], name: :index_good_job_executions_on_active_job_id_and_created_at
-    end
-
-    change_table :good_jobs do |t|
-      t.boolean :is_discrete
-      t.integer :executions_count
-      t.text :job_class
-    end
+    # Moved to db/migrate/tables/good_job_executions.rb and db/migrate/tables/good_jobs.rb
+    # This file is not squashed since good_job would otherwise recreate it when an update is done.
   end
 end

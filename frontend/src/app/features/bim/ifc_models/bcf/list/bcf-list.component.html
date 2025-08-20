@@ -3,12 +3,8 @@
 
 <!-- TABLE representation of the WP -->
 <div class="op-bcf-list--work-packages-split-view--tabletimeline-container"
-     [ngClass]="{ '_with-resizer': showResizerInCardView() }"
+     [ngClass]="{ '_with-resizer': showResizer }"
      *ngIf="tableInformationLoaded && showTableView">
-  <wp-resizer *ngIf="showResizer"
-              elementClass="work-packages-partitioned-page--content-right"
-              localStorageKey="openProject-splitViewFlexBasis">
-  </wp-resizer>
 
   <wp-table [projectIdentifier]="CurrentProject.identifier"
             [configuration]="wpTableConfiguration"
@@ -18,16 +14,19 @@
   </wp-table>
 </div>
 
+<wp-resizer *ngIf="showResizer"
+            elementClass="work-packages-partitioned-page--content-right"
+            localStorageKey="openProject-splitViewFlexBasis">
+</wp-resizer>
+
 <!-- GRID representation of the WP -->
 <div *ngIf="!showTableView"
      class="op-bcf-list--work-packages--card-view-container"
-     [ngClass]="{ '_with-resizer': showResizerInCardView() }">
+     [ngClass]="{ '_with-resizer': showResizer }">
   <wp-grid [configuration]="wpTableConfiguration"
-           [showResizer]="showResizerInCardView()"
+           [showResizer]="false"
            (itemClicked)="handleWorkPackageClicked($event)"
-           (stateLinkClicked)="openStateLink($event)"
-           resizerClass="work-packages-partitioned-page--content-right"
-           resizerStorageKey="openProject-splitViewFlexBasis">
+           (stateLinkClicked)="openStateLink($event)">
   </wp-grid>
 </div>
 

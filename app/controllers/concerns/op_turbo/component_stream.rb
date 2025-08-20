@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -42,6 +44,12 @@ module OpTurbo
 
     alias_method :respond_with_turbo_streams, :respond_to_with_turbo_streams
 
+    def respond_with_dialog(dialog_component, status: :ok, &format_block)
+      modify_via_turbo_stream(component: dialog_component, action: :dialog, status:)
+
+      respond_to_with_turbo_streams(&format_block)
+    end
+
     def update_via_turbo_stream(component:, status: :ok, method: nil)
       modify_via_turbo_stream(component:, action: :update, status:, method:)
     end
@@ -83,7 +91,15 @@ module OpTurbo
       render_flash_message_via_turbo_stream(**, scheme: :danger, icon: :stop)
     end
 
+    def render_live_region_update_message(message:, politeness: "polite", delay: nil)
+      turbo_streams << OpTurbo::StreamComponent
+        .new(action: :liveRegion, message:, politeness:, delay:, target: nil)
+        .render_in(view_context)
+    end
+
     def render_flash_message_via_turbo_stream(message:, component: OpPrimer::FlashComponent, **)
+      return if message.blank?
+
       instance = component.new(**).with_content(message)
       turbo_streams << instance.render_as_turbo_stream(view_context:, action: :flash)
     end
@@ -100,8 +116,14 @@ module OpTurbo
         .render_in(view_context)
     end
 
-    def close_dialog_via_turbo_stream(target)
-      turbo_streams << OpTurbo::StreamComponent.new(action: :closeDialog, target:).render_in(view_context)
+    def close_dialog_via_turbo_stream(target, additional: {})
+      turbo_streams << OpTurbo::StreamComponent
+        .new(action: :closeDialog, target:, additional: additional.to_json)
+        .render_in(view_context)
+    end
+
+    def reload_page_via_turbo_stream
+      turbo_streams << OpTurbo::StreamComponent.new(action: :reloadPage, target: nil).render_in(view_context)
     end
 
     def turbo_streams

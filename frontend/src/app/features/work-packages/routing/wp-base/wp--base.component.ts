@@ -46,6 +46,7 @@ export const wpBaseSelector = 'work-packages-base';
   providers: [
     { provide: EditFormRoutingService, useClass: WorkPackageEditFormRoutingService },
   ],
+  standalone: false,
 })
 export class WorkPackagesBaseComponent {
 }

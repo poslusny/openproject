@@ -133,24 +133,11 @@ module CustomFieldsHelper
     CustomValue.new(custom_field:, value:).formatted_value
   end
 
-  # Return an array of custom field formats which can be used in select_tag
-  def custom_field_formats_for_select(custom_field)
-    OpenProject::CustomFieldFormat.all_for_field(custom_field)
-                                  .map do |custom_field_format|
-      [label_for_custom_field_format(custom_field_format.name), custom_field_format.name]
-    end
-  end
-
   def label_for_custom_field_format(format_string)
     format = OpenProject::CustomFieldFormat.find_by(name: format_string)
     return "" if format.nil?
 
-    label = format.label.is_a?(Proc) ? format.label.call : I18n.t(format.label)
-
-    show_enterprise_text = format_string == "hierarchy" && !EnterpriseToken.allows_to?(:custom_field_hierarchies)
-    suffix = show_enterprise_text ? " (#{I18n.t(:"ee.upsale.title")})" : ""
-
-    "#{label}#{suffix}"
+    format.label.is_a?(Proc) ? format.label.call : I18n.t(format.label)
   end
 
   def options_for_list(custom_field, project)

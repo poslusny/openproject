@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -36,6 +38,12 @@ class Journal < ApplicationRecord
   include Journal::Timestamps
   include Reactable
 
+  # Inline attachments for Journal#notes aka comments
+  acts_as_attachable view_permission: :view_work_packages,
+                     add_on_new_permission: :add_work_package_comments,
+                     add_on_persisted_permission: :edit_own_work_package_comments,
+                     delete_permission: :edit_own_work_package_comments
+
   register_journal_formatter OpenProject::JournalFormatter::ActiveStatus
   register_journal_formatter OpenProject::JournalFormatter::AgendaItemDiff
   register_journal_formatter OpenProject::JournalFormatter::AgendaItemDuration
@@ -52,6 +60,7 @@ class Journal < ApplicationRecord
   register_journal_formatter OpenProject::JournalFormatter::MeetingWorkPackageId
   register_journal_formatter OpenProject::JournalFormatter::ProjectPhaseActive
   register_journal_formatter OpenProject::JournalFormatter::ProjectPhaseDates
+  register_journal_formatter OpenProject::JournalFormatter::ProjectPhaseDefinition
   register_journal_formatter OpenProject::JournalFormatter::ProjectStatusCode
   register_journal_formatter OpenProject::JournalFormatter::ScheduleManually
   register_journal_formatter OpenProject::JournalFormatter::SubprojectNamedAssociation
@@ -117,6 +126,8 @@ class Journal < ApplicationRecord
   scope :for_work_package, -> { where(journable_type: "WorkPackage") }
   scope :for_meeting, -> { where(journable_type: "Meeting") }
 
+  alias_attribute :internal, :restricted
+
   # In conjunction with the included Comparable module, allows comparison of journal records
   # based on their corresponding version numbers, creation timestamps and IDs.
   def <=>(other)
@@ -141,6 +152,22 @@ class Journal < ApplicationRecord
       journable.project
     elsif journable.is_a? Project
       journable
+    end
+  end
+
+  def attachments_visible?(user = User.current)
+    if internal?
+      super && user.allowed_in_project?(:view_internal_comments, project)
+    else
+      super
+    end
+  end
+
+  def visible?(user = User.current)
+    if internal?
+      user.allowed_in_project?(:view_internal_comments, project)
+    else
+      journable.visible?(user)
     end
   end
 

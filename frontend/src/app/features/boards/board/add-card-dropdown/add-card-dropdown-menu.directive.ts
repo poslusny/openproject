@@ -40,6 +40,7 @@ import { BoardListComponent } from 'core-app/features/boards/board/board-list/bo
 
 @Directive({
   selector: '[op-addCardDropdown]',
+  standalone: false,
 })
 export class AddCardDropdownMenuDirective extends OpContextMenuTrigger {
   constructor(readonly elementRef:ElementRef,

@@ -1,20 +1,8 @@
 # frozen_string_literal: true
 
 class CreateIndexGoodJobsJobsOnPriorityCreatedAtWhenUnfinished < ActiveRecord::Migration[7.0]
-  disable_ddl_transaction!
-
   def change
-    reversible do |dir|
-      dir.up do
-        # Ensure this incremental update migration is idempotent
-        # with monolithic install migration.
-        return if connection.index_name_exists?(:good_jobs, :index_good_jobs_jobs_on_priority_created_at_when_unfinished)
-      end
-    end
-
-    add_index :good_jobs, %i[priority created_at], order: { priority: "DESC NULLS LAST", created_at: :asc },
-                                                   where: "finished_at IS NULL",
-                                                   name: :index_good_jobs_jobs_on_priority_created_at_when_unfinished,
-                                                   algorithm: :concurrently
+    # Moved to db/migrate/tables/good_jobs.rb
+    # This file is not squashed since good_job would otherwise recreate it when an update is done.
   end
 end

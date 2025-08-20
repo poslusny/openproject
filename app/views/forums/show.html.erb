@@ -67,12 +67,11 @@ See COPYRIGHT and LICENSE files for more details.
     render(Primer::OpenProject::SubHeader.new) do |subheader|
       if authorize_for(:messages, :new)
         subheader.with_action_button(scheme: :primary,
-                                     aria: { label: t(:label_message_new) },
-                                     title: t(:label_message_new),
+                                     leading_icon: :plus,
+                                     label: t(:label_message_new),
                                      tag: :a,
                                      class: "add-message-button",
-                                     href: url_for({ controller: "/messages", action: "new", forum_id: @forum })) do |button|
-          button.with_leading_visual_icon(icon: :plus)
+                                     href: url_for({ controller: "/messages", action: "new", forum_id: @forum })) do
           t(:label_message)
         end
       end

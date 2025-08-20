@@ -49,7 +49,7 @@ module TimeEntries
                        type: "time",
                        required: start_and_end_time_required?,
                        label: TimeEntry.human_attribute_name(:start_time),
-                       value: model.start_timestamp&.strftime("%H:%M"),
+                       value: start_time_in_local_time,
                        show_clear_button: true,
                        data: {
                          "time-entry-target" => "startTimeInput",
@@ -60,7 +60,7 @@ module TimeEntries
                        type: "time",
                        required: start_and_end_time_required?,
                        label: TimeEntry.human_attribute_name(:end_time),
-                       value: model.end_timestamp&.strftime("%H:%M"),
+                       value: end_time_in_local_time,
                        show_clear_button: true,
                        caption: end_time_caption,
                        data: {
@@ -79,6 +79,18 @@ module TimeEntries
     end
 
     private
+
+    def start_time_in_local_time
+      return if model.start_timestamp.blank?
+
+      model.start_timestamp.in_time_zone(model.user.time_zone).strftime("%H:%M")
+    end
+
+    def end_time_in_local_time
+      return if model.end_timestamp.blank?
+
+      model.end_timestamp.in_time_zone(model.user.time_zone).strftime("%H:%M")
+    end
 
     def show_start_and_end_time_fields?
       TimeEntry.can_track_start_and_end_time?

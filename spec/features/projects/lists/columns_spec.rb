@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # -- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) 2010-2024 the OpenProject GmbH
@@ -272,53 +274,104 @@ RSpec.describe "Projects lists columns", :js, with_settings: { login_required?: 
     end
     shared_let(:inactive_project_phase) { create(:project_phase, project: development_project, active: false) }
 
-    context "with the feature flag disabled", with_flag: { stages_and_gates: false } do
-      specify "project phase columns cannot be configured to show up" do
+    context "with an admin" do
+      before do
         login_as(admin)
         projects_page.visit!
+      end
 
-        element_selector = "#columns-select_autocompleter ng-select.op-draggable-autocomplete--input"
-        results_selector = "#columns-select_autocompleter ng-dropdown-panel .ng-dropdown-panel-items"
-        projects_page.expect_no_config_columns(project_phase_with_gates.start_gate_name,
-                                               project_phase_with_gates.finish_gate_name,
-                                               project_phase.name,
-                                               inactive_project_phase_with_gates.name,
-                                               inactive_project_phase.name,
-                                               element_selector:,
-                                               results_selector:)
+      specify "configuring project phase column display" do
+        # project phase columns do not show up by default
+        projects_page.expect_columns("Name")
+        projects_page.expect_no_columns(project_phase_with_gates.finish_gate_name,
+                                        project_phase_with_gates.start_gate_name,
+                                        project_phase_with_gates.name,
+                                        project_phase.name,
+                                        inactive_project_phase.name)
+
+        # project phase columns show up when configured to do so
+        # Configuring columns specifically for gates is not supported.
+        # Phases inactive or not in a single project, can be added.
+        projects_page.set_columns(project_phase.name,
+                                  project_phase_with_gates.name,
+                                  inactive_project_phase.name)
+
+        projects_page.expect_columns("Name",
+                                     project_phase_with_gates.name,
+                                     project_phase.name,
+                                     inactive_project_phase.name)
+      end
+
+      specify "inactive project phase columns have no cell content" do
+        col_names = [project_phase_with_gates,
+                     project_phase,
+                     inactive_project_phase_with_gates,
+                     inactive_project_phase].collect(&:name)
+
+        projects_page.set_columns(*col_names)
+        # Inactive columns are still displayed in the header:
+        projects_page.expect_columns("Name", *col_names)
+
+        projects_page.within_row(development_project) do
+          expect(page).to have_css(".name", text: development_project.name)
+          expect(page).to have_css(".project_phase_#{project_phase_with_gates.definition_id}",
+                                   text: "12/01/2024\n-\n12/13/2024")
+          # project phase assigned to other project, no text here
+          expect(page).to have_css(".project_phase_#{project_phase.definition_id}", text: "")
+          # inactive project phases, no text here
+          expect(page).to have_css(".project_phase_#{inactive_project_phase.definition_id}", text: "")
+          expect(page).to have_css(".project_phase_#{inactive_project_phase_with_gates.definition_id}", text: "")
+        end
+
+        projects_page.within_row(project) do
+          expect(page).to have_css(".name", text: project.name)
+          expect(page).to have_css(".project_phase_#{project_phase.definition_id}",
+                                   text: "12/01/2024\n-\n12/13/2024")
+          # project phase assigned to other project, no text here
+          expect(page).to have_css(".project_phase_#{project_phase_with_gates.definition_id}", text: "")
+          # inactive project phases, no text here
+          expect(page).to have_css(".project_phase_#{inactive_project_phase.definition_id}", text: "")
+          expect(page).to have_css(".project_phase_#{inactive_project_phase_with_gates.definition_id}", text: "")
+        end
       end
     end
 
-    context "with the feature flag enabled", with_flag: { stages_and_gates: true } do
-      context "with an admin" do
-        before do
-          login_as(admin)
-          projects_page.visit!
-        end
+    context "with a user" do
+      let(:permissions) { %i(view_project) }
+      let(:user) do
+        create(:user, member_with_permissions: { development_project => permissions,
+                                                 project => %i(view_project) })
+      end
 
-        specify "configuring project phase column display" do
-          # project phase columns do not show up by default
+      before do
+        login_as(user)
+        projects_page.visit!
+      end
+
+      context "for users without view_project_phases permission" do
+        specify "project phase columns cannot be configured to show up" do
+          element_selector = "#columns-select_autocompleter ng-select.op-draggable-autocomplete--input"
+          results_selector = "#columns-select_autocompleter ng-dropdown-panel .ng-dropdown-panel-items"
+          projects_page.expect_no_config_columns(project_phase_with_gates.name,
+                                                 project_phase.name,
+                                                 inactive_project_phase_with_gates.name,
+                                                 inactive_project_phase.name,
+                                                 element_selector:,
+                                                 results_selector:)
+        end
+      end
+
+      context "for users with view_project_phases permission" do
+        let(:permissions) { %i(view_project view_project_phases) }
+
+        specify "project phase columns show up when configured to do so" do
           projects_page.expect_columns("Name")
-          projects_page.expect_no_columns(project_phase_with_gates.finish_gate_name,
-                                          project_phase_with_gates.start_gate_name,
-                                          project_phase_with_gates.name,
-                                          project_phase.name,
-                                          inactive_project_phase.name)
+          projects_page.set_columns(project_phase_with_gates.name)
 
-          # project phase columns show up when configured to do so
-          # Configuring columns specifically for gates is not supported.
-          # Phases inactive or not in a single project, can be added.
-          projects_page.set_columns(project_phase.name,
-                                    project_phase_with_gates.name,
-                                    inactive_project_phase.name)
-
-          projects_page.expect_columns("Name",
-                                       project_phase_with_gates.name,
-                                       project_phase.name,
-                                       inactive_project_phase.name)
+          expect(page).to have_text(project_phase_with_gates.name.upcase)
         end
 
-        specify "inactive project phase columns have no cell content" do
+        specify "not permitted project phase columns have no cell content" do
           col_names = [project_phase_with_gates,
                        project_phase,
                        inactive_project_phase_with_gates,
@@ -339,79 +392,9 @@ RSpec.describe "Projects lists columns", :js, with_settings: { login_required?: 
             expect(page).to have_css(".project_phase_#{inactive_project_phase_with_gates.definition_id}", text: "")
           end
 
+          # Not permitted project phase steps never show their date values
           projects_page.within_row(project) do
-            expect(page).to have_css(".name", text: project.name)
-            expect(page).to have_css(".project_phase_#{project_phase.definition_id}",
-                                     text: "12/01/2024\n-\n12/13/2024")
-            # project phase assigned to other project, no text here
-            expect(page).to have_css(".project_phase_#{project_phase_with_gates.definition_id}", text: "")
-            # inactive project phases, no text here
-            expect(page).to have_css(".project_phase_#{inactive_project_phase.definition_id}", text: "")
-            expect(page).to have_css(".project_phase_#{inactive_project_phase_with_gates.definition_id}", text: "")
-          end
-        end
-      end
-
-      context "with a user" do
-        let(:permissions) { %i(view_project) }
-        let(:user) do
-          create(:user, member_with_permissions: { development_project => permissions,
-                                                   project => %i(view_project) })
-        end
-
-        before do
-          login_as(user)
-          projects_page.visit!
-        end
-
-        context "for users without view_project_phases permission" do
-          specify "project phase columns cannot be configured to show up" do
-            element_selector = "#columns-select_autocompleter ng-select.op-draggable-autocomplete--input"
-            results_selector = "#columns-select_autocompleter ng-dropdown-panel .ng-dropdown-panel-items"
-            projects_page.expect_no_config_columns(project_phase_with_gates.name,
-                                                   project_phase.name,
-                                                   inactive_project_phase_with_gates.name,
-                                                   inactive_project_phase.name,
-                                                   element_selector:,
-                                                   results_selector:)
-          end
-        end
-
-        context "for users with view_project_phases permission" do
-          let(:permissions) { %i(view_project view_project_phases) }
-
-          specify "project phase columns show up when configured to do so" do
-            projects_page.expect_columns("Name")
-            projects_page.set_columns(project_phase_with_gates.name)
-
-            expect(page).to have_text(project_phase_with_gates.name.upcase)
-          end
-
-          specify "not permitted project phase columns have no cell content" do
-            col_names = [project_phase_with_gates,
-                         project_phase,
-                         inactive_project_phase_with_gates,
-                         inactive_project_phase].collect(&:name)
-
-            projects_page.set_columns(*col_names)
-            # Inactive columns are still displayed in the header:
-            projects_page.expect_columns("Name", *col_names)
-
-            projects_page.within_row(development_project) do
-              expect(page).to have_css(".name", text: development_project.name)
-              expect(page).to have_css(".project_phase_#{project_phase_with_gates.definition_id}",
-                                       text: "12/01/2024\n-\n12/13/2024")
-              # project phase assigned to other project, no text here
-              expect(page).to have_css(".project_phase_#{project_phase.definition_id}", text: "")
-              # inactive project phases, no text here
-              expect(page).to have_css(".project_phase_#{inactive_project_phase.definition_id}", text: "")
-              expect(page).to have_css(".project_phase_#{inactive_project_phase_with_gates.definition_id}", text: "")
-            end
-
-            # Not permitted project phase steps never show their date values
-            projects_page.within_row(project) do
-              expect(page).to have_css(".project_phase_#{project_phase.definition_id}", text: "")
-            end
+            expect(page).to have_css(".project_phase_#{project_phase.definition_id}", text: "")
           end
         end
       end

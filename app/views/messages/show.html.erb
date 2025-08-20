@@ -29,15 +29,14 @@ See COPYRIGHT and LICENSE files for more details.
 
 <%= render Messages::ShowPageHeaderComponent.new(topic: @topic, message: @message, forum: @forum, project:@project) %>
 
-<% content_controller 'forum-messages',
-                      dynamic: true %>
+<% content_controller 'forum-messages' %>
 
 <% title avatar(@topic.author) + h(@topic.subject) %>
 
 <div class="forum-message">
   <p class="author additional-information"><%= authoring @topic.created_at, @topic.author %></p>
   <div class="wiki op-uc-container">
-    <%= format_text(@topic.content, object: @topic, attachments: @topic.attachments) %>
+    <%= format_text(@topic, :content, attachments: @topic.attachments) %>
   </div>
 
   <% resource = message_attachment_representer(@topic) %>

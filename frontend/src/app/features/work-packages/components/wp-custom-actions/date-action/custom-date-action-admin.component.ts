@@ -40,6 +40,7 @@ import { I18nService } from 'core-app/core/i18n/i18n.service';
   selector: 'opce-custom-date-action-admin',
   templateUrl: './custom-date-action-admin.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class CustomDateActionAdminComponent implements OnInit {
   public valueVisible = false;

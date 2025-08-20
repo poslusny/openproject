@@ -30,7 +30,7 @@
 
 require "spec_helper"
 
-RSpec.describe CustomFields::Hierarchy::HierarchicalItemService do
+RSpec.describe CustomFields::Hierarchy::HierarchicalItemService, with_ee: [:custom_field_hierarchies] do
   let!(:custom_field) { create(:custom_field, field_format: "hierarchy", hierarchy_root: nil) }
   let!(:invalid_custom_field) { create(:custom_field, field_format: "text", hierarchy_root: nil) }
 

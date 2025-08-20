@@ -64,9 +64,9 @@ ru:
           name: Просмотрщик пакета работ
       project_roles:
         item_0:
-          name: Новый участник
+          name: Не участник
         item_1:
-          name: Аноним
+          name: Анонимно
         item_2:
           name: Участник
         item_3:
@@ -84,13 +84,13 @@ ru:
           name: Запуск
         item_1:
           name: Планирование
-          start_gate: Готово к планированию
+          start_gate: Готов к планированию
         item_2:
           name: Выполнение
           start_gate: Готово к выполнению
         item_3:
-          name: Завершение
-          start_gate: Готово к завершению
+          name: Закрытие
+          start_gate: Готов к закрытию
       priorities:
         item_0:
           name: Низкий
@@ -110,7 +110,7 @@ ru:
               title: Добро пожаловать в демо-проект
               summary: |
                 Мы рады, что вы присоединились.
-                В этом модуле вы можете сообщать новости проекта членам вашей команды.
+                В этом модуле вы можете сообщать новости о проекте членам вашей команды.
               description: Текущие новости
           categories:
             item_0: Категория 1 (будет изменена в настройках проекта)
@@ -127,7 +127,7 @@ ru:
             kanban:
               name: Доска Канбана
             basic:
-              name: Основная доска
+              name: Базовая доска
               lists:
                 item_0:
                   name: Список пожеланий
@@ -162,10 +162,10 @@ ru:
                     6. *Завершите ваши задачи в проекте*: &rightarrow; Перейдите в [Пакеты работ &rightarrow; Задачи]({{opSetting:base_url}}/projects/demo-project/work_packages/details/##wp.id:set_date_and_location_of_conference/overview?query_id=##query.id:demo_project__query__tasks).
 
                     Здесь вы найдете наши [руководства пользователя](https://www.openproject.org/docs/user-guide/).
-                    Пожалуйста, сообщите нам, если у вас есть какие-либо вопросы или нужна поддержка. Свяжитесь с нами: [поддержка[at]openproject.com](mailto:support@openproject.com).
+                    Пожалуйста, сообщите нам, если у вас есть какие-либо вопросы или нужна поддержка. Свяжитесь с нами: [support[at]openproject.com](mailto:support@openproject.com).
               item_5:
                 options:
-                  name: Пакеты работ
+                  name: Пакет работ
               item_6:
                 options:
                   name: Вехи
@@ -228,7 +228,7 @@ ru:
               title: Добро пожаловать в Ваш демо проект Scrum
               summary: |
                 Мы рады, что вы присоединились.
-                В этом модуле вы можете сообщать новости о проекте членам вашей команды.
+                В этом модуле вы можете сообщать новости проекта членам вашей команды.
           versions:
             item_0:
               name: Невыполненные задачи по исправлению ошибок
@@ -292,7 +292,7 @@ ru:
             item_0:
               name: План проекта
             item_1:
-              name: Невыполненные работы по продукту
+              name: бэклог продукта
             item_2:
               name: Спринт 1
             item_3:
@@ -336,7 +336,7 @@ ru:
                     Пожалуйста, сообщите нам, если у Вас возникнут вопросы или Вам понадобится поддержка. Свяжитесь с нами: [support[at]openproject.com](mailto:support@openproject.com).
               item_5:
                 options:
-                  name: Пакеты работ
+                  name: Пакет работ
               item_6:
                 options:
                   name: План проекта

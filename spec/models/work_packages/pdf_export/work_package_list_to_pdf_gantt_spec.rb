@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -78,7 +80,7 @@ RSpec.describe WorkPackage::PDFExport::WorkPackageListToPdf do
     end
   end
   let(:export_time) { DateTime.new(2024, 4, 22, 12, 37) }
-  let(:export_time_formatted) { format_time(export_time, include_date: true) }
+  let(:export_date_formatted) { format_date(export_time) }
   let(:export) do
     login_as(user)
     work_packages
@@ -187,7 +189,7 @@ RSpec.describe WorkPackage::PDFExport::WorkPackageListToPdf do
       expect(pdf[:strings]).to eq [query.name, "2024 Apr 21 22 23", # header columns
                                    wp_title_column(work_package_task),
                                    wp_title_column(work_package_milestone),
-                                   "1/1", export_time_formatted, query.name].join(" ").squeeze(" ")
+                                   "1/1", export_date_formatted, query.name].join(" ").squeeze(" ")
 
       # if one of these expect fails you can output the actual pdf calls uncommenting the following line
       # show_calls
@@ -219,9 +221,9 @@ RSpec.describe WorkPackage::PDFExport::WorkPackageListToPdf do
       expect(pdf[:strings]).to eq [query.name, "2024 Apr May 21 22 23 24 25 26 27 28 29 30 1 2 3 4 5", # header columns
                                    wp_title_column(work_package_task),
                                    wp_title_column(work_package_milestone),
-                                   "1/2", export_time_formatted, query.name,
+                                   "1/2", export_date_formatted, query.name,
                                    "2024 May 6 7 8", # header columns
-                                   "2/2", export_time_formatted, query.name].join(" ").squeeze(" ")
+                                   "2/2", export_date_formatted, query.name].join(" ").squeeze(" ")
 
       # if one of these expect fails you can output the actual pdf calls uncommenting the following line
       # show_calls
@@ -256,25 +258,25 @@ RSpec.describe WorkPackage::PDFExport::WorkPackageListToPdf do
         query.name, "2024 Apr May 21 22 23 24 25 26 27 28 29 30 1 2 3 4 5", # header columns
         wp_title_column(work_package_task),
         filler_work_packages.slice(0, 17).map.map { |wp| wp_title_column(wp) },
-        "1/6", export_time_formatted, query.name,
+        "1/6", export_date_formatted, query.name,
 
         "2024 May 6 7 8", # header columns
-        "2/6", export_time_formatted, query.name,
+        "2/6", export_date_formatted, query.name,
 
         query.name, "2024 Apr May 21 22 23 24 25 26 27 28 29 30 1 2 3 4 5", # header columns
         filler_work_packages.slice(17, 18).map { |wp| wp_title_column(wp) },
-        "3/6", export_time_formatted, query.name,
+        "3/6", export_date_formatted, query.name,
 
         "2024 May 6 7 8", # header columns
-        "4/6", export_time_formatted, query.name,
+        "4/6", export_date_formatted, query.name,
 
         query.name, "2024 Apr May 21 22 23 24 25 26 27 28 29 30 1 2 3 4 5", # header columns
         filler_work_packages.slice(35, 15).map { |wp| wp_title_column(wp) },
         wp_title_column(work_package_milestone),
-        "5/6", export_time_formatted, query.name,
+        "5/6", export_date_formatted, query.name,
 
         "2024 May 6 7 8", # header columns
-        "6/6", export_time_formatted, query.name
+        "6/6", export_date_formatted, query.name
       ].flatten.join(" ").squeeze(" ")
     end
 
@@ -317,16 +319,16 @@ RSpec.describe WorkPackage::PDFExport::WorkPackageListToPdf do
         query.name, "2024 Apr May 21 22 23 24 25 26 27 28 29 30 1", # header columns
         wp_title_column(work_package_task),
         filler_work_packages.slice(0, 17).map { |wp| wp_title_column(wp) },
-        "1/3", export_time_formatted, query.name,
+        "1/3", export_date_formatted, query.name,
 
         query.name, "2024 Apr May 21 22 23 24 25 26 27 28 29 30 1", # header columns
         filler_work_packages.slice(17, 18).map { |wp| wp_title_column(wp) },
-        "2/3", export_time_formatted, query.name,
+        "2/3", export_date_formatted, query.name,
 
         query.name, "2024 Apr May 21 22 23 24 25 26 27 28 29 30 1", # header columns
         filler_work_packages.slice(35, 15).map { |wp| wp_title_column(wp) },
         wp_title_column(work_package_milestone),
-        "3/3", export_time_formatted, query.name
+        "3/3", export_date_formatted, query.name
       ].flatten.join(" ").squeeze(" ")
     end
 
@@ -366,7 +368,7 @@ RSpec.describe WorkPackage::PDFExport::WorkPackageListToPdf do
                                    wp_title_column(work_package_milestone),
                                    type_standard.name,
                                    wp_title_column(work_package_task),
-                                   "1/1", export_time_formatted, query.name].join(" ").squeeze(" ")
+                                   "1/1", export_date_formatted, query.name].join(" ").squeeze(" ")
 
       # if one of these expect fails you can output the actual pdf calls uncommenting the following line
       # show_calls

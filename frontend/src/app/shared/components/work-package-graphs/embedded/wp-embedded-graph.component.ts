@@ -1,6 +1,6 @@
 import { Component, Input, SimpleChanges } from '@angular/core';
 import { WorkPackageTableConfiguration } from 'core-app/features/work-packages/components/wp-table/wp-table-configuration';
-import { ChartOptions } from 'chart.js';
+import { ChartOptions, Plugin } from 'chart.js';
 import { I18nService } from 'core-app/core/i18n/i18n.service';
 import { GroupObject } from 'core-app/features/hal/resources/wp-collection-resource';
 import DataLabelsPlugin from 'chartjs-plugin-datalabels';
@@ -20,6 +20,7 @@ interface ChartDataSet {
   selector: 'op-wp-embedded-graph',
   templateUrl: './wp-embedded-graph.html',
   styleUrls: ['./wp-embedded-graph.component.sass'],
+  standalone: false,
 })
 export class WorkPackageEmbeddedGraphComponent {
   @Input() public datasets:WorkPackageEmbeddedGraphDataset[];
@@ -38,7 +39,7 @@ export class WorkPackageEmbeddedGraphComponent {
 
   public chartData:ChartDataSet[] = [];
 
-  public chartPlugins = [DataLabelsPlugin];
+  public chartPlugins:Plugin[] = [DataLabelsPlugin];
 
   public internalChartOptions:ChartOptions;
 
@@ -63,7 +64,18 @@ export class WorkPackageEmbeddedGraphComponent {
     }
   }
 
+  private getHexColor(index:number):string {
+    const tealColor= getComputedStyle(document.body).getPropertyValue('--data-teal-color-emphasis');
+    const orangeFont1Color= getComputedStyle(document.body).getPropertyValue('--data-orange-color-emphasis');
+    const hexColors = [
+      tealColor,
+      orangeFont1Color,
+    ];
+    return hexColors[index % hexColors.length];
+  }
+
   private updateChartData() {
+    const borderColor= getComputedStyle(document.body).getPropertyValue('--borderColor-muted');
     let uniqLabels = _.uniq(this.datasets.reduce((array, dataset) => {
       const groups = (dataset.groups || []).map((group) => group.value) as any;
       return array.concat(groups);
@@ -78,6 +90,10 @@ export class WorkPackageEmbeddedGraphComponent {
       return {
         label: dataset.label,
         data: uniqLabels.map((label) => countMap[label] || 0),
+        borderColor,
+        backgroundColor: this.chartType === 'bar' || this.chartType === 'horizontalBar'
+          ? uniqLabels.map((_, i) => this.getHexColor(i))
+          : undefined,
       };
     });
 
@@ -99,7 +115,7 @@ export class WorkPackageEmbeddedGraphComponent {
 
   protected setChartOptions() {
     const bodyFontColor= getComputedStyle(document.body).getPropertyValue('--body-font-color');
-    const gridLineColor= getComputedStyle(document.body).getPropertyValue('--borderColor-default');
+    const gridLineColor= getComputedStyle(document.body).getPropertyValue('--borderColor-muted');
     const backdropColor= getComputedStyle(document.body).getPropertyValue('--overlay-backdrop-bgColor');
 
     const defaults:ChartOptions = {
@@ -121,6 +137,10 @@ export class WorkPackageEmbeddedGraphComponent {
           ticks: {
             color: this.isRadarChart() ? bodyFontColor : 'transparent',
             backdropColor: this.isRadarChart() ? backdropColor : 'transparent',
+            font: {
+              weight: 'bold',
+              size: 16,
+            },
           },
         },
         y: {
@@ -155,6 +175,10 @@ export class WorkPackageEmbeddedGraphComponent {
           anchor: 'center',
           align: this.chartType === 'bar' ? 'top' : 'center',
           color: bodyFontColor,
+          font: {
+            weight: 'bold',
+            size: 16,
+          },
         },
       },
     };

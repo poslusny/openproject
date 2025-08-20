@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -111,7 +113,7 @@ RSpec.describe TabularFormBuilder do
 
         it "includes the prefix hidden in the label" do
           expect(output).to be_html_eql(%{
-            <span class="hidden-for-sighted">
+            <span class="sr-only">
               <span style="color:red">Prefix</span>
             </span>
           }).within_path("label.form--label")
@@ -176,7 +178,7 @@ RSpec.describe TabularFormBuilder do
 
         it "includes the prefix hidden in the label" do
           expect(output).to be_html_eql(%{
-            <span class="hidden-for-sighted">
+            <span class="sr-only">
               <span style="color:yellow">PREFIX</span>
             </span>
           }).within_path("label.form--label")

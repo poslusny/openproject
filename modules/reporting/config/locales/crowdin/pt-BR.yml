@@ -93,7 +93,9 @@ pt-BR:
       button: "Exportar planilha de horas em PDF"
       timesheet: "Planilha de horas"
       time: "Hora"
-      sum_hours: Soma
+      sums_hours: Totais
+      overview_per_user_total: "Visão geral: Total de horas por usuário"
+      overview_per_user_day: "Visão geral: Horas por usuário por dia"
     cost_reports:
       title: "Exportação XLS dos seus relatórios de custos"
       start_time: "Hora de início"

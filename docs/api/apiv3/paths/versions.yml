@@ -20,7 +20,6 @@ get:
 
         + id: Sort by the version id
         + name: Sort by the version name using numeric collation, comparing sequences of decimal digits by their numeric value
-        + semver_name: Deprecated, use name instead
       example: '[["name", "desc"]]'
       in: query
       name: sortBy

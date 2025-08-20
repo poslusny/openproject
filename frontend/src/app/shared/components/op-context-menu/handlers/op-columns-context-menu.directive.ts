@@ -46,6 +46,7 @@ import { ConfirmDialogService } from 'core-app/shared/components/modals/confirm-
 
 @Directive({
   selector: '[opColumnsContextMenu]',
+  standalone: false,
 })
 export class OpColumnsContextMenu extends OpContextMenuTrigger {
   @Input('opColumnsContextMenu-column') public column:QueryColumn;

@@ -144,7 +144,7 @@ Sanity and regression tests are manually performed tests by QA for relevant comp
 
 **Usage at OpenProject**
 
-For writing and executing manual sanity and regression testing, especially focusing on functional requirements, one of the tools in use at OpenProject is TestLink (https://testlink.org/) to achieve the following goals:
+For writing and executing manual sanity and regression testing, especially focusing on functional requirements, one of the tools in use at OpenProject is [TestLink](https://testlink.org/) to achieve the following goals:
 
 - Test cases have clear preconditions so that the tester prepares for executing each case with enough knowledge about requirements.
 - Test cases are as specific as possible. They should check the proper working of one single point/case and should therefore have no more than 8-10 steps.

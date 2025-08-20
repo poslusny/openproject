@@ -30,6 +30,7 @@
 module Projects
   class PhaseComponent < ApplicationComponent
     include OpPrimer::ComponentHelpers
+    include Projects::Phases::Shared
 
     def initialize(phase:, **)
       @phase = phase
@@ -61,12 +62,14 @@ module Projects
       phase.finish_gate? && phase.finish_date.present?
     end
 
-    def gate_icon
-      :"op-gate"
-    end
+    def hover_card_data_args(gate:)
+      raise ArgumentError, "gate must be either :start or :finish" unless %i[start finish].include?(gate)
 
-    def icon_color_class
-      helpers.hl_inline_class("project_phase_definition", phase.definition_id)
+      {
+        hover_card_trigger_target: "trigger",
+        hover_card_url: hover_card_project_phase_path(phase, gate:),
+        test_selector: "phase-#{phase.id}-#{gate}-gate"
+      }
     end
 
     private

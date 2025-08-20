@@ -29,6 +29,7 @@ import { Directive, ElementRef, OnInit } from '@angular/core';
 
 @Directive({
   selector: 'op-drag-scroll',
+  standalone: false,
 })
 export class OpDragScrollDirective implements OnInit {
   constructor(readonly elementRef:ElementRef) {

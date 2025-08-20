@@ -116,6 +116,12 @@ Rails.application.routes.draw do
     post "/account/confirm_consent", action: "confirm_consent", as: "account_confirm_consent"
   end
 
+  resources :attribute_help_texts, only: [] do
+    member do
+      get :show_dialog
+    end
+  end
+
   # Because of https://github.com/intridea/grape/pull/853/files this has to be
   # placed behind handling the deprecated v1 because otherwise, a 405 is
   # returned for all routes for which the v3 has also resources. Grape does
@@ -131,23 +137,25 @@ Rails.application.routes.draw do
 
   get "/roles/workflow/:id/:role_id/:type_id" => "roles#workflow"
 
-  resources :types do
-    member do
-      get "edit/:tab" => "types#edit", as: "edit_tab"
-      match "update/:tab" => "types#update", as: "update_tab", via: %i[post patch]
-      put :subject_configuration,
-          controller: "work_packages/types/subject_configuration_tab",
-          action: "update_subject_configuration"
+  resources :types, module: "work_package_types", except: [:update] do
+    resource :form_configuration, only: %i[edit update], controller: "form_configuration_tab"
+    resource :projects, controller: "projects_tab", only: %i[update edit] do
+      collection do
+        post :enable_all, to: "projects_tab#enable_all_projects"
+      end
     end
+    resource :settings, controller: "settings_tab", only: %i[update edit]
+    resource :subject_configuration, controller: "subject_configuration_tab", only: %i[update edit]
 
     resources :pdf_export_template, only: %i[],
-                                    controller: "work_packages/types/pdf_export_template",
+                                    controller: "pdf_export_template",
                                     path: "pdf_export_template" do
       member do
         post :toggle
         put :drop
       end
       collection do
+        get :edit
         put :enable_all
         put :disable_all
       end
@@ -249,10 +257,13 @@ Rails.application.routes.draw do
     resource :menu, only: %i[show]
   end
 
-  resources :projects, except: %i[show edit create update] do
+  resources :projects, except: %i[show edit update] do
     scope module: "projects" do
       namespace "settings" do
-        resource :general, only: %i[show], controller: "general"
+        resource :general, only: %i[show update], controller: "general" do
+          get :toggle_public_dialog
+          post :toggle_public
+        end
         resource :modules, only: %i[show update]
         resource :project_custom_fields, only: %i[show] do
           member do
@@ -280,6 +291,7 @@ Rails.application.routes.draw do
         get :categories, to: redirect("projects/%{project_id}/settings/work_packages/categories")
         resource :work_packages, only: %i[show]
         namespace :work_packages do
+          resource :internal_comments, only: %i[show update]
           resource :types, only: %i[show update]
           resource :custom_fields, only: %i[show update]
           resource :categories, only: %i[show update]
@@ -289,12 +301,14 @@ Rails.application.routes.draw do
       resource :templated, only: %i[create destroy], controller: "templated"
       resource :archive, only: %i[create destroy], controller: "archive"
       resource :identifier, only: %i[show update], controller: "identifier"
+      resource :status, only: %i[update destroy], controller: "status"
     end
 
     member do
       get "settings", to: redirect("projects/%{id}/settings/general/")
 
-      get :copy
+      get :copy, to: "projects#copy_form"
+      post :copy
 
       patch :types
 
@@ -449,6 +463,12 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :project_phases, only: [] do
+    member do
+      get "/hover_card" => "project_phases/hover_card#show", as: "hover_card"
+    end
+  end
+
   resources :admin, controller: :admin, only: :index do
     collection do
       get :plugins
@@ -459,11 +479,24 @@ Rails.application.routes.draw do
 
   scope "admin" do
     resource :announcements, only: %i[edit update]
+
+    get "/enterprise", to: redirect("#{rails_relative_url_root}/admin/enterprise_tokens")
+
     constraints(Constraints::Enterprise) do
-      resource :enterprise, only: %i[show create destroy]
-      scope controller: "enterprises" do
-        post "enterprise/save_trial_key" => "enterprises#save_trial_key"
-        delete "enterprise/delete_trial_key" => "enterprises#delete_trial_key"
+      resources :enterprise_tokens, only: %i[index new create destroy] do
+        member do
+          get :destroy_dialog
+        end
+
+        collection do
+          post :save_trial_key
+          delete :delete_trial_key
+        end
+      end
+
+      resource :enterprise_trial, only: %i[show create destroy] do
+        get :trial_dialog
+        post :request_resend, on: :collection
       end
     end
 
@@ -472,7 +505,6 @@ Rails.application.routes.draw do
     delete "design/export_cover" => "custom_styles#export_cover_delete", as: "custom_style_export_cover_delete"
     delete "design/favicon" => "custom_styles#favicon_delete", as: "custom_style_favicon_delete"
     delete "design/touch_icon" => "custom_styles#touch_icon_delete", as: "custom_style_touch_icon_delete"
-    get "design/upsale" => "custom_styles#upsale", as: "custom_style_upsale"
     post "design/colors" => "custom_styles#update_colors", as: "update_design_colors"
     post "design/themes" => "custom_styles#update_themes", as: "update_design_themes"
     post "design/export_cover_text_color" => "custom_styles#update_export_cover_text_color",
@@ -552,8 +584,7 @@ Rails.application.routes.draw do
       resource :projects, controller: "/admin/settings/projects_settings", only: %i[show update]
       resource :new_project, controller: "/admin/settings/new_project_settings", only: %i[show update]
       resources :project_phase_definitions,
-                path: "project_life_cycle",
-                controller: "/admin/settings/project_life_cycle_definitions",
+                controller: "/admin/settings/project_phase_definitions",
                 except: :show do
         member do
           patch :move
@@ -579,6 +610,9 @@ Rails.application.routes.draw do
           put :move
           put :drop
         end
+        collection do
+          get :new_link
+        end
       end
       resource :working_days_and_hours, controller: "/admin/settings/working_days_and_hours_settings", only: %i[show update]
       resource :users, controller: "/admin/settings/users_settings", only: %i[show update]
@@ -596,6 +630,18 @@ Rails.application.routes.draw do
     resources :quarantined_attachments,
               controller: "/admin/attachments/quarantined_attachments",
               only: %i[index destroy]
+
+    resources :scim_clients, only: %i[index edit new create update destroy] do
+      member do
+        get :deletion_dialog
+      end
+
+      resources :static_tokens, only: %i[create destroy], controller: "/admin/scim_client_static_tokens" do
+        member do
+          get :deletion_dialog
+        end
+      end
+    end
 
     resource :backups, controller: "/admin/backups", only: %i[show] do
       collection do
@@ -646,32 +692,43 @@ Rails.application.routes.draw do
         get :cancel_edit
         put :toggle_reaction
       end
+
       collection do
         get :update_streams
         get :update_filter # filter not persisted
         put :update_sorting # sorting is persisted
+        post :sanitize_internal_mentions
       end
     end
 
-    resources :children_relations, only: %i[new create destroy], controller: "work_package_children_relations"
+    resources :hierarchy_relations, only: %i[new create destroy], controller: "work_package_hierarchy_relations"
 
-    resource :progress, only: %i[new edit update], controller: "work_packages/progress"
+    resource :progress, only: %i[edit update], controller: "work_packages/progress" do
+      get :preview, on: :member
+    end
     collection do
       resource :progress,
-               only: :create,
+               only: %i[create new],
                controller: "work_packages/progress",
-               as: :work_package_progress
+               as: :work_package_progress do
+        get :preview, on: :collection
+      end
     end
 
-    resource :datepicker_dialog_content,
-             only: %i[show new edit update],
+    resource :date_picker,
+             only: %i[show edit update],
              controller: "work_packages/date_picker",
-             on: :member,
-             as: "datepicker_dialog_content"
+             as: "date_picker" do
+      get :preview, on: :member
+    end
+
     collection do
-      resource :datepicker_dialog_content,
-               only: :create,
-               controller: "work_packages/date_picker"
+      resource :date_picker,
+               only: %i[create new],
+               controller: "work_packages/date_picker",
+               as: "date_picker" do
+        get :preview, on: :collection
+      end
     end
 
     resources :relations_tab, only: %i[index], controller: "work_package_relations_tab"
@@ -698,7 +755,7 @@ Rails.application.routes.draw do
     get "/new" => "work_packages#index", on: :collection, as: "new", state: "new"
     # We do not want to match the work package export routes
     get "(/*state)" => "work_packages#show", on: :member, as: "", constraints: { id: /\d+/, state: /(?!(shares|split_view)).+/ }
-    get "/share_upsale" => "work_packages#index", on: :collection, as: "share_upsale"
+    get "/share_upsell" => "work_packages#share_upsell", on: :collection, as: "share_upsell"
     get "/edit" => "work_packages#show", on: :member, as: "edit"
   end
 
@@ -793,6 +850,9 @@ Rails.application.routes.draw do
 
     resources :sessions, controller: "my/sessions", as: "my_sessions", only: %i[index show destroy]
     resources :auto_login_tokens, controller: "my/auto_login_tokens", as: "my_auto_login_tokens", only: %i[destroy]
+
+    get "/banner" => "my/enterprise_banners#show", as: "show_enterprise_banner"
+    post "/dismiss_banner" => "my/enterprise_banners#dismiss", as: "dismiss_enterprise_banner"
   end
 
   scope controller: "my" do
@@ -801,6 +861,7 @@ Rails.application.routes.draw do
 
     get "/my/account", action: "account"
     get "/my/settings", action: "settings"
+    get "/my/interface", action: "interface"
     get "/my/notifications", action: "notifications"
     get "/my/reminders", action: "reminders"
 
@@ -817,6 +878,7 @@ Rails.application.routes.draw do
 
   scope controller: "onboarding" do
     patch "user_settings", action: "user_settings"
+    get "onboarding_video_dialog", action: "onboarding_video_dialog"
   end
 
   resources :colors do
@@ -853,8 +915,8 @@ Rails.application.routes.draw do
   end
 
   scope :notifications do
-    get "/share_upsale" => "notifications#share_upsale", as: "notifications_share_upsale"
-    get "/date_alerts" => "notifications#date_alerts", as: "notifications_date_alert_upsale"
+    get "/share_upsell" => "notifications#share_upsell", as: "notifications_share_upsell"
+    get "/date_alerts" => "notifications#date_alerts", as: "notifications_date_alert_upsell"
     get "/", to: "notifications#index", as: :notifications_center
   end
 
@@ -864,7 +926,26 @@ Rails.application.routes.draw do
     get "ensure_connection", controller: "oauth_clients", action: :ensure_connection, as: "oauth_clients_ensure_connection"
   end
 
+  namespace :scim_v2 do
+    mount Scimitar::Engine, at: "/"
+
+    get    "Users",     to: "users#index"
+    get    "Users/:id", to: "users#show"
+    post   "Users",     to: "users#create"
+    put    "Users/:id", to: "users#replace"
+    patch  "Users/:id", to: "users#update"
+    delete "Users/:id", to: "users#destroy"
+
+    get    "Groups",     to: "groups#index"
+    get    "Groups/:id", to: "groups#show"
+    post   "Groups",     to: "groups#create"
+    put    "Groups/:id", to: "groups#replace"
+    patch  "Groups/:id", to: "groups#update"
+    delete "Groups/:id", to: "groups#destroy"
+  end
+
   if OpenProject::Configuration.lookbook_enabled?
+    mount Primer::ViewComponents::Engine, at: "/"
     mount Lookbook::Engine, at: "/lookbook"
   end
 

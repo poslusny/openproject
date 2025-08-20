@@ -78,6 +78,7 @@ function newSegment(vp:TimelineViewParameters,
 @Component({
   selector: 'wp-timeline-relations',
   template: '<div class="wp-table-timeline--relations"></div>',
+  standalone: false,
 })
 export class WorkPackageTableTimelineRelations extends UntilDestroyedMixin implements OnInit {
   @InjectField() querySpace:IsolatedQuerySpace;

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 require "features/page_objects/notification"
 
@@ -191,15 +193,17 @@ RSpec.describe "Notification center date alerts", :js, with_settings: { journal_
   end
 
   context "without date alerts ee" do
-    it "shows the upsale page" do
+    it "shows the upsell page" do
       side_menu.click_item "Date alert"
 
       expect(page).to have_current_path(/notifications\/date_alerts/)
-      expect(page).to have_text "Date alerts is an Enterprise"
-      expect(page).to have_text "Please upgrade to a paid plan "
+      expect(page).to have_enterprise_banner(:basic)
 
       # It does not allows direct url access
       visit notifications_center_path(filter: "reason", name: "dateAlert")
+
+      expect(page).to have_current_path(/notifications\/date_alerts/)
+      expect(page).to have_enterprise_banner(:basic)
     end
   end
 

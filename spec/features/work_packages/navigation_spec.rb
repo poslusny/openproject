@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -170,7 +172,7 @@ RSpec.describe "Work package navigation", :js, :selenium do
   it "double clicking search result row (Regression #30247)" do
     work_package.subject = "Foobar"
     work_package.save!
-    visit search_path(q: "Foo", work_packages: 1, scope: :all)
+    visit search_path(q: "Foo", filter: :work_packages, scope: :all)
 
     table = Pages::EmbeddedWorkPackagesTable.new page.find_by_id("content")
     table.expect_work_package_listed work_package

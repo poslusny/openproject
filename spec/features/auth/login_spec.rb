@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -29,6 +31,8 @@
 require "spec_helper"
 
 RSpec.describe "Login" do
+  let(:user_menu) { Components::UserMenu.new }
+
   before do
     @capybara_ignore_elements = Capybara.ignore_hidden_elements
     Capybara.ignore_hidden_elements = true
@@ -39,8 +43,7 @@ RSpec.describe "Login" do
   end
 
   def expect_being_logged_in(user)
-    expect(page)
-      .to have_css("a[title='#{user.name}']")
+    user_menu.expect_user_shown user.name
   end
 
   def expect_not_being_logged_in

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -221,7 +223,7 @@ RSpec.describe ServiceResult, type: :model do
     let(:message) { "some message" }
 
     subject(:flash) do
-      {}.tap { service_result.apply_flash_message!(_1) }
+      {}.tap { service_result.apply_flash_message!(it) }
     end
 
     context "when successful" do

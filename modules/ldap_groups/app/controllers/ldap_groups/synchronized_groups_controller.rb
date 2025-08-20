@@ -1,7 +1,11 @@
 module LdapGroups
   class SynchronizedGroupsController < ::ApplicationController
     before_action :require_admin
-    before_action :check_ee
+
+    guard_enterprise_feature(:ldap_groups, except: %i[index show destroy]) do
+      redirect_to action: :index, status: :see_other
+    end
+
     before_action :find_group, only: %i(show destroy_info destroy)
 
     layout "admin"
@@ -52,27 +56,12 @@ module LdapGroups
 
     def find_group
       @group = SynchronizedGroup.find(params[:ldap_group_id])
-    rescue ActiveRecord::RecordNotFound
-      render_404
-    end
-
-    def check_ee
-      unless EnterpriseToken.allows_to?(:ldap_groups)
-        render template: "ldap_groups/synchronized_groups/upsale"
-        false
-      end
     end
 
     def permitted_params
       params
         .require(:synchronized_group)
         .permit(:dn, :group_id, :ldap_auth_source_id, :sync_users)
-    end
-
-    def default_breadcrumb; end
-
-    def show_local_breadcrumb
-      false
     end
   end
 end

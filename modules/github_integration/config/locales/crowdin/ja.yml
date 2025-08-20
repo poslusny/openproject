@@ -31,16 +31,17 @@ ja:
     github_avatar_url: "Avatar URL"
     github_updated_at: "Updated at"
     github_login: "GitHub login"
+    host: "Host"
     labels: "Labels"
     repository: "リポジトリ"
     changed_files_count: "Changed files"
-  button_add_deploy_target: デプロイターゲットを追加
-  label_deploy_target: デプロイターゲット
-  label_deploy_target_new: 新しいデプロイターゲット
-  label_deploy_target_plural: デプロイターゲット
+  button_add_deploy_target: デプロイ先を追加
+  label_deploy_target: デプロイ先
+  label_deploy_target_new: 新しいデプロイ先
+  label_deploy_target_plural: デプロイ先
   label_github_integration: GitHubとの連携
-  notice_deploy_target_created: デプロイターゲットが作成されました
-  notice_deploy_target_destroyed: デプロイターゲットが削除されました
+  notice_deploy_target_created: デプロイ先が作成されました
+  notice_deploy_target_destroyed: デプロイ先が削除されました
   plugin_openproject_github_integration:
     name: "OpenProject GitHub 統合"
     description: "OpenProjectとGitHubを統合してワークフローを改善"

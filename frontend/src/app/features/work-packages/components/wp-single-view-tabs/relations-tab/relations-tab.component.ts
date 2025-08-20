@@ -36,6 +36,7 @@ import { ApiV3Service } from 'core-app/core/apiv3/api-v3.service';
 @Component({
   templateUrl: './relations-tab.html',
   selector: 'wp-relations-tab',
+  standalone: false,
 })
 export class WorkPackageRelationsTabComponent extends UntilDestroyedMixin implements OnInit {
   @Input() public workPackageId?:string;

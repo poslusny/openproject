@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -58,11 +60,5 @@ class WorkPackages::ReportsController < ApplicationController
         format.html { redirect_to report_project_work_packages_path(@project) }
       end
     end
-  end
-
-  private
-
-  def default_breadcrumb
-    I18n.t(:label_summary)
   end
 end

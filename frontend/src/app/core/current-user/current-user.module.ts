@@ -6,7 +6,7 @@ import { CurrentUserQuery } from './current-user.query';
 import { firstValueFrom } from 'rxjs';
 
 function loadUserMetadata(currentUserService:CurrentUserService) {
-  const userMeta = document.querySelectorAll('meta[name=current_user]')[0] as HTMLElement|undefined;
+  const userMeta = document.querySelector<HTMLMetaElement>('meta[name=current_user]');
   currentUserService.setUser({
     id: userMeta?.dataset.id || null,
     name: userMeta?.dataset.name || null,

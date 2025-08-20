@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -28,7 +30,7 @@
 
 require "spec_helper"
 
-RSpec.describe "Document categories" do
+RSpec.describe "Document categories", :js do
   shared_let(:admin) { create(:admin) }
 
   before do
@@ -58,5 +60,36 @@ RSpec.describe "Document categories" do
 
     expect(DocumentCategory).to exist(name: "Specification")
     expect(DocumentCategory).not_to exist(name: "Documentation")
+  end
+
+  context "with uploaded documents" do
+    let(:project) { create(:project) }
+    let(:category1) { create(:document_category, name: "Category 1", project:) }
+    let(:category2) { create(:document_category, name: "Category 2", project:) }
+
+    it "can group by category and date (regression #64134)" do
+      # Add documents to the category
+      create_list(:document, 2, category: category1, project:)
+      create_list(:document, 2, category: category2, project:)
+
+      # Visit the documents module
+      visit project_documents_path(project.identifier)
+
+      # Expect grouping to be applied by category
+      expect(page).to have_css(".CollapsibleSection h2", text: "Category 1")
+      expect(page).to have_css(".CollapsibleSection h2", text: "Category 2")
+
+      # Change grouping to "date"
+      within "#sidebar" do
+        choose(I18n.t(:label_date))
+      end
+
+      wait_for_reload
+
+      # Expect grouping to be changed
+      expect(page).to have_css(".CollapsibleSection h2", text: Time.zone.today)
+      expect(page).to have_no_css(".CollapsibleSection h2", text: "Category 1")
+      expect(page).to have_no_css(".CollapsibleSection h2", text: "Category 2")
+    end
   end
 end

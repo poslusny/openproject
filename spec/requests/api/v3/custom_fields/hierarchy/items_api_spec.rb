@@ -30,7 +30,7 @@
 
 require "spec_helper"
 
-RSpec.describe "API v3 custom field hierarchy items", :webmock, content_type: :json do
+RSpec.describe "API v3 custom field hierarchy items", :webmock, content_type: :json, with_ee: [:custom_field_hierarchies] do
   include API::V3::Utilities::PathHelper
 
   describe "GET /api/v3/custom_fields/:id/items" do

@@ -39,6 +39,7 @@ const screenfull:Screenfull = sfimport as any;
   templateUrl: '../wp-button.template.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'opce-zen-mode-toggle-button',
+  standalone: false,
 })
 export class ZenModeButtonComponent extends AbstractWorkPackageButtonComponent {
   public buttonId = 'work-packages-zen-mode-toggle-button';

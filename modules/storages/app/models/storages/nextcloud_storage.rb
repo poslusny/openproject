@@ -49,9 +49,12 @@ module Storages
     store_attribute :provider_fields, :group_folder, :string
     store_attribute :provider_fields, :authentication_method, :string, default: "two_way_oauth2"
     store_attribute :provider_fields, :storage_audience, :string
+    store_attribute :provider_fields, :token_exchange_scope, :string
+
+    def self.short_provider_name = :nextcloud
 
     def oauth_configuration
-      Peripherals::OAuthConfigurations::NextcloudConfiguration.new(self)
+      Adapters::Providers::Nextcloud::OAuthConfiguration.new(self)
     end
 
     def automatic_management_new_record?
@@ -73,6 +76,10 @@ module Storages
 
     def audience
       storage_audience
+    end
+
+    def exchanges_token?
+      storage_audience.present? && storage_audience != OpenIDConnect::UserToken::IDP_AUDIENCE
     end
 
     def authenticate_via_idp?

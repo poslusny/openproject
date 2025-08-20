@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -33,7 +35,7 @@
 class PermissionMock
   attr_reader :user, :permitted_entities, :allow_all_permissions
 
-  NIL_ERROR = "You tried to mock a permission on nil, this will not work! If you want to satisfy the `allow_in_any_project?` call, build an unused project and mock the permission on that.".freeze
+  NIL_ERROR = "You tried to mock a permission on nil, this will not work! If you want to satisfy the `allow_in_any_project?` call, build an unused project and mock the permission on that."
 
   def initialize(user)
     @user = user

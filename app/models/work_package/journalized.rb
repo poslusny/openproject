@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -31,12 +33,12 @@ module WorkPackage::Journalized
 
   included do
     acts_as_journalized journals_association_extension: proc {
-      def restricted_visible
-        if OpenProject::FeatureDecisions.comments_with_restricted_visibility_active? &&
-            User.current.allowed_in_project?(:view_comments_with_restricted_visibility, proxy_association.owner.project)
+      def internal_visible
+        if proxy_association.owner.project.enabled_internal_comments &&
+            User.current.allowed_in_project?(:view_internal_comments, proxy_association.owner.project)
           all
         else
-          where(restricted: false)
+          where(internal: false)
         end
       end
     }
@@ -46,7 +48,7 @@ module WorkPackage::Journalized
       def self.event_title
         Proc.new do |o|
           title = o.to_s
-          title << " (#{o.status.name})" if o.status.present?
+          title += " (#{o.status.name})" if o.status.present?
 
           title
         end
@@ -63,7 +65,7 @@ module WorkPackage::Journalized
           journal = o.last_journal
           t = "work_package"
 
-          t << if journal && journal.details.empty? && !journal.initial?
+          t += if journal && journal.details.empty? && !journal.initial?
                  "-note"
                else
                  status = Status.find_by(id: o.status_id)
@@ -98,6 +100,7 @@ module WorkPackage::Journalized
     register_journal_formatted_fields "ignore_non_working_days", formatter_key: :ignore_non_working_days
     register_journal_formatted_fields "cause", formatter_key: :cause
     register_journal_formatted_fields /file_links_?\d+/, formatter_key: :file_link
+    register_journal_formatted_fields "project_phase_definition_id", formatter_key: :project_phase_definition
 
     # Joined
     register_journal_formatted_fields :parent_id, :project_id,

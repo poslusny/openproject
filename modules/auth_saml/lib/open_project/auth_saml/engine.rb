@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "omniauth-saml"
 module OpenProject
   module AuthSaml
@@ -25,6 +27,7 @@ module OpenProject
              :plugin_saml,
              :saml_providers_path,
              parent: :authentication,
+             after: :oauth_applications,
              caption: ->(*) { I18n.t("saml.menu_title") },
              enterprise_feature: "sso_auth_providers"
       end
@@ -34,7 +37,7 @@ module OpenProject
         auth_provider-saml.png
       )
 
-      register_auth_providers do
+      register_auth_providers(persist: false) do
         strategy :saml do
           OpenProject::AuthSaml.configuration.values.map do |h|
             # Remember saml session values when logging in user
@@ -65,6 +68,11 @@ module OpenProject
                                    writable: false,
                                    default: {},
                                    format: :hash
+      end
+
+      config.to_prepare do
+        # Load AuthProvider descendants due to STI
+        Saml::Provider
       end
     end
   end

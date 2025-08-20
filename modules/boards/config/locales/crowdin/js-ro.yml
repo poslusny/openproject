@@ -1,14 +1,15 @@
 #English strings go here
 ro:
+  ee:
+    upsell:
+      board_view:
+        description: 'Vrei să automatizezi fluxurile de lucru cu Boards? Tablourile avansate sunt un add-on pentru Enterprise. Te rog să treci la un plan plătit.'
   js:
     boards:
-      create_new: 'Creează un nou panou'
+      create_new: 'Creează panou nou'
       label_unnamed_board: 'Consiliul de administrație fără nume'
       label_unnamed_list: 'Listă fără nume'
       label_board_type: 'Tipul de placă'
-      upsale:
-        teaser_text: 'Doriți să vă automatizați fluxurile de lucru cu Boards? Tablourile avansate sunt un add-on pentru Enterprise. Vă rugăm să treceți la un plan plătit.'
-        upgrade: 'Actualizează acum'
       lists:
         delete: 'Ștergeți lista'
       version:
@@ -32,7 +33,7 @@ ro:
       text_hidden_list_warning: "Nu toate listele sunt afișate deoarece nu aveți permisiunea. Contactați administratorul pentru mai multe informații."
       click_to_remove_list: "Clic pentru a elimina această listă"
       board_type:
-        text: 'Tipul de placă'
+        text: 'Tip panou'
         free: 'De baza'
         select_board_type: 'Vă rugăm să alegeți tipul de placă de care aveți nevoie.'
         free_text: >

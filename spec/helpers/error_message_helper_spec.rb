@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -37,7 +39,7 @@ RSpec.describe ErrorMessageHelper do
   let(:description) { error_flash[:description] }
 
   def escape_html(array)
-    array.map { CGI.escapeHTML _1 }
+    array.map { CGI.escapeHTML it }
   end
 
   before do

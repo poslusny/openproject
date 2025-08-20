@@ -53,7 +53,7 @@ Available arguments for this rake task that specify the email behavior are
 | `username` | `IMAP_USERNAME` | the name of the user that is used to connect to the email server |
 | `password` | `IMAP_PASSWORD` | the password of the user |
 | `port` | `IMAP_PORT` | the port that is used to connect to the email server |
-| `ssl` | `IMAP_SSL` and ``IMAP_SSL_VERIFICATION` | specifies if SSL should be used when connecting to the email server |
+| `ssl` | `IMAP_SSL` and `IMAP_SSL_VERIFICATION` | specifies if SSL should be used when connecting to the email server |
 | `folder` | `IMAP_FOLDER` | the folder to fetch emails from (default: INBOX) |
 | `move_on_success` | `IMAP_MOVE_ON_SUCCESS` | the folder emails that were successfully parsed are moved to (instead of deleted, example: INBOX.success) |
 | `move_on_failure` | `IMAP_MOVE_ON_FAILURE` | the folder emails that were ignored are moved to (example: INBOX.failed) |
@@ -69,14 +69,15 @@ Available arguments that change how the work packages are handled:
 | `version` | `IMAP_ATTR_VERSION` | name of the target version |
 | `type` | `IMAP_ATTR_TYPE` | name of the target type |
 | `assigned_to` | `IMAP_ATTR_ASSIGNED_TO` | name of the assigned user |
-| `unknown_user` | `IMAP_UNKNOWN_USER` | ignore: email is ignored (default), accept: accept as anonymous user, create: create a user account |
+| `unknown_user` | `IMAP_UNKNOWN_USER` | ignore: email is ignored (default), accept: accept as anonymous user, create: create a user account <br />Hint: You must also set `IMAP_NO_PERMISSION_CHECK=1` for sending mail by anonymous users to work as expected.|
+| `no_permission_check` | `IMAP_NO_PERMISSION_CHECK` | disable permission checking when receiving the email if set to 1 |
 | `allow_override` | `IMAP_ALLOW_OVERRIDE` | specifies which attributes may be overwritten though specified by previous options. Comma separated list |
 
 **Gmail API**
 
 In order to use the more secure Gmail API method, some extra initial setup in google cloud is required.
 
-1. Go to https://console.cloud.google.com/
+1. Go to the [Google cloud console](https://console.cloud.google.com/)
 2. Create new project
 3. Navigate to Enable APIs and Services
 4. Enable the Gmail API
@@ -86,7 +87,7 @@ In order to use the more secure Gmail API method, some extra initial setup in go
 8. Click on the new service account, go to the "Keys" tab, and add a new key.
 9. Save the JSON key file
     ***Note: Do not give anyone access to this JSON file as it contains the private key to your service account!***
-10. Go to https://admin.google.com
+10. Go to [admin.google.com](https://admin.google.com)
 11. Select Security > Access and Data Control > API Controls
 12. Go to "Domain-Wide Delegation"
 13. Add new API Client
@@ -97,13 +98,13 @@ In order to use the more secure Gmail API method, some extra initial setup in go
 
 Available arguments for the Gmail API rake task that specify the email behavior are
 
-|key | description|
-|----|------------|
-| `credentials` | Gmail service account credentials file (JSON) |
-| `username` | Gmail email address |
-| `query` | Gmail search query (https://support.google.com/mail/answer/7190?hl=en) |
-| `read_on_failure` | Mark emails as read even on failure (default: true) |
-| `max_emails` | Max emails to process (default: 1000) |
+|key | description                                                             |
+|----|-------------------------------------------------------------------------|
+| `credentials` | Gmail service account credentials file (JSON)                           |
+| `username` | Gmail email address                                                     |
+| `query` | [Gmail search query](https://support.google.com/mail/answer/7190?hl=en) |
+| `read_on_failure` | Mark emails as read even on failure (default: true)                     |
+| `max_emails` | Max emails to process (default: 1000)                                   |
 
 ## Format of the emails
 

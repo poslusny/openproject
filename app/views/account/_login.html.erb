@@ -54,7 +54,6 @@ See COPYRIGHT and LICENSE files for more details.
           <% end %>
         </div>
       </div>
-
       <div class="form--field -required">
         <%= styled_label_tag "password-pulldown", User.human_attribute_name(:password) %>
         <div class="form--field-container">
@@ -73,7 +72,8 @@ See COPYRIGHT and LICENSE files for more details.
           <% end %>
         </div>
       </div>
-
+    </div>
+    <div class="grid-block">
       <div class="form--field">
         <label class="form--label" for="login-pulldown">
           &nbsp;
@@ -82,7 +82,6 @@ See COPYRIGHT and LICENSE files for more details.
                value="<%= t(:button_login) %>" class="button -primary button_no-margin" tabindex="1">
       </div>
     </div>
-
     <%= render partial: "account/auth_providers" %>
   <% end %>
 </div>

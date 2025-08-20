@@ -202,69 +202,6 @@ fa:
         edit_query: "Edit query"
         new_group: "New group"
         reset_to_defaults: "Reset to defaults"
-      enterprise:
-        text_reprieve_days_left: "%{days} days until end of grace period"
-        text_expired: "expired"
-        trial:
-          confirmation: "Confirmation of email address"
-          confirmation_info: >
-            We sent you an email on %{date} to %{email}. Please check your inbox and click the confirmation link provided to start your 14 days trial.
-          form:
-            general_consent: >
-              I agree with the <a target="_blank" href="%{link_terms}">terms of service</a> and the <a target="_blank" href="%{link_privacy}">privacy policy</a>.
-            invalid_email: "Invalid email address"
-            label_company: "Company"
-            label_first_name: "نام"
-            label_last_name: "نام خانوادگی"
-            label_domain: "Domain"
-            label_subscriber: "Subscriber"
-            label_maximum_users: "Maximum active users"
-            label_starts_at: "Starts at"
-            label_expires_at: "Expires at"
-            label_plan: "Plan"
-            label_additional_features: "Additional features"
-            receive_newsletter: I want to receive the OpenProject <a target="_blank" href="%{link}">newsletter</a>.
-            taken_domain: There can only be one active trial per domain.
-            domain_mismatch: The current request host name does not match the configured host name. Please double check your system settings.
-            taken_email: Each user can only create one trial.
-          email_not_received: "You did not receive an email? You can resend the email with the link on the right."
-          try_another_email: "Or try it with another email address."
-          next_steps: "Next steps"
-          resend_link: "Resend"
-          resend_success: "Email has been resent. Please check your emails and click the confirmation link provided."
-          resend_warning: "Could not resend email."
-          session_timeout: "Your session timed out. Please try to reload the page or resend email."
-          status_label: "Status:"
-          status_confirmed: "تایید شده"
-          status_waiting: "email sent - waiting for confirmation"
-          test_ee: "نسخه انترپرایز را به مدت 14 روز به صورت رایگان تست کنید."
-          quick_overview: "یک مرور سریع از مدیریت پروژه و همکاری تیمی با نسخه انترپرایز OpenProject را دریافت کنید."
-        upsale:
-          become_hero: "Become a hero!"
-          enterprise_info_html: "%{feature_title} is an Enterprise <span class='spot-icon spot-icon_inline spot-icon_enterprise-addons'></span> add-on."
-          upgrade_info: "Please upgrade to a paid plan to activate and start using it in your team."
-          benefits:
-            description: "مزایای OpenProject اینترپرایز حرفه ای در نسخه قابل نصب بر روی سرور مجازی یا اختصاصی خودتان چیست؟"
-            high_security: "Security features"
-            high_security_text: "ورود یکباره (Single Sign-On) (SAML، OpenID Connect، CAS)، گروه‌های LDAP"
-            installation: "Installation support"
-            installation_text: "Experienced software engineers guide you through the complete installation and setup process in your own infrastructure."
-            premium_features: "افزونه‌های نسخه حرفه ای"
-            premium_features_text: "Agile boards, custom theme and logo, graphs, intelligent workflows with custom actions, full text search for work package attachments and multi-select custom fields."
-            professional_support: "Professional support"
-            professional_support_text: "Get reliable, high-touch support from senior support engineers with expert knowledge about running OpenProject in business-critical environments."
-          button_start_trial: "Start free trial"
-          button_upgrade: "هم اکنون ارتقا داده شود"
-          button_contact_us: "جهت نسخه نمایشی با ما تماس بگیرید"
-          button_book_now: "Book now"
-          confidence: >
-            We deliver the confidence of a tested and supported enterprise-class project management software - with Open Source and an open mind.
-          link_quote: "Get a quote"
-          more_info: "اطلاعات بیشتر"
-          text: >
-            نسخه انترپرایز اوپن‌پروژه بر پایه نسخه جامعه سازگاری دارد. این نسخه شامل افزونه‌های انترپرایز و پشتیبانی حرفه‌ای است که به‌طور اصلی برای سازمان‌ها با بیش از 10 کاربر طراحی شده است و پروژه‌های حیاتی تجاری خود را با استفاده از اوپن‌پروژه مدیریت می‌کنند.
-          unlimited: "Unlimited"
-          you_contribute: "توسعه‌دهندگان هم نیاز به پرداخت قبوض دارند. با ارتقاء به نسخه انترپرایز، شما این تلاش جامعه متن باز را حمایت کرده و به توسعه، نگهداری و بهبود مداوم آن کمک خواهید کرد."
       working_days:
         calendar:
           empty_state_header: "Non-working days"
@@ -275,9 +212,9 @@ fa:
         change_button: "Save and reschedule"
         change_title: "Change working days"
         removed_title: "You will remove the following days from the non-working days list:"
-        change_description: "Changing which days of the week are considered working days or non-working days can affect the start and finish days of all work packages in all projects in this instance."
+        change_description: "Changing which days of the week are considered working days or non-working days can affect the start and finish days of all work packages and life cycles in all projects in this instance."
         warning: >
-          The changes might take some time to take effect. You will be notified when all relevant work packages have been updated.
+          The changes might take some time to take effect. You will be notified when all relevant work packages and project life cycles have been updated.
           Are you sure you want to continue?
       work_packages_settings:
         warning_progress_calculation_mode_change_from_status_to_field_html: >-
@@ -355,13 +292,13 @@ fa:
       blocks:
         new_features:
           text_new_features: "Read about new features and product updates."
-          learn_about: "Learn more about the new features"
+          learn_about: "Learn more about all new features"
           #Include the version to invalidate outdated translations in other locales.
-          #Otherwise, e.g. chinese might still have the translations for 10.0 in the 12.0 release.
-          "15_5":
+          #Otherwise, e.g. Chinese might still have the translations for 10.0 in the 12.0 release.
+          "16_3":
             standard:
               new_features_html: >
-                The release brings various features and improvements for you, e.g. <br> <ul class="%{list_styling_class}"> <li>Filter for descendants (children and grandchildren) of work packages.</li> <li>Benefit from advanced accessibility in the date picker.</li> <li>See % Complete included in work package table sums.</li> <li>Include a column for children in work package tables.</li> <li>Better use the date picker in mobile screens.</li> <li>PDF exports matching configured form layout.</li> </ul>
+                The release contains various new features and improvements, such as <br> <ul class="%{list_styling_class}"> <li>UX/UI improvements for a more modern look.</li> <li>Meetings: Option to mute email notifications and ICS.</li> <li>Ongoing timers shown in the My time tracking module.</li> <li>Progress reporting: % Complete sum also shown in Status-based mode.</li> <li>Nextcloud Health check: Indicate missing token exchange capability (Enterprise add-on).</li> </ul>
     ical_sharing_modal:
       title: "Subscribe to calendar"
       inital_setup_error_message: "An error occured while fetching data."
@@ -387,6 +324,7 @@ fa:
     label_added_time_by: 'Added by <a href="%{authorLink}">%{author}</a> at %{age}'
     label_ago: "days ago"
     label_all: "all"
+    label_all_projects: "All projects"
     label_all_uppercase: "همه"
     label_all_work_packages: "تمام بسته های کاری"
     label_and: "and"
@@ -434,7 +372,6 @@ fa:
     label_filename: "فایل"
     label_filesize: "اندازه‌"
     label_general: "General"
-    label_global_roles: "نقش‌های جهانی"
     label_greater_or_equal: ">="
     label_group: "گروه"
     label_group_by: "گروه‌بندی بر اساس"
@@ -463,6 +400,7 @@ fa:
     label_menu_collapse: "جمع کردن"
     label_menu_expand: "باز کردن"
     label_more_than_ago: "more than days ago"
+    label_moderate_comment: "Moderate comment"
     label_next: "Next"
     label_no_color: "No color"
     label_no_data: "No data to display"
@@ -496,7 +434,6 @@ fa:
     label_repository_plural: "Repositories"
     label_save_as: "ذخیره به عنوان"
     label_search_columns: "Search a column"
-    label_select_project: "Select a project"
     label_select_watcher: "یک ناظر را انتخاب کنید..."
     label_selected_filter_list: "فیلترهای انتخاب شده"
     label_show_attributes: "نمایش تمام خصیصه ها"
@@ -527,7 +464,7 @@ fa:
     label_value_derived_from_children: "(value derived from children)"
     label_children_derived_duration: "Work package's children derived duration"
     label_warning: "Warning"
-    label_work_package: "بسته کاری"
+    label_work_package: "کاربسته"
     label_work_package_parent: "Parent work package"
     label_work_package_plural: "بسته های کاری"
     label_watch: "نگاه کردن"
@@ -566,7 +503,7 @@ fa:
     label_version_plural: "نسخه ها"
     label_view_has_changed: "This view has unsaved changes. Click to save them."
     help_texts:
-      show_modal: "Show attribute help text entry"
+      show_modal: "Show help text"
     onboarding:
       buttons:
         skip: "صرفنظر"
@@ -631,9 +568,6 @@ fa:
         property_is: "is in %{difference_in_days}."
         property_was: "was %{difference_in_days} ago."
         property_is_deleted: "is deleted."
-        upsale:
-          title: "Date alerts"
-          description: "With date alerts, you will be notified of upcoming start or finish dates so that you never miss or forget an important deadline."
       center:
         label_actor_and: "and"
         and_more_users:
@@ -644,6 +578,7 @@ fa:
           with_current_filter: "There are no notifications in this view at the moment"
         mark_all_read: "Mark all as read"
         mark_as_read: "Mark as read"
+        mark_all_read_confirmation: "This will mark all notifications in this view as read. Are you sure you want to do this?"
         text_update_date_by: "%{date} by"
         total_count_warning: "Showing the %{newest_count} most recent notifications. %{more_count} more are not displayed."
         empty_state:
@@ -696,7 +631,6 @@ fa:
           date_alerts:
             title: "Date alerts"
             description: "اعلان‌های خودکار هنگام نزدیک شدن تاریخ‌های مهم برای پکیج‌های کاری باز که در آن‌ها شرکت دارید (به عنوان مسئول، متولی یا تماشاگر)."
-            teaser_text: "With date alerts, you will be notified of upcoming start or finish dates so that you never miss or forget an important deadline."
           overdue: When overdue
         project_specific:
           title: "Project-specific notification settings"
@@ -709,9 +643,12 @@ fa:
       title: "Confirm your password to continue"
     pagination:
       no_other_page: "You are on the only page."
+      pages_skipped: "Pages skipped."
+      page_navigation: "Pagination navigation"
+      per_page_navigation: 'Items per page selection'
       pages:
-        next: "Forward to the next page"
-        previous: "Back to the previous page"
+        page_number: Page %{number}
+        show_per_page: Show %{number} per page
     placeholders:
       default: "-"
       subject: "موضوع را اینجا وارد نمایید"
@@ -722,15 +659,10 @@ fa:
       autocompleter:
         label: "تکمیل خودکار پروژه"
       click_to_switch_to_project: "Project: %{projectname}"
-      confirm_template_load: "Switching the template will reload the page and you will lose all input to this form. Continue?"
       context: "زمینه پروژه"
-      copy:
-        copy_options: "Copy options"
       not_available: "Project N/A"
-      no_template_selected: "(None)"
       required_outside_context: >
         Please choose a project to create the work package in to see all attributes. You can only select projects which have the type above activated.
-      use_template: "Use template"
     reminders:
       settings:
         daily:
@@ -764,6 +696,8 @@ fa:
           first_day: "First day"
           last_day: "Last day"
     text_are_you_sure: "آیا مطمئن هستید؟"
+    text_are_you_sure_to_cancel: "You have unsaved changes on this page. Are you sure you want to discard them?"
+    breadcrumb: "Breadcrumb"
     text_data_lost: "All entered data will be lost."
     text_user_wrote: "%{value} wrote:"
     types:
@@ -836,9 +770,9 @@ fa:
       update_description: "Set or update description of this relation"
       toggle_description: "Toggle relation description"
       update_relation: "Click to change the relation type"
-      add_follower: "Add follower"
       show_relations: "Show relations"
       add_predecessor: "Add predecessor"
+      add_successor: "Add successor"
       remove: "Remove relation"
       save: "Save relation"
       abort: "انصراف"
@@ -848,6 +782,7 @@ fa:
     autocompleter:
       placeholder: "Type to search"
       notFoundText: "موردی یافت نشد"
+      search: "Search"
       project:
         placeholder: "Select project"
     repositories:
@@ -868,7 +803,7 @@ fa:
     tl_toolbar:
       zooms: "سطح زوم"
       outlines: "سطح سلسله مراتب"
-    upsale:
+    upsell:
       ee_only: "Enterprise edition add-on"
     wiki_formatting:
       strong: "ضخیم"
@@ -893,10 +828,10 @@ fa:
         mixed: "Mixed"
     work_packages:
       bulk_actions:
-        move: "Bulk change of project"
         edit: "Bulk edit"
-        copy: "Bulk copy"
         delete: "Bulk delete"
+        duplicate: "Bulk duplicate"
+        move: "Bulk change of project"
       button_clear: "پاکسازی"
       comment_added: "The comment was successfully added."
       comment_send_failed: "An error has occurred. Could not submit the comment."
@@ -940,8 +875,8 @@ fa:
         header_no_type: "New work package (Type not yet set)"
         header_with_parent: "New %{type} (Child of %{parent_type} #%{id})"
         button: "ایجاد"
-      copy:
-        title: "Copy work package"
+      duplicate:
+        title: "Duplicate work package"
       hierarchy:
         show: "Show hierarchy mode"
         hide: "Hide hierarchy mode"
@@ -1038,17 +973,21 @@ fa:
       reminders:
         button_label: "Set reminder"
         title:
-          new: "Set reminder"
+          new: "Set a reminder"
           edit: "Edit reminder"
         subtitle: "You will receive a notification for this work package at the chosen time."
+        presets:
+          tomorrow: "Tomorrow"
+          three_days: "In 3 days"
+          week: "In a week"
+          month: "In a month"
+          custom: "At a particular date/time"
       scheduling:
         is_parent: "The dates of this work package are automatically deduced from its children. Activate 'Manual scheduling' to set the dates."
         is_switched_from_manual_to_automatic: "The dates of this work package may need to be recalculated after switching from manual to automatic scheduling due to relationships with other work packages."
       sharing:
         title: "Share work package"
         show_all_users: "Show all users with whom the work package has been shared with"
-        upsale:
-          description: "Share work packages with users who are not members of the project."
       table:
         configure_button: "Configure work package table"
         summary: "Table with rows of work package and columns of work package attributes."
@@ -1083,10 +1022,6 @@ fa:
           manually: "Manually"
           warning: "You will lose your previous sorting when activating the automatic sorting mode."
         columns_help_text: "Use the input field above to add columns to your table view. You can drag and drop the columns to reorder them."
-        upsale:
-          attribute_highlighting: "Need certain work packages to stand out from the mass?"
-          relation_columns: "آیا نیاز به مشاهده روابط در بسته کاری را دارید؟"
-          check_out_link: "نسخه سازمانی را بررسی کنید."
         relation_filters:
           filter_work_packages_by_relation_type: "Filter work packages by relation type"
       tabs:
@@ -1117,7 +1052,7 @@ fa:
         page_settings: "Rename view"
         delete: "حذف"
       filter: "فیلتر"
-      unselected_title: "بسته کاری"
+      unselected_title: "کاربسته"
       search_query_label: "Search saved views"
     modals:
       label_name: "نام"
@@ -1156,7 +1091,7 @@ fa:
       button_save_all: "ذخیره"
       button_cancel_all: "لغو"
       link_formatting_help: "Text formatting help"
-      btn_preview_enable: "پيش نمايش"
+      btn_preview_enable: "پیش‌نمایش"
       btn_preview_disable: "غیر فعال کردن پیش نمایش"
       null_value_label: "No value"
       clear_value_label: "-"
@@ -1197,7 +1132,6 @@ fa:
       current_project_and_all_descendants: "In this project + subprojects"
       current_project: "In this project"
       recently_viewed: "Recently viewed"
-      search: "Search"
       title:
         all_projects: "all projects"
         project_and_subprojects: "and all subprojects"
@@ -1300,9 +1234,7 @@ fa:
       clear: "پاکسازی"
       apply: "درخواست"
       header_description: "Highlight changes made to this list since any point in the past."
-      enterprise_header_description: "Highlight changes made to this list since any point in the past with Enterprise edition."
       show_changes_since: "Show changes since"
-      baseline_comparison: "Baseline comparison"
       help_description: "Reference time zone for the baseline."
       time_description: "In your local time: %{datetime}"
       time: "زمان"

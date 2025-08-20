@@ -33,13 +33,13 @@ lt:
           label: Kurti MR
           description: Kurti suliejimo prašymą
         copy_menu:
-          label: Git gabaliukai
-          description: Kopijuoti git gabaliukus į iškarpinę
+          label: Git fragmentai
+          description: Kopijuoti git fragmentus į iškarpinę
         git_actions:
           branch_name: Šakos pavadinimas
-          commit_message: Pakeitimo pranešimas
-          cmd: Kurti šaką su tuščiu pakeitimu
-          title: Greiti Git gabaliukai
+          commit_message: Commit pranešimas
+          cmd: Sukurti šaką su tuščiu commit pranešimu
+          title: Greiti Git fragmentai
           copy_success: '✅ Nukopijuota!'
           copy_error: '❌ Kopijavimas nepavyko!'
       tab_issue:

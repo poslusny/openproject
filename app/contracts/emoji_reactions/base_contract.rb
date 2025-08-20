@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -63,9 +65,9 @@ module EmojiReactions
     def manage_emoji_reactions?
       case model.reactable
       when WorkPackage
-        user.allowed_in_work_package?(:add_work_package_notes, model.reactable)
+        user.allowed_in_work_package?(:add_work_package_comments, model.reactable)
       when Journal
-        user.allowed_in_work_package?(:add_work_package_notes, model.reactable.journable)
+        user.allowed_in_work_package?(:add_work_package_comments, model.reactable.journable)
       else
         false
       end

@@ -12,6 +12,7 @@ import { Observable } from 'rxjs';
       <op-icon icon-classes="button--icon icon-show-more"></op-icon>
     </button>
   `,
+  standalone: false,
 })
 export class BoardsMenuButtonComponent {
   @Input() board$:Observable<Board>;

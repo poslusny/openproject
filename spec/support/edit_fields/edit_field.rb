@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class EditField
   include Capybara::DSL
   include Capybara::RSpecMatchers
@@ -26,7 +28,6 @@ class EditField
                  property_name,
                  selector: nil,
                  create_form: false)
-
     @property_name = property_name.to_s
     @context = context
     @field_type = derive_field_type
@@ -109,7 +110,7 @@ class EditField
     retry_block(args: { tries: 2 }) do
       unless active?
         SeleniumHubWaiter.wait unless using_cuprite?
-        scroll_to_and_click(display_trigger_element)
+        scroll_to_and_click(display_trigger_element, block: :nearest)
         SeleniumHubWaiter.wait unless using_cuprite?
       end
 
@@ -189,7 +190,7 @@ class EditField
   # Set or select the given value.
   # For fields of type select, will check for an option with that value.
   def set_value(content)
-    scroll_to_element(input_element)
+    scroll_to_element(input_element, block: :nearest)
     if autocompleter_field?
       autocomplete(content)
     elsif using_cuprite?
@@ -308,7 +309,7 @@ class EditField
       "version-autocompleter"
     when :assignee, :responsible, :user
       "op-user-autocompleter"
-    when :priority, :status, :type, :category, :workPackage, :parent
+    when :priority, :status, :type, :category, :workPackage, :parent, :projectPhase
       "create-autocompleter"
     when :project
       "op-project-autocompleter"

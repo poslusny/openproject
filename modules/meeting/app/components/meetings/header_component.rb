@@ -73,9 +73,15 @@ module Meetings
         @series.scheduled_meetings.none?
     end
 
+    def send_emails?
+      !@meeting.closed? &&
+        @meeting.notify? &&
+        User.current.allowed_in_project?(:send_meeting_invites_and_outcomes, @meeting.project)
+    end
+
     def breadcrumb_items
       [
-        parent_element,
+        ({ href: project_overview_path(@project.id), text: @project.name } if @project.present?),
         { href: @project.present? ? project_meetings_path(@project.id) : meetings_path,
           text: I18n.t(:label_meeting_plural) },
         meeting_series_element,
@@ -96,14 +102,6 @@ module Meetings
     def meeting_series_element
       if @series.present?
         { href: project_recurring_meeting_path(@series.project, @series), text: @series.title }
-      end
-    end
-
-    def parent_element
-      if @project.present?
-        { href: project_overview_path(@project.id), text: @project.name }
-      else
-        { href: home_path, text: helpers.organization_name }
       end
     end
 

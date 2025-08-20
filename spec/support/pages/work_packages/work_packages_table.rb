@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -32,6 +34,7 @@ require_relative "concerns/work_package_by_button_creator"
 module Pages
   class WorkPackagesTable < Page
     include ::Pages::WorkPackages::Concerns::WorkPackageByButtonCreator
+    include ::Components::Autocompleter::NgSelectAutocompleteHelpers
 
     attr_reader :project
 
@@ -83,6 +86,16 @@ module Pages
           expect(page).to have_css(
             ".wp-row-#{work_package.id} td.#{column}", text: value.to_s, wait: 20
           )
+        end
+      end
+    end
+
+    # Expects a collection of groups and the count of their grouped items in the table.
+    # @param group_hash [Hash] Group names mapped to the count of their items, e.g. "first group" => 3
+    def expect_groups(group_hash)
+      within(table_container) do
+        group_hash.each do |group_name, count|
+          expect(page).to have_test_selector("op-group--value", text: "#{group_name} (#{count})")
         end
       end
     end
@@ -357,6 +370,11 @@ module Pages
 
     def progress_popover(work_package)
       Components::WorkPackages::ProgressPopover.new(container: work_package_container(work_package))
+    end
+
+    def expect_no_column_add_option(column_name)
+      completer = find(".wp-table--configuration-modal .op-draggable-autocomplete--input")
+      expect_no_ng_option(completer, column_name, results_selector: "body")
     end
 
     protected

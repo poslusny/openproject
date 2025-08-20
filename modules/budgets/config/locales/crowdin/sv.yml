@@ -43,7 +43,7 @@ sv:
       material_budget_item: "Enhet"
   activity:
     filter:
-      budget: "Budget"
+      budget: "Budgetar"
   attributes:
     budget: "Budget"
   button_add_budget_item: "Lägg till planerade kostnader"
@@ -54,7 +54,7 @@ sv:
   caption_labor: "Arbetskraft"
   caption_labor_costs: "Faktiska arbetskraftskostnader"
   caption_material_costs: "Faktiska enhetskostnader"
-  budgets_title: "Budgetar"
+  budgets_title: "Budget"
   events:
     budget: "Budget redigerad"
   help_click_to_edit: "Klicka här för att redigera."
@@ -62,7 +62,7 @@ sv:
   help_override_rate: "Ange ett värde här om du vill åsidosätta standardtimpriset."
   label_budget: "Budget"
   label_budget_new: "Ny budget"
-  label_budget_plural: "Budgetar"
+  label_budget_plural: "Budget"
   label_budget_id: "Budget #%{id}"
   label_deliverable: "Budget"
   label_example_placeholder: 't.ex., %{decimal}'
@@ -72,7 +72,7 @@ sv:
   notice_no_budgets_available: "Inga budgetar tillgängliga."
   permission_edit_budgets: "Redigera budgetar"
   permission_view_budgets: "Visa budgetar"
-  project_module_budgets: "Budgetar"
+  project_module_budgets: "Budget"
   text_budget_reassign_to: "Omfördela dessa till denna budget:"
   text_budget_delete: "Ta bort budgeten från alla arbetspaket"
   text_budget_destroy_assigned_wp: "Det finns %{count} arbetspaket tilldelade till denna budget. Vad vill du göra?"

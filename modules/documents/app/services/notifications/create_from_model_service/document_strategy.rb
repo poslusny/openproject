@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -31,7 +33,7 @@ module Notifications::CreateFromModelService::DocumentStrategy
     %i(subscribed)
   end
 
-  def self.permission
+  def self.permission(*)
     :view_documents
   end
 

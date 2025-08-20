@@ -45,6 +45,7 @@ import { OpContextMenuItem } from 'core-app/shared/components/op-context-menu/op
 
 @Directive({
   selector: '[opBcfViewDropdown]',
+  standalone: false,
 })
 export class BcfViewToggleDropdownDirective extends OpContextMenuTrigger {
   constructor(readonly elementRef:ElementRef,

@@ -3,6 +3,7 @@ ms:
   js:
     team_planner:
       add_existing: 'Tambah sedia ada'
+      label_team_planner_plural: 'Team planners'
       add_existing_title: 'Tambah pakej kerja sedia ada'
       create_label: 'Perancang pasukan'
       create_title: 'Cipta perancang pasukan baharu'
@@ -14,7 +15,7 @@ ms:
       one_week: '1-minggu'
       four_weeks: '4-minggu'
       eight_weeks: '8-minggu'
-      work_week: 'Minggu kerja'
+      work_week: 'Minggu bekerja'
       today: 'Hari ini'
       drag_here_to_remove: 'Tarik ke sini untuk keluarkan penerima tugasan dan tarikh mula dan tamat. '
       cannot_drag_here: 'Tidak boleh memadam pakej kerja oleh kerana batasan kebenaran atau pengeditan.'

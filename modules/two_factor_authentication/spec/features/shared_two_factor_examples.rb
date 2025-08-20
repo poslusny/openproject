@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module SharedTwoFactorExamples
   def first_login_step
     visit signin_path
@@ -19,7 +21,7 @@ module SharedTwoFactorExamples
   def two_factor_step(token)
     expect(page).to have_css("input#otp")
     fill_in "otp", with: token
-    click_button I18n.t(:button_login)
+    click_button I18n.t(:button_login), type: "submit"
     wait_for_network_idle
   end
 

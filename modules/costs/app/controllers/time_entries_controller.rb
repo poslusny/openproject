@@ -30,7 +30,6 @@
 
 class TimeEntriesController < ApplicationController
   include OpTurbo::ComponentStream
-  include OpTurbo::DialogStreamHelper
   include Redmine::I18n
 
   before_action :require_login
@@ -46,10 +45,10 @@ class TimeEntriesController < ApplicationController
 
   def dialog
     @show_work_package = params[:work_package_id].blank?
-    @show_user = show_user_input_in_dialog
+    @show_user = show_user_input_in_dialog?
     @limit_to_project_id = @project&.id
 
-    @time_entry.spent_on ||= params[:date].presence || Time.zone.today
+    prefill_time_entry_from_params
   end
 
   def user_tz_caption
@@ -89,47 +88,96 @@ class TimeEntriesController < ApplicationController
 
     @time_entry = call.result
 
-    unless call.success?
+    if call.success?
+      close_dialog_via_turbo_stream("#time-entry-dialog", additional: { spent_on: @time_entry.spent_on })
+    else
       form_component = TimeEntries::TimeEntryFormComponent.new(time_entry: @time_entry, **form_config_options)
       update_via_turbo_stream(component: form_component, status: :bad_request)
 
-      respond_with_turbo_streams
     end
+    respond_with_turbo_streams
   end
 
-  def update
+  def update # rubocop:disable Metrics/AbcSize
     call = TimeEntries::UpdateService
       .new(user: current_user, model: @time_entry)
       .call(permitted_params.time_entries)
 
     @time_entry = call.result
 
-    unless call.success?
+    if call.success?
+      if request_from_dialog?
+        close_dialog_via_turbo_stream("#time-entry-dialog", additional: { spent_on: @time_entry.spent_on })
+      else
+        reload_page_via_turbo_stream
+      end
+    elsif call.failure? && request_from_dialog?
       form_component = TimeEntries::TimeEntryFormComponent.new(time_entry: @time_entry, **form_config_options)
       update_via_turbo_stream(component: form_component, status: :bad_request)
-
-      respond_with_turbo_streams
+    else
+      render_error_flash_message_via_turbo_stream(message: t("notice_time_entry_update_failed",
+                                                             errors: call.errors.full_messages.join(", ")))
     end
+
+    respond_with_turbo_streams(status: call.success? ? :ok : :bad_request)
   end
 
-  def destroy
+  def destroy # rubocop:disable Metrics/AbcSize
     call = TimeEntries::DeleteService.new(user: current_user, model: @time_entry).call
 
     @time_entry = call.result
 
-    if call.success?
-      close_dialog_via_turbo_stream("#time-entry-dialog")
+    if request_from_dialog?
+      if call.success?
+        close_dialog_via_turbo_stream("#time-entry-dialog")
+      else
+        form_component = TimeEntries::TimeEntryFormComponent.new(time_entry: @time_entry, **form_config_options)
+        update_via_turbo_stream(component: form_component, status: :bad_request)
+      end
+    elsif call.success?
+      reload_page_via_turbo_stream
     else
-      form_component = TimeEntries::TimeEntryFormComponent.new(time_entry: @time_entry, **form_config_options)
-      update_via_turbo_stream(component: form_component, status: :bad_request)
+      render_error_flash_message_via_turbo_stream(message: t("notice_time_entry_delete_failed",
+                                                             errors: call.errors.full_messages.join(", ")))
     end
 
-    respond_with_turbo_streams
+    respond_with_turbo_streams(status: call.success? ? :ok : :bad_request)
   end
 
   private
 
-  def show_user_input_in_dialog
+  def request_from_dialog?
+    !ActiveModel::Type::Boolean.new.cast(params[:no_dialog])
+  end
+
+  def prefill_time_entry_from_params # rubocop:disable Metrics/AbcSize, Metrics/PerceivedComplexity
+    # correct time calcuation needs a time zone
+    @time_entry.time_zone ||= User.current.time_zone.name
+
+    if params[:date].present?
+      @time_entry.spent_on = params[:date]
+    elsif params[:startTime].present? && params[:endTime].present?
+      parsed_start_time = DateTime.parse(params[:startTime]).in_time_zone(User.current.time_zone)
+      parsed_end_time = DateTime.parse(params[:endTime]).in_time_zone(User.current.time_zone)
+
+      @time_entry.spent_on = parsed_start_time.to_date
+
+      # FullCalendar sends the same time for start and end if the event is an "all-day event" or
+      # in our case "no speicific time"
+      if parsed_start_time != parsed_end_time
+        @time_entry.start_time = (parsed_start_time.hour * 60) + parsed_start_time.min
+        @time_entry.hours = ((parsed_end_time - parsed_start_time) / 1.hour).round(2)
+      end
+    else
+      @time_entry.spent_on ||= Time.zone.today
+    end
+
+    if params[:removeTime] == "true"
+      @time_entry.start_time = nil
+    end
+  end
+
+  def show_user_input_in_dialog?
     return false if params[:onlyMe] == "true"
 
     if @project
@@ -184,7 +232,7 @@ class TimeEntriesController < ApplicationController
                       entry
                     end
                   else
-                    TimeEntry.new(project: @project, work_package: @work_package, user: User.current)
+                    TimeEntry.new(project: @project, entity: @work_package, user: User.current)
                   end
   end
 end

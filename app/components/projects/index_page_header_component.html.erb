@@ -73,7 +73,7 @@
           anchor_align: :end
         },
         button_arguments: {
-          icon: "op-kebab-vertical",
+          icon: "kebab-horizontal",
           "aria-label": t(:label_more),
           data: { "test-selector": "project-more-dropdown-menu" }
         }
@@ -138,7 +138,7 @@
           tag: :a,
           label: t(:"queries.configure_view.heading"),
           href: configure_view_modal_project_queries_path(projects_query_params),
-          content_arguments: { data: { controller: "async-dialog" } }
+          content_arguments: { data: { controller: "async-dialog" }, rel: "nofollow" }
         ) do |item|
           item.with_leading_visual_icon(icon: :gear)
         end

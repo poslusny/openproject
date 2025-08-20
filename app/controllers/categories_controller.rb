@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -101,7 +103,5 @@ class CategoriesController < ApplicationController
 
   def find_project
     @project = Project.find(params[:project_id])
-  rescue ActiveRecord::RecordNotFound
-    render_404
   end
 end

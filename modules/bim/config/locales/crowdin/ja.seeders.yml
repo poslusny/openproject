@@ -47,7 +47,7 @@ ja:
           name: クラッシュ
       global_queries:
         item_0:
-          name: ''
+          name: '埋め込みテーブル: 子'
       type_configuration:
         item_0:
           form_configuration:
@@ -207,9 +207,9 @@ ja:
             item_0:
               subject: Project kick off construction project
               description: |-
-                The project kick off initializes the start of the project in your company. Everybody being part of this project should be invited to the kick off for a first briefing.
+                キックオフは、会社におけるプロジェクト開始の会議体です。このプロジェクトに参加する人全員をキックオフに招待し、最初のブリーフィングを行う。
 
-                The next step could be checking out the timetable and adjusting the appointments, by looking at the [Gantt chart]({{opSetting:base_url}}/projects/demo-construction-project/work_packages?query_props=%7B%22c%22%3A%5B%22id%22%2C%22subject%22%2C%22startDate%22%2C%22dueDate%22%5D%2C%22tv%22%3Atrue%2C%22tzl%22%3A%22weeks%22%2C%22hi%22%3Atrue%2C%22g%22%3A%22%22%2C%22t%22%3A%22startDate%3Aasc%22%2C%22f%22%3A%5B%7B%22n%22%3A%22status%22%2C%22o%22%3A%22o%22%2C%22v%22%3A%5B%5D%7D%5D%2C%22pa%22%3A1%2C%22pp%22%3A100%7D).
+                次のステップは、[ガントチャート]({{opSetting:base_url}}/projects/demo-construction-project/work_packages?query_props=%7B%22c%22%3A%5B%22id%22%2C%22subject%22%2C%22startDate%22%2C%22dueDate%22%5D%2C%22tv%22%3Atrue%2C%22tzl%22%3A%22weeks%22%2C%22hi%22%3Atrue%2C%22g%22%3A%22%22%2C%22t%22%3A%22startDate%3Aasc%22%2C%22f%22%3A%5B%7B%22n%22%3A%22status%22%2C%22o%22%3A%22o%22%2C%22v%22%3A%5B%5D%7D%5D%2C%22pa%22%3A1%2C%22pp%22%3A100%7D)。
             item_1:
               subject: Basic evaluation
               description: This type is hierarchically a parent of the types &quot;Clash&quot; and &quot;Request&quot;, thus represents a general note.
@@ -464,9 +464,9 @@ ja:
             item_0:
               subject: Project kick off creating BIM model
               description: |-
-                The project Kickoff initializes the start of the project in your company. The whole project team should be invited to the Kickoff for a first briefing.
+                キックオフは、会社におけるプロジェクト開始の会議体です。このプロジェクトに参加する人全員をキックオフに招待し、最初のブリーフィングを行う。
 
-                The next step could be to check out the timetable and adjusting the appointments, by looking at the [Gantt chart]({{opSetting:base_url}}/projects/demo-bim-project/work_packages?query_props=%7B%22c%22%3A%5B%22id%22%2C%22subject%22%2C%22startDate%22%2C%22dueDate%22%5D%2C%22tv%22%3Atrue%2C%22tzl%22%3A%22weeks%22%2C%22hi%22%3Atrue%2C%22g%22%3A%22%22%2C%22t%22%3A%22startDate%3Aasc%22%2C%22f%22%3A%5B%7B%22n%22%3A%22status%22%2C%22o%22%3A%22o%22%2C%22v%22%3A%5B%5D%7D%5D%2C%22pa%22%3A1%2C%22pp%22%3A100%7D).
+                次のステップは、[ガントチャート]({{opSetting:base_url}}/projects/demo-construction-project/work_packages?query_props=%7B%22c%22%3A%5B%22id%22%2C%22subject%22%2C%22startDate%22%2C%22dueDate%22%5D%2C%22tv%22%3Atrue%2C%22tzl%22%3A%22weeks%22%2C%22hi%22%3Atrue%2C%22g%22%3A%22%22%2C%22t%22%3A%22startDate%3Aasc%22%2C%22f%22%3A%5B%7B%22n%22%3A%22status%22%2C%22o%22%3A%22o%22%2C%22v%22%3A%5B%5D%7D%5D%2C%22pa%22%3A1%2C%22pp%22%3A100%7D)。
             item_1:
               subject: Project preparation
               description: This type is hierarchically a parent of the types &quot;Clash&quot; and &quot;Request&quot;, thus represents a general note.
@@ -474,19 +474,19 @@ ja:
                 item_0:
                   subject: Gathering the project specific data and information for the BIM model
                   description: |-
-                    ## Goal
+                    ## ゴール
 
-                    *   Identify the information strategy for the customer (e.g. by using plain language questions)
-                    *   If provided, analyze the customer information requirements for the BIM model
-                    *   Define an information delivery strategy according to the customers needs
+                    * 顧客の情報戦略を特定する（平易な質問を使用するなど）
+                    * 提供された場合、BIMモデルに対する顧客の情報要件を分析する
+                    * 顧客のニーズに応じた情報提供戦略を定義する
 
-                    ## Description
+                    ## 概要
 
-                    *   Analyzing the customers needs and goals for using the BIM methodology
-                    *   Results of this tasks should be:
-                    *   The requirements for the project
-                    *   A strategy for the delivery phase
-                    *   ...
+                    * BIM手法を使用するための顧客のニーズと目標を分析する
+                    * このタスクの結果は次のとおりである：
+                    * プロジェクトの要件
+                    * 納品段階の戦略
+                    * …
                 item_1:
                   subject: Creating the BIM execution plan
                   description: |-
@@ -544,15 +544,13 @@ ja:
                 item_0:
                   subject: Referencing external BIM models
                   description: |-
-                    # Goal
+                    # ゴール
+                    * 内部モデルを開発するために外部モデルを使用する
 
-                    *   Having a foundation for developing the internal model/ offering answers
-                    *   Using the external model to develop the internal model
+                    # 説明
 
-                    # Description
-
-                    *   The external model will be referenced in the BIM platform, thus used for modelling the internal model
-                    *   ...
+                    * 外部モデルはBIMプラットフォームで参照されるため、内部モデルのモデリングに使用される
+                    * …
                 item_1:
                   subject: Modelling the BIM model
                   description: |-
@@ -636,16 +634,14 @@ ja:
                 item_1:
                   subject: Construct the building
                   description: |-
-                    ## Goal
+                    ## ゴール
+                    * BCFファイルとBIMモデルを使用して、問題が文書化される
 
-                    *   New issues realized on construction site will be handled model based
-                    *   Issues will be documented by using the BCF files and the BIM model
+                    ## 説明
 
-                    ## Description
-
-                    *   New issues will be documented using BCF files as sticky notes for the model
-                    *   The BCF files will be used to assign, track and correct issues
-                    *   ...
+                    * BCFファイルをモデルの付箋として使用して、新しい問題が文書化される
+                    * BCFファイルを使用して、問題が割り当てられ、追跡され、修正される
+                    * …
                 item_2:
                   subject: Finish construction
             item_12:
@@ -682,7 +678,7 @@ ja:
             item_0: Category 1 (to be changed in Project settings)
           queries:
             item_0:
-              name: チケット
+              name: 課題
             item_1:
               name: Clashes
             item_2:

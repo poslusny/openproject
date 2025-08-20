@@ -81,7 +81,7 @@ See COPYRIGHT and LICENSE files for more details.
           <%= placeholder_cell("12px", vertical: true) %>
         </tr>
 
-        <% if storage.provider_type == ::Storages::Storage::PROVIDER_TYPE_NEXTCLOUD && state == :unhealthy %>
+        <% if storage.provider_type == ::Storages::NextcloudStorage.name && state == :unhealthy %>
           <tr id="troubleshooting">
             <%= placeholder_cell("12px", vertical: true) %>
 

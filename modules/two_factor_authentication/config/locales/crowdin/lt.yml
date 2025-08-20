@@ -82,7 +82,7 @@ lt:
       text_2fa_enabled: "Kiekvieną kartą prisijungiant, naudotojo bus paprašoma įvesti OTB žetoną iš jo numatytojo 2FA įrenginio."
       text_2fa_disabled: "Naudotojas nenustatė savo 2FA įrenginio savo „Mano paskyros puslapyje“"
       only_sms_allowed: "Kitiems naudotojams galima nustatyti tik SMS pristatymą."
-    upsale:
+    upsell:
       title: "Dviejų veiksnių autentifikavimas"
       description: "Sustiprinkite savo OpenProject sistemos saugumą pasiūlydami (ar reikalaudami) dviejų faktorių autentifikacijos visiems projekto nariams."
     backup_codes:
@@ -123,7 +123,7 @@ lt:
       2fa_from_webauthn: Prašome pateikti WebAuthn rrenginį <strong>%{device_name}</strong>. Jei tai USB įrenginys, įsitikinkite, kad jis įjungtas ir jį palieskite. Tada paspauskite prisijungimo mygtuką.
       webauthn:
         title: "WebAuthn"
-        description: Register a FIDO2 device (like YubiKey) or the secure encalve of your mobile device.
+        description: Register a FIDO2 device (like YubiKey) or the secure enclave of your mobile device.
         further_steps: Pasirinkę pavadinimą galite spausti mygtką Tęsti. Jūsų naršyklė paprašys pateikti jūsų WebAuthn įrenginį. Tai padarius, įrenginio registravimas bus baigtas.
       totp:
         title: "App-based authenticator"

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -60,11 +62,5 @@ class HomescreenController < ApplicationController
       # try to redirect to the requested menu item
       redirect_to_global_menu_item(params[:jump]) && return
     end
-  end
-
-  def default_breadcrumb; end
-
-  def show_local_breadcrumb
-    false
   end
 end

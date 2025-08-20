@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -134,7 +136,19 @@ RSpec.describe Attachments::FinishDirectUploadJob, "integration", type: :job do
     it_behaves_like "adding a journal to the attachment in the name of the attachment's author"
   end
 
-  context "with an incompatible attachment whitelist",
+  context "for an attachment that has been removed in the meantime" do
+    let!(:container) { create(:work_package) }
+
+    it "logs the error and resolves the job as done" do
+      allow(OpenProject.logger).to receive(:error)
+
+      job.perform(pending_attachment.id + 1)
+
+      expect(OpenProject.logger).to have_received(:error)
+    end
+  end
+
+  context "with an incompatible attachment allowlist",
           with_settings: { attachment_whitelist: %w[image/png] } do
     let!(:container) { create(:work_package) }
     let!(:container_timestamp) { container.updated_at }
@@ -154,9 +168,9 @@ RSpec.describe Attachments::FinishDirectUploadJob, "integration", type: :job do
       expect { pending_attachment.reload }.to raise_error(ActiveRecord::RecordNotFound)
     end
 
-    context "when the job is getting a whitelist override" do
+    context "when the job is getting a allowlist override" do
       it "Does save the attachment" do
-        job.perform(pending_attachment.id, whitelist: false)
+        job.perform(pending_attachment.id, allowlist: false)
 
         container.reload
 

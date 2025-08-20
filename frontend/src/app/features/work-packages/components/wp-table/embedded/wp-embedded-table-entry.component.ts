@@ -17,6 +17,7 @@ export const wpTableEntrySelector = 'wp-embedded-table-entry';
                          [configuration]="configuration">
       </wp-embedded-table>
   `,
+  standalone: false,
 })
 export class WorkPackageEmbeddedTableEntryComponent {
   @Input() public queryProps:unknown;

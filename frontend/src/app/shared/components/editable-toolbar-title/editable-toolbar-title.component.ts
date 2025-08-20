@@ -49,6 +49,7 @@ export const selectableTitleIdentifier = 'editable-toolbar-title';
   selector: 'editable-toolbar-title',
   templateUrl: './editable-toolbar-title.html',
   styleUrls: ['./editable-toolbar-title.sass'],
+  standalone: false,
 })
 export class EditableToolbarTitleComponent implements OnInit, OnChanges {
   @Input('title') public inputTitle:string;

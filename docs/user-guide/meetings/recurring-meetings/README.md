@@ -24,7 +24,7 @@ Recurring meetings are helpful to schedule and organize meetings that happen reg
 
 ## Create and edit recurring meetings
 
-You can either create a recurring meeting from within a project or from the global **Meetings** module. For steps on creating a classic meetings please consult [this page](../classic-meetings). For steps on setting up one-time meetings please consult [this page](../one-time-meetings).
+You can either create a recurring meeting from within a project or from the global **Meetings** module. For steps on setting up one-time meetings please consult [this page](../one-time-meetings).
 
 To create a new recurring meeting, click the green **+ Meeting** button in the upper right corner and select **Recurring**. 
 
@@ -53,14 +53,21 @@ Enter your meeting's title, location, start and end date and time, duration, fre
 - Daily, Interval = 2 → The meeting occurs every two days.
 - Weekly, Interval = 4 → The meeting occurs every four weeks.
 
->  [!TIP]
->  For **working day-based recurrence**, the **Interval field is hidden** and always set to 1, meaning the meeting occurs on every working day without customization.
+> [!TIP]
+> For **working day-based recurrence**, the **Interval field is hidden** and always set to 1, meaning the meeting occurs on every working day without customization.
 
 **Meeting series ends** field is a select dropdown field that defines when a recurring meeting series should come to an end. The following options are possible:
 
 - **Never** - the meeting series runs indefinitely
 - **After a specific date** – lets you specify an **end date** (the meeting might end before or on this date, depending on the original start date and frequency)
 - **After a number of occurrences** – lets you specify the number of individual **occurrences** after which the series will end
+
+**Send email calendar updates** checkbox determines whether email calendar updates are enabled for the meeting series.  If activated, all participants will receive updated calendar invites informing them of the changes to this template or to individual occurrences of the meeting series. If deactivated, no notifications will be sent per email.
+
+> [!TIP] 
+> This checkbox is enabled by default.
+>
+> You can activate or deactivate it at any point in the future by editing the template for the recurring meetings series.
 
 Click the **Create meeting series** button to save your changes. This will create the recurring meeting series and redirect you to the meeting template page. 
 
@@ -76,18 +83,17 @@ You can always adjust the template at a later date by selecting the meeting seri
 
 ![Edit template button for recurring meetings in OpenProject](openproject_userguide_meetings_recurring_meeting_edit_template_button.png)
 
-
-
 ## Edit recurring meetings
+
 ### Edit recurring meeting series
 
 The left side menu displays all existing meeting series. Click on one will open the index page for this particular series, displaying all meeting occurrences planned for this series, and are grouped into:
 
--  **Open**: lists all meetings within the series that have been opened and can be edited. All open meetings will also be displayed under *My Meetings* section. 
+- **Open**: lists all meetings within the series that have been opened and can be edited. All open meetings will also be displayed under *My Meetings* section. 
 - **Planned**: lists all meetings within the selected meeting series that are scheduled, but not yet open.  Every time a planned meeting starts, the next one will open automatically. You can also open any of the planned  meetings manually to import the template and start editing the agenda.
 
->  [!TIP]
->  Once a meeting is open, changes to the template do not affect it. 
+> [!TIP]
+> Once a meeting is open, changes to the template do not affect it. 
 
 To edit the meeting series, select the **More** (three dots) icon on the far right side of the meeting series name and select *Edit meeting series*.
 
@@ -125,3 +131,32 @@ In addition to all the options available for [editing one-time meetings](../one-
 To do that click the **More** (three dots) icon next to an agenda item and select **Move to next meeting**.
 
 ![Move an agenda item to next meeting in OpenProject recurring meetings](openproject_userguide_meetings_recurring_meeting_move_agenda_item_to_next_meeting.png)
+
+## Meeting backlogs for recurring meetings
+
+### Series backlogs
+
+A **series backlog** is a special pre-existing section below the actual agenda items of that occurrence where additional agenda items maybe be listed for consideration. These items may then be added to a particular occurrence by the meeting organizer either before or during a meeting. 
+
+The backlog can be collapsed or expanded by clicking on the the title. Agenda backlog for recurring meetings will be visible for all meetings in the series. 
+
+> [!TIP]
+> By default, the backlog is expanded when the meeting status is *open*, collapsed if the meeting status is *in progress*, and hidden if the meeting is *closed*.
+
+![Agenda backlog section title collapsed, in OpenProject recurring meetings](openproject_userguide_meetings_series_backlog_title.png)
+
+#### Add and edit items to series backlogs
+
+You can add agenda items and link work packages in the same way as you would within the meeting agenda: either by dragging and dropping via the handle on the left or by using the dropdown options of the More (three dots) icon on the right.
+
+![Agenda backlog in recurring meetings in OpenProject](openproject_userguide_meetings_series_backlog.png)
+
+That same *More* menu also allows editing, reordering, adding notes or deleting an item in the series backlog. 
+
+![Move agenda items from the series backlog to the agenda in OpenProject Meetings](openproject_userguide_meetings_move_series_backlog_items.png)
+
+#### Clear agenda backlogs
+
+You can either remove single items from a series backlog or clear an entire backlog by clicking the *Clear backlog* option under More (three dots) menu next to the backlog name. Use this option with caution, as the action cannot be undone.
+
+![An option to clear a series backlog in OpenProject recurring meetings](openproject_userguide_meetings_clear_series_backlog.png)

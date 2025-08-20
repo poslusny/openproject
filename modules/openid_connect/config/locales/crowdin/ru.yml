@@ -6,14 +6,18 @@ ru:
     Вы вышли из системы. Содержимое любой формы, которую вы можете отправить, может быть потеряно. Пожалуйста [войдите в систему].
   activerecord:
     attributes:
+      openid_connect/group_link:
+        oidc_group_name: Идентификатор группы OpenID
       openid_connect/provider:
         name: Имя
         slug: Уникальный идентификатор
         display_name: Отображаемое имя
-        client_id: ID клиента
+        client_id: Идентификатор клиента
         client_secret: Закрытый ключ клиента
+        groups_claim: Groups claim
         secret: Закрытый ключ
         scope: Масштаб
+        sync_groups: Синхронизировать группы
         grant_types_supported: Поддерживаемые типы разрешений
         limit_self_registration: Ограничение самостоятельной регистрации
         authorization_endpoint: Конечная точка авторизации
@@ -28,7 +32,7 @@ ru:
         icon: Пользовательская иконка
         claims: Претензии
         acr_values: Значения ACR
-        redirect_url: URL перенаправления
+        redirect_url: URL переадресации
     errors:
       models:
         openid_connect/provider:
@@ -52,15 +56,20 @@ ru:
   openid_connect:
     menu_title: Провайдеры OpenID
     delete_title: "Удалить провайдера OpenID Connect"
+    group_links_heading: OpenID Connect group links
     instructions:
       redirect_url: Это URL, который провайдер OpenID Connect должен использовать для перенаправления обратно на OpenProject после успешного входа в систему.
       endpoint_url: URL-адрес конечной точки, указанный поставщиком OpenID Connect
+      group_regexes: По одному регулярному выражению на строку. Пожалуйста, прочитайте [документацию](docs_url) для получения дополнительной информации о том, как это сделать.
+      group_regexes_detail: Определите шаблоны с помощью регулярных выражений, чтобы сопоставить имена групп. Например, шаблон <code>^Level1/Level2/([\w/]+)$</code> извлечет группу "Groupname/SubGroup" из ответа, включающего "Level1/Level2/GroupName/SubGroup".
+      group_sync: Автоматически извлекать и синхронизировать информацию о членстве в группах от поставщика идентификационных данных.
+      groups_claim: Specify the name of the claim that's expected to indicate the group names that the user is a member of.
       metadata_none: У меня нет этой информации
       metadata_url: У меня есть URL конечной точки обнаружения
       client_id: Это идентификатор клиента, присвоенный вам провайдером OpenID Connect
       client_secret: Это ключ клиента, предоставленный вам провайдером OpenID Connect
       limit_self_registration: Если эта опция включена, пользователи смогут регистрироваться у этого провайдера только в том случае, если конфигурация провайдера позволяет это делать.
-      display_name: Это имя провайдера. Оно будет отображаться как кнопка входа и в списке провайдеров.
+      display_name: Имя провайдера. Оно будет отображаться как кнопка входа и в списке провайдеров.
       tenant: 'Пожалуйста, замените владельца по умолчанию на своего собственного, если это применимо. См. <a href=" https://learn.microsoft.com/en-us/entra/identity-platform/v2-protocols-oidc#find-your-apps-openid-configuration-document-uri">это</a>.'
       scope: Если Вы хотите запросить пользовательские области видимости, Вы можете добавить здесь одно или несколько значений диапазона, разделенных пробелами. Более подробную информацию Вы найдете в [документации OpenID Connect](docs_url).
       post_logout_redirect_uri: URL-адрес, на который провайдер OpenID Connect должен перенаправить Вас после запроса на выход из системы.
@@ -91,12 +100,15 @@ ru:
         name: Microsoft Entra
       custom:
         name: Пользовательский
-      upsale:
+      upsell:
+        title: "Технология единого входа (SSO) с использованием OpenID connect"
         description: Подключить OpenProject к провайдеру идентификации OpenID connect
       label_add_new: Добавить нового провайдера OpenID
       label_edit: Редактировать провайдера OpenID %{name}
       label_empty_title: Провайдеры OpenID еще не настроены.
-      label_empty_description: Добавьте провайдера, чтобы увидеть его здесь.
+      label_empty_description: Добавьте провайдера, чтобы увидеть их здесь.
+      label_group_mapping: Сопоставление групп
+      label_group_regexes: Шаблон (регулярное выражение)
       label_metadata: Конечная точка обнаружения OpenID Connect
       label_automatic_configuration: Автоматическая настройка
       label_optional_configuration: Необязательные настройки
@@ -109,6 +121,7 @@ ru:
       plural: Провайдеры OpenID
       singular: Провайдер OpenID
       section_texts:
+        group_mapping: Map group names provided by the identity provider to groups in OpenProject.
         metadata: Предварительно заполните конфигурацию, используя URL обнаружения OpenID Connect
         metadata_form_banner: Редактирование URL может перезаписать ранее заполненные значения метаданных.
         metadata_form_title: Конечная точка обнаружения OpenID Connect
@@ -118,6 +131,9 @@ ru:
         display_name: Отображаемое имя, видимое пользователям.
         attribute_mapping: Настройте сопоставление атрибутов между OpenProject и провайдером OpenID Connect.
         claims: Запросите дополнительные требования к ID-токену или ответу userinfo.
+      side_panel:
+        information_component:
+          backchannel_logout_url: Backchannel logout URL
     setting_instructions:
       limit_self_registration: >
-        Если включено, пользователи могут зарегистрироваться только с помощью данного провайдера, если это позволяет сама регистрация.
+        Если эта опция включена, пользователи могут регистрироваться с помощью этого провайдера только в том случае, если настройка саморегистрации позволяет это сделать.

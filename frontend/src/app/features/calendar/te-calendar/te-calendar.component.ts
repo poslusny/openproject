@@ -14,8 +14,7 @@ import {
 } from '@angular/core';
 import { FullCalendarComponent } from '@fullcalendar/angular';
 import { States } from 'core-app/core/states/states.service';
-import * as moment from 'moment';
-import { Moment } from 'moment';
+import moment, { Moment } from 'moment';
 import { StateService } from '@uirouter/core';
 import { I18nService } from 'core-app/core/i18n/i18n.service';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -59,7 +58,7 @@ import { PathHelperService } from 'core-app/core/path-helper/path-helper.service
 
 interface TimeEntrySchema extends SchemaResource {
   activity:IFieldSchema;
-  workPackage:IFieldSchema;
+  entity:IFieldSchema;
   project:IFieldSchema;
   hours:IFieldSchema;
   user:IFieldSchema;
@@ -110,6 +109,7 @@ const ADD_ENTRY_PROHIBITED_CLASS_NAME = '-prohibited';
     TurboRequestsService,
     PathHelperService,
   ],
+  standalone: false,
 })
 export class TimeEntryCalendarComponent implements AfterViewInit, OnDestroy {
   @ViewChild(FullCalendarComponent) ucCalendar:FullCalendarComponent;
@@ -608,16 +608,16 @@ export class TimeEntryCalendarComponent implements AfterViewInit, OnDestroy {
 
   private entryName(entry:TimeEntryResource):string {
     let { name } = entry.project;
-    if (entry.workPackage) {
-      name += ` - ${this.workPackageName(entry)}`;
+    if (entry.entity) {
+      name += ` - ${this.entityName(entry)}`;
     }
 
     return name || '-';
   }
 
-  private workPackageName(entry:TimeEntryResource):string {
-    const workPackage = entry.workPackage;
-    return `#${idFromLink(workPackage.href)}: ${workPackage.name}`;
+  private entityName(entry:TimeEntryResource):string {
+    const entity = entry.entity;
+    return `#${idFromLink(entity.href)}: ${entity.name}`;
   }
 
   private tooltipContentString(entry:TimeEntryResource, schema:TimeEntrySchema):string {
@@ -628,8 +628,8 @@ export class TimeEntryCalendarComponent implements AfterViewInit, OnDestroy {
             <span class="tooltip--map--value">${this.sanitizedValue(entry.project.name)}</span>
           </li>
           <li class="tooltip--map--item">
-            <span class="tooltip--map--key">${schema.workPackage.name}:</span>
-            <span class="tooltip--map--value">${entry.workPackage ? this.sanitizedValue(this.workPackageName(entry)) : this.i18n.t('js.placeholders.default')}</span>
+            <span class="tooltip--map--key">${schema.entity.name}:</span>
+            <span class="tooltip--map--value">${entry.entity ? this.sanitizedValue(this.entityName(entry)) : this.i18n.t('js.placeholders.default')}</span>
           </li>
           <li class="tooltip--map--item">
             <span class="tooltip--map--key">${schema.activity.name}:</span>

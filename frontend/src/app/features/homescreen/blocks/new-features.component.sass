@@ -1,3 +1,5 @@
+@import "helpers"
+
 .op-new-features
   &--teaser-image
       background-image: var(--new-feature-teaser-image)
@@ -5,3 +7,11 @@
       background-size: contain
       background-repeat: no-repeat
       background-position-x: right
+
+  @media (max-width: $breakpoint-md)
+    .widget-box--description
+      grid-template-columns: 1fr !important
+
+    .op-new-features--teaser-image
+      order: -1
+      justify-self: center

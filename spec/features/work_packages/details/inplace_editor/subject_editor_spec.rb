@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 require "features/page_objects/notification"
 require "features/work_packages/details/inplace_editor/shared_examples"

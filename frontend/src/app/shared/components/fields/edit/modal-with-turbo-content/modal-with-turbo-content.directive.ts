@@ -46,6 +46,7 @@ import { ResourceChangeset } from 'core-app/shared/components/fields/changeset/r
 
 @Directive({
   selector: '[opModalWithTurboContent]',
+  standalone: false,
 })
 export class ModalWithTurboContentDirective implements AfterViewInit, OnDestroy {
   @Input() resource:HalResource;

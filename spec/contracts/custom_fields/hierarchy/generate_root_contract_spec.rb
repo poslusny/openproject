@@ -30,12 +30,12 @@
 
 require "rails_helper"
 
-RSpec.describe CustomFields::Hierarchy::GenerateRootContract do
+RSpec.describe CustomFields::Hierarchy::GenerateRootContract, with_ee: [:custom_field_hierarchies] do
   subject { described_class.new }
 
   describe "#call" do
     context "when hierarchy_root is nil" do
-      let(:custom_field) { create(:custom_field, field_format: "hierarchy", hierarchy_root: nil) }
+      let(:custom_field) { create(:hierarchy_wp_custom_field, hierarchy_root: nil) }
 
       it "is valid" do
         result = subject.call(custom_field:)
@@ -45,7 +45,7 @@ RSpec.describe CustomFields::Hierarchy::GenerateRootContract do
 
     context "when hierarchy_root is not nil" do
       let(:hierarchy_root) { create(:hierarchy_item) }
-      let(:custom_field) { create(:custom_field, field_format: "hierarchy", hierarchy_root:) }
+      let(:custom_field) { create(:hierarchy_wp_custom_field, hierarchy_root:) }
 
       it "is invalid" do
         result = subject.call(custom_field:)
@@ -55,7 +55,7 @@ RSpec.describe CustomFields::Hierarchy::GenerateRootContract do
     end
 
     context "when inputs are valid" do
-      let(:custom_field) { create(:custom_field, field_format: "hierarchy", hierarchy_root: nil) }
+      let(:custom_field) { create(:hierarchy_wp_custom_field, hierarchy_root: nil) }
 
       it "creates a success result" do
         expect(subject.call(custom_field:)).to be_success

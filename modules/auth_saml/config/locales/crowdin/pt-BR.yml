@@ -4,9 +4,9 @@ pt-BR:
       saml/provider:
         display_name: Nome
         identifier: Identificador
-        secret: Secret
+        secret: Segredo
         scope: Escopo
-        assertion_consumer_service_url: URL do ACS (Assertion Consumer Service)
+        assertion_consumer_service_url: URL do ACS (Serviço de consumidor de afirmação)
         limit_self_registration: Restringir auto-registro
         sp_entity_id: ID da entidade do serviço
         metadata_url: URL de metadados do provedor de identidade
@@ -46,7 +46,7 @@ pt-BR:
       label_empty_description: "Adicione um provedor para vê-lo aqui."
       label_automatic_configuration: Configuração automática
       label_metadata: Metadados
-      label_metadata_endpoint: Ponto de extremidade de metadados do OpenProject
+      label_metadata_endpoint: Endpoint de metadados do OpenProject
       label_openproject_information: Informações sobre o OpenProject
       label_configuration_details: "Terminais e certificados do provedor de identidade"
       label_configuration_encryption: "Assinaturas e criptografia"
@@ -64,7 +64,8 @@ pt-BR:
         Os seguintes campos controlam quais atributos fornecidos pelo provedor de identidade SAML são usados para fornecer atributos de usuário no OpenProject
       metadata:
         dialog: "Este é o URL onde os metadados SAML do OpenProject estão disponíveis. Use-o opcionalmente para configurar seu provedor de identidade:"
-      upsale:
+      upsell:
+        title: "Autenticação única (SSO) com SAML"
         description: Conecte o OpenProject a um provedor de identidade SAML
       request_attributes:
         title: 'Atributos solicitados'
@@ -78,9 +79,9 @@ pt-BR:
       section_texts:
         display_name: "Configure o nome de exibição do provedor SAML."
         metadata: "Pré-preencha a configuração usando um URL de metadados ou colando o XML de metadados"
-        metadata_form: "Se o seu provedor de identidade tiver um ponto de extremidade de metadados ou um download de XML, adicione-o abaixo para preencher a configuração automaticamente."
+        metadata_form: "Se o seu provedor de identidade tiver um endpoint de metadados ou um download de XML, adicione-o abaixo para preencher a configuração automaticamente."
         metadata_form_banner: "Editar os metadados pode substituir os valores existentes em outras seções. "
-        configuration: "Configure os URLs do ponto de extremidade para o provedor de identidade, certificados e outras opções de SAML."
+        configuration: "Configure os URLs do endpoint para o provedor de identidade, certificados e outras opções de SAML."
         configuration_metadata: "As informações foram preenchidas automaticamente com os metadados fornecidos. Na maioria das situações, não é necessário fazer edições."
         encryption: "Configure as assinaturas de asserção e a criptografia para as solicitações e respostas SAML."
         encryption_form: "Você pode escolher criptografar a resposta de asserção ou assinar as solicitações do OpenProject."
@@ -107,9 +108,9 @@ pt-BR:
       sp_entity_id: >
         O ID da entidade do provedor de serviços (SP), que também pode ser chamado de Público, é o identificador exclusivo do cliente da instância do OpenProject.
       idp_sso_service_url: >
-        O URL do ponto de extremidade do login do provedor de identidade.
+        O URL do endpoint do login do provedor de identidade.
       idp_slo_service_url: >
-        O URL do ponto de extremidade do login do provedor de identidade.
+        O URL do endpoint do login do provedor de identidade.
       idp_cert: >
         Digite o certificado público no formato PEM X509 do provedor de identidade. Você pode adicionar vários certificados, separando-os por uma nova linha.
       name_identifier_format: >

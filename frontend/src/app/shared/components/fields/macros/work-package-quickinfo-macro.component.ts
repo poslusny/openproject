@@ -56,6 +56,7 @@ import { PathHelperService } from 'core-app/core/path-helper/path-helper.service
   providers: [
     HalResourceEditingService,
   ],
+  standalone: false,
 })
 export class WorkPackageQuickinfoMacroComponent {
   // Whether the value could not be loaded

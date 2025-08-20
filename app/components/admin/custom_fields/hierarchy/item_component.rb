@@ -98,7 +98,7 @@ module Admin
             tag: :a,
             content_arguments: { data: { turbo_frame: ItemsComponent.wrapper_key } },
             href: new_child_custom_field_item_path(@root.custom_field_id, model.parent, position: model.sort_order)
-          ) { _1.with_leading_visual_icon(icon: "fold-up") }
+          ) { it.with_leading_visual_icon(icon: "fold-up") }
         end
 
         def add_below_action_item(menu)
@@ -107,16 +107,18 @@ module Admin
             tag: :a,
             content_arguments: { data: { turbo_frame: ItemsComponent.wrapper_key } },
             href: new_child_custom_field_item_path(@root.custom_field_id, model.parent, position: model.sort_order + 1)
-          ) { _1.with_leading_visual_icon(icon: "fold-down") }
+          ) { it.with_leading_visual_icon(icon: "fold-down") }
         end
 
         def add_sub_item_action_item(menu)
+          position = model.children.any? ? model.children.maximum(:sort_order) + 1 : 0
+
           menu.with_item(
             label: I18n.t(:button_add_sub_item),
             tag: :a,
             content_arguments: { data: { turbo_frame: ItemsComponent.wrapper_key } },
-            href: new_child_custom_field_item_path(@root.custom_field_id, model)
-          ) { _1.with_leading_visual_icon(icon: "op-arrow-in") }
+            href: new_child_custom_field_item_path(@root.custom_field_id, model, position:)
+          ) { it.with_leading_visual_icon(icon: "op-arrow-in") }
         end
 
         def move_to_top_action_item(menu)

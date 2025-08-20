@@ -55,6 +55,14 @@ module Admin
           label: object.class.human_attribute_name(:active)
         )
 
+        if object.class.can_have_default_value?
+          form.check_box(
+            name: :is_default,
+            label: I18n.t(:label_default),
+            caption: I18n.t(:"priorities.admin.default.caption")
+          )
+        end
+
         form.submit(
           name: :submit,
           label: I18n.t(:button_save),

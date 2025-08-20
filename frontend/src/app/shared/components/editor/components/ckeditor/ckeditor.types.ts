@@ -25,7 +25,7 @@ export interface ICKEditorInstance {
 
   state:string;
 
-  getData(options:{ trim:boolean }):string;
+  getData(options?:{ trim:boolean }):string;
 
   setData(content:string):void;
 
@@ -106,4 +106,10 @@ export interface ICKEditorContext {
   previewContext?:string;
   // disabled specific mentions
   disabledMentions?:['user'|'work_package'];
+}
+
+declare global {
+  interface HTMLElement {
+    ckeditorInstance?:ICKEditorInstance;
+  }
 }

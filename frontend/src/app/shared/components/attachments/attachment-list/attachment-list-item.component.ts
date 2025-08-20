@@ -57,6 +57,7 @@ import { IFileIcon } from 'core-app/shared/components/storages/icons.mapping';
   selector: '[op-attachment-list-item]',
   templateUrl: './attachment-list-item.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class OpAttachmentListItemComponent extends UntilDestroyedMixin implements OnInit, AfterViewInit {
   @Input() public attachment:IAttachment;
@@ -65,9 +66,11 @@ export class OpAttachmentListItemComponent extends UntilDestroyedMixin implement
 
   @Input() public showTimestamp = true;
 
+  @Input() public showDelete = true;
+
   @Output() public removeAttachment = new EventEmitter<void>();
 
-  @ViewChild('avatar') avatar:ElementRef;
+  @ViewChild('avatar') avatar:ElementRef<HTMLDivElement>;
 
   static imageFileExtensions:string[] = ['jpeg', 'jpg', 'gif', 'bmp', 'png'];
 

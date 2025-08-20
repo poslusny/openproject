@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative "../spec_helper"
 
 RSpec.describe "Admin 2FA management", :js, :selenium, with_settings: {

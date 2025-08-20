@@ -7,7 +7,7 @@ mn:
   label_avatar: "Аватар"
   label_avatar_plural: "Аватар"
   label_current_avatar: "Одоогийн Аватар"
-  label_choose_avatar: "Аватарыг файлаас сонгох"
+  label_choose_avatar: "Файлаас Аватарыг сонгоно уу"
   message_avatar_uploaded: "Аватар амжилттай өөрчлөгдлөө."
   error_image_upload: "Зураг хадгалахад алдаа гарлаа."
   error_image_size: "Зураг хэтэрхий том байна."

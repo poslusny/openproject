@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -47,7 +49,7 @@ RSpec.describe "SAML administration CRUD",
       fill_in "Name", with: "My provider"
       click_link_or_button "Continue"
 
-      expect(page).to have_css("h1", text: "My provider")
+      expect(page).to have_heading text: "My provider"
 
       # Skip metadata
       click_link_or_button "Continue"
@@ -193,9 +195,9 @@ RSpec.describe "SAML administration CRUD",
   end
 
   context "without EE", without_ee: %i[sso_auth_providers] do
-    it "renders the upsale page" do
+    it "renders the upsell page" do
       visit "/admin/saml/providers"
-      expect(page).to have_text "SAML identity providers is an Enterprise  add-on"
+      expect(page).to have_enterprise_banner(:professional)
     end
   end
 end

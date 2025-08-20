@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -30,7 +32,6 @@ module Admin::Settings
   class ProjectCustomFieldsController < ::Admin::SettingsController
     include CustomFields::SharedActions
     include OpTurbo::ComponentStream
-    include OpTurbo::DialogStreamHelper
     include FlashMessagesOutputSafetyHelper
     include Admin::Settings::ProjectCustomFields::ComponentStreams
 
@@ -48,22 +49,21 @@ module Admin::Settings
     before_action :find_unlink_project_custom_field_mapping, only: :unlink
     # rubocop:enable Rails/LexicallyScopedActionFilter
 
-    def show_local_breadcrumb
-      false
-    end
-
     def index
+      @allow_custom_field_creation = @project_custom_field_sections.any?
+
       respond_to :html
     end
 
     def show
       # quick fixing redirect issue from perform_update
-      # perform_update is always redirecting to the show action altough configured otherwise
+      # perform_update is always redirecting to the show action although configured otherwise
       render :edit
     end
 
     def new
-      @custom_field = ProjectCustomField.new(custom_field_section_id: params[:custom_field_section_id])
+      @custom_field = ProjectCustomField.new(custom_field_section_id: params[:custom_field_section_id],
+                                             field_format: params[:field_format])
 
       respond_to :html
     end
@@ -212,8 +212,6 @@ module Admin::Settings
 
     def find_custom_field
       @custom_field = ProjectCustomField.find(params[:id])
-    rescue ActiveRecord::RecordNotFound
-      render_404
     end
 
     def drop_success_streams(call)

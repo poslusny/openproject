@@ -3,6 +3,7 @@ zh-CN:
   js:
     team_planner:
       add_existing: '添加现有'
+      label_team_planner_plural: '团队规划工具'
       add_existing_title: '添加现有工作包'
       create_label: '工作组规划器'
       create_title: '创建新的工作组规划器'

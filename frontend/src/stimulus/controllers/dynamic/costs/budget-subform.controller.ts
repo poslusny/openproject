@@ -29,6 +29,7 @@
  */
 
 import { Controller } from '@hotwired/stimulus';
+import { useMeta } from 'stimulus-use';
 
 export default class BudgetSubformController extends Controller {
   static targets = [
@@ -47,10 +48,15 @@ export default class BudgetSubformController extends Controller {
   declare itemCountValue:number;
   declare updateUrlValue:string;
 
+  static metaNames = ['csrf-token'];
+
+  declare readonly csrfToken:string|null;
+
   private form:HTMLFormElement;
   private submitButtons:NodeListOf<HTMLButtonElement>;
 
   connect():void {
+    useMeta(this, { suffix: false });
     this.form = this.element.closest('form') as HTMLFormElement;
     this.submitButtons = this.form.querySelectorAll("button[type='submit']");
   }
@@ -129,10 +135,8 @@ export default class BudgetSubformController extends Controller {
       body.append(itemValue.dataset.requestKey as string, (itemValue.value || '0'));
     });
 
-    const csrfTokenTag = document.querySelector("meta[name='csrf-token']");
-
-    if (csrfTokenTag !== null) {
-      body.append('authenticity_token', csrfTokenTag.getAttribute('content') as string);
+    if (this.csrfToken !== null) {
+      body.append('authenticity_token', this.csrfToken);
     }
 
     return body;

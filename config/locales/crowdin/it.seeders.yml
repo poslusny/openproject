@@ -118,7 +118,7 @@ it:
             item_0:
               name: Piano del progetto
             item_1:
-              name: Pietre miliari
+              name: Traguardi
             item_2:
               name: Incarichi
             item_3:
@@ -168,7 +168,7 @@ it:
                   name: Macro-attività
               item_6:
                 options:
-                  name: Pietre miliari
+                  name: Traguardi
           work_packages:
             item_0:
               subject: Inizio del progetto

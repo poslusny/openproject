@@ -46,18 +46,22 @@
               render(Primer::Beta::Text.new(color: :subtle)) { t("settings.project_attributes.label_no_project_custom_fields") }
             end
             empty_list_container.with_column do
-              render(
-                Primer::Beta::Button.new(
-                  tag: :a,
-                  href: new_admin_settings_project_custom_field_path(
-                    type: "ProjectCustomField", custom_field_section_id: @project_custom_field_section.id
-                  ),
+              render(Primer::Alpha::ActionMenu.new(data: { test_selector: "new-project-custom-field-in-section-button" })) do |menu|
+                menu.with_show_button(
                   scheme: :secondary,
-                  data: { turbo: "false", test_selector: "new-project-custom-field-button" }
-                )
-              ) do |button|
-                button.with_leading_visual_icon(icon: :plus)
-                t("settings.project_attributes.label_new_attribute")
+                  "aria-label": t("settings.project_attributes.label_new_attribute")
+                ) do |btn|
+                  btn.with_leading_visual_icon(icon: :plus)
+                  btn.with_trailing_visual_icon(icon: :"triangle-down")
+
+                  t("settings.project_attributes.label_new_attribute")
+                end
+
+                OpenProject::CustomFieldFormat.available_for_class_name("Project")
+                                              .sort_by(&:name)
+                                              .map do |format|
+                  action_menu_item_for_custom_field_format(menu, format)
+                end
               end
             end
           end

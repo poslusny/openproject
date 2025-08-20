@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -50,7 +52,7 @@ class WorkPackages::DeleteService < BaseServices::Delete
 
   def destroy_descendants(descendants, result)
     descendants.each do |descendant|
-      success = destroy(descendant)
+      success = destroy(descendant.reload)
       result.add_dependent!(ServiceResult.new(success:, result: descendant))
     end
   end
@@ -63,6 +65,7 @@ class WorkPackages::DeleteService < BaseServices::Delete
 
   def find_successors_of_self_and_descendants(work_package)
     WorkPackage.where(id: Relation.follows.of_predecessor(work_package.self_and_descendants).select(:from_id))
+               .where.not(id: work_package.self_and_descendants)
   end
 
   def update_ancestors_and_successors(successors, result)
@@ -94,8 +97,8 @@ class WorkPackages::DeleteService < BaseServices::Delete
       .new(user:, work_package: work_packages_to_reschedule)
       .call
 
-    result.dependent_results.map(&:result).each do |dependent_result|
-      dependent_result.save(validate: false)
+    result.dependent_results.map(&:result).each do |rescheduled_work_package|
+      rescheduled_work_package.save(validate: false)
     end
 
     result

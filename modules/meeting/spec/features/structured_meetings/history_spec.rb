@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -29,9 +30,8 @@
 
 require "spec_helper"
 
-require_relative "../../support/pages/meetings/new"
-require_relative "../../support/pages/structured_meeting/show"
-require_relative "../../support/pages/structured_meeting/history"
+require_relative "../../support/pages/meetings/show"
+require_relative "../../support/pages/meetings/history"
 
 RSpec.describe "history",
                :js do
@@ -72,7 +72,7 @@ RSpec.describe "history",
   end
   shared_let(:meeting) do
     User.execute_as(user) do
-      create(:structured_meeting,
+      create(:meeting,
              project:,
              start_time: DateTime.parse("2024-03-28T13:30:00Z"),
              title: "Some title",
@@ -82,8 +82,8 @@ RSpec.describe "history",
     end
   end
 
-  let(:show_page) { Pages::StructuredMeeting::Show.new(meeting) }
-  let(:history_page) { Pages::StructuredMeeting::History.new(meeting) }
+  let(:show_page) { Pages::Meetings::Show.new(meeting) }
+  let(:history_page) { Pages::Meeting::History.new(meeting) }
   let(:editor) { Components::WysiwygEditor.new "#content", "opce-ckeditor-augmented-textarea" }
 
   it "allows browsing the history", with_settings: { journal_aggregation_time_minutes: 0 } do
@@ -132,7 +132,7 @@ RSpec.describe "history",
 
     show_page.add_agenda_item do
       fill_in "Title", with: "My agenda item"
-      fill_in "min", with: "25"
+      fill_in "Duration", with: "25"
     end
 
     show_page.expect_agenda_item(title: "My agenda item")
@@ -144,7 +144,7 @@ RSpec.describe "history",
     history_page.expect_event('Agenda item "My agenda item"',
                               timestamp: format_time(item.created_at.utc),
                               actor: user.name,
-                              action: "created by")
+                              action: "added by")
 
     within("li.op-activity-list--item", match: :first) do
       expect(page).to have_css(".op-activity-list--item-title", text: 'Agenda item "My agenda item"')
@@ -157,7 +157,7 @@ RSpec.describe "history",
     item = MeetingAgendaItem.find_by(title: "My agenda item")
     show_page.edit_agenda_item(item) do
       fill_in "Title", with: "Updated title"
-      fill_in "min", with: "5"
+      fill_in "Duration", with: "5"
       click_on "Save"
     end
 
@@ -209,7 +209,7 @@ RSpec.describe "history",
 
     item = history_page.first_item
     expect(item).to have_css(".op-activity-list--item-title", text: 'Agenda item "Second"')
-    expect(item).to have_css(".op-activity-list--item-subtitle", text: "deleted by")
+    expect(item).to have_css(".op-activity-list--item-subtitle", text: "removed by")
     expect(item).to have_css(".op-activity-list--item-subtitle", text: user.name)
 
     # Add linked work package

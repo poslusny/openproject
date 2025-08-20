@@ -27,7 +27,7 @@ pl:
       budget:
         author: "Autor"
         available: "Dostępne"
-        budget: "Zaplanowany"
+        budget: "Zaplanowane"
         budget_ratio: "Wydano (%)"
         description: "Opis"
         spent: "Wydatki"
@@ -43,7 +43,7 @@ pl:
       material_budget_item: "Jednostka"
   activity:
     filter:
-      budget: "Budżety"
+      budget: "Budżetowanie"
   attributes:
     budget: "Budżet"
   button_add_budget_item: "Dodaj planowane koszty"
@@ -54,7 +54,7 @@ pl:
   caption_labor: "Praca"
   caption_labor_costs: "Rzeczywiste koszty pracy"
   caption_material_costs: "Rzeczywiste koszty jednostkowe"
-  budgets_title: "Budżetowanie"
+  budgets_title: "Budżety"
   events:
     budget: "Budżet edytowany"
   help_click_to_edit: "Kliknij tutaj aby edytować."
@@ -62,7 +62,7 @@ pl:
   help_override_rate: "Podaj wartość tutaj aby zastąpić domyślną stawkę."
   label_budget: "Budżet"
   label_budget_new: "Nowy budżet"
-  label_budget_plural: "Budżetowanie"
+  label_budget_plural: "Budżety"
   label_budget_id: "Budżet #%{id}"
   label_deliverable: "Budżet"
   label_example_placeholder: 'np. %{decimal}'
@@ -72,7 +72,7 @@ pl:
   notice_no_budgets_available: "Nie ma dostępnych budżetów."
   permission_edit_budgets: "Edytuj budżety"
   permission_view_budgets: "Zobacz budżety"
-  project_module_budgets: "Budżetowanie"
+  project_module_budgets: "Budżety"
   text_budget_reassign_to: "Przypisz je do tego budżetu:"
   text_budget_delete: "Usuń budżet ze wszystkich pakietów roboczych"
   text_budget_destroy_assigned_wp: "Liczba pakietów roboczych przypisanych do tego budżetu wynosi %{count}. Co chcesz zrobić?"

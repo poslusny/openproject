@@ -33,13 +33,13 @@ vi:
           label: Tạo MR
           description: Tạo một Yêu cầu Kéo
         copy_menu:
-          label: Đoạn mã Git
-          description: Sao chép đoạn mã Git vào bảng tạm
+          label: Mã git
+          description: Sao chép mã git vào clipboard
         git_actions:
           branch_name: Tên nhánh
-          commit_message: Thông điệp commit
+          commit_message: Tin nhắn commit
           cmd: Tạo nhánh với commit trống
-          title: Đoạn mã nhanh cho Git
+          title: Mã nhanh cho Git
           copy_success: '✅ Đã sao chép!'
           copy_error: '❌ Sao chép thất bại!'
       tab_issue:

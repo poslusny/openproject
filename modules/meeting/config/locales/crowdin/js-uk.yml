@@ -21,7 +21,7 @@
 #++
 uk:
   js:
-    label_meetings: 'Зустрічі'
+    label_meetings: 'Наради'
     work_packages:
       tabs:
         meetings: 'Наради'

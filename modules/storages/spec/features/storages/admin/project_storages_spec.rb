@@ -329,7 +329,7 @@ RSpec.describe "Admin lists project mappings for a storage",
         end
       end
 
-      context "with OneDrive/Sharepoint with AMPF enabled" do
+      context "with OneDrive with AMPF enabled" do
         let(:storage) { create(:one_drive_storage_configured, :as_automatically_managed) }
         let(:project_storage) { create(:project_storage, storage:) }
 

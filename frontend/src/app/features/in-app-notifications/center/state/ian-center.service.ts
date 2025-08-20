@@ -216,13 +216,6 @@ export class IanCenterService extends UntilDestroyedMixin {
     this.onReload.pipe(take(1)).subscribe((collection) => {
       this.store.update({ activeCollection: collection });
     });
-
-    if (facet === 'unread') {
-      if (this.selectedNotification?.readIAN) {
-        this.goToCenter();
-      }
-    }
-    this.reload.next(true);
   }
 
   markAsRead(notifications:ID[]):void {
@@ -240,11 +233,6 @@ export class IanCenterService extends UntilDestroyedMixin {
     void this.state.go('work-packages.show', { workPackageId });
   }
 
-  goToCenter():void {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-argument
-    void this.state.go(this.state.current.data.baseRoute);
-  }
-
   showNextNotification():void {
     void this
       .notifications$
@@ -255,7 +243,15 @@ export class IanCenterService extends UntilDestroyedMixin {
           return;
         }
         if (notifications[0][0]._links.resource || notifications[this.selectedNotificationIndex][0]._links.resource) {
-          const wpId = idFromLink(notifications[this.selectedNotificationIndex >= notifications.length ? 0 : this.selectedNotificationIndex][0]._links.resource.href);
+          let index:number;
+          if (this.selectedNotificationIndex === notifications.length) {
+            // If the last notification is marked as read, we do not jump to the top, but rather show the new last notification
+            index = notifications.length - 1;
+          } else {
+            index = this.selectedNotificationIndex > notifications.length ? 0 : this.selectedNotificationIndex;
+          }
+
+          const wpId = idFromLink(notifications[index][0]._links.resource.href);
           this.openSplitScreen(wpId);
         }
       });

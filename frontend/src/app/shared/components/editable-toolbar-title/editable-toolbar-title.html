@@ -31,8 +31,8 @@
   <input-shim
     class="editable-toolbar-title--input editable-toolbar-title--input-shim toolbar--editable-toolbar">{{ selectedTitle || text.input_placeholder }}{{ selectedTitle ? '&nbsp;&nbsp;' : ''}}</input-shim>
 </div>
-<h2 *ngIf="!editable"
+<div *ngIf="!editable"
     [attr.title]="selectedTitle"
     [ngClass]="{ '-disabled': disabled, '-small': smallHeader }"
     class="editable-toolbar-title--fixed">{{ selectedTitle }}
-</h2>
+</div>

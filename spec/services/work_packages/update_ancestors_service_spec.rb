@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -1171,20 +1173,20 @@ RSpec.describe WorkPackages::UpdateAncestorsService,
     end
 
     context "when a manually scheduled work package becomes parent for the first time, " \
-            "but it's part of a bulk copy in progress" do
+            "but it's part of a bulk duplicate in progress" do
       let_work_packages(<<~TABLE)
         subject       | scheduling mode
         future parent | manual
         future child  | manual
       TABLE
       let(:initiator_work_package) { future_child }
-      let(:state) { { bulk_copy_in_progress: true } }
+      let(:state) { { bulk_duplicate_in_progress: true } }
 
       before do
         future_child.update!(parent: future_parent)
       end
 
-      it "keeps the scheduling mode (or it would not be an exact copy anymore)" do
+      it "keeps the scheduling mode (or it would not be an exact duplicate anymore)" do
         expect(call_result).to be_success
         expect(future_parent.reload.schedule_manually).to be(true)
       end

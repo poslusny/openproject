@@ -31,6 +31,7 @@ import {
   styleUrls: ['./wp-table.component.sass'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   hostDirectives: [WorkPackageIsolatedQuerySpaceDirective],
+  standalone: false,
 })
 export class WidgetWpTableComponent extends AbstractWidgetComponent implements OnInit {
   public queryId:string|null;

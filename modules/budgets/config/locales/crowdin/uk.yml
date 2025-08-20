@@ -27,14 +27,14 @@ uk:
       budget:
         author: "Автор"
         available: "Доступно"
-        budget: "Планується"
+        budget: "Заплановано"
         budget_ratio: "Витрачено (співвідношення)"
         description: "Опис"
-        spent: "Витрачений"
+        spent: "Витрачено"
         status: "Статус"
         subject: "Тема"
         type: "Тип вартості"
-        labor_budget: "Планові витрати праці"
+        labor_budget: "Планові витрати на працю"
         material_budget: "Планові витрати на одиницю продукції"
       work_package:
         budget_subject: "Назва бюджету"
@@ -47,7 +47,7 @@ uk:
   attributes:
     budget: "Бюджет"
   button_add_budget_item: "Додайте планові витрати"
-  button_add_budget: "Додайте бюджет"
+  button_add_budget: "Додати бюджет"
   button_add_cost_type: "Додати тип витрат"
   button_cancel_edit_budget: "Скасувати редагування бюджету"
   button_cancel_edit_costs: "Скасування  редагування витрат "
@@ -63,7 +63,7 @@ uk:
   label_budget: "Бюджет"
   label_budget_new: "Новий бюджет"
   label_budget_plural: "Бюджети"
-  label_budget_id: "Бюджет  #%{id}"
+  label_budget_id: "Бюджет #%{id}"
   label_deliverable: "Бюджет"
   label_example_placeholder: 'наприклад, %{decimal}'
   label_view_all_budgets: "Переглянути всі бюджети"

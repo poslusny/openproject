@@ -38,7 +38,7 @@ class MeetingSection::Title < ApplicationForm
       autofocus: true,
       bg: :default,
       data: {
-        action: "keydown.esc->meeting-section-form#cancel"
+        action: "keydown.esc->meetings--section-form#cancel"
       }
     )
   end

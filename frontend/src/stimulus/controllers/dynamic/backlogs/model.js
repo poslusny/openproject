@@ -121,7 +121,7 @@ RB.Model = (function ($) {
         },
         ],
         close: function (e, ui) {
-          if (e.which === 1 || e.which === 27) {
+          if (e.type === 'click' || (e.type === 'keydown' && e.key === 'Escape')) {
             self.cancelEdit();
           }
         },
@@ -387,10 +387,6 @@ RB.Model = (function ($) {
       } else {
         this.open();
       }
-
-      window.OpenProject.getPluginContext().then((pluginContext) => {
-        pluginContext.bootstrap(this.$[0]);
-      });
 
       this.refreshed();
     },

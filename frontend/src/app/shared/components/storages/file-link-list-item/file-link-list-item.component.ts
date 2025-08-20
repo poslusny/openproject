@@ -61,6 +61,7 @@ import SpotDropAlignmentOption from 'core-app/spot/drop-alignment-options';
   selector: '[op-file-link-list-item]',
   templateUrl: './file-link-list-item.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class FileLinkListItemComponent implements OnInit, OnChanges, AfterViewInit {
   @Input() public fileLink:IFileLink;

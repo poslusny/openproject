@@ -37,6 +37,7 @@ export const appBaseSelector = 'openproject-base';
       <ui-view></ui-view>
     </div>
   `,
+  standalone: false,
 })
 export class ApplicationBaseComponent {
 }

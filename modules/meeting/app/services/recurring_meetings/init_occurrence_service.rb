@@ -41,7 +41,8 @@ module RecurringMeetings
 
     protected
 
-    def perform(start_time:)
+    def perform
+      start_time = params.fetch(:start_time)
       in_context(recurring_meeting, send_notifications: false) do
         call = instantiate(start_time)
         create_schedule(call) if call.success?

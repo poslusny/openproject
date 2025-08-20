@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Saml
   class ProvidersController < ::ApplicationController
     include OpTurbo::ComponentStream
@@ -6,7 +8,7 @@ module Saml
     menu_item :plugin_saml
 
     before_action :require_admin
-    before_action :check_ee
+    before_action :check_ee, except: %i[index]
     before_action :find_provider, only: %i[show edit import_metadata update confirm_destroy destroy]
     before_action :check_provider_writable, only: %i[update import_metadata]
     before_action :set_edit_state, only: %i[create edit update import_metadata]
@@ -106,7 +108,7 @@ module Saml
       if call.success?
         flash[:notice] = I18n.t(:notice_successful_delete)
       else
-        flash[:error] = I18n.t(:error_failed_to_delete_entry)
+        flash[:error] = call.errors.full_messages
       end
 
       redirect_to action: :index
@@ -141,16 +143,7 @@ module Saml
     end
 
     def check_ee
-      unless EnterpriseToken.allows_to?(:sso_auth_providers)
-        render template: "/saml/providers/upsale"
-        false
-      end
-    end
-
-    def default_breadcrumb; end
-
-    def show_local_breadcrumb
-      false
+      redirect_to action: :index unless EnterpriseToken.allows_to?(:sso_auth_providers)
     end
 
     def update_provider_metadata_call
@@ -183,8 +176,6 @@ module Saml
 
     def find_provider
       @provider = Saml::Provider.find(params[:id])
-    rescue ActiveRecord::RecordNotFound
-      render_404
     end
 
     def check_provider_writable

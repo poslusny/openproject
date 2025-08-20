@@ -68,7 +68,8 @@ export function createDynamicInputFixture(fields:IOPFormlyFieldSettings[], model
                      [fields]="fields">
         </formly-form>
       </form>      
-    `
+    `,
+    standalone: false,
   })
   class DynamicInputsTestingComponent {
     form = new UntypedFormGroup({});

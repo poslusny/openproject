@@ -39,6 +39,7 @@ import { WorkPackageViewTimelineService } from 'core-app/features/work-packages/
 
 @Directive({
   selector: '[wpViewDropdown]',
+  standalone: false,
 })
 export class WorkPackageViewDropdownMenuDirective extends OpContextMenuTrigger {
   constructor(

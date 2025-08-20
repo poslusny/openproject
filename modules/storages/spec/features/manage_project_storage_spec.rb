@@ -138,7 +138,7 @@ RSpec.describe("Activation of storages in projects",
     expect_and_dismiss_flash(message: "Successful creation.")
 
     # The list of enabled file storages should now contain Storage 1
-    expect(page).to have_css("h1", text: "Files")
+    expect(page).to have_heading "Files"
     expect(page).to have_text(storage.name)
 
     # Press Edit icon to change the project folder mode to inactive
@@ -161,7 +161,7 @@ RSpec.describe("Activation of storages in projects",
     expect_and_dismiss_flash(message: "Successful update.")
 
     # The list of enabled file storages should still contain Storage 1
-    expect(page).to have_css("h1", text: "Files")
+    expect(page).to have_heading "Files"
     expect(page).to have_text(storage.name)
 
     # Click Edit icon again but cancel the edit

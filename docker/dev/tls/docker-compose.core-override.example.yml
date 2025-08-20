@@ -19,6 +19,7 @@ services:
   backend:
     environment:
       <<: *environment
+      OPENPROJECT_CLI_PROXY: "https://openproject-assets.local"
     networks:
       - external
     volumes:
@@ -27,6 +28,10 @@ services:
       # Mac OS
       # - ~/.step/certs:/etc/ssl/certs
       # - ~/.step/certs:/usr/local/share/ca-certificates
+    labels:
+    - "traefik.enable=true"
+    - "traefik.http.routers.openproject.rule=Host(`openproject.local`)"
+    - "traefik.http.routers.openproject.entrypoints=websecure"
 
   worker:
     environment:
@@ -54,11 +59,10 @@ services:
   frontend:
     networks:
       - external
-    # Those label interpreted by traefik to create the correct HTTP router
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.openproject.rule=Host(`${OPENPROJECT_DEV_HOST}`)"
-      - "traefik.http.routers.openproject.entrypoints=websecure"
+    - "traefik.enable=true"
+    - "traefik.http.routers.openproject-assets.rule=Host(`openproject-assets.local`)"
+    - "traefik.http.routers.openproject-assets.entrypoints=websecure"
 
 # You need to define the same external network
 # that is defined in the TLS proxy compose file

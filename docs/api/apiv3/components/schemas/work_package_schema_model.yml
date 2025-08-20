@@ -64,6 +64,10 @@ properties:
     $ref: './schema_property_model.yml'
   project:
     $ref: './schema_property_model.yml'
+  projectPhase:
+    $ref: './schema_property_model.yml'
+  projectPhaseDefinition:
+    $ref: './schema_property_model.yml'
   parent:
     $ref: './schema_property_model.yml'
   assignee:

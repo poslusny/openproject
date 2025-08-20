@@ -47,6 +47,7 @@ import { BcfViewService } from 'core-app/features/bim/ifc_models/pages/viewer/bc
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'op-bcf-view-toggle-button',
+  standalone: false,
 })
 export class BcfViewToggleButtonComponent {
   view$ = this.bcfView.live$();

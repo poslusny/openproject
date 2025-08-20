@@ -21,7 +21,7 @@
 #++
 ro:
   js:
-    label_meetings: 'Reuniuni'
+    label_meetings: 'Întâlniri'
     work_packages:
       tabs:
         meetings: 'Întâlniri'

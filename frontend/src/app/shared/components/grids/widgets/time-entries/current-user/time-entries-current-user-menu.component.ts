@@ -42,6 +42,7 @@ import { OpContextMenuItem } from 'core-app/shared/components/op-context-menu/op
 @Component({
   selector: 'widget-time-entries-current-user-menu',
   templateUrl: '../../menu/widget-menu.component.html',
+  standalone: false,
 })
 export class WidgetTimeEntriesCurrentUserMenuComponent extends WidgetAbstractMenuComponent {
   @InjectField() opModalService:OpModalService;

@@ -22,12 +22,14 @@
 ru:
   js:
     text_are_you_sure: "Уверены?"
+    myTimeTracking:
+      noSpecificTime: "Нет определенного времени"
     work_packages:
       property_groups:
         costs: "Затраты"
       properties:
         overallCosts: "Общие затраты"
         spentUnits: "Затраченное количество"
-    button_log_costs: "Регистрировать затраты"
+    button_log_costs: "Внести расходы на единицу"
     label_hour: "час"
     label_hours: "часы"

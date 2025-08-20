@@ -6,14 +6,18 @@ ms:
     Anda telah log keluar. Sebarang bentuk kandungan yang anda hantar mungkin hilang. Sila [log masuk].
   activerecord:
     attributes:
+      openid_connect/group_link:
+        oidc_group_name: OpenID group identifier
       openid_connect/provider:
         name: Nama
         slug: Pengecam unik
         display_name: Nama paparan
         client_id: ID pelanggan
         client_secret: Rahsia pelanggan
+        groups_claim: Groups claim
         secret: Sulit
         scope: Skop
+        sync_groups: Synchronize groups
         grant_types_supported: Jenis geran yang disokong
         limit_self_registration: Hadkan pendaftaran diri
         authorization_endpoint: Titik akhir kebenaran
@@ -52,9 +56,14 @@ ms:
   openid_connect:
     menu_title: Penyedia OpenID
     delete_title: "Padam pembekal OpenID Connect"
+    group_links_heading: OpenID Connect group links
     instructions:
       redirect_url: Ini ialah URL ubah hala yang harus digunakan oleh pembekal OpenID Connect untuk mengubah hala semula ke OpenProject selepas log masuk berjaya.
       endpoint_url: URL titik akhir yang diberikan kepada anda oleh pembekal OpenID Connect
+      group_regexes: One regular expression pattern per line. Please read [the documentation](docs_url) for more information on how to do this.
+      group_regexes_detail: Define patterns using regular expressions to match group names from the groups claim. For example, entering a pattern like <code>^Level1/Level2/([\w/]+)$</code> will extract the group “Groupname/SubGroup” from a response including “Level1/Level2/GroupName/SubGroup”.
+      group_sync: Automatically extract and synchronise group membership information from the identity provider.
+      groups_claim: Specify the name of the claim that's expected to indicate the group names that the user is a member of.
       metadata_none: Saya tidak mempunyai maklumat ini
       metadata_url: Saya mempunyai URL titik akhir penemuan
       client_id: Ini ialah ID klien yang diberikan kepada anda oleh pembekal OpenID Connect anda
@@ -84,19 +93,22 @@ ms:
       endpoint_url: URL titik akhir
     providers:
       label_providers: "Pembekal"
-      seeded_from_env: "Pembekal ini telah dipilih daripada konfigurasi persekitaran. Ia tidak boleh disunting."
+      seeded_from_env: "Pembekal ini telah dipilih daripada konfigurasi persekitaran. Ia tidak boleh diedit."
       google:
         name: Google
       microsoft_entra:
         name: Microsoft Entra
       custom:
         name: Adat
-      upsale:
+      upsell:
+        title: "Single Sign-On (SSO) with OpenID connect"
         description: Sambungkan OpenProject kepada pembekal identiti sambungan OpenID
       label_add_new: Tambah penyedia OpenID baharu
       label_edit: Edit penyedia OpenID %{name}
       label_empty_title: Tiada pembekal OpenID dikonfigurasikan lagi.
       label_empty_description: Tambah pembekal untuk melihat mereka di sini.
+      label_group_mapping: Group mapping
+      label_group_regexes: Pattern (regular expression)
       label_metadata: OpenID Connect Discovery Endpoint
       label_automatic_configuration: Konfigurasi automatik
       label_optional_configuration: Konfigurasi pilihan
@@ -109,6 +121,7 @@ ms:
       plural: Penyedia OpenID
       singular: Penyedia OpenID
       section_texts:
+        group_mapping: Map group names provided by the identity provider to groups in OpenProject.
         metadata: Konfigurasi praisi menggunakan URL titik akhir penemuan OpenID Connect
         metadata_form_banner: Mengedit titik akhir penemuan mungkin mengatasi nilai metadata pra-isi sedia ada.
         metadata_form_title: Titik akhir OpenID Connect Discovery
@@ -118,6 +131,9 @@ ms:
         display_name: Nama paparan boleh dilihat oleh pengguna.
         attribute_mapping: Konfigurasikan pemetaan atribut antara OpenProject dan pembekal OpenID Connect.
         claims: Minta tuntutan tambahan untuk token ID atau respons maklumat pengguna.
+      side_panel:
+        information_component:
+          backchannel_logout_url: Backchannel logout URL
     setting_instructions:
       limit_self_registration: >
-        Jika pengguna yang dibenarkan hanya boleh mendaftar menggunakan penyediaan ini jika tetapan pendaftaran sendiri dibenarkan.
+        Jika didayakan pengguna hanya boleh mendaftar menggunakan pembekal ini jika tetapan pendaftaran sendiri membenarkannya.

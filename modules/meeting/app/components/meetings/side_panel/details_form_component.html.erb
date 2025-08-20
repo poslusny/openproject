@@ -5,9 +5,7 @@
       method: :put,
       data: { turbo: true,
               turbo_stream: true,
-              controller: "meetings--form",
-              "application-target": "dynamic",
-              "meetings--form-structured-value": true },
+              controller: "meetings--form" },
       url: update_details_project_meeting_path(@project, @meeting)
     ) do |f|
       component_collection do |collection|
@@ -21,8 +19,12 @@
               render(Meeting::TimeGroup.new(f, meeting: @meeting))
             end
 
-            modal_body.with_row do
+            modal_body.with_row(mb: 3) do
               render(Meeting::Location.new(f, meeting: @meeting))
+            end
+
+            modal_body.with_row do
+              render(Meetings::EmailUpdatesBannerComponent.new(@meeting))
             end
 
             modal_body.with_row do
@@ -33,11 +35,11 @@
 
         collection.with_component(Primer::Alpha::Dialog::Footer.new) do
           component_collection do |modal_footer|
-            modal_footer.with_component(Primer::ButtonComponent.new(data: { "close-dialog-id": "edit-meeting-details-dialog" })) do
+            modal_footer.with_component(Primer::Beta::Button.new(data: { "close-dialog-id": "edit-meeting-details-dialog" })) do
               t("button_cancel")
             end
 
-            modal_footer.with_component(Primer::ButtonComponent.new(scheme: :primary, type: :submit)) do
+            modal_footer.with_component(Primer::Beta::Button.new(scheme: :primary, type: :submit)) do
               t("button_save")
             end
           end

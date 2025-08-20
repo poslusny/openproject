@@ -6,18 +6,22 @@ tr:
     Çıkış yaptınız. Gönderdiğiniz herhangi bir formun içeriği kaybolabilir. Lütfen giriş yapın].
   activerecord:
     attributes:
+      openid_connect/group_link:
+        oidc_group_name: OpenID group identifier
       openid_connect/provider:
         name: İsim
         slug: Benzersiz tanımlayıcı
-        display_name: Görünen isim
+        display_name: Ekran adı
         client_id: İstemci ID
         client_secret: İstemci gizliliği
+        groups_claim: Groups claim
         secret: Gizli Anahtar
         scope: Kapsam
-        grant_types_supported: Supported grant types
+        sync_groups: Synchronize groups
+        grant_types_supported: Desteklenen izin türleri
         limit_self_registration: Kendi kendine kaydı sınırlayın
-        authorization_endpoint: Yetkilendirme uç noktası
-        userinfo_endpoint: Kullanıcı bilgisi uç noktası
+        authorization_endpoint: Yetkilendirme bitiş noktası
+        userinfo_endpoint: Kullanıcı bilgisi bitiş noktası
         token_endpoint: Gösterge bitiş noktası
         end_session_endpoint: Oturum bitiş noktasını sonlandır
         post_logout_redirect_uri: Oturum kapatma sonrası yönlendirme URI'si
@@ -52,9 +56,14 @@ tr:
   openid_connect:
     menu_title: OpenID sağlayıcıları
     delete_title: "OpenID Connect sağlayıcısını sil"
+    group_links_heading: OpenID Connect group links
     instructions:
       redirect_url: Bu, OpenID Connect sağlayıcısının başarılı bir oturum açma işleminden sonra OpenProject'e geri yönlendirmek için kullanması gereken yönlendirme adresidir.
       endpoint_url: OpenID Connect sağlayıcısı tarafından size verilen uç nokta URL'si
+      group_regexes: One regular expression pattern per line. Please read [the documentation](docs_url) for more information on how to do this.
+      group_regexes_detail: Define patterns using regular expressions to match group names from the groups claim. For example, entering a pattern like <code>^Level1/Level2/([\w/]+)$</code> will extract the group “Groupname/SubGroup” from a response including “Level1/Level2/GroupName/SubGroup”.
+      group_sync: Automatically extract and synchronise group membership information from the identity provider.
+      groups_claim: Specify the name of the claim that's expected to indicate the group names that the user is a member of.
       metadata_none: Bu bilgiye sahip değilim
       metadata_url: Bir keşif uç noktası URL'im var
       client_id: OpenID Connect sağlayıcısı tarafından size verilen istemci URL'si
@@ -91,12 +100,15 @@ tr:
         name: Microsoft Entra
       custom:
         name: Özel
-      upsale:
+      upsell:
+        title: "Single Sign-On (SSO) with OpenID connect"
         description: Connect OpenProject to an OpenID connect identity provider
       label_add_new: Yeni bir OpenID sağlayıcı ekle
       label_edit: OpenID sağlayıcıyı düzenle %{name}
       label_empty_title: No OpenID providers configured yet.
       label_empty_description: Add a provider to see them here.
+      label_group_mapping: Group mapping
+      label_group_regexes: Pattern (regular expression)
       label_metadata: OpenID Connect Discovery Endpoint
       label_automatic_configuration: Otomatik yapılandırma
       label_optional_configuration: İsteğe bağlı yapılandırma
@@ -109,6 +121,7 @@ tr:
       plural: OpenID sağlayıcıları
       singular: OpenID sağlayıcı
       section_texts:
+        group_mapping: Map group names provided by the identity provider to groups in OpenProject.
         metadata: Pre-fill configuration using an OpenID Connect discovery endpoint URL
         metadata_form_banner: Editing the discovery endpoint may override existing pre-filled metadata values.
         metadata_form_title: OpenID Connect Discovery endpoint
@@ -118,6 +131,9 @@ tr:
         display_name: Görünen isim kullanıcılara görünür.
         attribute_mapping: Configure the mapping of attributes between OpenProject and the OpenID Connect provider.
         claims: Request additional claims for the ID token or userinfo response.
+      side_panel:
+        information_component:
+          backchannel_logout_url: Backchannel logout URL
     setting_instructions:
       limit_self_registration: >
         Etkinleştirilirse, kullanıcılar bu sağlayıcıyı kullanarak yalnızca kendi kendine kayıt ayarı buna izin veriyorsa kaydolabilir.

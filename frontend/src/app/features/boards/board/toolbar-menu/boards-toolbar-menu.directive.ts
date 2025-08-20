@@ -43,6 +43,7 @@ import { triggerEditingEvent } from 'core-app/shared/components/editable-toolbar
 
 @Directive({
   selector: '[boardsToolbarMenu]',
+  standalone: false,
 })
 export class BoardsToolbarMenuDirective extends OpContextMenuTrigger {
   @Input('boardsToolbarMenu-resource') public board:Board;

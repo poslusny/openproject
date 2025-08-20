@@ -7,7 +7,7 @@ ms:
   activerecord:
     attributes:
       two_factor_authentication/device:
-        identifier: "Pengenal"
+        identifier: "Pengenalan"
         default: "Guna sebagai default"
         channel: "Channel"
       two_factor_authentication/device/sms:
@@ -82,7 +82,7 @@ ms:
       text_2fa_enabled: "Setiap kali log masuk, pengguna ini akan diminta untuk memasukkan token OTP daripada peranti 2FA default mereka."
       text_2fa_disabled: "Pengguna ini tidak menyediakan peranti 2FA melalui 'Laman akaun saya' mereka"
       only_sms_allowed: "Hanya penghantaran SMS boleh disediakan untuk pengguna-pengguna lain."
-    upsale:
+    upsell:
       title: "Pengesahan dua faktor"
       description: "Ketatkan keselamatan contoh OpenProject anda dengan menawarkan (atau kuatkuasakan) pengesahan dua faktor ke semua ahli projek."
     backup_codes:
@@ -123,7 +123,7 @@ ms:
       2fa_from_webauthn: Sila sediakan peranti WebAuthn <strong>%{device_name}</strong>. Jika ia berdasarkan USB, sila pastikan untuk memasang dan menyentuhnya. Selepas itu, klik butang log masuk.
       webauthn:
         title: "WebAuthn"
-        description: Daftarkan peranti FIDO2 (seperti YubiKey) atau sangkar selamat peranti mudah alih anda.
+        description: Register a FIDO2 device (like YubiKey) or the secure enclave of your mobile device.
         further_steps: Setelah anda memilih nama, anda boleh klik butang Teruskan. Pelayar anda akan maklumkan kepada anda untuk mengemukakan peranti WebAuthn anda. Setelah berbuat demikian, pendaftaran peranti anda telah selesai.
       totp:
         title: "Pengesah berasaskan aplikasi"
@@ -178,7 +178,7 @@ ms:
   label_expiration_hint: "%{date} atau pada log keluar"
   label_actions: "Tindakan"
   label_confirmed: "Disahkan"
-  button_continue: "Seterusnya"
+  button_continue: "Teruskan"
   button_make_default: "Tandakan sebagai default"
   label_unverified_phone: "Telefon bimbit masih belum disahkan "
   notice_phone_number_format: "Sila masukkan nombor dalam format berikut: +XX XXXXXXXX."

@@ -52,6 +52,7 @@ export interface IWorkPackageAutocompleteItem extends WorkPackageResource {
   templateUrl: '../../../../../../shared/components/autocompleter/op-autocompleter/op-autocompleter.component.html',
   styleUrls: ['../../../../../../shared/components/autocompleter/op-autocompleter/op-autocompleter.component.sass'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class WorkPackageRelationsAutocompleteComponent extends OpAutocompleterComponent<IWorkPackageAutocompleteItem> {
   @Input() workPackage:WorkPackageResource;

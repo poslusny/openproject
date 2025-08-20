@@ -45,7 +45,7 @@ it:
       meeting_agenda_item:
         title: "Titolo"
         author: "Autore"
-        duration_in_minutes: "min"
+        duration_in_minutes: "Durata"
         description: "Note"
         presenter: "Presentatore"
       meeting_section:
@@ -70,11 +70,9 @@ it:
         invalid_time_format: "non è un tempo valido. Formato richiesto: HH: mm"
     models:
       recurring_meeting: "Riunione ricorrente"
-      structured_meeting: "Riunione una tantum"
-      meeting: "Riunione"
+      meeting: "Riunione una tantum"
       meeting_agenda_item: "Attività"
       meeting_agenda: "Ordine del giorno"
-      meeting_minutes: "Verbali"
       meeting_section: "Sezione"
   activity:
     filter:
@@ -101,6 +99,7 @@ it:
     meeting_agenda_opened: Agenda riunione aperta
     meeting_minutes: Verbali riunione modificati
     meeting_minutes_created: Verbale riunione creato
+  error_notification: "Impossibile inviare la notifica."
   error_notification_with_errors: "Impossibile inviare notifica. Non è possibile notificare i seguenti destinatari: %{recipients}"
   label_meeting: "Riunione"
   label_meeting_plural: "Riunioni"
@@ -120,6 +119,7 @@ it:
   label_meeting_date_time: "Data/ora"
   label_meeting_date_and_time: "Data e ora"
   label_meeting_diff: "Differenza"
+  label_meeting_send_updates: "Invia aggiornamenti del calendario via email"
   label_recurring_meeting: "Riunione ricorrente"
   label_recurring_meeting_part_of: "Parte di una serie di riunioni"
   label_recurring_meeting_new: "Nuova riunione ricorrente"
@@ -184,6 +184,7 @@ it:
       agenda_items: "Copia punti all'ordine del giorno"
       agenda_text: "Copia l'ordine del giorno della vecchia riunione"
       participants: "Copia elenco dei partecipanti"
+      to_clipboard: "Copia negli appunti"
     email:
       send_emails: "Invia e-mail ai partecipanti"
       send_invitation_emails: >
@@ -215,11 +216,8 @@ it:
         body: "La riunione \"%{title}\" è stata riprogrammata da %{actor}."
         old_date_time: "Data/ora precedente"
         new_date_time: "Nuova data/ora"
-    label_mail_all_participants: "Invia e-mail a tutti i partecipanti"
+    label_mail_all_participants: "Invia un invito tramite email al calendario a tutti i partecipanti"
     types:
-      classic: "Classica (non supportata)"
-      classic_text: "Nota: le riunioni classiche verranno rimosse nella prossima versione di OpenProject."
-      structured: "Strutturato"
       one_time: "Una tantum"
       recurring: "Ricorrente"
       recurring_text: "Crea una serie di riunioni con modello dinamico per ogni ricorrenza."
@@ -241,12 +239,79 @@ it:
     blankslate:
       title: "Nessuna riunione da visualizzare"
       desc: "Non ci sono riunioni che soddisfano i criteri del filtro attivo."
+    label_export_pdf: "Esporta PDF"
+    export:
+      your_meeting_export: "Riunione in corso di esportazione"
+    export_pdf_dialog:
+      title: Esporta PDF
+      description: Genera un file PDF stampabile di questa riunione allo stato attuale.
+      include_participants:
+        label: Includi l'elenco dei partecipanti
+        caption: L'elenco dei partecipanti sarà preimpostato sopra l'ordine del giorno della riunione.
+      include_attachments:
+        label: Includi l'elenco degli allegati
+        caption: Alla fine verrà aggiunto un elenco contenente i nomi dei file degli allegati.
+      include_backlog:
+        label: Includi backlog
+        caption: Di solito gli elementi del backlog non vengono considerati parte integrante di una riunione, ma è possibile scegliere di includerli.
+      include_outcomes:
+        label: Includi esiti dell'ordine del giorno
+        caption: Se i risultati dell'agenda contengono informazioni riservate, puoi scegliere di non includerli nell'esportazione.
+      footer_text:
+        label: Testo del piè di pagina
+        caption: Questo testo apparirà in ogni pagina al centro del piè di pagina.
+      submit_button: Scarica
+    notifications:
+      sidepanel:
+        title: "Aggiornamenti del calendario via email"
+        state:
+          disabled: "Disabilitate."
+          enabled: "Abilitate."
+        description:
+          disabled: "I partecipanti non riceveranno un'email che li informerà delle modifiche."
+          enabled: "Tutti i partecipanti riceveranno via email inviti aggiornati al calendario per informarli delle modifiche."
+          change_via_template: "Per cambiare l'impostazione, modifica il modello della serie."
+        button:
+          disable: "Disabilita"
+          enable: "Abilita"
+      dialog:
+        title:
+          enable: "Abilitare gli aggiornamenti del calendario via email?"
+          disable: "Disabilitare gli aggiornamenti del calendario via email?"
+        message:
+          enable: >
+            Tutti i partecipanti riceveranno inviti aggiornati tramite email ogni volta che si verificherà una modifica alla data, all'ora, al luogo o ai partecipanti della riunione. Una volta attivata, un'email verrà inviata immediatamente a tutti i partecipanti.
+          disable: >
+            I partecipanti non riceveranno più inviti aggiornati al calendario via email in caso di modifiche alla data, all'ora, al luogo o ai partecipanti della riunione. Se avevano già un invito per questa riunione, potrebbe non essere più corretto.
+        confirm_label:
+          enable: "Abilita gli aggiornamenti via email"
+          disable: "Disabilita gli aggiornamenti via email"
+      banner:
+        onetime:
+          enabled: >
+            Tutti i partecipanti riceveranno via email inviti aggiornati al calendario per informarli delle tue modifiche.
+          disabled: >
+            Gli aggiornamenti del calendario via email sono disabilitati. I partecipanti non riceveranno un'email che li informa delle modifiche.
+        occurrence:
+          enabled: >
+            Gli aggiornamenti del calendario via email sono abilitati per la serie di riunioni. Tutti i partecipanti riceveranno inviti aggiornati al calendario, che li informeranno delle modifiche apportate a questo evento.
+          disabled: >
+            Gli aggiornamenti del calendario via email sono disabilitati per la serie di riunioni. I partecipanti non riceveranno un'email che li informerà delle modifiche apportate a questo evento.
+        template:
+          enabled: >
+            Gli aggiornamenti del calendario via e-mail sono abilitati per la serie di riunioni. Tutti i partecipanti riceveranno inviti al calendario aggiornati che li informeranno delle modifiche apportate a questo modello o ai singoli eventi.
+          disabled: >
+            Gli aggiornamenti del calendario via email sono disabilitati per la serie di riunioni. I partecipanti non riceveranno un'email che li informerà delle modifiche apportate a questo modello o ai singoli eventi.
   meeting_section:
     untitled_title: "Sezione senza titolo"
     delete_confirmation: "L'eliminazione della sezione eliminerà anche tutti i suoi elementi dell'ordine del giorno. Continuare?"
     placeholder_title: "Nuova sezione"
     empty_text: "Trascina gli elementi qui o creane una nuova"
   recurring_meeting:
+    time_zone_difference_banner:
+      title: "Differenza di fuso orario"
+      description: >
+        Le date riportate di seguito fanno riferimento al fuso orario della serie di riunioni (%{actual_zone}), non al tuo fuso orario locale (%{user_zone}).
     ended_blankslate:
       title: "Serie di riunioni terminata"
       message: "Questa serie di riunioni è giunta al termine. Non ci sono altre riunioni. "
@@ -324,23 +389,17 @@ it:
       confirm_button: "Cancella l'occorrenza"
     end_series_dialog:
       title: "Termina serie di riunioni"
-  notice_successful_notification: "Notifica inviata con successo"
+  notice_successful_notification: "Aggiornamento del calendario via e-mail inviato a tutti i partecipanti"
   notice_timezone_missing: Nessun fuso orario è impostato e la %{zone} è un requisito necessario. Per scegliere il tuo fuso orario, fare clic qui.
   notice_meeting_updated: "Questa pagina è stata aggiornata da qualcun altro. Ricarica per visualizzare le modifiche."
   permission_create_meetings: "Creare riunioni"
   permission_edit_meetings: "Modificare riunioni"
   permission_delete_meetings: "Annullare riunioni"
   permission_view_meetings: "Vedere riunioni"
-  permission_create_meeting_agendas: "Crea ordini del giorno della riunione"
-  permission_create_meeting_agendas_explanation: "Consente di modificare il contenuto dell'ordine del giorno della Riunione classica."
   permission_manage_agendas: "Gestire gli ordini del giorno"
-  permission_manage_agendas_explanation: "Consente di gestire gli elementi dell'ordine del giorno della Riunione dinamica."
-  permission_close_meeting_agendas: "Chiudere gli ordini del giorno"
-  permission_send_meeting_agendas_notification: "Inviare notifiche di modifica degli ordini del giorno"
-  permission_create_meeting_minutes: "Gestire i verbali"
-  permission_send_meeting_minutes_notification: "Inviare notifiche di verbali modificati"
-  permission_meetings_send_invite: "Invita gli utenti alle riunioni"
-  permission_send_meeting_agendas_icalendar: "Invia l'agenda della riunione come voce del calendario"
+  permission_manage_agendas_explanation: "Consente di creare, modificare e rimuovere voci dell'ordine del giorno"
+  permission_manage_outcomes: "Gestisci risultati"
+  permission_send_meeting_invites_and_outcomes: "Invia inviti alla riunione e risultati ai partecipanti"
   project_module_meetings: "Riunioni"
   text_duration_in_hours: "Durata in ore"
   text_in_hours: "in ore"
@@ -352,8 +411,8 @@ it:
   text_meeting_minutes_for_meeting: 'verbali per l''incontro "%{meeting}"'
   text_notificiation_invited: "Questa mail contiene un elemento di riunione ics qui in seguito:"
   text_meeting_empty_heading: "La tua riunione è vuota"
-  text_meeting_empty_description_1: "Inizia con l'aggiunta di elementi dell'ordine del giorno qui sotto. Ogni elemento può essere semplice come solo un titolo, ma è anche possibile aggiungere ulteriori dettagli come durata e note."
-  text_meeting_empty_description_2: 'Puoi anche aggiungere riferimenti alle macro-attività esistenti. Quando lo fai, le note correlate saranno automaticamente visibili nella scheda "Riunioni" della macro-attività.'
+  text_meeting_empty_description1: "Inizia con l'aggiunta di elementi dell'ordine del giorno qui sotto. Ogni elemento può essere semplice come solo un titolo, ma è anche possibile aggiungere ulteriori dettagli come durata e note."
+  text_meeting_empty_description2: 'Puoi anche aggiungere riferimenti alle macro-attività esistenti. Quando lo fai, le note correlate saranno automaticamente visibili nella scheda "Riunioni" della macro-attività.'
   label_meeting_empty_action: "Aggiungi punto all'ordine del giorno"
   label_meeting_actions: "Azioni di riunione"
   label_meeting_edit_title: "Modifica titolo riunione"
@@ -367,23 +426,47 @@ it:
   label_meeting_index_later: "La prossima settimana e più tardi"
   label_agenda_items: "Punti all'ordine del giorno"
   label_agenda_items_reordered: "riordinato"
-  label_agenda_item_remove: "Rimuovi dall'ordine del giorno"
+  label_agenda_item_add: "Aggiungi punto all'ordine del giorno"
+  label_agenda_item_remove_from_agenda: "Rimuovi dall'ordine del giorno"
+  label_agenda_item_remove_from_backlog: "Rimuovi dal backlog"
   label_agenda_item_undisclosed_wp: "Macro-attività #%{id} non visibile"
   label_agenda_item_deleted_wp: "Riferimento della macro-attività eliminato"
   label_agenda_item_actions: "Azioni all'ordine del giorno"
+  label_agenda_item_move_to_next_title: "Move to next meeting?"
+  label_agenda_item_move: "Move"
   label_agenda_item_move_to_next: "Sposta alla prossima riunione"
+  label_agenda_item_move_to_backlog: "Sposta nel backlog"
+  label_agenda_item_move_to_current_meeting: "Sposta alla riunione attuale"
   label_agenda_item_move_to_top: "Sposta in cima"
   label_agenda_item_move_to_bottom: "Sposta in fondo"
   label_agenda_item_move_up: "Sposta su"
   label_agenda_item_move_down: "Sposta giu"
   label_agenda_item_add_notes: "Aggiungi nota"
   label_agenda_item_add_outcome: "Aggiungi risultato"
+  label_agenda_item_work_package_add: "Aggiungi macro-attività"
   label_agenda_item_work_package: "Macro-attività nei punti all'ordine del giorno"
+  label_section_rename: "Rinomina sezione"
   label_agenda_outcome: "Risultato"
   label_agenda_outcome_actions: "Azioni di risultato dell'ordine del giorno"
   label_agenda_outcome_edit: "Modifica risultato"
   label_agenda_outcome_delete: "Rimuovi risultato"
   text_outcome_not_editable_anymore: "Questo risultato non è più modificabile."
+  text_outcome_cannot_be_added: "Non è più possibile aggiungere un risultato."
+  label_backlog_clear: "Ripulisci il backlog"
+  label_backlog_clear_button: "Cancella tutto"
+  text_backlog_clear_error: "Si sono verificati uno o più errori durante il tentativo di ripulire il backlog."
+  label_agenda_backlog: "Backlog dell'ordine del giorno"
+  text_agenda_backlog: >
+    Questo backlog è unico per questa riunione una tantum. Puoi trascinare gli elementi dentro e fuori per aggiungerli o rimuoverli dall'ordine del giorno della riunione.
+  label_agenda_backlog_clear_title: "Ripulire il backlog dell'ordine del giorno?"
+  text_agenda_backlog_clear_description: >
+    Vuoi davvero rimuovere tutti gli elementi attualmente presenti nel backlog dell'ordine del giorno? Questa azione non è reversibile.
+  label_series_backlog: "Backlog della serie"
+  text_series_backlog: >
+    Il backlog è condiviso con tutte le occorrenze di questa serie. Puoi trascinare gli elementi dentro e fuori per aggiungerli o rimuoverli da una particolare riunione.
+  label_series_backlog_clear_title: "Ripulire il backlog della serie?"
+  text_series_backlog_clear_description: >
+    Questa operazione rimuoverà tutti gli elementi del backlog, che è condiviso con tutte le riunioni della serie. Vuoi continuare? Questa azione è irreversibile.
   text_agenda_item_title: 'Punto all''ordine del giorno "%{title}"'
   text_agenda_work_package_deleted: 'Punto all''ordine del giorno per la macro-attività cancellata'
   text_deleted_agenda_item: 'Punto all''ordine del giorno cancellato'
@@ -392,7 +475,7 @@ it:
   label_meeting_series_details: "Dettagli della serie di riunioni"
   label_meeting_details_edit: "Modifica dettagli riunione"
   label_meeting_state: "Stato della riunione"
-  label_meeting_state_open: "Aperti"
+  label_meeting_state_open: "Aperte"
   label_meeting_state_closed: "Chiuso"
   label_meeting_state_agenda_created: "Ordine del giorno creato"
   label_meeting_state_planned: "Pianificata"
@@ -421,9 +504,12 @@ it:
   text_add_work_package_to_meeting_description: "Una macro-attività può essere aggiunta a una o più riunioni per la discussione. Tutte le note che la riguardano sono visibili anche qui."
   text_agenda_item_no_notes: "Nessuna nota fornita"
   text_agenda_item_not_editable_anymore: "Questo punto dell'ordine del giorno non è più modificabile."
-  text_agenda_item_move_next_meeting: "Vuoi davvero spostarlo alla prossima riunione il giorno %{date} alle ore %{time}?"
+  text_agenda_item_move_next_meeting: "This item will be moved to the next meeting on %{date} at %{time}."
   text_agenda_item_moved_to_next_meeting: "Punto all'ordine del giorno spostato alla prossima riunione, il giorno %{date}"
   text_work_package_has_no_upcoming_meeting_agenda_items: "Questa macro-attività non è ancora programmata in un prossimo ordine del giorno di riunione."
   text_agenda_item_move_next_meeting_cancelled: "Impossibile passare alla riunione successiva perché è stata annullata."
   text_work_package_add_to_meeting_hint: 'Utilizzare il pulsante "Aggiungi alla riunione" per aggiungere questa macro-attività a una riunione imminente.'
   text_work_package_has_no_past_meeting_agenda_items: "Questa macro-attività non è stato menzionata in una riunione precedente."
+  text_email_updates_muted: "Gli aggiornamenti del calendario via email sono disattivati. I partecipanti non riceveranno inviti aggiornati via email quando apporti modifiche."
+  text_email_updates_enabled: "Gli aggiornamenti del calendario via email sono abilitati. Tutti i partecipanti riceveranno gli inviti aggiornati via email quando apporti modifiche."
+

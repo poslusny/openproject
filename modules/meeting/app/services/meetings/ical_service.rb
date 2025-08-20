@@ -63,8 +63,8 @@ module Meetings
         e.url = url_helpers.meeting_url(meeting)
         e.summary = "[#{meeting.project.name}] #{meeting.title}"
         e.description = ical_subject
-        e.uid = "#{meeting.id}@#{meeting.project.identifier}"
-        e.organizer = ical_organizer(meeting)
+        e.uid = meeting.uid
+        e.organizer = ical_organizer
         e.location = meeting.location.presence
 
         set_status(cancelled, e)

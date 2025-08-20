@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -86,5 +88,14 @@ OpenProject::CustomFieldFormat.map do |fields|
                                                      only: %w(WorkPackage),
                                                      order: 12,
                                                      multi_value_possible: true,
+                                                     enterprise_feature: :custom_field_hierarchies,
                                                      formatter: "CustomValue::HierarchyStrategy")
+
+  fields.register OpenProject::CustomFieldFormat.new("calculated_value",
+                                                     label: :label_calculated_value,
+                                                     only: %w(Project),
+                                                     order: 13,
+                                                     enabled: lambda do
+                                                       OpenProject::FeatureDecisions.calculated_value_project_attribute_active?
+                                                     end)
 end

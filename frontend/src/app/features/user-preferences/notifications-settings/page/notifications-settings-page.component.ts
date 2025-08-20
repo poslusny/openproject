@@ -46,6 +46,7 @@ interface IFullNotificationSettingsValue extends IToastSettingsValue {
   templateUrl: './notifications-settings-page.component.html',
   styleUrls: ['./notifications-settings-page.component.sass'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class NotificationsSettingsPageComponent extends UntilDestroyedMixin implements OnInit {
   @Input() userId:string;
@@ -54,7 +55,7 @@ export class NotificationsSettingsPageComponent extends UntilDestroyedMixin impl
 
   public availableTimesOverdue = overDueReminderTimes();
 
-  public eeShowBanners = false;
+  public eeAvailable = false;
 
   public form = new UntypedFormGroup({
     assignee: new UntypedFormControl(false),
@@ -114,9 +115,6 @@ export class NotificationsSettingsPageComponent extends UntilDestroyedMixin impl
     startDate: this.I18n.t('js.work_packages.properties.startDate'),
     dueDate: this.I18n.t('js.work_packages.properties.dueDate'),
     overdue: this.I18n.t('js.notifications.settings.global.overdue'),
-    teaser_text: this.I18n.t('js.notifications.settings.global.date_alerts.teaser_text'),
-    upgrade_to_ee_text: this.I18n.t('js.boards.upsale.upgrade'),
-    more_info_link: enterpriseDocsUrl.website,
   };
 
   dateAlertsStatuses = {
@@ -140,7 +138,7 @@ export class NotificationsSettingsPageComponent extends UntilDestroyedMixin impl
 
   ngOnInit():void {
     this.form.disable();
-    this.eeShowBanners = this.bannersService.eeShowBanners;
+    this.eeAvailable = this.bannersService.allowsTo('date_alerts');
 
     this
       .currentUserService

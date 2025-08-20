@@ -178,17 +178,17 @@ To highlight and edit several work packages at once, keep the Ctrl key pressed a
 
 **Right-click** on the highlighted work packages. This will open a context menu.
 
-Select **Bulk copy** in order to copy all selected work packages including their relations.
+Select **Bulk duplicate** in order to copy all selected work packages including their relations.
 
 ![image-20200331132513748](image-20200331132513748.png)
 
-In the following view you have the possibility to change additional attributes of the work packages to be copied. Confirm your selection with **Copy**.
+In the following view you have the possibility to change additional attributes of the work packages to be copied. Confirm your selection with **Duplicate**.
 
 ### How can I move a work package to another project?
 
-In the work package table: Right-click on the work package and choose **Move to another project**.  
+In the work package table: Right-click on the work package and choose **Move to another project**.
 
-In the details view of the work package: Click on **More** (button with three dots in the upper right hand corner) and then on **Move to another project**. 
+In the details view of the work package: Click on **More** (button with three dots in the upper right hand corner) and then on **Move to another project**.
 
 > [!TIP]
 > If a work package you move has children work packages, they will be moved to the selected project as well.

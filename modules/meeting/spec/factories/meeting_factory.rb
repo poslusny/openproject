@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -45,14 +46,13 @@ FactoryBot.define do
 
     after(:create) do |meeting, evaluator|
       meeting.project = evaluator.project if evaluator.project
+
+      # create backlog
+      create(:meeting_section, meeting:, backlog: true)
     end
 
-    factory :structured_meeting, class: "StructuredMeeting" do |structured_meeting|
-      structured_meeting.sequence(:title) { |n| "Structured meeting #{n}" }
-    end
-
-    factory :structured_meeting_template, class: "StructuredMeeting" do |structured_meeting|
-      structured_meeting.sequence(:title) { |n| "Structured meeting template #{n}" }
+    factory :meeting_template do |meeting|
+      meeting.sequence(:title) { |n| "Meeting template #{n}" }
       template { true }
       recurring_meeting
 

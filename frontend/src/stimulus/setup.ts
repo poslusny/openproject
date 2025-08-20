@@ -1,4 +1,3 @@
-import { Application } from '@hotwired/stimulus';
 import { environment } from '../environments/environment';
 import { OpApplicationController } from './controllers/op-application.controller';
 import MainMenuController from './controllers/dynamic/menus/main.controller';
@@ -20,6 +19,16 @@ import PatternInputController from './controllers/pattern-input.controller';
 import HoverCardTriggerController from './controllers/hover-card-trigger.controller';
 import ScrollIntoViewController from './controllers/scroll-into-view.controller';
 import CkeditorFocusController from './controllers/ckeditor-focus.controller';
+import IndexController from './controllers/dynamic/work-packages/activities-tab/index.controller';
+import AutoScrollingController from './controllers/dynamic/work-packages/activities-tab/auto-scrolling.controller';
+import PollingController from './controllers/dynamic/work-packages/activities-tab/polling.controller';
+import StemsController from './controllers/dynamic/work-packages/activities-tab/stems.controller';
+import EditorController from './controllers/dynamic/work-packages/activities-tab/editor.controller';
+
+import AutoSubmit from '@stimulus-components/auto-submit';
+import { OpenProjectStimulusApplication } from 'core-stimulus/openproject-stimulus-application';
+import { Application } from '@hotwired/stimulus';
+import { BeforeunloadController } from './controllers/beforeunload.controller';
 
 declare global {
   interface Window {
@@ -27,31 +36,38 @@ declare global {
   }
 }
 
-const instance = Application.start();
+OpenProjectStimulusApplication.preregister('application', OpApplicationController);
+OpenProjectStimulusApplication.preregister('async-dialog', AsyncDialogController);
+OpenProjectStimulusApplication.preregister('disable-when-checked', OpDisableWhenCheckedController);
+OpenProjectStimulusApplication.preregister('flash', FlashController);
+OpenProjectStimulusApplication.preregister('menus--main', MainMenuController);
+OpenProjectStimulusApplication.preregister('password-confirmation-dialog', PasswordConfirmationDialogController);
+OpenProjectStimulusApplication.preregister('poll-for-changes', PollForChangesController);
+OpenProjectStimulusApplication.preregister('print', PrintController);
+OpenProjectStimulusApplication.preregister('refresh-on-form-changes', RefreshOnFormChangesController);
+OpenProjectStimulusApplication.preregister('form-preview', FormPreviewController);
+OpenProjectStimulusApplication.preregister('hover-card-trigger', HoverCardTriggerController);
+OpenProjectStimulusApplication.preregister('show-when-checked', OpShowWhenCheckedController);
+OpenProjectStimulusApplication.preregister('show-when-value-selected', OpShowWhenValueSelectedController);
+OpenProjectStimulusApplication.preregister('table-highlighting', TableHighlightingController);
+OpenProjectStimulusApplication.preregister('projects-zen-mode', OpProjectsZenModeController);
+OpenProjectStimulusApplication.preregister('work-packages--date-picker--preview', PreviewController);
+OpenProjectStimulusApplication.preregister('keep-scroll-position', KeepScrollPositionController);
+OpenProjectStimulusApplication.preregister('pattern-input', PatternInputController);
+OpenProjectStimulusApplication.preregister('scroll-into-view', ScrollIntoViewController);
+OpenProjectStimulusApplication.preregister('ckeditor-focus', CkeditorFocusController);
+OpenProjectStimulusApplication.preregister('auto-submit', AutoSubmit);
+OpenProjectStimulusApplication.preregister('work-packages--activities-tab--index', IndexController);
+OpenProjectStimulusApplication.preregister('work-packages--activities-tab--auto-scrolling', AutoScrollingController);
+OpenProjectStimulusApplication.preregister('work-packages--activities-tab--polling', PollingController);
+OpenProjectStimulusApplication.preregister('work-packages--activities-tab--stems', StemsController);
+OpenProjectStimulusApplication.preregister('work-packages--activities-tab--editor', EditorController);
+OpenProjectStimulusApplication.preregister('beforeunload', BeforeunloadController);
+
+const instance = OpenProjectStimulusApplication.start();
 window.Stimulus = instance;
 
 instance.debug = !environment.production;
 instance.handleError = (error, message, detail) => {
   console.warn(error, message, detail);
 };
-
-instance.register('application', OpApplicationController);
-instance.register('async-dialog', AsyncDialogController);
-instance.register('disable-when-checked', OpDisableWhenCheckedController);
-instance.register('flash', FlashController);
-instance.register('menus--main', MainMenuController);
-instance.register('password-confirmation-dialog', PasswordConfirmationDialogController);
-instance.register('poll-for-changes', PollForChangesController);
-instance.register('print', PrintController);
-instance.register('refresh-on-form-changes', RefreshOnFormChangesController);
-instance.register('form-preview', FormPreviewController);
-instance.register('hover-card-trigger', HoverCardTriggerController);
-instance.register('show-when-checked', OpShowWhenCheckedController);
-instance.register('show-when-value-selected', OpShowWhenValueSelectedController);
-instance.register('table-highlighting', TableHighlightingController);
-instance.register('projects-zen-mode', OpProjectsZenModeController);
-instance.register('work-packages--date-picker--preview', PreviewController);
-instance.register('keep-scroll-position', KeepScrollPositionController);
-instance.register('pattern-input', PatternInputController);
-instance.register('scroll-into-view', ScrollIntoViewController);
-instance.register('ckeditor-focus', CkeditorFocusController);

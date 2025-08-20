@@ -32,13 +32,9 @@ import { ApplicationController } from 'stimulus-use';
 import { TurboRequestsService } from 'core-app/core/turbo/turbo-requests.service';
 import { PathHelperService } from 'core-app/core/path-helper/path-helper.service';
 
-export default class OpMeetingsFormController extends ApplicationController {
-  private turboRequests:TurboRequestsService;
-  private pathHelper:PathHelperService;
-
-  static values = { structured: Boolean };
-
-  declare structuredValue:boolean;
+export default class extends ApplicationController {
+  protected turboRequests:TurboRequestsService;
+  protected pathHelper:PathHelperService;
 
   async connect() {
     const context = await window.OpenProject.getPluginContext();
@@ -52,11 +48,7 @@ export default class OpMeetingsFormController extends ApplicationController {
     let key:string;
 
     ['start_date', 'start_time_hour'].forEach((name) => {
-      if (this.structuredValue === true) {
-        key = `structured_meeting[${name}]`;
-      } else {
-        key = `meeting[${name}]`;
-      }
+      key = `meeting[${name}]`;
       urlSearchParams.append(key, data.get(key) as string);
     });
 
@@ -65,7 +57,9 @@ export default class OpMeetingsFormController extends ApplicationController {
       .request(
         `${this.pathHelper.staticBase}/meetings/fetch_timezone?${urlSearchParams.toString()}`,
         {
-          headers: { Accept: 'text/vnd.turbo-stream.html' },
+          headers: {
+            Accept: 'text/vnd.turbo-stream.html',
+          },
         },
       );
   }

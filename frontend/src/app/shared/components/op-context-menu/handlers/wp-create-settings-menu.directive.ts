@@ -35,6 +35,7 @@ import { FormResource } from 'core-app/features/hal/resources/form-resource';
 
 @Directive({
   selector: '[wpCreateSettingsMenu]',
+  standalone: false,
 })
 export class WorkPackageCreateSettingsMenuDirective extends OpContextMenuTrigger {
   constructor(readonly elementRef:ElementRef,

@@ -41,9 +41,14 @@ fr:
         changed: "modifié"
         created: "créé"
         commented: "commenté"
-        restrict_visibility: Restreindre la visibilité
-        restricted_journal: Les commentaires restreints sont visibles pour un groupe limité de membres.
+        internal_comment: Commentaire interne
+        internal_journal: Les commentaires internes sont visibles pour un groupe limité de membres.
         unsaved_changes_confirmation_message: Vous avez des modifications non enregistrées. Voulez-vous vraiment fermer l'éditeur ?
+        internal_comment_confirmation:
+          title: "Rendre ce commentaire public ?"
+          heading: "Rendre ce commentaire public ?"
+          description: "Votre commentaire sera visible pour tous ceux qui peuvent accéder à ce lot de travaux. Voulez-vous continuer ?"
+          confirm_button_text: "Passer en public"
   admin:
     plugins:
       no_results_title_text: Aucun plugin n'est actuellement installé.
@@ -58,30 +63,25 @@ fr:
         primary-button-color: "Bouton principal"
         accent-color: "Couleur d'accentuation"
         header-bg-color: "Fond de l'en-tête"
-        header-item-bg-hover-color: "Fond d’en-tête au survol"
         main-menu-bg-color: "Arrière-plan du menu principal"
         main-menu-bg-selected-background: "Menu principal quand sélectionné"
-        main-menu-bg-hover-background: "Menu principal au survol"
       custom_colors: "Couleurs personnalisées"
-      customize: "Personnalisez votre installation OpenProject avec votre propre logo et couleurs."
-      enterprise_notice: "Comme remerciement spécial pour leur contribution financière au développement d'OpenProject, cet add-on n’est disponible que pour les titulaires d'une version Entreprise."
-      enterprise_more_info: "Remarque : le logo utilisé sera accessible publiquement."
       manage_colors: "Modifier les options du sélecteur de couleur"
       instructions:
         primary-button-color: "Couleur d'accentuation, utilisée pour le bouton le plus important à l'écran."
         accent-color: "Couleur pour les liens et autres éléments correctement mis en évidence."
-        header-item-bg-hover-color: "Couleur d’arrière-plan des éléments de l’en-tête survolées par la souris."
-        header-item-font-color: "Couleur de la police des éléments de l’en-tête cliquables."
-        header-item-font-hover-color: "Couleur de la police des éléments de l’en-tête survolées par la souris."
-        header-border-bottom-color: "Ligne mince sous l’en-tête. Laissez ce champ vide si vous ne voulez pas de ligne."
         main-menu-bg-color: "Couleur d’arrière-plan du menu de gauche."
       theme_warning: Le changement de thème écrasera votre style personnalisé. Le design sera alors perdu. Êtes-vous sûr de vouloir continuer ?
     enterprise:
-      upgrade_to_ee: "Passer à la version Entreprise"
+      delete_dialog:
+        title: "Supprimer le jeton Enterprise"
+        heading: "Supprimer ce jeton Enterprise ?"
+        confirmation: "Voulez-vous vraiment supprimer le jeton d'assistance de cette édition Enterprise ?"
+      create_dialog:
+        title: "Ajouter un jeton Enterprise"
+        type_token_text: "Saisissez le texte du jeton d'assistance"
+        token_placeholder: "Collez votre jeton d'assistance pour l'édition Enterprise ici"
       add_token: "Charger un jeton de support pour la version Entreprise"
-      delete_token_modal:
-        text: "Voulez-vous vraiment supprimer le jeton actuellement utilisé pour l'édition Entreprise ?"
-        title: "Supprimer le jeton"
       replace_token: "Remplacer votre licence actuelle"
       order: "Commander l'édition Entreprise auto-hébergée"
       paste: "Coller votre jeton de support pour la version Entreprise"
@@ -93,13 +93,73 @@ fr:
       buttons:
         upgrade: "Passer au plan supérieur"
         contact: "Contactez-nous pour une démo"
-      enterprise_info_html: "est un module de la version <span class='spot-icon spot-icon_inline spot-icon_enterprise-addons'></span>Enterprise."
-      upgrade_info: "Veuillez passer à un plan payant pour l'activer et commencer à l'utiliser dans votre équipe."
+      status:
+        expired: "Expiré"
+        expiring_soon: "Expire bientôt"
+        in_grace_period: "En période de grâce"
+        invalid_domain: "Domaine invalide"
+        not_active: "Non actif"
+        trial: "Essai"
     jemalloc_allocator: Allocateur de mémoire Jemalloc
     journal_aggregation:
       explanation:
         text: "Les actions individuelles d'un utilisateur (par ex. mis à jour un lot de travaux deux fois) sont agrégés en une seule action si leur différence d'âge est inférieure à la période spécifiée. Elles seront affichées en une seule action dans l'application. Cela retardera également les notifications du même temps réduisant donc le nombre d'e-mails envoyés et affectera également le délai %{webhook_link}."
         link: "webhook"
+    scim_clients:
+      authentication_methods:
+        sso: "JWT du fournisseur d'identité"
+        oauth2_client: "Informations d'identification client OAuth 2.0"
+        oauth2_token: "Jeton d'accès statique"
+      created_client_credentials_dialog_component:
+        title: "Informations d'identification client créées"
+        heading: "Les informations d'identification client ont été générées"
+        one_time_hint: "C'est la seule fois que vous verrez le secret client. Pensez à le copier maintenant."
+      created_token_dialog_component:
+        title: "Jeton créé"
+        heading: "Un jeton a été généré"
+        label_token: "Jeton"
+        one_time_hint: "C'est la seule fois que vous verrez ce jeton. Pensez à le copier maintenant."
+      delete_scim_client_dialog_component:
+        title: "Supprimer le client SCIM"
+        heading: "Voulez-vous vraiment supprimer ce client SCIM ?"
+        description: "Les utilisateurs gérés par ce client SCIM ne peuvent plus être mis à jour par celui-ci."
+      edit:
+        label_delete_scim_client: "Supprimer le client SCIM"
+      form:
+        auth_provider_description: "Il s'agit du service que les utilisateurs ajoutés par le fournisseur SCIM utiliseront pour s'authentifier dans OpenProject."
+        authentication_method_description_html: "Voici comment le client SCIM s'authentifie dans OpenProject. Veuillez vous assurer que les jetons OAuth incluent la portée <code>scim_v2</code>."
+        description: "Veuillez consulter notre [documentation sur la configuration des clients SCIM](docs_url) pour obtenir plus d'informations sur ces options de configuration."
+        jwt_sub_description: "Par exemple, pour Keycloak, il s'agit de l'UUID du compte de service associé au client SCIM. Consultez [notre documentation](docs_url) pour savoir comment trouver la revendication de sujet selon votre cas d'utilisation."
+        name_description: "Choisissez un nom qui aidera les autres administrateurs à mieux comprendre pourquoi ce client a été configuré."
+      index:
+        description: "Les clients SCIM configurés ici peuvent interagir avec l'API SCIM du serveur OpenProject pour créer, mettre à jour et désactiver des comptes utilisateurs et des groupes."
+        label_create_button: "Ajouter un client SCIM"
+      new:
+        title: "Nouveau client SCIM"
+      revoke_static_token_dialog_component:
+        confirm_button: "Révoquer"
+        title: "Révoquer le jeton statique"
+        heading: "Voulez-vous vraiment révoquer ce jeton ?"
+        description: "Le client SCIM qui utilise ce jeton ne pourra plus accéder à l'API SCIM du serveur OpenProject."
+      table_component:
+        blank_slate:
+          title: "Aucun client SCIM configuré pour le moment"
+          description: "Ajoutez des clients pour les voir ici"
+        user_count: "Utilisateurs"
+      token_list_component:
+        description: "Les jetons que vous générez ici peuvent être transmis par un client SCIM pour accéder à l'API SCIM d'OpenProject."
+        heading: "Jetons"
+        label_add_token: "Jeton"
+        label_aria_add_token: "Ajouter un jeton"
+      token_table_component:
+        blank_slate:
+          title: "Aucun jeton n'a encore été créé"
+          description: "Vous pouvez en créer un maintenant"
+        expired: "Expiré le %{date}"
+        revoked: "Révoqué le %{date}"
+        title: "Tableau des jetons d'accès"
+  authentication:
+    login_and_registration: "Connexion et inscription"
   announcements:
     show_until: Afficher jusqu'à
     is_active: actuellement affiché
@@ -215,9 +275,6 @@ fr:
     new: "Nouvelle action personnalisée"
     edit: "Modifier l’action personnalisée %{name}"
     execute: "Exécuter %{name}"
-    upsale:
-      title: "Actions personnalisées"
-      description: "Les actions personnalisées sont des raccourcis en un clic vers un ensemble d'actions prédéfinies que vous pouvez rendre disponibles sur certains lots de travaux en fonction de l'état, rôle, type ou projet."
   custom_fields:
     admin:
       custom_field_projects:
@@ -247,8 +304,6 @@ fr:
           zero: aucun sous-élément
           one: 1 sous-élément
           other: "%{count} sous-éléments"
-    upsale:
-      custom_field_format_hierarchy: "Vous avez besoin d'une hiérarchie dans vos champs personnalisés pour les lots de travaux ?"
     text_add_new_custom_field: >
       Pour ajouter de nouveaux champs personnalisés à un projet, vous devez d’abord les créer avant de pouvoir les ajouter à ce projet.
     is_enabled_globally: "Est activé globalement"
@@ -269,6 +324,7 @@ fr:
       admin_only: "Cocher pour rendre cet attribut visible uniquement par les administrateurs. Les utilisateurs sans droits d'administration ne seront pas en mesure de le voir ou de l'éditer."
       is_filter: >
         Permet au champ personnalisé d'être utilisé dans un filtre dans les vues des lots de travaux. Notez que le champ personnalisé n'apparaîtra dans les vues globales que si l'option "Pour tous les projets" est sélectionnée.
+      formula: "Ajoutez des valeurs numériques ou saisissez / pour rechercher un attribut ou un opérateur mathématique."
     tab:
       no_results_title_text: Il n'y a actuellement aucun champ personnalisé.
       no_results_content_text: Créer un nouveau champ personnalisé
@@ -281,6 +337,8 @@ fr:
       greater_or_equal_zero: "doit être supérieur ou égal à 0."
       not_found: "introuvable."
       rules:
+        copy_workflow_from:
+          workflow_missing: "n'a pas de flux de travail propre."
         item:
           root_item: "ne peut pas être un élément racine."
           not_persisted: "doit être un élément déjà existant."
@@ -291,6 +349,8 @@ fr:
         parent:
           not_descendant: "doit être un descendant de la racine de la hiérarchie."
     rules:
+      copy_workflow_from: "Type de copie du flux de travail"
+      enabled: "Activé"
       depth: "Profondeur"
       item: "Élément"
       label: "Étiquette"
@@ -298,18 +358,34 @@ fr:
       parent: "Parent"
       blueprint: "Modèle de plan"
   global_search:
+    title:
+      all_projects: 'Recherche de "%{search_term}" dans tous les projets'
+      current_project: 'Recherche de "%{search_term}" dans %{project_name}'
+      project_and_subprojects: 'Recherche de "%{search_term}" dans %{project_name} et tous les sous-projets'
     placeholder: "Rechercher dans %{app_title}"
     overwritten_tabs:
-      wiki_pages: "Wiki"
+      all: "Tous"
       messages: "Forum"
+      wiki_pages: "Wiki"
   groups:
+    edit:
+      synchronized_groups: "Groupes synchronisés"
     index:
-      no_results_title_text: Il n'y a actuellement aucun groupe.
-      no_results_content_text: Créer un nouveau groupe
+      description: En regroupant les utilisateurs, vous pouvez les ajouter en tant que membres aux mêmes projets ou leur attribuer les mêmes rôles globaux.
+    table_component:
+      blank_slate:
+        description: Vous pouvez définir des groupes d'utilisateurs avec des noms spécifiques
+        title: Aucun groupe n'a encore été configuré
+      user_count: Nombre d'utilisateurs
     users:
       no_results_title_text: Aucun utilisateur dans ce groupe pour le moment.
     memberships:
       no_results_title_text: Aucun projet dans ce groupe pour le moment.
+    synchronized_groups:
+      blankslate:
+        action: Paramètres d'authentification
+        description: Lorsque ce groupe est automatiquement synchronisé avec des groupes de fournisseurs d'identité externes comme OpenID, ils apparaissent ici. Vous pouvez configurer cela dans vos paramètres d'authentification.
+        title: Vous n'avez encore aucun groupe synchronisé
   incoming_mails:
     ignore_filenames: >
       Spécifiez une liste de noms à ignorer lors du traitement des pièces jointes aux messages entrants (par exemple, signatures ou icônes). Entrez un nom de fichier par ligne.
@@ -353,6 +429,24 @@ fr:
         heading: "Supprimer cette liste de projets ?"
         text: "Cette action ne supprimera aucun projet contenu dans la liste. Voulez-vous vraiment supprimer cette liste de projets ?"
     settings:
+      header_details: Informations de base
+      header_status: État du projet
+      header_relations: Relations du projet
+      button_update_details: Mettre à jour les informations
+      button_update_status_description: Mettre à jour la description du statut
+      button_update_parent_project: Mettre à jour le projet parent
+      public_warning: >
+        Ce projet est public. Quiconque a accès à cette instance sera en mesure de voir et d'interagir avec ce projet en fonction de son rôle et des autorisations associées. Les sous-projets ne sont pas affectés et ont leurs propres paramètres.
+      public_confirmation:
+        checkbox: "Je comprends que cela rendra public le contenu précédemment privé"
+        title: "Rendre ce projet public ?"
+        description: >
+          Quiconque a accès à cette instance sera en mesure de voir et d'interagir avec ce projet en fonction de son rôle et des paramètres d'authentification. Les sous-projets ne sont pas affectés et ont leurs propres paramètres.
+      private_confirmation:
+        checkbox: "Je comprends que cela rendra privé le contenu précédemment public."
+        title: "Rendre ce projet privé ?"
+        description: >
+          Le projet ne sera visible que par les membres du projet en fonction de leur rôle et des autorisations associées. Les sous-projets ne sont pas affectés et ont leurs propres paramètres.
       change_identifier: Changer l'identifiant
       actions:
         label_enable_all: "Activer tout"
@@ -401,10 +495,8 @@ fr:
         no_results_title_text: Il n'y a pas d'espace disque supplémentaire utilisé par ce projet.
       work_package_priorities:
         new_label: "Nouvelle priorité"
-  project_phase:
-    working_days_count:
-      one: "Durée : %{count} jour ouvrable"
-      other: "Durée : %{count} jours ouvrables"
+    status:
+      button_edit: Modifier le statut du projet
   lists:
     create:
       success: "La liste modifiée a été enregistrée en tant que nouvelle liste"
@@ -544,15 +636,14 @@ fr:
         Toutes les occurrences de l'utilisateur de remplacement (par exemple, en tant que responsable ou autre valeur utilisateur) seront réaffectées à un compte appelé « Utilisateur supprimé ». Comme les données de chaque compte supprimé sont réaffectées à ce compte, il ne sera pas possible de distinguer les données que l'utilisateur a créées des données d'un autre compte supprimé.
       irreversible: "Cette action est irréversible"
       confirmation: "Saisissez le nom d'utilisateur fictif %{name} pour confirmer ça suppression."
-    upsale:
-      title: Utilisateurs de remplacement
-      description: >
-        Les utilisateurs fictifs sont un moyen d'attribuer des lots de travaux à des utilisateurs qui ne font pas partie de votre projet. Ils peuvent être utiles dans une série de scénarios ; par exemple, si vous avez besoin de suivre des tâches pour une ressource qui n'est pas encore nommée ou disponible, ou si vous ne voulez pas donner à cette personne l'accès à OpenProject mais voulez quand même suivre les tâches qui lui sont assignées.
-  prioritiies:
+  priorities:
     edit:
       priority_color_text: |
-        Cliquez pour assigner ou modifier la couleur de cette priorité.
+        Cliquez pour attribuer ou modifier la couleur de cette priorité.
         Elle peut être utilisée pour mettre en évidence les lots de travaux dans le tableau.
+    admin:
+      default:
+        caption: Le fait de définir cette priorité par défaut remplacera la priorité par défaut précédente.
   reactions:
     action_title: "Réagir"
     add_reaction: "Ajouter une réaction"
@@ -602,11 +693,11 @@ fr:
     edit:
       form_configuration:
         tab: "Configuration du formulaire"
-      more_info_text_html: >
-        L'édition Entreprise vous permet de personnaliser la configuration du formulaire avec ces add-ons supplémentaires : <br> <ul class="%{list_styling_class}"> <li><b>Ajouter de nouveaux groupes d'attributs</b></li> <li><b>Renommer les groupes d'attributs</b></li> <li><b>Ajouter une table des lots de travaux connexes</b></li> </ul>
       projects:
-        tab: "Projets"
-        enabled_projects: "Projets activés"
+        tab: Projets
+        enable_all: Activer pour tous les projets
+        select_projects: Sélectionner des projets
+        select_projects_description: Sélectionnez les projets dans lesquels vous souhaitez utiliser ce type.
       settings:
         tab: "Paramètres"
         type_color_text: La couleur sélectionnée distingue les différents types dans les graphiques de Gantt ou les tableaux des lots de travaux. Il est donc recommandé d'utiliser une couleur forte.
@@ -618,13 +709,15 @@ fr:
         automatically_generated_subjects:
           label: "Sujets générés automatiquement"
           caption: "Définissez un modèle utilisant des attributs et du texte référencés pour générer automatiquement des sujets de lots de travaux. Les utilisateurs ne pourront pas modifier manuellement les sujets."
-        pattern:
-          label: "Modèle de sujet"
-          caption: "Ajouter du texte ou saisissez / pour rechercher un attribut. Vous pouvez ajouter des espaces pour les séparer."
-          headings:
+        token:
+          label_with_context: "%{attribute_context} : %{attribute_label}"
+          context:
             work_package: "Lot de travaux"
             parent: "Parent"
             project: "Projet"
+        pattern:
+          label: "Modèle de sujet"
+          caption: Créez des modèles en ajoutant du texte ou saisissez « / » pour rechercher les [attributs pris en charge](attributes_url).
           insert_as_text: "Aucun attribut n'a été trouvé. Ajouter en tant que texte : « %{word} »"
       export_configuration:
         tab: "Générer un fichier PDF"
@@ -673,6 +766,7 @@ fr:
         automatic: "Automatique"
         manual: "Manuel"
       show_relations: "Afficher les relations"
+      update_inputs_aria_live_message: "Sélecteur de date mis à jour. %{message}"
       tabs:
         aria_label: "Onglets de sélection de date"
         children: "Enfants"
@@ -741,7 +835,9 @@ fr:
     label_add_description: "Ajouter une description"
     lag:
       subject: "Délai"
-      caption: "Le nombre minimum de jours ouvrables à respecter entre les deux lots de travaux."
+      caption: |-
+        Le nombre minimum de jours ouvrables à respecter entre les deux lots de travaux.
+        Il peut également être négatif.
     relations:
       label_new_child_created: "Nouveau lot de travaux créé et ajouté en tant qu'enfant"
       label_relates_singular: "lié à"
@@ -759,9 +855,11 @@ fr:
       label_child_singular: "enfant"
       label_child_plural: "enfants"
       new_child: "Créer un nouvel enfant"
-      new_child_text: "Crée un lot de travaux lié en tant que sous-élément du lot de travaux actuel (parent)"
+      new_child_description: "Crée un lot de travaux lié en tant que sous-élément du lot de travaux actuel (parent)"
       child: "Enfant"
       child_description: "Fait du lot de travaux lié un sous-élément du lot de travaux actuel (parent)"
+      parent: "Parent"
+      parent_description: "Fait du lot de travaux lié un parent du lot de travaux actuel (enfant)"
       label_closest: "Le plus proche"
       label_blocks_singular: "blocs"
       label_blocks_plural: "blocs"
@@ -798,6 +896,7 @@ fr:
       required_description: "Marque ce lot de travaux comme étant une exigence pour le lot de travaux correspondant"
       label_parent_singular: "parent"
       label_parent_plural: "parent"
+      label_other_relations: "Autres relations"
       ghost_relation_title: "Lot de travaux associé"
       ghost_relation_description: "Cela n'est pas visible pour vous en raison des autorisations."
   label_invitation: Invitation
@@ -832,6 +931,10 @@ fr:
     auth_source_login: Veuillez vous connecter en tant que <em>%{login}</em> pour activer votre compte.
     omniauth_login: Veuillez vous connecter pour activer votre compte.
   actionview_instancetag_blank_option: "Veuillez sélectionner"
+  activemodel:
+    attributes:
+      projects/copy_options:
+        dependencies: "Dépendances"
   activerecord:
     attributes:
       announcements:
@@ -847,6 +950,8 @@ fr:
       attribute_help_text:
         attribute_name: "Attribut"
         help_text: "Texte d’aide"
+      auth_provider:
+        scim_clients: "Clients SCIM"
       capability:
         context: "Contexte"
       changeset:
@@ -860,6 +965,7 @@ fr:
         default_value: "Valeur par défaut"
         editable: "Modifiable"
         field_format: "Format"
+        formula: "Formule"
         is_filter: "Utilisé comme filtre"
         is_for_all: "Pour tous les projets"
         is_required: "Obligatoire"
@@ -886,11 +992,14 @@ fr:
       emoji_reaction:
         reactable: "Réagi le"
       enterprise_token:
-        domain: "Domaine"
         starts_at: "Valable depuis"
         subscriber: "Abonné"
+        subscription: "Abonnement"
+        plan: "Abonnement"
         encoded_token: "Licence Entreprise"
-        active_user_count_restriction: "Nombre maximal d’utilisateurs actif"
+        active_user_count_restriction: "Utilisateurs actifs"
+      enterprise_trial:
+        company: "Entreprise"
       grids/grid:
         page: "Page"
         row_count: "Nombre de lignes"
@@ -955,6 +1064,10 @@ fr:
       project/phase:
         date_range: "Plage de dates"
         definition: "Définition"
+        duration: "Durée"
+        start_date: "Date de début"
+        start_date_caption: "Suit la phase précédente."
+        finish_date: "Date de fin"
       project/phase_definition:
         name: "Nom"
         color: "Couleur"
@@ -1003,6 +1116,9 @@ fr:
         url: "URL"
       role:
         permissions: "Autorisations"
+      scim_client:
+        authentication_method: "Méthode d'authentification"
+        jwt_sub: "Revendication de sujet"
       status:
         is_closed: "Lot de travaux clôturé"
         is_readonly: "Paquet de travail en lecture seule"
@@ -1019,7 +1135,7 @@ fr:
         ongoing: "En cours"
       type:
         description: "Texte par défaut pour la description"
-        attribute_groups: ""
+        attribute_groups: "Configuration du formulaire"
         is_in_roadmap: "Affiché par défaut dans la feuille de route"
         is_default: "Activé par défaut pour les nouveaux projets"
         is_milestone: "Est un jalon"
@@ -1045,14 +1161,25 @@ fr:
         new_password: "Nouveau mot de passe"
         password_confirmation: "Confirmation"
         consented_at: "Consenti à"
+      group:
+        identity_url: "URL d'identité"
       user_preference:
-        comments_sorting: "Afficher les commentaires"
+        header_look_and_feel: "Apparence et ergonomie"
+        header_alerts: "Alertes"
+        button_update_look_and_feel: "Mettre à jour l'apparence"
+        button_update_alerts: "Mettre à jour les alertes"
+        comments_sorting: "Afficher l'activité du lot de travaux triée par"
+        disable_keyboard_shortcuts: "Désactiver les raccourcis clavier"
+        disable_keyboard_shortcuts_caption_html: |-
+          Vous pouvez choisir de désactiver les <a href="%{href}">raccourcis clavier</a> par défaut si vous utilisez un lecteur d'écran ou si vous voulez éviter de déclencher accidentellement une action avec un raccourci.
+        dismissed_enterprise_banners: "Bannières d'entreprise masquées"
         impaired: "Mode d'accessibilité"
-        auto_hide_popups: "Masquer automatiquement les notifications de succès"
+        auto_hide_popups: "Masquer automatiquement les bannières de réussite"
+        auto_hide_popups_caption: "Lorsque cette option est activée, les bannières vertes de réussite disparaissent automatiquement après 5 secondes."
         warn_on_leaving_unsaved: "M'avertir lorsque je quitte un lot de travaux contenant des modifications non enregistrées"
-        theme: "Mode"
+        theme: "Mode couleur"
         time_zone: "Fuseau horaire"
-        mode_guideline: "Certains modes écraseront les couleurs personnalisées du thème pour l'accessibilité et la lisibilité. Pour le thème personnalisé complet, veuillez sélectionner le mode Clair."
+        mode_guideline: "Certains modes écrasent les couleurs des thèmes personnalisés pour des raisons d'accessibilité et de lisibilité. Veuillez sélectionner le mode Clair pour une prise en charge complète des thèmes personnalisés."
         daily_reminders: "Rappels quotidiens"
         workdays: "Jours ouvrés"
       version:
@@ -1081,7 +1208,7 @@ fr:
           title: "Jours ouvrés"
           false: "jours ouvrés seulement"
           true: "Inclure les jours non ouvrés"
-        journal_restricted: Journal restreint
+        journal_internal: Journal interne
         notify: "Notifier" #used in custom actions
         parent: "Parent"
         parent_issue: "Parent"
@@ -1121,8 +1248,10 @@ fr:
         error_unauthorized: "est interdit d'accès."
         error_readonly: "a tenté d'être écrit mais n'est pas accessible en écriture."
         error_conflict: "Cette information a été mise a jour par au moin un autre utilisateur pendant la même session"
+        error_not_found: "introuvable."
         email: "n'est pas une adresse e-mail valide."
         empty: "ne peut pas être vide."
+        enterprise_plan_required: "nécessite au minimum l'abonnement %{plan_name}."
         even: "doit être pair."
         exclusion: "est réservé."
         feature_disabled: n'est pas disponible.
@@ -1137,6 +1266,8 @@ fr:
         inclusion: "ne correspond à aucune des valeurs autorisées."
         inclusion_nested: "ne correspond à aucune des valeurs autorisées dans le chemin « %{path} »."
         invalid: "est invalide."
+        invalid_characters: "contient des caractères invalides."
+        not_allowed_custom_fields_referenced: "contient des champs personnalisés qui ne sont pas autorisés : %{custom_fields}."
         invalid_url: "n’est pas une URL valide."
         invalid_url_scheme: "n’est pas un protocole pris en charge (autorisés : %{allowed_schemes})."
         less_than_or_equal_to: "doit être inférieur ou égal à %{count}."
@@ -1179,7 +1310,7 @@ fr:
           attributes:
             content_type:
               blank: "Le type de contenu du fichier ne peut pas être vide."
-              not_whitelisted: "Le fichier a été rejeté par un filtre automatique. « %{value} » n'est pas en liste blanche pour le téléversement."
+              not_allowlisted: "Le fichier a été rejeté par un filtre automatique. Le fichier « %{value} » ne peut pas être téléchargé."
               format: "%{message}"
         capability:
           context:
@@ -1212,8 +1343,14 @@ fr:
               forbidden_uri: "est interdit par le serveur."
             scopes:
               not_match_configured: "ne correspond pas aux portées disponibles."
+        enterprise_trial:
+          already_used: "a déjà été utilisé pour créer un essai."
+          failed_to_create: "L'essai n'a pas pu être créé (%{status})"
+          general_consent: "Veuillez accepter les conditions générales."
         enterprise_token:
+          only_one_trial: "Un seul jeton d'essai peut être actif. Veuillez supprimer le jeton d'essai précédent avant d'en ajouter un autre."
           unreadable: "ne peut être lu. Êtes-vous sûr qu'il s'agisse d'une licence Entreprise ?"
+          already_added: "Ce jeton a déjà été ajouté."
         grids/grid:
           overlaps: "superposition."
           outside: "est hors de la grille."
@@ -1264,14 +1401,14 @@ fr:
               blank: "Veuillez sélectionner un projet."
         project/phase:
           attributes:
-            date_range:
-              start_date_must_be_before_finish_date: "la date de début doit être antérieure à la date de fin."
+            start_date:
+              must_be_before_finish_date: "doit être antérieure à la date de fin."
               non_continuous_dates: "ne peut pas être antérieure à la date de fin de la phase précédente."
-              incomplete: "est incomplet."
+            finish_date:
+              must_be_after_start_date: "doit être postérieure à la date de début."
+          cannot_be_a_non_working_day: "ne peut pas être un jour non travaillé."
         query:
           attributes:
-            project:
-              error_not_found: "non trouvé"
             public:
               error_unauthorized: "- L’utilisateur n'est pas autorisé à créer des vues publiques."
             group_by:
@@ -1302,20 +1439,18 @@ fr:
             values:
               inclusion: "Les valeurs du filtre sont invalides."
               format: "%{message}"
+        queries/principals/filters/internal_mentionable_on_work_package_filter:
+          attributes:
+            values:
+              single_value_requirement: "doit être un lot de travaux unique"
         relation:
           typed_dag:
             circular_dependency: "La relation créée un cercle de relations."
           attributes:
             to_id:
-              error_not_found: "introuvable ou non visible."
               error_readonly: "ne peut pas être modifié pour les relations existantes."
             from_id:
-              error_not_found: "introuvable ou non visible."
               error_readonly: "ne peut pas être modifié pour les relations existantes."
-            lag:
-              greater_than_or_equal_to:
-                zero: "ne peut pas être négatif."
-              less_than_or_equal_to: "est trop élevé."
         repository:
           not_available: "Le fournisseur de gestion de contrôle de sources n'est pas disponible"
           not_whitelisted: "n'est pas autorisé par la configuration."
@@ -1393,6 +1528,8 @@ fr:
               cannot_be_self_assigned: "ne peut pas être assigné à lui-même."
               cannot_be_in_another_project: "ne peut pas être dans un autre projet."
               not_a_valid_parent: "est invalide."
+            schedule_manually:
+              cannot_be_automatically_scheduled: "ne peut pas être défini sur false (programmé automatiquement) car il n'a ni prédécesseurs ni enfants."
             start_date:
               violates_relationships: "peut uniquement valoir %{soonest_start} ou une date ultérieure afin de ne pas violer les relations du lot de travaux."
               cannot_be_null: "ne peut pas être définie à NULL car la date de fin et la durée sont connues."
@@ -1439,7 +1576,7 @@ fr:
               confirmation: "La confirmation du mot de passe ne correspond pas au mot de passe."
               format: "%{message}"
             password:
-              weak: "Doit contenir des caractères des classes suivantes (au moins %{min_count} sur %{all_count}) : %{rules}"
+              weak: "Doit contenir des caractères des classes suivantes (au moins %{min_count} de %{all_count}) : %{rules}"
               lowercase: "minuscules (par exemple, « a »)"
               uppercase: "majuscule (e.g. « A »)"
               numeric: "numérique (e.g. « 1 »)"
@@ -1452,10 +1589,6 @@ fr:
                 description: "La confirmation du mot de passe doit correspondre à celui saisi dans le champ “Nouveau mot de passe”."
             status:
               invalid_on_create: "n’est pas un statut valide pour les nouveaux utilisateurs."
-            ldap_auth_source:
-              error_not_found: "introuvable"
-            auth_source:
-              error_not_found: "introuvable"
         member:
           principal_blank: "Veuillez choisir au moins un utilisateur ou un groupe."
           role_blank: "doit être assigné."
@@ -1480,11 +1613,17 @@ fr:
     models:
       attachment: "Fichier"
       attribute_help_text: "Attribut d’aide de texte"
+      auth_provider:
+        one: "Fournisseur d'authentification"
+        other: "Fournisseurs d'authentification"
       category: "Catégorie"
       comment: "Commentaire"
       custom_action: "Action personnalisée"
       custom_field: "Champ personnalisé"
       "doorkeeper/application": "Application OAuth"
+      enterprise_token:
+        one: "Jeton Enterprise"
+        other: "Jetons Enterprise"
       forum: "Forum"
       global_role: "Rôle global"
       group: "Groupe"
@@ -1497,7 +1636,9 @@ fr:
         one: "Notification"
         other: "Notifications"
       placeholder_user: "Utilisateur de remplacement"
-      project: "Projet"
+      project:
+        one: "Projet"
+        other: "Projets"
       project_query:
         one: "Liste de projets"
         other: "Listes de projets"
@@ -1506,6 +1647,9 @@ fr:
       role:
         one: "Rôle"
         other: "Rôles"
+      scim_client:
+        one: "Client SCIM"
+        other: "Clients SCIM"
       status: "Statut du lot de travaux"
       token/api:
         one: Jeton d'accès
@@ -1563,12 +1707,13 @@ fr:
       work_package: "Lots de travaux"
     project_phase:
       activated: "activée"
-      deactivated: "désactivée"
       added_date: "définie sur %{date}"
       changed_date: "changée du %{from} au %{to}"
-      removed_date: "date de suppression %{date}"
-      phase_and_one_gate: "%{phase_message}. %{gate_message}"
+      deactivated: "désactivée"
+      deleted_project_phase: "Phase de projet supprimée"
       phase_and_both_gates: "%{phase_message}. %{start_gate_message} et %{finish_gate_message}"
+      phase_and_one_gate: "%{phase_message}. %{gate_message}"
+      removed_date: "date de suppression %{date}"
   #common attributes of all models
   attributes:
     active: "Actif"
@@ -1601,6 +1746,7 @@ fr:
     derived_start_date: "Date de début dérivée"
     direction: "Direction"
     display_sums: "Afficher les sommes"
+    domain: "Domaine"
     due_date: "Date de fin"
     estimated_hours: "Travail"
     estimated_time: "Travail"
@@ -1635,6 +1781,8 @@ fr:
     priority: "Priorité"
     project: "Projet"
     project_ids: "ID de projet"
+    project_phase: "Étape du projet"
+    project_phase_definition: "Étape du projet"
     reason: "Raison"
     responsible: "Responsable"
     required: "Obligatoire"
@@ -1653,6 +1801,7 @@ fr:
     title: "Titre"
     type: "Type"
     typeahead: "Saisie semi-automatique"
+    uid: "Identifiant unique"
     updated_at: "Mis à jour le"
     updated_on: "Mis à jour le"
     uploader: "Téléversé par"
@@ -1717,9 +1866,8 @@ fr:
   button_configure: "Configurer"
   button_continue: "Continuer"
   button_copy: "Copier"
-  button_copy_to_clipboard: "Copier dans le presse-papier"
+  button_copy_to_clipboard: "Copier dans le presse-papiers"
   button_copy_link_to_clipboard: "Copier le lien dans le presse-papiers"
-  button_copy_and_follow: "Copier et suivre"
   button_create: "Créer"
   button_create_and_continue: "Créer et continuer"
   button_decline: "Refuser"
@@ -1728,6 +1876,7 @@ fr:
   button_delete_watcher: "Supprimer l'observateur %{name}"
   button_download: "Télécharger"
   button_duplicate: "Dupliquer"
+  button_duplicate_and_follow: "Dupliquer et suivre"
   button_edit: "Éditer"
   button_edit_associated_wikipage: "Éditer la page wiki associée : %{page_title}"
   button_expand_all: "Tout déplier"
@@ -1766,6 +1915,7 @@ fr:
   button_unwatch: "Ne plus suivre"
   button_update: "Mettre à jour"
   button_upgrade: "Mise à niveau"
+  button_buy_now: "Acheter maintenant"
   button_upload: "Charger"
   button_view: "Afficher"
   button_watch: "Suivre"
@@ -1810,7 +1960,15 @@ fr:
     text:
       failed: 'Impossible de copier le projet "%{source_project_name}" vers "%{target_project_name}".'
       succeeded: 'Le projet "%{source_project_name}" a été copié vers "%{target_project_name}".'
-  create_new_page: "Page wiki"
+    source_project_label: "Projet copié"
+    copy_options:
+      dependencies_label: 'Copier à partir du projet'
+  create_project:
+    template_label: "Utiliser le modèle"
+    copy_options:
+      dependencies_label: 'Copier à partir du modèle'
+  create_wiki_page: "Créer une nouvelle page wiki"
+  create_wiki_page_button: "Page wiki"
   date:
     abbr_day_names:
       - "Dim"
@@ -1924,6 +2082,9 @@ fr:
         one: "1 s"
         other: "%{count} s"
     units:
+      minute_abbreviated:
+        one: "min"
+        other: "min"
       hour:
         one: "heure"
         other: "heures"
@@ -1962,17 +2123,131 @@ fr:
   #Text direction: Left-to-Right (ltr) or Right-to-Left (rtl)
   direction: de gauche à droite
   ee:
-    upsale:
+    features:
+      baseline_comparison: Comparaisons de référence
+      board_view: Tableaux avancés
+      conditional_highlighting: Mise en surbrillance conditionnelle
+      internal_comments: Commentaires internes
+      custom_actions: Actions personnalisées
+      custom_field_hierarchies: Champs personnalisés de type hiérarchie
+      customize_life_cycle: Personnaliser le cycle de vie
+      date_alerts: Alertes de date
+      define_custom_style: Thème et logo personnalisés
+      edit_attribute_groups: Modifier les groupes d'attributs
+      gantt_pdf_export: Exportation PDF de diagramme de Gantt
+      ldap_groups: Synchronisation des utilisateurs LDAP et des groupes
+      nextcloud_sso: Authentification unique pour le stockage Nextcloud
+      one_drive_sharepoint_file_storage: Stockage de fichiers OneDrive/SharePoint
+      placeholder_users: Utilisateurs de remplacement
+      project_list_sharing: Partage de liste de projets
+      readonly_work_packages: Lots de travaux en lecture seule
+      scim_api: API du serveur SCIM
+      sso_auth_providers: Authentification unique
+      team_planner_view: Vue du planificateur d'équipe
+      virus_scanning: Analyse antivirus
+      work_package_query_relation_columns: Colonnes de relation de requête de lot de travaux
+      work_package_sharing: Partager les lots de travaux avec des utilisateurs
+      work_package_subject_generation: Génération du sujet du lot de travaux
+    upsell:
+      buy_now_button: "Acheter maintenant"
+      plans_title: "Formules d'abonnement Enterprise"
       title: "Add-on Enterprise"
-      link_title: "Plus d'informations"
-      automatic_subject_generation:
+      plan_title: "Add-on Enterprise %{plan}"
+      plan_name: "Abonnement Enterprise %{plan}"
+      plan_text_html: "Disponible à partir de l'abonnement %{plan_name}."
+      unlimited: "Illimité"
+      already_have_token: >
+        Vous avez déjà un jeton ? Ajoutez-le en utilisant le bouton ci-dessous pour passer à l'abonnement Enterprise réservé.
+      hide_banner: "Masquer cette bannière"
+      homescreen_description: >
+        Les abonnements Enterprise prolongent l'édition Community d'OpenProject que vous utilisez actuellement. Ils comprennent des add-ons, des fonctionnalités supplémentaires et une assistance professionnelle qui permet aux organisations de toutes tailles de réaliser de grandes choses ensemble.
+      homescreen_subline: En optant pour une formule d'abonnement supérieure, vous soutiendrez également un projet open source.
+      baseline_comparison:
+        description: Mettre en évidence les modifications apportées à cette liste depuis n'importe quel point dans le passé.
+      benefits:
+        description: "Quels sont les avantages de l'édition Enterprise sur site ?"
+        high_security: "Fonctionnalités de sécurité"
+        high_security_text: "Authentification unique (SAML, OpenID Connect, CAS), groupes LDAP."
+        installation: "Assistance à l'installation"
+        installation_text: "Des ingénieurs logiciels expérimentés vous guident tout au long du processus d'installation et de configuration dans votre propre infrastructure."
+        premium_features: "Add-ons Enterprise"
+        premium_features_text: "Des tableaux agiles, un thème et un logo personnalisés, des graphiques, des flux de travail intelligents avec des actions personnalisées, une recherche plein texte pour les pièces jointes des lots de travaux et des champs personnalisés à sélection multiple."
+        professional_support: "Assistance professionnelle"
+        professional_support_text: "Bénéficiez d'une assistance fiable et de qualité de la part d'ingénieurs d'assistance expérimentés ayant une connaissance approfondie de l'utilisation d'OpenProject dans des environnements critiques."
+      work_package_subject_generation:
         description: "Créez des sujets générés automatiquement à l'aide d'attributs et de textes référencés."
       customize_life_cycle:
-        description: "Create and organize different project phases than the ones provided by PM2 project cycle planning."
-      form_configuration:
-        description: "Personnaliser la configuration du formulaire avec ces add-ons supplémentaires :"
-        add_groups: "Ajouter de nouveaux groupes d’attributs"
-        rename_groups: "Renommer les groupes d’attributs"
+        description: "Créez et organisez des phases de projet différentes de celles fournies par la planification du cycle de projet PM2."
+      conditional_highlighting:
+        description: "Vous avez besoin que certains lots de travaux se démarquent de la masse ? Utilisez la mise en évidence conditionnelle dans le tableau des lots de travaux."
+      work_package_query_relation_columns:
+        description: "Vous avez besoin de voir les relations ou les éléments enfants dans la liste des lots de travaux ?"
+      edit_attribute_groups:
+        description: "Personnalisez la configuration du formulaire avec ces add-ons supplémentaires :"
+        features:
+          groups: "Ajouter de nouveaux groupes d’attributs"
+          rename: "Renommer les groupes d'attributs"
+          related: "Ajouter un tableau des lots de travaux associés"
+      readonly_work_packages:
+        description: "Marquer les lots de travaux comme étant en lecture seule pour des statuts spécifiques."
+      custom_field_hierarchies:
+        description: "Les champs personnalisés de type hiérarchie permettent d'organiser des structures hiérarchiques dans les lots de travaux en utilisant des listes de sélection à plusieurs niveaux."
+      date_alerts:
+        description: "Avec les alarmes, vous serez informé(e) à l'approche des dates de début ou de fin vous concernant afin de ne jamais manquer ou oublier une échéance importante."
+      work_package_sharing:
+        description: "Partagez les lots de travaux avec des utilisateurs qui ne sont pas membres du projet."
+      project_list_sharing:
+        description: "Partagez les listes de projets avec des utilisateurs individuels."
+      define_custom_style:
+        title: "Thème de couleur et logo personnalisés"
+        more_info: "Remarque : le logo utilisé sera accessible publiquement."
+        description: Personnalisez votre installation OpenProject avec votre propre logo et couleurs.
+      custom_actions:
+        title: "Actions personnalisées"
+        description: "Les actions personnalisées sont des raccourcis en un clic vers un ensemble d'actions prédéfinies que vous pouvez rendre disponibles sur certains lots de travaux en fonction de l'état, du rôle, du type ou du projet."
+      nextcloud_sso:
+        title: "Authentification unique pour le stockage Nextcloud"
+        description: "Activez l'authentification transparente et sécurisée pour votre stockage Nextcloud avec l'authentification unique. Simplifiez la gestion des accès et augmentez la commodité des utilisateurs."
+      scim_api:
+        title: "Clients SCIM"
+        description: "Automatisez la gestion des utilisateurs dans OpenProject en intégrant de manière transparente des services d'identité externes tels que Microsoft Entra ou Keycloak via notre API de serveur SCIM. Disponible à partir de l'abonnement Enterprise."
+      virus_scanning:
+        description: "Assurez-vous que les fichiers téléversés dans OpenProject sont analysés pour détecter les virus avant d'être accessibles aux autres utilisateurs."
+      placeholder_users:
+        title: Utilisateurs de remplacement
+        description: >
+          Les utilisateurs fictifs sont un moyen d'attribuer des lots de travaux à des utilisateurs qui ne font pas partie de votre projet. Ils peuvent être utiles dans une série de scénarios ; par exemple, si vous avez besoin de suivre des tâches pour une ressource qui n'est pas encore nommée ou disponible, ou si vous ne voulez pas donner à cette personne l'accès à OpenProject mais voulez quand même suivre les tâches qui lui sont assignées.
+      internal_comments:
+        title: Commentaires internes
+        description: "Les commentaires internes permettent aux membres d'une équipe interne de communiquer entre eux en privé. Les commentaires ne sont visibles que pour certains rôles du projet et ne seront jamais visibles publiquement."
+      internal_comments_inline:
+        title: "Écrire des commentaires internes qu'un petit groupe peut voir"
+        description: " "
+    teaser:
+      title:
+        one: "Un jour restant pour le jeton d'essai %{trial_plan}"
+        other: "%{count} jours restants pour le jeton d'essai %{trial_plan}"
+      description: "Vous avez accès à toutes les fonctionnalités %{trial_plan}."
+    trial:
+      not_found: "Vous avez demandé un jeton d'essai, mais cette demande n'est plus disponible. Veuillez réessayer."
+      wait_for_confirmation: "Nous vous avons envoyé un e-mail pour confirmer votre adresse afin de récupérer un jeton d'essai."
+      already_retrieved: >
+        Votre jeton d'essai Enterprise a déjà été récupéré. Veuillez vérifier vos e-mails pour voir si le jeton s'y trouve. Veuillez contacter notre équipe d'assistance si vous avez besoin d'un nouveau jeton.
+      successfully_saved: "Votre jeton d'essai Enterprise a été récupéré avec succès."
+      token_sent: "Jeton d'essai demandé"
+      request_again: "Demander à nouveau"
+      resend_action: "Renvoyer l'e-mail de confirmation"
+      welcome_title: "Aperçu rapide des fonctionnalités"
+      welcome_description: "Obtenez un aperçu rapide de la gestion de projets et de la collaboration en équipe avec l'édition OpenProject Enterprise."
+      confirmation_info: >
+        Nous vous avons envoyé un e-mail le %{date} à l'adresse %{email} avec toutes les informations pour commencer l'essai gratuit d'OpenProject Enterprise. Veuillez vérifier votre boîte de réception et cliquer sur le lien de confirmation fourni pour commencer votre essai gratuit de 14 jours.
+      confirmation_subline: >
+        Veuillez consulter votre boîte de réception et suivre les étapes pour commencer votre essai gratuit de 14 jours.
+      domain_caption: Le jeton sera valable pour votre nom d'hôte actuellement configuré.
+      receive_newsletter_html: >
+        Je souhaite recevoir la <a target="_blank" href="https://www.openproject.org/newsletter/">lettre d'information d'</a>OpenProject.
+      consent_html: >
+        J'accepte les <a target="_blank" href="https://www.openproject.org/terms-of-service/">conditions d'utilisation</a> et la <a target="_blank" href="https://www.openproject.org/data-privacy-and-security/">politique de confidentialité</a>.
   enumeration_activities: "Activités de suivi du temps"
   enumeration_work_package_priorities: "Priorités du Lot de Travaux"
   enumeration_reported_project_statuses: "Statuts de projet signalés"
@@ -1997,8 +2272,9 @@ fr:
   error_color_could_not_be_saved: "La couleur n'a pas pu être enregistrée"
   error_cookie_missing: "Le cookie OpenProject est manquant. Assurez-vous que les cookies sont activés, sans quoi cette application ne fonctionnera pas correctement."
   error_custom_option_not_found: "L'option n'existe pas."
+  error_enterprise_plan_needed: "Vous avez besoin de souscrire à l'abonnement Enterprise %{plan} pour effectuer cette action."
   error_enterprise_activation_user_limit: "Votre compte n'a pas pu être activé (limite d'utilisateurs atteinte). Veuillez contacter votre administrateur pour obtenir l'accès."
-  error_enterprise_token_invalid_domain: "La version Entreprise n'est pas active. Le domaine de votre jeton Entreprise (%{actual}) ne correspond pas au nom d'hôte du système (%{expected})."
+  error_enterprise_token_invalid_domain: "L'édition Enterprise n'est pas active. Le domaine de votre jeton Enterprise (%{actual}) ne correspond pas au nom d'hôte du système (%{expected})."
   error_failed_to_delete_entry: "Échec lors de la suppression de cette entrée."
   error_in_dependent: "Erreur lors de la tentative de modification de l'objet dépendant : %{dependent_class} #%{related_id} - %{related_subject} : %{error}"
   error_in_new_dependent: "Erreur lors de la tentative de création d'un objet dépendant : %{dependent_class} - %{related_subject} : %{error}"
@@ -2054,6 +2330,8 @@ fr:
     dialog:
       title: "Exporter"
       submit: "Exporter"
+      save_export_settings:
+        label: "Enregistrer les paramètres"
       format:
         label: "Format de fichier"
         options:
@@ -2073,7 +2351,7 @@ fr:
           label: "Type d'export PDF"
           options:
             table:
-              label: "Table"
+              label: "Tableau"
               caption: "Exporter la liste des lots de travaux dans une table avec les colonnes souhaitées."
             report:
               label: "Rapport"
@@ -2197,9 +2475,8 @@ fr:
       users: "Les utilisateurs enregistrés les plus récents de cette instance."
     blocks:
       community: "Communauté OpenProject"
-      upsale:
+      upsell:
         title: "Passer à la version Entreprise"
-        more_info: "Plus d'informations"
     links:
       upgrade_enterprise_edition: "Passer à la version Entreprise"
       postgres_migration: "Migration de votre installation vers PostgreSQL"
@@ -2271,7 +2548,7 @@ fr:
       aggregation: "Agrégation"
       api_and_webhooks: "API et webhooks"
     quick_add:
-      label: "Ouvrir le menu d'ajout rapide"
+      label: "Ajouter…"
   my_account:
     access_tokens:
       no_results:
@@ -2303,7 +2580,7 @@ fr:
         static_token_name: "Jeton RSS"
         disabled_text: "Les jetons RSS ne sont pas activés par l'administrateur. Veuillez contacter votre administrateur pour utiliser cette fonctionnalité."
       storages:
-        title: "Espaces de stockage des fichiers"
+        title: "Espaces de stockage de fichiers"
         text_hint: "Les jetons de stockage de fichiers connectent cette instance OpenProject à une solution de stockage de fichiers externe."
         empty_text_hint: "Il n'y a pas d'accès à l'espace de stockage lié à votre compte."
         revoke_token: "Voulez-vous vraiment supprimer ce jeton ? Vous devrez vous reconnecter sur %{storage}"
@@ -2337,6 +2614,8 @@ fr:
         mentioned: "Vous avez été mentionné dans %{work_package}"
         responsible: "Vous êtes devenu responsable de %{work_package}"
         watched: "Vous surveillez %{work_package}"
+    query:
+      invalid_filter: "Filtre de notification invalide"
   label_accessibility: "Accessibilité"
   label_account: "Compte"
   label_active: "Actif"
@@ -2391,7 +2670,6 @@ fr:
   label_ldap_auth_source_plural: "Connexions LDAP"
   label_attribute_expand_text: "Le texte complet pour « %{attribute} »."
   label_authentication: "Authentification"
-  label_authentication_settings: "Paramètres d'authentification"
   label_available_custom_fields_projects: "Projets de champs personnalisés disponibles"
   label_available_global_roles: "Rôles globaux disponibles"
   label_available_project_attributes: "Attributs de projet disponibles"
@@ -2429,6 +2707,7 @@ fr:
   label_select_main_menu_item: Sélectionner nouvel élément de menu principal
   label_required_disk_storage: "Espace disque requis"
   label_send_invitation: Envoyer une invitation
+  label_calculated_value: "Valeur calculée"
   label_change_plural: "Changements"
   label_change_properties: "Modifier les propriétés"
   label_change_status: "Changer le statut"
@@ -2478,6 +2757,7 @@ fr:
   label_dashboard: "Tableau de bord"
   label_database_version: "Version de PostgreSQL"
   label_date: "Date"
+  label_dates: "Dates"
   label_date_and_time: "Date et heure"
   label_date_format: "Format de date"
   label_date_from: "De"
@@ -2493,6 +2773,8 @@ fr:
   label_deleted_custom_item: "(élément supprimé)"
   label_deleted_custom_option: "(option supprimée)"
   label_empty_element: "(vide)"
+  label_go_back: "Revenir en arrière d'un niveau dans le menu"
+  label_go_forward: "Ouvrir le sous-menu %{module}"
   label_missing_or_hidden_custom_option: "(valeur manquante ou manque d'autorisations d'accès)"
   label_descending: "Décroissant"
   label_details: "Détails"
@@ -2526,7 +2808,7 @@ fr:
   label_enumerations: "Énumérations"
   label_enterprise: "Entreprise"
   label_enterprise_active_users: "%{current}/%{limit} utilisateurs actifs inscrits"
-  label_enterprise_edition: "Version Entreprise"
+  label_enterprise_edition: "édition Enterprise"
   label_enterprise_support: "Support Enterprise"
   label_environment: "Environement"
   label_estimates_and_progress: "Estimations et progression"
@@ -2561,10 +2843,13 @@ fr:
   label_follows: "suivi"
   label_force_user_language_to_default: "Pour cet utilisateur, revenir au langage par defaut"
   label_form_configuration: "Configuration du formulaire"
+  label_formula: "Formule"
   label_gantt_chart: "Diagramme de Gantt"
   label_gantt_chart_plural: "Diagrammes de Gantt"
   label_general: "Général"
   label_generate_key: "Générer une clé"
+  label_global_modules: "Modules globaux"
+  label_global_roles: "Rôles globaux"
   label_git_path: "Chemin d'accès au répertoire .git"
   label_greater_or_equal: ">="
   label_group_by: "Grouper par"
@@ -2596,6 +2881,7 @@ fr:
   label_information_plural: "Information"
   label_installation_guides: "Guides d'installation"
   label_integer: "Nombre entier"
+  label_interface: "Interface"
   label_internal: "Interne"
   label_introduction_video: "Vidéo de présentation"
   label_invite_user: "Inviter utilisateur"
@@ -2647,6 +2933,7 @@ fr:
   label_manage: "Gérer"
   label_manage_groups: "Gérer les groupes"
   label_managed_repositories_vendor: "Référentiels %{vendor} gérés"
+  label_mathematical_operators: "Opérateurs mathématiques"
   label_max_size: "Taille maximale"
   label_me: "moi"
   label_member_new: "Nouveau membre"
@@ -2676,6 +2963,7 @@ fr:
   label_modules: "Modules"
   label_months_from: "mois de"
   label_more: "Plus"
+  label_more_information: "Plus d'informations"
   label_more_than_ago: "il y a plus de quelques jours"
   label_move_column_left: "Déplacer la colonne à gauche"
   label_move_column_right: "Déplacer la colonne à droite"
@@ -2705,6 +2993,7 @@ fr:
   label_no_due_date: "pas de date de fin"
   label_no_start_date: "pas de date de début"
   label_no_parent_page: "Aucune page parente"
+  label_notification_center_plural: "Notifications"
   label_nothing_display: "Rien à afficher"
   label_nobody: "personne"
   label_not_configured: "Non configuré"
@@ -2737,7 +3026,7 @@ fr:
   label_password_rule_special: "Caractères spéciaux"
   label_password_rule_uppercase: "Majuscules"
   label_path_encoding: "Encodage du chemin d'accès"
-  label_per_page: "Par page"
+  label_per_page: "Par page :"
   label_people: "Participants"
   label_permissions: "Autorisations"
   label_permissions_report: "Rapport d'autorisations"
@@ -2780,7 +3069,7 @@ fr:
   label_project_custom_field_plural: "Attributs du projet"
   label_project_settings: "Paramètres du projet"
   label_project_attributes_settings: "Paramètres des attributs du projet"
-  label_project_storage_plural: "Espaces de stockage des fichiers"
+  label_project_storage_plural: "Espaces de stockage de fichiers"
   label_project_storage_project_folder: "Espaces de stockage des fichiers : dossiers du projet"
   label_projects_disk_usage_information: "%{count} projets utilisant %{used_disk_space} d'espace disque"
   label_project_view_all: "Afficher tous les projets"
@@ -2790,12 +3079,10 @@ fr:
   label_query_new: "Nouvelle requête"
   label_query_plural: "Requêtes personnalisées"
   label_read: "Lire…"
+  label_read_documentation: "Lire la documentation"
   label_register: "Créer un compte"
   label_register_with_developer: "S'inscrire en tant que développeur"
   label_registered_on: "Enregistré sur"
-  label_registration_activation_by_email: "activation du compte par e-mail"
-  label_registration_automatic_activation: "activation automatique du compte"
-  label_registration_manual_activation: "activation manuelle du compte"
   label_related_work_packages: "Lots de Travaux associés"
   label_relates: "En relation avec"
   label_relates_to: "En relation avec"
@@ -2915,6 +3202,7 @@ fr:
   label_user_mail_option_only_my_events: "Uniquement pour les éléments que je suis ou auxquels je participe"
   label_user_mail_option_only_owner: "Les éléments dont je suis le propriétaire"
   label_user_mail_option_selected: "Pour chaque événement sur le projet selectionné seulement"
+  label_user_menu: "Menu utilisateur"
   label_user_new: "Nouvel utilisateur"
   label_user_plural: "Utilisateurs"
   label_user_search: "Recherche d'Utilisateurs"
@@ -2957,6 +3245,7 @@ fr:
   label_work_package_attachments: "Pièces jointes du lot de travaux"
   label_work_package_category_new: "Nouvelle catégorie"
   label_work_package_category_plural: "Catégories de Lots de Travaux"
+  label_work_package_comments: "Commentaires du lot de travaux"
   label_work_package_hierarchy: "Hiérarchie du lot de travaux"
   label_work_package_new: "Nouveau Lot de Travaux"
   label_work_package_edit: "Éditer le lot de travaux %{name}"
@@ -3224,7 +3513,7 @@ fr:
   notice_bad_request: "Mauvaise requête."
   notice_not_authorized: "Vous n'êtes pas autorisé à accéder à cette page."
   notice_not_authorized_archived_project: "Le projet auquel vous essayer d'accéder a été archivé."
-  notice_requires_enterprise_token: "Le jeton d'entreprise est manquant ou n'autorise pas l'accès à cette page."
+  notice_requires_enterprise_token: "Le jeton Enterprise est manquant ou n'autorise pas l'accès à cette page."
   notice_password_confirmation_failed: "Votre mot de passe est incorrect. Impossible de continuer."
   notice_principals_found_multiple: "Il y a %{number} résultats trouvés. Tabulation pour sélectionner le premier résultat."
   notice_principals_found_single: "Il y a un seul résultat. Tabulation pour le sélectionner."
@@ -3235,6 +3524,10 @@ fr:
   notice_successful_delete: "Suppression réussie."
   notice_successful_cancel: "Annulation réussie."
   notice_successful_update: "Mise à jour réussie."
+  notice_unsuccessful_create: "Échec de la création."
+  notice_unsuccessful_create_with_reason: "Échec de la création : %{reason}"
+  notice_unsuccessful_update: "Mise à jour échouée."
+  notice_unsuccessful_update_with_reason: "Échec de la mise à jour : %{reason}"
   notice_successful_update_custom_fields_added_to_project: |
     Mise à jour réussie. Les champs personnalisés des types activés sont automatiquement activés
     sur le formulaire du lot de travaux. <a href="%{url}" target="_blank">Voir plus</a>.
@@ -3251,7 +3544,7 @@ fr:
   #Default format for numbers
   number:
     format:
-      delimiter: ""
+      delimiter: ","
       precision: 3
       separator: ","
     human:
@@ -3273,13 +3566,13 @@ fr:
     text_getting_started_description: "Obtenez un aperçu rapide de la gestion de projet et de la collaboration en équipe avec OpenProject. Vous pouvez redémarrer cette vidéo à partir du menu d'aide."
     welcome: "Bienvenue sur %{app_title}"
     select_language: "Veuillez sélectionner votre langue"
-  permission_add_work_package_notes: "Ajouter des commentaires"
+  permission_add_work_package_comments: "Ajouter des commentaires"
   permission_add_work_packages: "Ajouter des lots de travaux"
   permission_add_messages: "Poster des messages"
   permission_add_project: "Créer des projets"
   permission_add_work_package_attachments: "Ajouter pièces jointes"
   permission_add_work_package_attachments_explanation: "Permet d'ajouter des pièces jointes sans avoir le droit de modifier les lots de travaux"
-  permission_add_comments_with_restricted_visibility: "Écrire des commentaires avec une visibilité restreinte"
+  permission_add_internal_comments: "Écrire des commentaires internes"
   permission_archive_project: "Archiver le projet"
   permission_create_user: "Créer des utilisateurs"
   permission_manage_user: "Modifier les utilisateurs"
@@ -3294,7 +3587,7 @@ fr:
   permission_comment_news: "Commenter les actualités"
   permission_commit_access: "Accès au dépôt en lecture/écriture (« commit »)"
   permission_copy_projects: "Copier des projets"
-  permission_copy_work_packages: "Copier lots de travaux"
+  permission_copy_work_packages: "Dupliquer les lots de travaux"
   permission_create_backup: "Créer des sauvegardes"
   permission_delete_work_package_watchers: "Supprimer des observateurs"
   permission_delete_work_packages: "Supprimer des lots de travaux"
@@ -3304,16 +3597,16 @@ fr:
   permission_delete_timelines: "Supprimer lignes du temps"
   permission_delete_wiki_pages: "Supprimer des pages wiki"
   permission_delete_wiki_pages_attachments: "Supprimer des pièces jointes"
-  permission_edit_work_package_notes: "Modérer les commentaires"
-  permission_edit_work_package_notes_explanation: "Attention : les utilisateurs disposant de cette autorisation peuvent modifier les commentaires de n'importe qui."
+  permission_edit_work_package_comments: "Modérer les commentaires"
+  permission_edit_work_package_comments_explanation: "Attention : les utilisateurs disposant de cette autorisation peuvent modifier les commentaires de n'importe qui."
   permission_edit_work_packages: "Éditer des lots de travaux"
   permission_edit_messages: "Éditer des messages"
-  permission_edit_own_comments_with_restricted_visibility: "Modifier les propres commentaires avec une visibilité restreinte"
-  permission_edit_own_work_package_notes: "Modifier ses propres commentaires"
+  permission_edit_own_internal_comments: "Modifier ses propres commentaires internes"
+  permission_edit_own_work_package_comments: "Modifier ses propres commentaires"
   permission_edit_own_messages: "Éditer ses propres messages"
   permission_edit_own_time_entries: "Éditer mes propres enregistrements de temps"
-  permission_edit_others_comments_with_restricted_visibility: "Modérer les commentaires avec une visibilité restreinte"
-  permission_edit_others_comments_with_restricted_visibility_explanation: "Attention : les utilisateurs ayant cette permission peuvent modifier les commentaires d'autres utilisateurs avec une visibilité restreinte."
+  permission_edit_others_internal_comments: "Modérer les commentaires internes"
+  permission_edit_others_internal_comments_explanation: "Attention : les utilisateurs ayant cette autorisation peuvent modifier les commentaires internes des autres utilisateurs."
   permission_edit_project: "Éditer le projet"
   permission_edit_project_attributes: "Modifier les attributs du projet"
   permission_edit_project_phases: "Modifier les phases du projet"
@@ -3354,7 +3647,7 @@ fr:
   permission_manage_own_reminders: "Créer des rappels personnalisés"
   permission_view_project: "Voir les projets"
   permission_view_changesets: "Voir révisions du dépôt dans OpenProject"
-  permission_view_comments_with_restricted_visibility: "Voir les commentaires avec une visibilité restreinte"
+  permission_view_internal_comments: "Voir les commentaires internes"
   permission_view_commit_author_statistics: "Voir les statistiques des auteurs de «commit»"
   permission_view_dashboards: "Voir les tableaux de bord"
   permission_view_work_package_watchers: "Voir la liste des observateurs"
@@ -3522,7 +3815,7 @@ fr:
       oauth_application_details: "La clé secrète du client ne sera plus accessible après la fermeture de cette fenêtre. Veuillez copier ces valeurs dans les paramètres d'intégration Nextcloud OpenProject :"
       oauth_application_details_link_text: "Aller à la page des paramètres"
       setup_documentation_details: "Si vous avez besoin d'aide pour configurer un nouvel espace de stockage des fichiers, veuillez consulter la documentation : "
-      setup_documentation_details_link_text: "Configuration de l'espace de stockage des fichiers"
+      setup_documentation_details_link_text: "Configuration des espaces de stockage des fichiers"
       show_warning_details: "Pour utiliser ce stockage de fichiers, n'oubliez pas d'activer le module et le stockage spécifique dans les paramètres du projet de chaque projet souhaité."
     subversion:
       existing_title: "Dépôt Subversion existant"
@@ -3635,6 +3928,7 @@ fr:
   setting_hours_per_day_explanation: >-
     Cela définit ce qui est considéré comme un « jour » lors de l'affichage de la durée en jours et en heures (par exemple, si un jour dure 8 heures, 32 heures représentent 4 jours).
   setting_invitation_expiration_days: "L'émail d’activation expire après"
+  setting_invitation_expiration_days_caption: "Nombre de jours après l'expiration de l'e-mail d'activation."
   setting_work_package_done_ratio: "Mode de calcul de l'avancement"
   setting_work_package_done_ratio_field: "Basé sur le travail"
   setting_work_package_done_ratio_field_caption_html: >-
@@ -3650,6 +3944,9 @@ fr:
   setting_journal_aggregation_time_minutes: "Actions utilisateur agrégées dans"
   setting_log_requesting_user: "Enregister le login utilisateur, nom et adresse e-mail pour toutes les requêtes"
   setting_login_required: "Authentification requise"
+  setting_login_required_caption: "Lorsque cette case est cochée, toutes les requêtes envoyées à l'application doivent être authentifiées."
+  setting_lost_password: "Activer la réinitialisation du mot de passe"
+  setting_lost_password_caption: "Lorsque cette case est cochée, les utilisateurs peuvent réinitialiser leurs propres mots de passe."
   setting_mail_from: "Adresse expéditeur"
   setting_mail_handler_api_key: "Clé API"
   setting_mail_handler_body_delimiters: "Tronquer les e-mails à partir de l'une de ces lignes"
@@ -3675,6 +3972,7 @@ fr:
   setting_project_gantt_query_text: "Vous pouvez modifier la requête utilisée pour afficher le diagramme de Gantt à partir de la page d'aperçu du projet."
   setting_security_badge_displayed: "Afficher le badge de sécurité"
   setting_registration_footer: "Pied de page d’inscription"
+  setting_registration_footer_caption: "Ce texte est affiché dans le pied de page de la page d'inscription. Utilisez l'éditeur HTML pour formater le texte pour chaque langue sélectionnée."
   setting_repositories_automatic_managed_vendor: "Type de fournisseur de dépôt automatique"
   setting_repositories_encodings: "Encodages de référentiels"
   setting_repository_storage_cache_minutes: "Cache de l'espace disque du dépôt"
@@ -3685,6 +3983,22 @@ fr:
   setting_repository_truncate_at: "Le nombre maiximum de fichiers exposes au navigateur"
   setting_rest_api_enabled: "Autoriser service web REST"
   setting_self_registration: "Auto-enregistrement"
+  setting_self_registration_caption: >
+    Choisissez le mécanisme d'auto-inscription pour les utilisateurs. Faites attention au paramètre que vous choisissez, car certaines options permettent aux utilisateurs d'activer leurs propres comptes pour cette instance.
+  setting_self_registration_warning: >
+    L'utilisateur sera en mesure d'activer ses propres comptes. Veuillez noter que cela lui donnera accès à tous les projets publics et à leur contenu. Veuillez vous assurer qu'aucune donnée sensible ou privée n'est exposée dans des projets publics.
+  setting_self_registration_disabled: "Désactivé"
+  setting_self_registration_disabled_caption: >
+    Aucun compte ne peut être enregistré seul. Seuls les administrateurs et les utilisateurs ayant la permission globale de créer de nouveaux utilisateurs peuvent créer de nouveaux comptes.
+  setting_self_registration_activation_by_email: "Activation du compte par e-mail"
+  setting_self_registration_activation_by_email_caption: >
+    Les utilisateurs peuvent s'inscrire seuls et activer leur compte après avoir confirmé leur adresse e-mail. Les administrateurs n'ont aucun contrôle de modération sur le processus d'activation.
+  setting_self_registration_automatic_activation: "Activation automatique du compte"
+  setting_self_registration_automatic_activation_caption: >
+    Les utilisateurs peuvent s'inscrire seuls. Leurs comptes sont immédiatement actifs sans autre action. Les administrateurs n'ont aucun contrôle de modération sur le processus d'activation.
+  setting_self_registration_manual_activation: "Activation manuelle du compte"
+  setting_self_registration_manual_activation_caption: >
+    Les utilisateurs peuvent s'inscrire eux-mêmes. Leurs comptes sont placés en attente jusqu'à ce qu'un administrateur ou un utilisateur ayant la permission globale de créer ou de gérer des utilisateurs les active.
   setting_session_ttl: "Délai d'expiration de session après inactivité"
   setting_session_ttl_hint: "Une valeur inférieur à 5 désactive cette fonction"
   setting_session_ttl_enabled: "Session expirée"
@@ -3712,6 +4026,8 @@ fr:
   setting_working_days: "Jours ouvrés"
   settings:
     authentication:
+      login_and_sso: "Connexion et SSO"
+      registration: "Inscription"
       single_sign_on: "Authentification unique"
       omniauth_direct_login_hint_html: >
         Si cette option est activée, les demandes de connexion seront redirigées vers le fournisseur omniauth configuré. La liste déroulante de connexion et la page de connexion seront désactivées. <br/> <strong>Remarque :</strong> lorsque cette option est activée, les utilisateurs peuvent toujours se connecter en interne en visitant la page de connexion <code>%{internal_path}</code>, sauf si vous désactivez également les connexions par mot de passe.
@@ -3729,8 +4045,6 @@ fr:
         Les fichiers restants ont été analysés. Il y a %{file_count} en quarantaine. Vous allez être redirigé vers la page de quarantaine. Utilisez cette page pour supprimer ou remplacer les fichiers en quarantaine.
       remaining_rescanned_files: >
         L'analyse antivirus a été activée avec succès. %{file_count} fichiers ont été téléchargés précédemment et doivent encore être analysés. Ce processus a été planifié en arrière-plan. Les fichiers resteront accessibles pendant l'analyse.
-      upsale:
-        description: "Assurez-vous que les fichiers téléversés dans OpenProject sont analysés pour détecter les virus avant d'être accessibles aux autres utilisateurs."
       actions:
         delete: "Supprimer le fichier"
         quarantine: "Mettre le fichier en quarantaine"
@@ -3785,7 +4099,7 @@ fr:
       heading: "Cycle de vie du projet"
       heading_description: "Le cycle de vie du projet définit les phases du projet qui peuvent être utilisées pour la planification de votre projet et apparaîtra dans la page d'aperçu de chaque projet. Ces attributs peuvent être activés ou désactivés, mais pas réordonnés au niveau du projet."
       label_add: "Ajouter"
-      label_add_description: "Ajouter une définition de cycle de vie"
+      label_add_description: "Ajouter une définition de phase de projet"
       filter:
         label: "Rechercher une phase de projet"
       section_header: "Phases"
@@ -3794,8 +4108,6 @@ fr:
       new:
         description: "Les modifications apportées à cette phase du projet seront répercutées dans tous les projets où elle est activée."
         heading: "Nouvelle phase"
-      edit:
-        heading: "Modifier la phase"
       both_gate: "Porte de début et de fin"
       no_gate: "Aucune porte"
       start_gate: "Porte de début"
@@ -3816,6 +4128,9 @@ fr:
       section_holidays_and_closures: "Vacances et fermetures"
     work_packages:
       not_allowed_text: "Vous n'avez pas les autorisations nécessaires pour voir cette page."
+      activities:
+        enable_internal_comments: "Activer les commentaires internes"
+        helper_text: "Les commentaires internes permettent aux membres d'une équipe interne de communiquer entre eux en privé. Les commentaires ne sont visibles que pour les rôles sélectionnés qui ont les autorisations nécessaires et ne seront pas visibles publiquement. %{link}"
   text_formatting:
     markdown: "Markdown"
     plain: "Texte brut"
@@ -3851,8 +4166,6 @@ fr:
     Lorsque vous utilisez des champs personnalisés : n’oubliez pas que les champs personnalisés doivent être activés par projet également.
   text_custom_field_hint_activate_per_project_and_type: >
     Les champs personnalisés doivent être activés par type de lot de travaux et par projet.
-  text_wp_status_read_only_html: >
-    L'édition Entreprise ajoutera ces add-ons supplémentaires pour les champs de statut des lots de travaux : <br> <ul> <li><b>Permet de marquer les lots de travaux en lecture seule pour des statuts spécifiques</b></li> </ul>
   text_project_custom_field_html: >
     L'édition Entreprise ajoutera ces add-ons supplémentaires pour les champs personnalisés des projets : <br> <ul> <li><b>Ajouter des champs personnalisés pour les projets à votre liste de projets pour créer une vue du portefeuille de projets</b></li> </ul>
   text_custom_logo_instructions: >
@@ -4097,7 +4410,7 @@ fr:
     reminders:
       label_remind_at: "Date"
       note_placeholder: "Pourquoi définissez-vous ce rappel ?"
-      success_creation_message: "Le rappel a été défini avec succès. Vous recevrez une notification pour ce lot de travaux au moment choisi."
+      create_success_message: "Le rappel a été défini avec succès. Vous recevrez une notification pour ce lot de travaux %{reminder_time}."
       success_update_message: "Rappel mis à jour avec succès."
       success_deletion_message: "Rappel supprimé avec succès."
   sharing:
@@ -4165,16 +4478,16 @@ fr:
         view_description: "Peut consulter cette liste de projets."
         edit: "Éditer"
         edit_description: "Peut consulter, partager et éditer cette liste de projets."
-      upsale:
+      upsell:
         message: "Le partage des listes de projets avec des utilisateurs individuels est un module complémentaire pour les entreprises."
   working_days:
     info: >
-      Les jours qui ne sont pas sélectionnés sont ignorés lors de la planification des lots de travaux (et non inclus dans le nombre de jours). Ils peuvent être remplacés au niveau du lot de travaux.
+      Les jours qui ne sont pas sélectionnés sont ignorés lors de la planification des lots de travaux et des cycles de vie du projet (et non inclus dans le nombre de jours). Ils peuvent être remplacés au niveau du lot de travaux.
     instance_wide_info: >
       Les dates ajoutées à la liste ci-dessous sont considérées comme non fonctionnelles et ignorées lors de la planification des lots de travaux.
     change_button: "Changer les jours ouvrables"
     warning: >
-      La modification des jours de la semaine qui sont considérés comme des jours travaillés ou des jours non travaillés peut affecter les jours de début et de fin de tous les lots de travaux de tous les projets dans ce cas.
+      La modification des jours de la semaine considérés comme des jours ouvrables ou des jours non ouvrables peut affecter les jours de début et de fin de tous les lots de travaux et les cycles de vie de tous les projets dans ce cas.
     journal_note:
       changed: _**Jours ouvrables** modifiés (%{changes})._
       days:
@@ -4197,9 +4510,15 @@ fr:
       code_429: "Trop de demandes, Veuillez réessayer ultérieurement."
       code_500: "Une erreur interne s'est produite."
       code_500_outbound_request_failure: "Une requête sortante vers une autre ressource a échoué avec le code de statut %{status_code}."
-      code_500_missing_enterprise_token: "La requête ne peut pas être traitée en raison d'un jeton Entreprise invalide ou manquant."
+      code_500_missing_enterprise_token: "La requête ne peut pas être traitée en raison d'un jeton Enterprise invalide ou manquant."
+      bad_request:
+        emoji_reactions_activity_type_not_supported: "Ce type d'activité ne prend pas en charge les réactions via émojis."
+      conflict:
+        multiple_reminders_not_allowed: |-
+          Vous ne pouvez définir qu'un seul rappel à la fois pour un lot de travaux. Veuillez supprimer ou mettre à jour le rappel existant.
       not_found:
         work_package: "Le lot de travaux que vous cherchez est introuvable ou a été supprimé."
+        reminder: "Le rappel que vous cherchez est introuvable ou a été supprimé."
       expected:
         date: "AAAA-MM-JJ (date ISO 8601 uniquement)"
         datetime: "YYYY-MM-DDThh:mm:ss[.lll][+hh:mm] (n'importe quelle date heure compatible ISO 8601)"
@@ -4396,27 +4715,3 @@ fr:
     description: "Ajoute le fournisseur SAML OmniAuth à OpenProject"
   enterprise_plans:
     legacy_enterprise: "Abonnement Enterprise"
-  enterprise_features:
-    baseline_comparison: Comparaison de référence
-    board_view: Vue en tableau
-    conditional_highlighting: Mise en surbrillance conditionnelle
-    custom_actions: Actions personnalisées
-    custom_field_hierarchies: Hiérarchies de champs personnalisés
-    customize_life_cycle: Personnaliser le cycle de vie
-    date_alerts: Alertes de date
-    define_custom_style: Définir un style personnalisé
-    edit_attribute_groups: Modifier les groupes d'attributs
-    gantt_pdf_export: Exportation PDF de diagramme de Gantt
-    grid_widget_wp_graph: Graphique du widget de grille de lot de travaux
-    ldap_groups: Groupes LDAP
-    one_drive_sharepoint_file_storage: Stockage de fichiers OneDrive/SharePoint
-    placeholder_users: Utilisateurs de remplacement
-    project_list_sharing: Partage de liste de projets
-    readonly_work_packages: Lots de travaux en lecture seule
-    sso_auth_providers: Fournisseurs d'authentification SSO
-    team_planner_view: Vue du planificateur d'équipe
-    two_factor_authentication: Authentification à deux facteurs
-    virus_scanning: Analyse des virus des pièces jointes
-    work_package_query_relation_columns: Colonnes de relation de requête de lot de travaux
-    work_package_sharing: Partage de lots de travaux
-    work_package_subject_generation: Génération du sujet du lot de travaux

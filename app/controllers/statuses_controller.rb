@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -84,10 +86,6 @@ class StatusesController < ApplicationController
   end
 
   protected
-
-  def show_local_breadcrumb
-    false
-  end
 
   def recompute_progress_values
     attributes_triggering_recomputing = ["excluded_from_totals"]

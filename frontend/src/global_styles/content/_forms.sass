@@ -271,7 +271,7 @@ fieldset.form--fieldset
       padding: 0.625rem 0.25rem 0 0.25rem
 
 #main-menu .form--fieldset-legend
-  color: var(--main-menu-fieldset-header-color)
+  color: var(--main-menu-font-color)
   margin-bottom: 1rem
 
 .form--toolbar
@@ -422,6 +422,9 @@ fieldset.form--fieldset
 
   .form--label.-error &
     color: var(--content-form-error-color)
+
+  &:has(.op-attribute-help-text)
+    @extend .op-attribute-label
 
 .form--field-container
   @include grid-content(10)

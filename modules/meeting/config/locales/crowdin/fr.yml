@@ -45,7 +45,7 @@ fr:
       meeting_agenda_item:
         title: "Titre"
         author: "Auteur"
-        duration_in_minutes: "min"
+        duration_in_minutes: "Durée"
         description: "Notes"
         presenter: "Responsable"
       meeting_section:
@@ -70,11 +70,9 @@ fr:
         invalid_time_format: "n’est pas une heure valide. Format requis : HH:MM"
     models:
       recurring_meeting: "Réunion récurrente"
-      structured_meeting: "Réunion ponctuelle"
-      meeting: "Réunion"
+      meeting: "Réunion ponctuelle"
       meeting_agenda_item: ""
       meeting_agenda: "Ordre du jour"
-      meeting_minutes: "Compte-rendu"
       meeting_section: "Section"
   activity:
     filter:
@@ -101,6 +99,7 @@ fr:
     meeting_agenda_opened: Ordre du jour de la réunion ouvert
     meeting_minutes: Compte-rendu de la réunion modifié
     meeting_minutes_created: Compte-rendu de la réunion créé
+  error_notification: "Échec de l'envoi de la notification."
   error_notification_with_errors: "L'envoi de notifications a échoué. Les destinataires suivant n'ont pas pu être notifiés : %{recipients}"
   label_meeting: "Réunion"
   label_meeting_plural: "Réunions"
@@ -120,6 +119,7 @@ fr:
   label_meeting_date_time: "Date/Heure"
   label_meeting_date_and_time: "Date et heure"
   label_meeting_diff: "Différence"
+  label_meeting_send_updates: "Envoyer les mises à jour du calendrier par e-mail"
   label_recurring_meeting: "Réunion récurrente"
   label_recurring_meeting_part_of: "Partie d'une série de réunions"
   label_recurring_meeting_new: "Nouvelle réunion récurrente"
@@ -184,6 +184,7 @@ fr:
       agenda_items: "Copier les points de l'ordre du jour"
       agenda_text: "Copier l'ordre du jour de l'ancienne réunion"
       participants: "Copier la liste des participants"
+      to_clipboard: "Copier dans le presse-papiers"
     email:
       send_emails: "Envoyer un e-mail aux participants"
       send_invitation_emails: >
@@ -215,11 +216,8 @@ fr:
         body: "La réunion « %{title} » a été reprogrammée par %{actor}."
         old_date_time: "Ancienne date/heure"
         new_date_time: "Nouvelle date/heure"
-    label_mail_all_participants: "Envoyer un mail à tous les participants"
+    label_mail_all_participants: "Envoyer par e-mail une invitation de calendrier à tous les participants"
     types:
-      classic: "Classique (non pris en charge)"
-      classic_text: "Note : les réunions classiques seront supprimées dans la prochaine version d'OpenProject."
-      structured: "Structurée"
       one_time: "Ponctuelle"
       recurring: "Récurrente"
       recurring_text: "Créez une série de réunions avec un modèle dynamique pour chaque occurrence."
@@ -241,12 +239,79 @@ fr:
     blankslate:
       title: "Aucune réunion à afficher"
       desc: "Aucune réunion ne répond aux critères du filtre actif."
+    label_export_pdf: "Exporter au format PDF"
+    export:
+      your_meeting_export: "La réunion est en cours d'exportation"
+    export_pdf_dialog:
+      title: Exporter au format PDF
+      description: Générez un fichier PDF imprimable de cette réunion dans son état actuel.
+      include_participants:
+        label: Inclure la liste des participants
+        caption: Une liste des participants sera prédéfinie au-dessus de l'ordre du jour de la réunion.
+      include_attachments:
+        label: Inclure la liste des pièces jointes
+        caption: Une liste contenant les noms de fichiers des pièces jointes sera ajoutée à la fin.
+      include_backlog:
+        label: Inclure le backlog
+        caption: Les éléments du backlog ne sont normalement pas considérés comme faisant partie d'une occurrence de réunion, mais vous pouvez choisir de les inclure.
+      include_outcomes:
+        label: Inclure les résultats de l'ordre du jour
+        caption: Si les résultats de votre ordre du jour contiennent des informations confidentielles, vous pouvez choisir de ne pas les inclure dans l'exportation.
+      footer_text:
+        label: Texte de pied de page
+        caption: Ce texte apparaîtra sur chaque page au centre du pied de page.
+      submit_button: Télécharger
+    notifications:
+      sidepanel:
+        title: "Mises à jour du calendrier par e-mail"
+        state:
+          disabled: "Désactivé."
+          enabled: "Activé."
+        description:
+          disabled: "Les participants ne recevront aucun e-mail pour les informer des modifications."
+          enabled: "Tous les participants recevront des invitations de calendrier mises à jour par e-mail les informant des modifications."
+          change_via_template: "Pour modifier cela, éditez le modèle de la série."
+        button:
+          disable: "Désactiver"
+          enable: "Activer"
+      dialog:
+        title:
+          enable: "Activer les mises à jour du calendrier par e-mail ?"
+          disable: "Désactiver les mises à jour du calendrier par e-mail ?"
+        message:
+          enable: >
+            Tous les participants recevront des invitations actualisées par e-mail chaque fois que la date, l'heure, le lieu ou les participants de la réunion seront modifiés. Une fois l'option activée, un e-mail sera immédiatement envoyé à tous les participants.
+          disable: >
+            Les participants ne recevront plus d'invitations actualisées par e-mail lorsque la date, l'heure, le lieu ou les participants de la réunion seront modifiés. S'ils ont déjà reçu une invitation pour cette réunion, il se peut qu'elle ne soit plus exacte.
+        confirm_label:
+          enable: "Activer les mises à jour par e-mail"
+          disable: "Désactiver les mises à jour par e-mail"
+      banner:
+        onetime:
+          enabled: >
+            Tous les participants recevront des invitations de calendrier mises à jour par e-mail les informant de vos modifications.
+          disabled: >
+            Les mises à jour du calendrier par e-mail sont désactivées. Les participants ne recevront pas d'e-mail les informant de vos modifications.
+        occurrence:
+          enabled: >
+            Les mises à jour du calendrier par e-mail sont activées pour la série de réunions. Tous les participants recevront des invitations de calendrier mises à jour les informant des modifications que vous avez apportées à cet événement.
+          disabled: >
+            Les mises à jour du calendrier par e-mail sont désactivées pour la série de réunions. Les participants ne recevront pas d'e-mail les informant des modifications apportées à cet événement.
+        template:
+          enabled: >
+            Les mises à jour du calendrier par e-mail sont activées pour la série de réunions. Tous les participants recevront des invitations de calendrier mises à jour les informant des changements que vous avez apportés à ce modèle ou à des occurrences individuelles.
+          disabled: >
+            Les mises à jour du calendrier par e-mail sont désactivées pour la série de réunions. Les participants ne recevront pas d'e-mail les informant des modifications que vous avez apportées à ce modèle ou aux événements individuels.
   meeting_section:
     untitled_title: "Section sans titre"
     delete_confirmation: "Supprimer la section supprimera également tous les éléments de l'ordre du jour qui s'y rapportent. Voulez-vous vraiment continuer ?"
     placeholder_title: "Nouvelle section"
     empty_text: "Faites glisser des éléments ici ou créez-en un nouveau"
   recurring_meeting:
+    time_zone_difference_banner:
+      title: "Différence de fuseau horaire"
+      description: >
+        Les dates ci-dessous se réfèrent au fuseau horaire de la série de réunions (%{actual_zone}), et non à votre fuseau horaire local (%{user_zone}).
     ended_blankslate:
       title: "La série de réunions est terminée"
       message: "Cette série de réunions est terminée. Il n'y a pas de prochaines réunions. "
@@ -324,23 +389,17 @@ fr:
       confirm_button: "Annuler l'occurrence"
     end_series_dialog:
       title: "Terminer la série de réunions"
-  notice_successful_notification: "Notification envoyée avec succès"
+  notice_successful_notification: "Mise à jour du calendrier par e-mail envoyée à tous les participants"
   notice_timezone_missing: Aucun fuseau horaire n'est défini et %{zone} est supposé. Pour choisir votre fuseau horaire, veuillez cliquer ici.
   notice_meeting_updated: "Cette page a été mise à jour par quelqu'un d'autre. Rechargez pour voir les changements."
   permission_create_meetings: "Créer des réunions"
   permission_edit_meetings: "Modifier les réunions"
   permission_delete_meetings: "Supprimer des réunions"
   permission_view_meetings: "Afficher les réunions"
-  permission_create_meeting_agendas: "Établir l'ordre du jour des réunions"
-  permission_create_meeting_agendas_explanation: "Permet de modifier le contenu de l'agenda des réunions classiques."
   permission_manage_agendas: "Gérer les ordres du jour"
-  permission_manage_agendas_explanation: "Permet de modifier le contenu de l'agenda des réunions dynamiques."
-  permission_close_meeting_agendas: "Fermer les ordres du jour"
-  permission_send_meeting_agendas_notification: "Envoyer une notification de révision pour les ordres du jour"
-  permission_create_meeting_minutes: "Gérer les minutes"
-  permission_send_meeting_minutes_notification: "Envoyer une notification de révision pour les minutes"
-  permission_meetings_send_invite: "Inviter des utilisateurs à des réunions"
-  permission_send_meeting_agendas_icalendar: "Envoyer l'ordre du jour de la réunion comme entrée du calendrier"
+  permission_manage_agendas_explanation: "Autorise la création, la modification et la suppression de points de l'ordre du jour"
+  permission_manage_outcomes: "Gérer les résultats"
+  permission_send_meeting_invites_and_outcomes: "Envoyer des invitations à des réunions et des résultats aux participants"
   project_module_meetings: "Réunions"
   text_duration_in_hours: "Durée en heures"
   text_in_hours: "en heures"
@@ -352,8 +411,8 @@ fr:
   text_meeting_minutes_for_meeting: 'Minutes de la réunion "%{meeting}"'
   text_notificiation_invited: "Cet e-mail contient une entrée ics pour la réunion ci-dessous :"
   text_meeting_empty_heading: "Votre réunion est vide"
-  text_meeting_empty_description_1: "Démarrez en ajoutant des points à l'ordre du jour ci-dessous. Chaque élément peut être aussi simple qu'un titre, mais vous pouvez également ajouter des détails supplémentaires comme la durée et des notes."
-  text_meeting_empty_description_2: 'Vous pouvez également ajouter des références aux lots de travaux existants. Les notes connexes seront automatiquement visibles dans l''onglet "Réunions" du lot de travaux concerné.'
+  text_meeting_empty_description1: "Démarrez en ajoutant des points à l'ordre du jour ci-dessous. Chaque élément peut être aussi simple qu'un titre, mais vous pouvez également ajouter des détails supplémentaires comme la durée et des notes."
+  text_meeting_empty_description2: 'Vous pouvez également ajouter des références aux lots de travaux existants. Les notes connexes seront automatiquement visibles dans l''onglet "Réunions" du lot de travaux concerné.'
   label_meeting_empty_action: "Ajouter un point d'ordre du jour"
   label_meeting_actions: "Actions pour la réunion"
   label_meeting_edit_title: "Modifier le titre de la réunion"
@@ -367,23 +426,47 @@ fr:
   label_meeting_index_later: "La semaine prochaine et plus tard"
   label_agenda_items: "Points de l'ordre du jour"
   label_agenda_items_reordered: "réorganisé"
-  label_agenda_item_remove: "Supprimer de l'ordre du jour"
+  label_agenda_item_add: "Ajouter un point à l'ordre du jour"
+  label_agenda_item_remove_from_agenda: "Retirer de l'ordre du jour"
+  label_agenda_item_remove_from_backlog: "Retirer du backlog"
   label_agenda_item_undisclosed_wp: "Paquet de travail #%{id} non visible"
   label_agenda_item_deleted_wp: "Référence de lot de travaux supprimée"
   label_agenda_item_actions: "Actions des points de l'ordre du jour"
+  label_agenda_item_move_to_next_title: "Move to next meeting?"
+  label_agenda_item_move: "Move"
   label_agenda_item_move_to_next: "Passer à la prochaine réunion"
+  label_agenda_item_move_to_backlog: "Déplacer vers le backlog"
+  label_agenda_item_move_to_current_meeting: "Déplacer vers la réunion en cours"
   label_agenda_item_move_to_top: "Déplacer vers le haut"
   label_agenda_item_move_to_bottom: "Déplacer vers le bas"
   label_agenda_item_move_up: "Monter"
   label_agenda_item_move_down: "Descendre"
   label_agenda_item_add_notes: "Ajouter des notes"
   label_agenda_item_add_outcome: "Ajouter un résultat"
+  label_agenda_item_work_package_add: "Ajouter lot de travaux"
   label_agenda_item_work_package: "Lot de travaux du point de l'ordre du jour"
+  label_section_rename: "Renommer la section"
   label_agenda_outcome: "Résultat"
   label_agenda_outcome_actions: "Actions de résultat de l'agenda"
   label_agenda_outcome_edit: "Modifier le résultat"
   label_agenda_outcome_delete: "Supprimer le résultat"
   text_outcome_not_editable_anymore: "Ce résultat n'est plus modifiable."
+  text_outcome_cannot_be_added: "Un résultat ne peut plus être ajouté."
+  label_backlog_clear: "Effacer le backlog"
+  label_backlog_clear_button: "Tout réinitialiser"
+  text_backlog_clear_error: "Une ou plusieurs erreurs se sont produites lors de l'effacement du backlog."
+  label_agenda_backlog: "Backlog de l'ordre du jour"
+  text_agenda_backlog: >
+    Ce backlog est unique à cette réunion ponctuelle. Vous pouvez faire glisser des éléments à l'intérieur et à l'extérieur pour les ajouter ou les supprimer de l'ordre du jour de la réunion.
+  label_agenda_backlog_clear_title: "Effacer le backlog de l'ordre du jour ?"
+  text_agenda_backlog_clear_description: >
+    Voulez-vous vraiment supprimer tous les éléments actuellement dans le backlog de l'ordre du jour ? Cette action est irréversible.
+  label_series_backlog: "Backlog de la série"
+  text_series_backlog: >
+    Le backlog est partagé avec toutes les occurrences de cette série. Vous pouvez faire glisser des éléments à l'intérieur et à l'extérieur pour les ajouter ou les supprimer d'une réunion particulière.
+  label_series_backlog_clear_title: "Effacer le backlog de la série ?"
+  text_series_backlog_clear_description: >
+    Cela supprimera tous les éléments du backlog de la série, qui est partagé avec toutes les réunions de la série. Voulez-vous vraiment continuer ? Cette action est irréversible.
   text_agenda_item_title: 'Point de l''ordre du jour « %{title} »'
   text_agenda_work_package_deleted: 'Point de l''ordre du jour du lot de travaux supprimé'
   text_deleted_agenda_item: 'Point de l''ordre du jour supprimé'
@@ -402,12 +485,12 @@ fr:
   label_meeting_reopen_action: "Réouvrir la réunion"
   label_meeting_close_action: "Clôturer la réunion"
   label_meeting_in_progress_action: "Démarrer la réunion"
-  text_meeting_open_description: "Cette réunion est ouverte. Vous pouvez ajouter/supprimer des éléments de l'ordre du jour et les modifier comme vous le souhaitez. Une fois l'ordre du jour prêt, marquez-le comme étant en cours pour documenter les résultats."
+  text_meeting_open_description: "Cette réunion est ouverte. Vous pouvez ajouter/supprimer des points de l'ordre du jour et les modifier comme vous le souhaitez. Une fois l'ordre du jour prêt, marquez-le comme étant en cours pour documenter les résultats."
   text_meeting_closed_description: "Cette réunion est clôturée. Vous ne pouvez plus ajouter/supprimer des points de l'ordre du jour."
-  text_meeting_in_progress_description: "Cette réunion est en cours. Vous pouvez documenter les résultats pour chaque élément de l'ordre du jour, les réorganiser et même en ajouter de nouveaux. Une fois la réunion terminée, vous pouvez la marquer comme fermée pour la verrouiller."
+  text_meeting_in_progress_description: "Cette réunion est en cours. Vous pouvez documenter les résultats pour chaque point de l'ordre du jour, les réorganiser et même en ajouter de nouveaux. Une fois la réunion terminée, vous pouvez la marquer comme étant fermée pour la verrouiller."
   text_meeting_open_dropdown_description: "Tous les résultats existants resteront, mais les utilisateurs ne pourront pas ajouter de nouveaux résultats."
   text_meeting_in_progress_dropdown_description: "Documentez les résultats tels que les besoins d'information ou les décisions prises pendant la réunion."
-  text_meeting_closed_dropdown_description: "Cette réunion est terminée. Vous ne pouvez plus modifier les éléments de l'ordre du jour ou les résultats."
+  text_meeting_closed_dropdown_description: "Cette réunion est terminée. Vous ne pouvez plus modifier les points de l'ordre du jour ou les résultats."
   label_meeting_manage_participants: "Gérer les participants"
   label_meeting_no_participants: "Aucun participant"
   label_meeting_show_hide_participants: "Afficher/masquer %{count} autre(s)"
@@ -421,9 +504,12 @@ fr:
   text_add_work_package_to_meeting_description: "Un lot de travaux peut être ajouté à une ou plusieurs réunions pour y être discuté. Les éventuelles notes le concernant sont également visibles ici."
   text_agenda_item_no_notes: "Aucune note fournie"
   text_agenda_item_not_editable_anymore: "Ce point d'ordre du jour n'est plus modifiable."
-  text_agenda_item_move_next_meeting: "Voulez-vous vraiment déplacer cet élément vers la prochaine réunion le %{date} à %{time} ?"
+  text_agenda_item_move_next_meeting: "This item will be moved to the next meeting on %{date} at %{time}."
   text_agenda_item_moved_to_next_meeting: "L'ordre du jour a été déplacé vers la prochaine réunion, le %{date}"
   text_work_package_has_no_upcoming_meeting_agenda_items: "Ce lot de travaux n'est pas encore inclus dans l'ordre du jour d'une prochaine réunion."
   text_agenda_item_move_next_meeting_cancelled: "Impossible de passer à la prochaine réunion, car elle a été annulée."
   text_work_package_add_to_meeting_hint: 'Utilisez le bouton "Ajouter à la réunion" pour ajouter ce lot de travaux à une réunion à venir.'
   text_work_package_has_no_past_meeting_agenda_items: "Ce lot de travaux n'a pas été mentionné lors d'une réunion précédente."
+  text_email_updates_muted: "Les mises à jour du calendrier par e-mail sont désactivées. Les participants ne recevront pas d'invitations actualisées par e-mail lorsque vous effectuerez des modifications."
+  text_email_updates_enabled: "Les mises à jour du calendrier par e-mail sont activées. Tous les participants recevront des invitations actualisées par e-mail lorsque vous apporterez des modifications."
+

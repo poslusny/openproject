@@ -30,31 +30,46 @@
 
 import { ApplicationController } from 'stimulus-use';
 import { renderStreamMessage } from '@hotwired/turbo';
-import { TurboHelpers } from '../../turbo/helpers';
+import { TurboHelpers } from 'core-turbo/helpers';
 
 export default class AsyncDialogController extends ApplicationController {
   connect() {
-    this.element.addEventListener('click', (e) => {
-      e.preventDefault();
+    this.element.addEventListener('click', (event:MouseEvent) => {
+      event.preventDefault();
       this.triggerTurboStream();
+    });
+
+    this.element.addEventListener('keydown', (event:KeyboardEvent) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        this.triggerTurboStream();
+      }
     });
   }
 
-  triggerTurboStream():void {
+  private triggerTurboStream():void {
     TurboHelpers.showProgressBar();
 
     void fetch(this.href, {
       method: this.method,
       headers: {
         Accept: 'text/vnd.turbo-stream.html',
+        'X-Authentication-Scheme': 'Session',
       },
-    }).then((r) => r.text())
-      .then((html) => {
-        renderStreamMessage(html);
-      })
-      .finally(() => {
-        TurboHelpers.hideProgressBar();
-      });
+    }).then((response) => {
+      const contentType = response.headers.get('Content-Type') || '';
+      const isTurboStream = contentType.includes('text/vnd.turbo-stream.html');
+
+      if (!isTurboStream) {
+        return Promise.reject();
+      }
+
+      return response.text();
+    }).then((html) => {
+      renderStreamMessage(html);
+    }).finally(() => {
+      TurboHelpers.hideProgressBar();
+    });
   }
 
   get href() {

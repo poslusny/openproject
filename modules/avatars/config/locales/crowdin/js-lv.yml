@@ -4,7 +4,7 @@ lv:
     label_preview: 'Priekšskatīt'
     button_update: 'Atjaunot'
     avatars:
-      label_choose_avatar: "Izvēlieties avataru no faila"
+      label_choose_avatar: "Izvēlieties Avatar no faila"
       uploading_avatar: "Avatāra augšupielāde."
       text_upload_instructions: |
         Augšupielādējiet savu pielāgotu avatāru 128 x 128 pikseļi. Lielākiem failiem tiks mainīts izmērs un tie tiks apgriezti.

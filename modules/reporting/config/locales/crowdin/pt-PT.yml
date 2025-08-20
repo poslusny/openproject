@@ -93,7 +93,9 @@ pt-PT:
       button: "Exportar registo horário em PDF"
       timesheet: "Registo horário"
       time: "Hora"
-      sum_hours: Soma
+      sums_hours: Somas
+      overview_per_user_total: "Visão geral: Total de horas por utilizador"
+      overview_per_user_day: "Visão geral: Horas por utilizador por dia"
     cost_reports:
       title: "A sua exportação dos Relatórios de Custo XLS"
       start_time: "Hora de início"

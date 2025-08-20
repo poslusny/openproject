@@ -17,16 +17,17 @@
                    [ndcDynamicComponent]="headerComponent"
                    [ndcDynamicInputs]="{ resource: actionResource }">
       </ndc-dynamic>
-      <editable-toolbar-title *ngIf="!headerComponent"
-                              [title]="query.name"
-                              [smallHeader]="true"
-                              [inFlight]="inFlight"
-                              (onSave)="renameQuery(query, $event)"
-                              [editable]="canRename"
-                              [initialFocus]="initiallyFocused"
-                              class="-small">
-      </editable-toolbar-title>
-
+      <h3 class="toolbar-title--container">
+        <editable-toolbar-title *ngIf="!headerComponent"
+                                [title]="query.name"
+                                [smallHeader]="true"
+                                [inFlight]="inFlight"
+                                (onSave)="renameQuery(query, $event)"
+                                [editable]="canRename"
+                                [initialFocus]="initiallyFocused"
+                                class="-small">
+        </editable-toolbar-title>
+      </h3>
       <board-list-menu class="op-board-list--menu"
                        data-test-selector="op-board-list--menu"
                        [board]="board"

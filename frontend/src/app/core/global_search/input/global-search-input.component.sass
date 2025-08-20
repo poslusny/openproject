@@ -1,8 +1,8 @@
 @import "helpers"
 
-// search bar has a min-width of 160px and should adapt to every screen size
-$search-input-width: calc(160px + 3vw)
-$search-input-width-expanded: calc(160px + 13vw)
+// search bar has a min-width of 300px and should adapt to every screen size
+$search-input-width: calc(300px + 3vw)
+$search-input-width-expanded: 500px
 $search-input-height: 30px
 
 .top-menu-search
@@ -13,7 +13,7 @@ $search-input-height: 30px
   line-height: var(--header-height)
   margin: 0 15px
 
-  @media screen and (max-width: $breakpoint-sm)
+  @media screen and (max-width: $breakpoint-md)
     margin: 0
 
   &--back-button
@@ -25,18 +25,18 @@ $search-input-height: 30px
     right: 2px
     font-size: var(--header-item-font-size)
     color: var(--header-item-font-color)
+    z-index: 1
 
     &.-input-focused
       color: var(--body-font-color) !important
     &:hover
       text-decoration: none
 
-    @media screen and (max-width: $breakpoint-sm)
+    @media screen and (max-width: $breakpoint-md)
       position: relative
       padding: 0 8px
 
       &:hover
-        background: var(--header-item-bg-hover-color)
         color: var(--header-item-font-hover-color)
         border-bottom: var(--header-border-bottom-width) solid var(--header-border-bottom-color)
 
@@ -89,7 +89,7 @@ $search-input-height: 30px
     &.-expanded
       width: $search-input-width-expanded
       background: var(--overlay-bgColor)
-      border-radius: 4px
+      border-radius: var(--borderRadius-medium)
       .ng-input input.global-search--input, .ng-clear-wrapper
         color: var(--body-font-color) !important
     .ng-dropdown-header
@@ -107,6 +107,9 @@ $search-input-height: 30px
       @include styled-scroll-bar
       max-height: 80vh
       height: auto
+
+    .ng-dropdown-panel
+      width: $search-input-width-expanded !important
 
     .ng-option
       border-bottom: 1px solid var(--borderColor-default)
@@ -136,4 +139,4 @@ $search-input-height: 30px
     // Fix position of the spinner
     .ng-spinner-loader
       position: relative
-      right: 14px
+      right: 24px

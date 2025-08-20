@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -58,7 +60,7 @@ class WorkPackages::UpdateAncestorsService < BaseServices::BaseCallable
   end
 
   def ancestors(work_packages)
-    work_packages.reject { initiator?(_1) }
+    work_packages.reject { initiator?(it) }
   end
 
   def update_current_and_former_ancestors(attributes)
@@ -73,7 +75,7 @@ class WorkPackages::UpdateAncestorsService < BaseServices::BaseCallable
   end
 
   def save_updated_work_packages(updated_work_packages)
-    updated_initiators, updated_ancestors = updated_work_packages.partition { initiator?(_1) }
+    updated_initiators, updated_ancestors = updated_work_packages.partition { initiator?(it) }
 
     # Send notifications for initiator updates
     success = updated_initiators.all? { |wp| wp.save(validate: false) }
@@ -124,10 +126,9 @@ class WorkPackages::UpdateAncestorsService < BaseServices::BaseCallable
   def compute_derived_done_ratio(work_package, loader)
     return if no_children?(work_package, loader)
 
-    case Setting.total_percent_complete_mode
-    when "work_weighted_average"
+    if WorkPackage.work_weighted_average_mode?
       calculate_work_weighted_average_percent_complete(work_package)
-    when "simple_average"
+    elsif WorkPackage.simple_average_mode?
       calculate_simple_average_percent_complete(work_package, loader)
     end
   end
@@ -172,8 +173,8 @@ class WorkPackages::UpdateAncestorsService < BaseServices::BaseCallable
     return if initiator_work_package.parent_id.nil?
     return if initiator_work_package.parent_id != work_package.id
 
-    # it only applies if there is no bulk copy in progress: if it's a copy, the copy must stay exact
-    return if state.bulk_copy_in_progress
+    # it only applies if there is no bulk duplicate in progress: if it's a copy, the copy must stay exact
+    return if state.bulk_duplicate_in_progress
 
     # it only applies if the parent is manually scheduled
     return if work_package.schedule_automatically?

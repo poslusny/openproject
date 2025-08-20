@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -79,6 +81,10 @@ FactoryBot.define do
       field_format { "int" }
     end
 
+    trait :calculated_value do
+      field_format { "calculated_value" }
+    end
+
     trait :float do
       field_format { "float" }
     end
@@ -94,7 +100,7 @@ FactoryBot.define do
       end
       field_format { "list" }
       multi_value { false }
-      possible_values { ["A", "B", "C", "D", "E", "F", "G"] }
+      possible_values { %w[A B C D E F G] }
 
       # update custom options default value from the default_option transient
       # field for non-multiselect field
@@ -201,6 +207,7 @@ FactoryBot.define do
       factory :string_project_custom_field, traits: [:string]
       factory :text_project_custom_field, traits: [:text]
       factory :integer_project_custom_field, traits: [:integer]
+      factory :calculated_value_project_custom_field, traits: [:calculated_value]
       factory :float_project_custom_field, traits: [:float]
       factory :date_project_custom_field, traits: [:date]
       factory :list_project_custom_field, traits: [:list]

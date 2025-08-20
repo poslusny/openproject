@@ -31,6 +31,8 @@
       events:
         created: "Opprettet"
         updated: "Oppdatert"
+        comment: "Comment"
+        internal_comment: "Internal comment"
       explanation:
         text: >
           Ved forekomst av en hendelse som oppretting av en arbeidspakke eller en oppdatering fra et prosjekt, vil OpenProject sende en POST-forespørsel til de konfigurerte nettendepunktene. Ofte blir hendelsen sendt etter at %{link} er godkjent.

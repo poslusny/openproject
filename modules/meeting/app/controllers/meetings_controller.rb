@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -41,7 +42,6 @@ class MeetingsController < ApplicationController
   before_action :prevent_template_destruction, only: :destroy
 
   helper :watchers
-  helper :meeting_contents
   include MeetingsHelper
   include Layout
   include WatchersHelper
@@ -50,7 +50,6 @@ class MeetingsController < ApplicationController
 
   include OpTurbo::ComponentStream
   include OpTurbo::FlashStreamHelper
-  include OpTurbo::DialogStreamHelper
   include Meetings::AgendaComponentStreams
   include MetaTagsHelper
 
@@ -67,18 +66,15 @@ class MeetingsController < ApplicationController
     :meetings
   end
 
-  def show # rubocop:disable Metrics/AbcSize
+  def show
     respond_to do |format|
+      format.pdf { export_pdf }
       format.html do
         html_title "#{t(:label_meeting)}: #{@meeting.title}"
-        if @meeting.is_a?(StructuredMeeting)
-          if @meeting.state == "cancelled"
-            render_404
-          else
-            render(Meetings::ShowComponent.new(meeting: @meeting), layout: true)
-          end
-        elsif @meeting.agenda.present? && @meeting.agenda.locked?
-          params[:tab] ||= "minutes"
+        if @meeting.state == "cancelled"
+          render_404
+        else
+          render(Meetings::ShowComponent.new(meeting: @meeting), layout: true)
         end
       end
     end
@@ -256,7 +252,7 @@ class MeetingsController < ApplicationController
   end
 
   def update_title
-    @meeting.update(title: structured_meeting_params[:title])
+    @meeting.update(title: meeting_params[:title])
 
     if @meeting.errors.any?
       update_header_component_via_turbo_stream(state: :edit)
@@ -270,7 +266,7 @@ class MeetingsController < ApplicationController
   def update_details
     call = ::Meetings::UpdateService
       .new(user: current_user, model: @meeting)
-      .call(structured_meeting_params)
+      .call(meeting_params)
 
     if call.success?
       update_header_component_via_turbo_stream
@@ -300,6 +296,7 @@ class MeetingsController < ApplicationController
       update_sidebar_state_component_via_turbo_stream
     else
       update_all_via_turbo_stream
+      update_backlog_via_turbo_stream(collapsed: nil)
     end
 
     respond_with_turbo_streams
@@ -316,15 +313,7 @@ class MeetingsController < ApplicationController
   end
 
   def notify
-    service = MeetingNotificationService.new(@meeting)
-    result = service.call(:invited)
-
-    if result.success?
-      flash[:notice] = I18n.t(:notice_successful_notification)
-    else
-      flash[:error] = I18n.t(:error_notification_with_errors,
-                             recipients: result.errors.map(&:name).join("; "))
-    end
+    handle_notification(type: :notify)
 
     redirect_to action: :show, id: @meeting
   end
@@ -337,11 +326,33 @@ class MeetingsController < ApplicationController
       @text = friendly_timezone_name(User.current.time_zone, period: meeting.start_time)
     end
 
-    prefix = params[:structured_meeting] ? "structured_" : ""
-
-    add_caption_to_input_element_via_turbo_stream("input[name='#{prefix}meeting[start_time_hour]']",
+    add_caption_to_input_element_via_turbo_stream("input[name='meeting[start_time_hour]']",
                                                   caption: @text,
                                                   clean_other_captions: true)
+
+    respond_with_turbo_streams
+  end
+
+  def generate_pdf_dialog
+    respond_with_dialog Meetings::Exports::ModalDialogComponent.new(
+      meeting: @meeting,
+      project: @project
+    )
+  end
+
+  def toggle_notifications_dialog
+    respond_with_dialog Meetings::SidePanel::ToggleNotificationsDialogComponent.new(@meeting)
+  end
+
+  def toggle_notifications
+    @meeting.update!(notify: !@meeting.notify)
+
+    if @meeting.notify?
+      handle_notification(type: :toggle_notifications)
+    end
+
+    update_sidebar_component_via_turbo_stream
+    update_header_component_via_turbo_stream
 
     respond_with_turbo_streams
   end
@@ -402,7 +413,7 @@ class MeetingsController < ApplicationController
       .where(start_time: ...next_week)
       .order(start_time: :asc)
       .each do |meeting|
-      start_date = meeting.start_time.to_date
+      start_date = in_user_zone(meeting.start_time).to_date
 
       group_key =
         if start_date == Time.zone.today
@@ -420,7 +431,12 @@ class MeetingsController < ApplicationController
   end
 
   def build_meeting
-    meeting = meeting_class.new
+    meeting =
+      if params[:type] == "recurring"
+        RecurringMeeting.new
+      else
+        Meeting.new
+      end
 
     service = meeting.is_a?(RecurringMeeting) ? ::RecurringMeetings::SetAttributesService : ::Meetings::SetAttributesService
     call = service
@@ -428,17 +444,6 @@ class MeetingsController < ApplicationController
       .call(project: @project)
 
     @meeting = call.result
-  end
-
-  def meeting_class
-    case params[:type]
-    when "recurring"
-      RecurringMeeting
-    when "structured"
-      StructuredMeeting
-    else
-      Meeting
-    end
   end
 
   def global_upcoming_meetings
@@ -449,10 +454,8 @@ class MeetingsController < ApplicationController
 
   def find_meeting
     @meeting = Meeting
-      .includes([:project, :author, { participants: :user }, :agenda, :minutes])
+      .includes([:project, :author, { participants: :user }, :sections, { agenda_items: :outcomes }])
       .find(params[:id])
-  rescue ActiveRecord::RecordNotFound
-    render_404
   end
 
   def convert_params # rubocop:disable Metrics/AbcSize
@@ -462,11 +465,11 @@ class MeetingsController < ApplicationController
 
     @converted_params[:project] = @project if @project.present?
     @converted_params[:duration] = @converted_params[:duration].to_hours if @converted_params[:duration].present?
-    @converted_params[:send_notifications] = params[:send_notifications] == "1"
+    @converted_params[:send_notifications] = meeting_params[:notify] == "1" && params[:meeting][:copied_from_meeting_id].present?
 
     # Handle participants separately for each meeting type
     @converted_params[:participants_attributes] ||= {}
-    if copy_structured_meeting_participants?
+    if copy_meeting_participants?
       create_participants
     else
       force_defaults
@@ -479,18 +482,10 @@ class MeetingsController < ApplicationController
   def meeting_params
     if params[:meeting].present?
       params
-        .require(:meeting)
+        .require(:meeting) # rubocop:disable Rails/StrongParametersExpect
         .permit(:title, :location, :start_time, :project_id,
-                :duration, :start_date, :start_time_hour, :type,
+                :duration, :start_date, :start_time_hour, :notify,
                 participants_attributes: %i[email name invited attended user user_id meeting id])
-    end
-  end
-
-  def structured_meeting_params
-    if params[:structured_meeting].present?
-      params
-        .require(:structured_meeting)
-        .permit(:title, :location, :start_time_hour, :duration, :start_date, :state, :lock_version)
     end
   end
 
@@ -536,15 +531,13 @@ class MeetingsController < ApplicationController
     return unless copied_from_meeting_id
 
     @copy_from = Meeting.visible.find(copied_from_meeting_id)
-  rescue ActiveRecord::RecordNotFound
-    render_404
   end
 
   def copy_attributes
     {
       copy_agenda: copy_param(:copy_agenda),
       copy_attachments: copy_param(:copy_attachments),
-      send_notifications: copy_param(:send_notifications)
+      send_notifications: @converted_params[:send_notifications]
     }
   end
 
@@ -559,12 +552,41 @@ class MeetingsController < ApplicationController
   end
 
   def timezone_params
-    meeting_params = if params[:meeting]
-                       params.require(:meeting)
-                     else
-                       params.require(:structured_meeting)
-                     end
+    @timezone_params ||= params.expect(meeting: %i[start_date start_time_hour]).compact_blank
+  end
 
-    @timezone_params ||= meeting_params.permit(:start_date, :start_time_hour).compact_blank
+  def export_pdf
+    job = ::Meetings::ExportJob.perform_later(
+      export: MeetingExport.create,
+      user: current_user,
+      mime_type: :pdf,
+      query: @meeting,
+      options: params.to_unsafe_h
+    )
+    if request.headers["Accept"]&.include?("application/json")
+      render json: { job_id: job.job_id }
+    else
+      redirect_to job_status_path(job.job_id)
+    end
+  end
+
+  def handle_notification(type:)
+    service = MeetingNotificationService.new(@meeting)
+    result = service.call(:invited)
+
+    message = if result.success?
+                I18n.t(:notice_successful_notification)
+              else
+                I18n.t(:error_notification_with_errors,
+                       recipients: result.errors.map(&:name).join("; "))
+              end
+
+    if type == :notify
+      flash[result.success? ? :notice : :error] = message
+    elsif result.success?
+      render_success_flash_message_via_turbo_stream(message:)
+    else
+      render_error_flash_message_via_turbo_stream(message:)
+    end
   end
 end

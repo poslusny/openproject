@@ -78,6 +78,7 @@ export const opBasicRangeDatePickerSelector = 'op-basic-range-date-picker';
       multi: true,
     },
   ],
+  standalone: false,
 })
 export class OpBasicRangeDatePickerComponent implements OnInit, ControlValueAccessor, AfterViewInit {
   @HostBinding('class.op-basic-range-datepicker') className = true;

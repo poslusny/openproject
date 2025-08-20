@@ -53,17 +53,26 @@ export default class FormController extends Controller<HTMLFormElement> {
   submitForm(evt:CustomEvent) {
     evt.preventDefault(); // Don't submit
     const formData = new FormData(this.element);
+
     const columns = formData.get('columns');
     if (!columns && this.mustHaveColumns(formData)) {
       return false; // Error is already displayed on the element
     }
+
+    const saveExportSettingsCheckbox = document.getElementById('op-work-packages-export-dialog-form-save_export_settings') as HTMLInputElement;
+    if (saveExportSettingsCheckbox) {
+      formData.set('save_export_settings', saveExportSettingsCheckbox.checked ? 'true' : 'false');
+    }
+
     this.requestExport(this.generateExportURL(formData))
       .then((job_id) => this.showJobModal(job_id))
       .catch((error:HttpErrorResponse) => this.handleError(error));
+
     const dialog = document.getElementById(this.jobStatusDialogIdValue) as HTMLDialogElement;
     if (dialog) {
       dialog.close();
     }
+
     return true;
   }
 

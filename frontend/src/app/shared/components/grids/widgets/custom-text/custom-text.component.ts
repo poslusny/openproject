@@ -27,6 +27,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
   providers: [
     CustomTextEditFieldService,
   ],
+  standalone: false,
 })
 export class WidgetCustomTextComponent extends AbstractWidgetComponent implements OnInit, OnChanges, OnDestroy {
   protected currentRawText:string;

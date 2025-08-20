@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -34,8 +36,8 @@ RSpec.describe "API v3 User resource",
   include Rack::Test::Methods
   include API::V3::Utilities::PathHelper
 
-  let(:current_user) { create(:user) }
-  let(:user) { create(:user) }
+  let(:current_user) { user }
+  let(:user) { create(:user, lastname: "Bobbit") }
   let(:admin) { create(:admin) }
   let(:locked_admin) { create(:admin, status: Principal.statuses[:locked]) }
   let(:user_with_global_manage_user) do

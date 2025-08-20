@@ -64,6 +64,7 @@ import { DeviceService } from 'core-app/core/browser/device.service';
       multi: true,
     },
   ],
+  standalone: false,
 })
 export class OpBasicSingleDatePickerComponent implements ControlValueAccessor, OnInit, AfterViewInit, OnDestroy {
   @Output() valueChange = new EventEmitter();

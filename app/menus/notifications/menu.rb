@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -113,9 +115,9 @@ module Notifications
 
     def query_path(query_params)
       if query_params[:name] == "shared" && show_enterprise_icon?("shared")
-        return notifications_share_upsale_path(query_params)
+        return notifications_share_upsell_path(query_params)
       elsif query_params[:name] == "dateAlert" && show_enterprise_icon?("dateAlert")
-        return notifications_date_alert_upsale_path(query_params)
+        return notifications_date_alert_upsell_path(query_params)
       end
 
       notifications_center_path(query_params)

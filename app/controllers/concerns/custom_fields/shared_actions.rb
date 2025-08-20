@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -116,7 +118,9 @@ module CustomFields
       end
 
       def new_custom_field
-        ::CustomFields::CreateService.careful_new_custom_field(permitted_params.custom_field_type)
+        field = ::CustomFields::CreateService.careful_new_custom_field(permitted_params.custom_field_type)
+        field.field_format = params[:field_format]
+        field
       end
 
       def get_custom_field_params
@@ -125,8 +129,6 @@ module CustomFields
 
       def find_custom_option
         @custom_option = CustomOption.find params[:option_id]
-      rescue ActiveRecord::RecordNotFound
-        render_404
       end
 
       def delete_custom_values!(custom_option)

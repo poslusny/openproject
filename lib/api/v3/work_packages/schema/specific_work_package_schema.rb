@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -54,6 +56,7 @@ module API
                    :assignable_priorities,
                    :assignable_versions,
                    :assignable_budgets,
+                   :assignable_project_phases,
                    to: :contract
 
           def no_caching?

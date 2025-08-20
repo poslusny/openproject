@@ -30,7 +30,7 @@ import {
   Component,
   ElementRef,
 } from '@angular/core';
-import * as moment from 'moment';
+import moment, { Moment } from 'moment';
 import { TimelineZoomLevel } from 'core-app/features/hal/resources/query-resource';
 import { WorkPackageTimelineTableController } from '../container/wp-timeline-container.directive';
 import {
@@ -41,11 +41,11 @@ import {
   TimelineViewParameters,
 } from '../wp-timeline';
 import { WeekdayService } from 'core-app/core/days/weekday.service';
-import Moment = moment.Moment;
 
 @Component({
   selector: 'wp-timeline-grid',
   template: '<div class="wp-table-timeline--grid"></div>',
+  standalone: false,
 })
 export class WorkPackageTableTimelineGrid implements AfterViewInit {
   private activeZoomLevel:TimelineZoomLevel;

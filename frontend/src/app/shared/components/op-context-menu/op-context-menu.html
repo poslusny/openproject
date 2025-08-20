@@ -6,8 +6,16 @@
       [attr.aria-label]="locals.label"
       [ngClass]="{'-empty': items.length === 0 }">
     <ng-container *ngFor="let item of items">
+      <li *ngIf="item.isHeader" role="none">
+        <span
+          role="presentation"
+          [attr.aria-hidden]="true"
+          [textContent]="item.linkText"
+          class="op-menu--headline">
+        </span>
+      </li>
       <li *ngIf="item.divider" class="dropdown-divider" role="separator"></li>
-      <li *ngIf="!item.divider">
+      <li *ngIf="!item.divider && !item.isHeader">
         <a
           *ngIf="item.href"
           class="menu-item"

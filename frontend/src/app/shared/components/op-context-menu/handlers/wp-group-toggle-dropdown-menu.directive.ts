@@ -34,6 +34,7 @@ import { WorkPackageViewCollapsedGroupsService } from 'core-app/features/work-pa
 
 @Directive({
   selector: '[wpGroupToggleDropdown]',
+  standalone: false,
 })
 export class WorkPackageGroupToggleDropdownMenuDirective extends OpContextMenuTrigger {
   constructor(readonly elementRef:ElementRef,

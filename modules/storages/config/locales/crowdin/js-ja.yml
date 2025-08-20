@@ -6,8 +6,8 @@ ja:
       link_files_in_storage: "Link files in %{storageType}"
       link_existing_files: "Link existing files"
       upload_files: "Upload files"
-      drop_files: "Drop files here to upload them to %{name}."
-      drop_or_click_files: "Drop files here or click to upload them to %{name}."
+      drop_files: "ここにファイルをドロップして、 %{name} にアップロードします。"
+      drop_or_click_files: "ここにファイルをドロップするか、クリックして %{name} にアップロードします。"
       login: "%{storageType} login"
       login_to: "Login to %{storageType}"
       no_connection: "No %{storageType} connection"
@@ -18,7 +18,7 @@ ja:
       types:
         nextcloud: "Nextcloud"
         one_drive: "OneDrive/SharePoint"
-        default: "Storage"
+        default: "ストレージ"
       information:
         authentication_error: "The request to %{storageType} could not be authenticated, that's an error."
         connection_error: >
@@ -61,7 +61,7 @@ ja:
           Are you sure you want to unlink the file from this work package? Unlinking does not affect the original file and only removes the connection to this work package.
         remove_short: "Remove link"
         select: "Select files"
-        select_all: "全てを選択"
+        select_all: "全て選択"
         selection:
           zero: "Select files to link"
           other: "Link %{count} files"
@@ -75,7 +75,7 @@ ja:
           413: >
             Your file (%{fileName}) is bigger than what OpenProject can upload to %{storageType}. You can upload it directly to %{storageType} first and then link the file.
           507: >
-            Your file (%{fileName}) is bigger than the storage quota allows. Contact your administrator to modify this quota.
+            ファイル (%{fileName}) の容量がストレージ・クォータの許容量を超えています。管理者に連絡して、このクォータを変更してください。
           detail:
             nextcloud: >
               Please check that the latest version of the Nextcloud App "OpenProject Integration" is installed and contact your administrator for more information.
@@ -83,7 +83,7 @@ ja:
           An error occurred linking the recently uploaded file '%{fileName}' to the work package %{workPackageId}.
         tooltip:
           not_logged_in: "Please log in to the storage to access this file."
-          view_not_allowed: "You have no permission to see this file."
+          view_not_allowed: "このファイルを閲覧する権限がありません。"
           not_found: "This file cannot be found."
         already_linked_file: "This file is already linked to this work package."
-        already_linked_directory: "This directory is already linked to this work package."
+        already_linked_directory: "このディレクトリはすでにこのワークパッケージにリンクされている。"

@@ -148,10 +148,10 @@ module RecurringMeetings
     end
 
     def base_series_attributes(event) # rubocop:disable Metrics/AbcSize
-      event.uid = ical_uid("meeting-series-#{series.id}")
+      event.uid = series.uid
       event.summary = "[#{series.project.name}] #{series.title}"
       event.description = "[#{series.project.name}] #{I18n.t(:label_meeting_series)}: #{series.title}"
-      event.organizer = ical_organizer(series)
+      event.organizer = ical_organizer
     end
 
     def cancelled_schedules

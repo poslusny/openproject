@@ -1,6 +1,6 @@
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { States } from 'core-app/core/states/states.service';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { of, map } from 'rxjs';
 import { NgSelectModule } from '@ng-select/ng-select';
@@ -8,6 +8,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { OpAutocompleterComponent } from './op-autocompleter.component';
 import { TOpAutocompleterResource } from './typings';
 import { By } from '@angular/platform-browser';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('autocompleter', () => {
   let fixture:ComponentFixture<OpAutocompleterComponent>;
@@ -53,11 +54,11 @@ describe('autocompleter', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [OpAutocompleterComponent],
-      providers: [States],
-      imports: [HttpClientTestingModule, NgSelectModule],
-      schemas: [NO_ERRORS_SCHEMA],
-    }).compileComponents();
+    declarations: [OpAutocompleterComponent],
+    schemas: [NO_ERRORS_SCHEMA],
+    imports: [NgSelectModule],
+    providers: [States, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+}).compileComponents();
 
     fixture = TestBed.createComponent(OpAutocompleterComponent);
     getOptionsFnSpy = jasmine.createSpy("getOptionsFn").and.callFake((searchTerm:string) => {
@@ -78,13 +79,13 @@ describe('autocompleter', () => {
     fixture.componentInstance.debounceTimeMs = 0;
   });
 
-  it('should load the ng-select correctly', () => {
+  it('should load the ng-select correctly', fakeAsync(() => {
     fixture.detectChanges();
-    fixture.whenStable().then(() => {
-      const autocompleter = document.querySelector('.ng-select-container');
-      expect(document.contains(autocompleter)).toBeTruthy();
-    });
-  });
+    tick();
+
+    const autocompleter = document.querySelector('.ng-select-container');
+    expect(document.contains(autocompleter)).toBeTruthy();
+  }));
 
   describe('without debounce', () => {
     it('should load items', fakeAsync(() => {
@@ -151,9 +152,6 @@ describe('autocompleter', () => {
       const inputElement = inputDebugElement.nativeElement as HTMLInputElement;
 
       fixture.detectChanges();
-      tick();
-      expect(getOptionsFnSpy).not.toHaveBeenCalled();
-      tick(50);
       expect(getOptionsFnSpy).toHaveBeenCalledWith("");
       getOptionsFnSpy.calls.reset();
 

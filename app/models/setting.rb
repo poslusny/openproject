@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -339,7 +341,7 @@ class Setting < ApplicationRecord
       nil
     elsif definition.serialized? && value.is_a?(String)
       deserialize_hash(value)
-    elsif value != "".freeze && !value.nil?
+    elsif value != "" && !value.nil?
       read_formatted_setting(value, definition.format)
     elsif definition.format == :string
       value

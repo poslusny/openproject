@@ -37,7 +37,7 @@ vi:
       clear_all: "Xóa tất cả"
       loading: "Đang tải..."
       not_found: "Không tìm thấy mục nào"
-      type_to_search: "Nhập để tìm kiếm"
+      type_to_search: "Gõ để tìm kiếm"
     autocomplete_select:
       placeholder:
         multi: 'Thêm "%{name}"'
@@ -72,8 +72,8 @@ vi:
     button_confirm: "Xác nhận"
     button_continue: "Tiếp tục"
     button_copy: "Sao chép"
-    button_copy_to_clipboard: "Sao chép vào clipboard"
-    button_copy_link_to_clipboard: "Sao chép liên kết vào clipboard"
+    button_copy_to_clipboard: "Sao chép vào bảng tạm"
+    button_copy_link_to_clipboard: "Sao chép liên kết vào bảng tạm"
     button_copy_to_other_project: "Sao chép trong một dự án khác"
     button_custom-fields: "Trường tùy chỉnh"
     button_delete: "Xóa"
@@ -112,7 +112,7 @@ vi:
         inline: "Nổi bật nội tuyến:"
         entire_card_by: "Toàn bộ thẻ theo"
       remove_from_list: "Xóa thẻ khỏi danh sách"
-    caption_rate_history: "Lịch sử đánh giá"
+    caption_rate_history: "Lịch sử tỷ lệ"
     clipboard:
       browser_error: "Trình duyệt của bạn không hỗ trợ sao chép vào clipboard. Vui lòng sao chép thủ công: %{content}"
       copied_successful: "Sao chép vào clipboard thành công!"
@@ -202,69 +202,6 @@ vi:
         edit_query: "Chỉnh sửa truy vấn"
         new_group: "Nhóm mới"
         reset_to_defaults: "Đặt lại mặc định"
-      enterprise:
-        text_reprieve_days_left: "%{days} ngày còn lại đến khi hết thời gian gia hạn"
-        text_expired: "hết hạn"
-        trial:
-          confirmation: "Xác nhận địa chỉ email"
-          confirmation_info: >
-            Chúng tôi đã gửi cho bạn một email vào %{date} đến %{email}. Vui lòng kiểm tra hộp thư đến của bạn và nhấp vào liên kết xác nhận để bắt đầu dùng thử 14 ngày của bạn.
-          form:
-            general_consent: >
-              Tôi đồng ý với <a target="_blank" href="%{link_terms}">các điều khoản dịch vụ</a> và <a target="_blank" href="%{link_privacy}">chính sách bảo mật</a>.
-            invalid_email: "Địa chỉ email không hợp lệ"
-            label_company: "Công ty"
-            label_first_name: "Tên"
-            label_last_name: "Họ"
-            label_domain: "Miền"
-            label_subscriber: "Người đăng ký"
-            label_maximum_users: "Số người dùng hoạt động tối đa"
-            label_starts_at: "Bắt đầu từ"
-            label_expires_at: "Hết hạn vào"
-            label_plan: "Gói dịch vụ"
-            label_additional_features: "Additional features"
-            receive_newsletter: Tôi muốn nhận <a target="_blank" href="%{link}">bản tin</a> của OpenProject.
-            taken_domain: Chỉ có thể có một bản dùng thử hoạt động cho mỗi miền.
-            domain_mismatch: Tên máy chủ yêu cầu hiện tại không khớp với tên máy chủ đã cấu hình. Vui lòng kiểm tra lại cài đặt hệ thống của bạn.
-            taken_email: Mỗi người dùng chỉ có thể tạo một bản dùng thử.
-          email_not_received: "Bạn không nhận được email? Bạn có thể gửi lại email với liên kết bên phải."
-          try_another_email: "Hoặc thử với địa chỉ email khác."
-          next_steps: "Các bước tiếp theo"
-          resend_link: "Gửi lại"
-          resend_success: "Email đã được gửi lại. Vui lòng kiểm tra email của bạn và nhấp vào liên kết xác nhận được cung cấp."
-          resend_warning: "Không thể gửi lại email."
-          session_timeout: "Phiên làm việc của bạn đã hết thời gian. Vui lòng thử tải lại trang hoặc gửi lại email."
-          status_label: "Trạng thái:"
-          status_confirmed: "đã xác nhận"
-          status_waiting: "email đã được gửi - chờ xác nhận"
-          test_ee: "Dùng thử phiên bản Enterprise miễn phí trong 14 ngày"
-          quick_overview: "Nhận cái nhìn nhanh về quản lý dự án và hợp tác nhóm với phiên bản Enterprise của OpenProject."
-        upsale:
-          become_hero: "Trở thành anh hùng!"
-          enterprise_info_html: "%{feature_title} là một phần mở rộng Enterprise <span class='spot-icon spot-icon_inline spot-icon_enterprise-addons'></span>."
-          upgrade_info: "Vui lòng nâng cấp lên kế hoạch trả phí để kích hoạt và bắt đầu sử dụng nó trong nhóm của bạn."
-          benefits:
-            description: "Những lợi ích của phiên bản Enterprise tại chỗ là gì?"
-            high_security: "Tính năng bảo mật"
-            high_security_text: "Đăng nhập một lần (SAML, OpenID Connect, CAS), nhóm LDAP."
-            installation: "Hỗ trợ cài đặt"
-            installation_text: "Các kỹ sư phần mềm có kinh nghiệm sẽ hướng dẫn bạn qua toàn bộ quá trình cài đặt và cấu hình trong hạ tầng của bạn."
-            premium_features: "Phần mở rộng Enterprise"
-            premium_features_text: "Bảng Agile, chủ đề và logo tùy chỉnh, đồ thị, quy trình làm việc thông minh với các hành động tùy chỉnh, tìm kiếm toàn văn cho các tệp đính kèm công việc và trường tùy chỉnh nhiều chọn."
-            professional_support: "Hỗ trợ chuyên nghiệp"
-            professional_support_text: "Nhận hỗ trợ tin cậy, tận tâm từ các kỹ sư hỗ trợ cấp cao với kiến thức chuyên môn về việc chạy OpenProject trong môi trường kinh doanh quan trọng."
-          button_start_trial: "Bắt đầu dùng thử miễn phí"
-          button_upgrade: "Nâng cấp ngay"
-          button_contact_us: "Liên hệ với chúng tôi để được trình diễn"
-          button_book_now: "Đặt ngay"
-          confidence: >
-            Chúng tôi cung cấp sự tự tin với phần mềm quản lý dự án cấp doanh nghiệp đã được kiểm tra và hỗ trợ - với mã nguồn mở và tâm trí cởi mở.
-          link_quote: "Nhận báo giá"
-          more_info: "Thêm thông tin"
-          text: >
-            Phiên bản Enterprise của OpenProject xây dựng trên phiên bản Community. Nó bao gồm các phần mở rộng Enterprise và hỗ trợ chuyên nghiệp chủ yếu nhằm vào các tổ chức có hơn 10 người dùng quản lý các dự án quan trọng với OpenProject.
-          unlimited: "Không giới hạn"
-          you_contribute: "Các nhà phát triển cũng cần thanh toán hóa đơn của họ. Bằng cách nâng cấp lên phiên bản Enterprise, bạn sẽ hỗ trợ nỗ lực cộng đồng mã nguồn mở này và đóng góp vào sự phát triển, bảo trì và cải tiến liên tục của nó."
       working_days:
         calendar:
           empty_state_header: "Ngày không làm việc"
@@ -275,10 +212,10 @@ vi:
         change_button: "Lưu và lên lịch lại"
         change_title: "Thay đổi ngày làm việc"
         removed_title: "Bạn sẽ xóa các ngày sau khỏi danh sách ngày không làm việc:"
-        change_description: "Thay đổi những ngày trong tuần được coi là ngày làm việc hoặc ngày không làm việc có thể ảnh hưởng đến ngày bắt đầu và kết thúc của tất cả các công việc trong tất cả các dự án trong trường hợp này."
+        change_description: "Changing which days of the week are considered working days or non-working days can affect the start and finish days of all work packages and life cycles in all projects in this instance."
         warning: >
-          Các thay đổi có thể mất một thời gian để có hiệu lực. Bạn sẽ được thông báo khi tất cả các công việc liên quan đã được cập nhật.
-          Bạn có chắc chắn muốn tiếp tục không?
+          The changes might take some time to take effect. You will be notified when all relevant work packages and project life cycles have been updated.
+          Are you sure you want to continue?
       work_packages_settings:
         warning_progress_calculation_mode_change_from_status_to_field_html: >-
           Thay đổi chế độ tính toán tiến độ từ dựa trên trạng thái sang dựa trên công việc sẽ làm cho trường <i>% Hoàn thành</i> có thể chỉnh sửa tự do. Nếu bạn tùy ý nhập giá trị cho <i>Công việc</i> hoặc <i>Công việc còn lại</i>, chúng cũng sẽ được liên kết với <i>% Hoàn thành</i>. Thay đổi <i>Công việc còn lại</i> sau đó có thể cập nhật <i>% Hoàn thành</i>.
@@ -355,13 +292,13 @@ vi:
       blocks:
         new_features:
           text_new_features: "Đọc về các tính năng mới và cập nhật sản phẩm."
-          learn_about: "Tìm hiểu thêm về các tính năng mới"
+          learn_about: "Learn more about all new features"
           #Include the version to invalidate outdated translations in other locales.
-          #Otherwise, e.g. chinese might still have the translations for 10.0 in the 12.0 release.
-          "15_5":
+          #Otherwise, e.g. Chinese might still have the translations for 10.0 in the 12.0 release.
+          "16_3":
             standard:
               new_features_html: >
-                The release brings various features and improvements for you, e.g. <br> <ul class="%{list_styling_class}"> <li>Filter for descendants (children and grandchildren) of work packages.</li> <li>Benefit from advanced accessibility in the date picker.</li> <li>See % Complete included in work package table sums.</li> <li>Include a column for children in work package tables.</li> <li>Better use the date picker in mobile screens.</li> <li>PDF exports matching configured form layout.</li> </ul>
+                The release contains various new features and improvements, such as <br> <ul class="%{list_styling_class}"> <li>UX/UI improvements for a more modern look.</li> <li>Meetings: Option to mute email notifications and ICS.</li> <li>Ongoing timers shown in the My time tracking module.</li> <li>Progress reporting: % Complete sum also shown in Status-based mode.</li> <li>Nextcloud Health check: Indicate missing token exchange capability (Enterprise add-on).</li> </ul>
     ical_sharing_modal:
       title: "Đăng ký lịch"
       inital_setup_error_message: "Đã xảy ra lỗi khi lấy dữ liệu."
@@ -387,6 +324,7 @@ vi:
     label_added_time_by: 'Được thêm bởi <a href="%{authorLink}">%{author}</a> lúc %{age}'
     label_ago: "ngày trước"
     label_all: "tất cả"
+    label_all_projects: "All projects"
     label_all_uppercase: "Tất cả"
     label_all_work_packages: "tất cả các gói công việc"
     label_and: "và"
@@ -434,7 +372,6 @@ vi:
     label_filename: "Tệp"
     label_filesize: "Kích thước"
     label_general: "Chung"
-    label_global_roles: "Vai trò toàn cầu"
     label_greater_or_equal: ">="
     label_group: "Nhóm"
     label_group_by: "Nhóm theo"
@@ -448,7 +385,7 @@ vi:
     label_incoming_emails: "Email đến"
     label_information_plural: "Thông tin"
     label_invalid: "Không hợp lệ"
-    label_import: "Nhập"
+    label_import: "Nhập khẩu"
     label_latest_activity: "Hoạt động mới nhất"
     label_last_updated_on: "Cập nhật lần cuối vào"
     label_learn_more_link: "Tìm hiểu thêm"
@@ -458,11 +395,12 @@ vi:
     label_mail_notification: "Thông báo qua email"
     label_manage_columns: "Quản lý và sắp xếp lại các cột"
     label_me: "tôi"
-    label_meeting_agenda: "Chương trình họp"
+    label_meeting_agenda: "Chương trình nghị sự"
     label_meeting_minutes: "Biên bản cuộc họp"
     label_menu_collapse: "thu gọn"
     label_menu_expand: "mở rộng"
     label_more_than_ago: "hơn ngày trước"
+    label_moderate_comment: "Moderate comment"
     label_next: "Tiếp theo"
     label_no_color: "Không có màu"
     label_no_data: "Không có dữ liệu để hiển thị"
@@ -496,7 +434,6 @@ vi:
     label_repository_plural: "Các kho lưu trữ"
     label_save_as: "Lưu dưới dạng"
     label_search_columns: "Tìm cột"
-    label_select_project: "Chọn dự án"
     label_select_watcher: "Chọn người theo dõi..."
     label_selected_filter_list: "Danh sách bộ lọc đã chọn"
     label_show_attributes: "Hiển thị tất cả thuộc tính"
@@ -566,7 +503,7 @@ vi:
     label_version_plural: "Các phiên bản"
     label_view_has_changed: "Chế độ xem này có các thay đổi chưa được lưu. Nhấp để lưu chúng."
     help_texts:
-      show_modal: "Hiển thị văn bản trợ giúp thuộc tính"
+      show_modal: "Show help text"
     onboarding:
       buttons:
         skip: "Bỏ qua"
@@ -609,19 +546,19 @@ vi:
       title: "Thông báo"
       no_unread: "Không có thông báo chưa đọc"
       reasons:
-        mentioned: "nhắc đến"
-        watched: "người theo dõi"
-        assigned: "người được giao"
+        mentioned: "Nhắc đến"
+        watched: "Người quan sát"
+        assigned: "Người được giao"
         #The enum value is named 'responsible' in the database and that is what is transported through the API
         #up to the frontend.
         responsible: "Trách nhiệm"
-        created: "được tạo"
-        scheduled: "được lên lịch"
-        commented: "bình luận"
+        created: "Đã tạo"
+        scheduled: "Đã xếp lịch"
+        commented: "Nhận xét"
         processed: "đã xử lý"
         prioritized: "được ưu tiên"
         dateAlert: "Cảnh báo ngày"
-        shared: "được chia sẻ"
+        shared: "Được chia sẻ"
         reminder: "Reminder"
       date_alerts:
         milestone_date: "Ngày mốc"
@@ -631,9 +568,6 @@ vi:
         property_is: "is in %{difference_in_days}."
         property_was: "was %{difference_in_days} ago."
         property_is_deleted: "is deleted."
-        upsale:
-          title: "Cảnh báo ngày"
-          description: "Với cảnh báo ngày, bạn sẽ được thông báo về các ngày bắt đầu hoặc kết thúc sắp tới để không bao giờ bỏ lỡ hoặc quên hạn chót quan trọng."
       center:
         label_actor_and: "và"
         and_more_users:
@@ -643,6 +577,7 @@ vi:
           with_current_filter: "Hiện không có thông báo trong chế độ xem này"
         mark_all_read: "Đánh dấu tất cả là đã đọc"
         mark_as_read: "Đánh dấu là đã đọc"
+        mark_all_read_confirmation: "This will mark all notifications in this view as read. Are you sure you want to do this?"
         text_update_date_by: "%{date} bởi"
         total_count_warning: "Hiển thị %{newest_count} thông báo gần đây nhất. %{more_count} thông báo khác chưa được hiển thị."
         empty_state:
@@ -674,11 +609,11 @@ vi:
               P7D: mỗi tuần
         reasons:
           mentioned:
-            title: "Nhắc đến"
+            title: "nhắc đến"
             description: "Nhận thông báo mỗi khi ai đó nhắc đến tôi ở bất kỳ đâu"
           assignee: "Người được giao"
           responsible: "Người chịu trách nhiệm"
-          shared: "Được chia sẻ"
+          shared: "được chia sẻ"
           watched: "Người theo dõi"
           work_package_commented: "Tất cả bình luận mới"
           work_package_created: "Gói công việc mới"
@@ -695,7 +630,6 @@ vi:
           date_alerts:
             title: "Cảnh báo ngày"
             description: "Thông báo tự động khi các ngày quan trọng sắp đến cho các gói công việc mở mà bạn tham gia (người được giao, người chịu trách nhiệm hoặc người theo dõi)."
-            teaser_text: "Với cảnh báo ngày, bạn sẽ được thông báo về các ngày bắt đầu hoặc kết thúc sắp tới để không bao giờ bỏ lỡ hoặc quên hạn chót quan trọng."
           overdue: Khi quá hạn
         project_specific:
           title: "Cài đặt thông báo theo dự án"
@@ -708,9 +642,12 @@ vi:
       title: "Xác nhận mật khẩu của bạn để tiếp tục"
     pagination:
       no_other_page: "Bạn đang ở trang duy nhất."
+      pages_skipped: "Pages skipped."
+      page_navigation: "Pagination navigation"
+      per_page_navigation: 'Items per page selection'
       pages:
-        next: "Tiến tới trang tiếp theo"
-        previous: "Quay lại trang trước"
+        page_number: Page %{number}
+        show_per_page: Show %{number} per page
     placeholders:
       default: "-"
       subject: "Nhập chủ đề tại đây"
@@ -721,15 +658,10 @@ vi:
       autocompleter:
         label: "Hoàn tất tự động dự án"
       click_to_switch_to_project: "Dự án: %{projectname}"
-      confirm_template_load: "Việc chuyển đổi mẫu sẽ tải lại trang và bạn sẽ mất tất cả dữ liệu đã nhập vào biểu mẫu này. Tiếp tục?"
       context: "Ngữ cảnh dự án"
-      copy:
-        copy_options: "Tùy chọn sao chép"
       not_available: "Project N/A"
-      no_template_selected: "(Không có)"
       required_outside_context: >
         Vui lòng chọn một dự án để tạo gói công việc nhằm xem tất cả các thuộc tính. Bạn chỉ có thể chọn các dự án mà loại trên đã được kích hoạt.
-      use_template: "Sử dụng mẫu"
     reminders:
       settings:
         daily:
@@ -763,6 +695,8 @@ vi:
           first_day: "Ngày đầu tiên"
           last_day: "Ngày cuối cùng"
     text_are_you_sure: "Bạn có chắc không?"
+    text_are_you_sure_to_cancel: "You have unsaved changes on this page. Are you sure you want to discard them?"
+    breadcrumb: "Breadcrumb"
     text_data_lost: "Tất cả dữ liệu đã nhập sẽ bị mất."
     text_user_wrote: "%{value} đã viết:"
     types:
@@ -774,7 +708,7 @@ vi:
           Cảnh báo: Bạn có chắc muốn đặt lại cấu hình biểu mẫu không? Việc này sẽ đặt lại các thuộc tính về nhóm mặc định của chúng và vô hiệu hóa TẤT CẢ các trường tùy chỉnh.
         upgrade_to_ee: "Nâng cấp lên phiên bản Enterprise on-premises"
         upgrade_to_ee_text: "Wow! Nếu bạn cần tiện ích bổ sung này, bạn là một chuyên gia tuyệt vời! Bạn có thể hỗ trợ chúng tôi, các nhà phát triển OpenSource, bằng cách trở thành khách hàng của phiên bản Enterprise không?"
-        more_information: "Thông tin thêm"
+        more_information: "Thêm thông tin"
         nevermind: "Không sao"
     time_entry:
       work_package_required: "Yêu cầu chọn một gói công việc trước."
@@ -814,7 +748,7 @@ vi:
       relation_type: "Loại quan hệ"
     relations_hierarchy:
       parent_headline: "Cha"
-      hierarchy_headline: "Hệ thống phân cấp"
+      hierarchy_headline: "Phân cấp"
       children_headline: "Con"
     relation_buttons:
       set_parent: "Đặt cha"
@@ -835,10 +769,10 @@ vi:
       update_description: "Đặt hoặc cập nhật mô tả của quan hệ này"
       toggle_description: "Chuyển đổi mô tả quan hệ"
       update_relation: "Nhấp để thay đổi loại quan hệ"
-      add_follower: "Thêm người theo dõi"
-      show_relations: "Hiển thị các quan hệ"
+      show_relations: "Hiển thị các mối quan hệ"
       add_predecessor: "Thêm người tiền nhiệm"
-      remove: "Xóa quan hệ"
+      add_successor: "Add successor"
+      remove: "Xóa mối quan hệ"
       save: "Lưu quan hệ"
       abort: "Hủy"
     relations_autocomplete:
@@ -847,6 +781,7 @@ vi:
     autocompleter:
       placeholder: "Gõ để tìm kiếm"
       notFoundText: "Không tìm thấy mục nào"
+      search: "Search"
       project:
         placeholder: "Chọn dự án"
     repositories:
@@ -862,12 +797,12 @@ vi:
       activate_asc: "kích hoạt để áp dụng sắp xếp tăng dần"
       activate_dsc: "kích hoạt để áp dụng sắp xếp giảm dần"
       activate_no: "kích hoạt để loại bỏ sắp xếp"
-    text_work_packages_destroy_confirmation: "Bạn có chắc chắn muốn xóa các gói công việc(s) đã chọn không?"
+    text_work_packages_destroy_confirmation: "Bạn có chắc chắn muốn xóa gói công việc(s) đã chọn không?"
     text_query_destroy_confirmation: "Bạn có chắc chắn muốn xóa chế độ xem đã chọn không?"
     tl_toolbar:
       zooms: "Mức thu phóng"
       outlines: "Mức phân cấp"
-    upsale:
+    upsell:
       ee_only: "Bổ sung phiên bản Doanh nghiệp"
     wiki_formatting:
       strong: "In đậm"
@@ -892,10 +827,10 @@ vi:
         mixed: "Lẫn lộn"
     work_packages:
       bulk_actions:
-        move: "Thay đổi hàng loạt dự án"
         edit: "Chỉnh sửa hàng loạt"
-        copy: "Sao chép hàng loạt"
         delete: "Xóa hàng loạt"
+        duplicate: "Bulk duplicate"
+        move: "Thay đổi hàng loạt dự án"
       button_clear: "Xóa"
       comment_added: "Bình luận đã được thêm thành công."
       comment_send_failed: "Đã xảy ra lỗi. Không thể gửi bình luận."
@@ -923,8 +858,8 @@ vi:
       progress:
         title: "Ước lượng công việc và tiến độ"
       baseline:
-        addition_label: "Đã thêm vào chế độ xem trong khoảng thời gian so sánh"
-        removal_label: "Đã xóa khỏi chế độ xem trong khoảng thời gian so sánh"
+        addition_label: "Thêm vào chế độ xem trong khoảng thời gian so sánh"
+        removal_label: "Gỡ bỏ khỏi chế độ xem trong khoảng thời gian so sánh"
         modification_label: "Đã thay đổi trong khoảng thời gian so sánh"
         column_incompatible: "Cột này không hiển thị thay đổi trong chế độ Baseline."
       filters:
@@ -939,8 +874,8 @@ vi:
         header_no_type: "Gói công việc mới (Loại chưa được đặt)"
         header_with_parent: "Mới %{type} (Con của %{parent_type} #%{id})"
         button: "Tạo"
-      copy:
-        title: "Sao chép gói công việc"
+      duplicate:
+        title: "Duplicate work package"
       hierarchy:
         show: "Hiển thị chế độ phân cấp"
         hide: "Ẩn chế độ phân cấp"
@@ -989,7 +924,7 @@ vi:
         version: "Phiên bản"
         work: "Công việc"
         workAlternative: "Thời gian ước lượng"
-        remainingTime: "Thời gian còn lại"
+        remainingTime: "Công việc còn lại"
       default_queries:
         manually_sorted: "Truy vấn được sắp xếp thủ công mới"
         latest_activity: "Hoạt động mới nhất"
@@ -1028,7 +963,7 @@ vi:
         rename_query_placeholder: "Tên của chế độ xem này"
         star_text: "Đánh dấu chế độ xem này là yêu thích và thêm vào thanh bên chế độ xem đã lưu ở bên trái."
         public_text: >
-          Xuất bản chế độ xem này, cho phép người dùng khác truy cập chế độ xem của bạn. Người dùng có quyền 'Quản lý các chế độ xem công khai' có thể chỉnh sửa hoặc xóa truy vấn công khai. Điều này không ảnh hưởng đến khả năng hiển thị của kết quả gói công việc trong chế độ xem đó và tùy thuộc vào quyền của họ, người dùng có thể thấy các kết quả khác nhau.
+          Công khai chế độ xem này, cho phép người dùng khác truy cập chế độ xem của bạn. Người dùng có quyền 'Quản lý chế độ xem công khai' có thể chỉnh sửa hoặc xóa truy vấn công khai. Điều này không ảnh hưởng đến khả năng nhìn thấy kết quả gói công việc trong chế độ xem đó và tùy thuộc vào quyền của họ, người dùng có thể thấy các kết quả khác nhau.
         errors:
           unretrievable_query: "Không thể truy xuất chế độ xem từ URL"
           not_found: "Không có chế độ xem như vậy"
@@ -1037,17 +972,21 @@ vi:
       reminders:
         button_label: "Set reminder"
         title:
-          new: "Set reminder"
+          new: "Set a reminder"
           edit: "Edit reminder"
         subtitle: "You will receive a notification for this work package at the chosen time."
+        presets:
+          tomorrow: "Tomorrow"
+          three_days: "In 3 days"
+          week: "In a week"
+          month: "In a month"
+          custom: "At a particular date/time"
       scheduling:
         is_parent: "Ngày của gói công việc này được suy ra tự động từ các con của nó. Kích hoạt 'Lên lịch thủ công' để đặt ngày."
         is_switched_from_manual_to_automatic: "Ngày của gói công việc này có thể cần phải được tính toán lại sau khi chuyển từ lên lịch thủ công sang tự động do mối quan hệ với các gói công việc khác."
       sharing:
         title: "Chia sẻ gói công việc"
         show_all_users: "Hiển thị tất cả người dùng mà gói công việc đã được chia sẻ"
-        upsale:
-          description: "Chia sẻ gói công việc với người dùng không phải là thành viên của dự án."
       table:
         configure_button: "Cấu hình bảng gói công việc"
         summary: "Bảng với hàng gói công việc và cột thuộc tính gói công việc."
@@ -1069,7 +1008,7 @@ vi:
         highlighting: "Đánh dấu"
         highlighting_mode:
           description: "Đánh dấu bằng màu sắc"
-          none: "Không có đánh dấu"
+          none: "Không tô sáng"
           inline: "Thuộc tính(s) được tô sáng"
           inline_all: "Tất cả thuộc tính"
           entire_row_by: "Toàn bộ hàng theo"
@@ -1082,10 +1021,6 @@ vi:
           manually: "Thủ công"
           warning: "Bạn sẽ mất sắp xếp trước đó khi kích hoạt chế độ sắp xếp tự động."
         columns_help_text: "Sử dụng trường đầu vào phía trên để thêm cột vào chế độ xem bảng của bạn. Bạn có thể kéo và thả các cột để thay đổi thứ tự của chúng."
-        upsale:
-          attribute_highlighting: "Cần làm nổi bật các gói công việc nhất định khỏi đám đông?"
-          relation_columns: "Cần xem các mối quan hệ trong danh sách gói công việc?"
-          check_out_link: "Xem thêm phiên bản Doanh nghiệp."
         relation_filters:
           filter_work_packages_by_relation_type: "Lọc gói công việc theo loại mối quan hệ"
       tabs:
@@ -1193,7 +1128,6 @@ vi:
       current_project_and_all_descendants: "Trong dự án này + các dự án con"
       current_project: "Trong dự án này"
       recently_viewed: "Đã xem gần đây"
-      search: "Tìm kiếm"
       title:
         all_projects: "tất cả các dự án"
         project_and_subprojects: "và tất cả các dự án con"
@@ -1229,7 +1163,7 @@ vi:
           title: "Nhóm"
           description: "Quyền dựa trên vai trò được phân công trong dự án đã chọn"
         placeholder:
-          title: "Người dùng tạm thời"
+          title: "Người dùng giả lập"
           title_no_ee: "Người dùng tạm thời (chỉ có trong phiên bản Doanh nghiệp)"
           description: "Không có quyền truy cập vào dự án và không có email được gửi đi."
           description_no_ee: 'Không có quyền truy cập vào dự án và không có email được gửi đi. <br>Xem thêm <a href="%{eeHref}" target="_blank">phiên bản Doanh nghiệp</a>'
@@ -1296,9 +1230,7 @@ vi:
       clear: "Xóa"
       apply: "Áp dụng"
       header_description: "Nổi bật các thay đổi đã thực hiện đối với danh sách này kể từ bất kỳ thời điểm nào trong quá khứ."
-      enterprise_header_description: "Nổi bật các thay đổi đã thực hiện đối với danh sách này kể từ bất kỳ thời điểm nào trong quá khứ với phiên bản Doanh nghiệp."
       show_changes_since: "Hiển thị các thay đổi kể từ"
-      baseline_comparison: "So sánh cơ sở"
       help_description: "Múi giờ tham chiếu cho cơ sở."
       time_description: "Theo giờ địa phương của bạn: %{datetime}"
       time: "Thời gian"
@@ -1306,7 +1238,7 @@ vi:
       to: "Đến"
       drop_down:
         none: "-"
-        yesterday: "ngày hôm qua"
+        yesterday: "hôm qua"
         last_working_day: "ngày làm việc gần nhất"
         last_week: "tuần trước"
         last_month: "tháng trước"
@@ -1320,8 +1252,8 @@ vi:
         maintained_with_changes: "Duy trì với các thay đổi"
         in_your_timezone: "Theo múi giờ của bạn:"
       icon_tooltip:
-        added: "Thêm vào chế độ xem trong khoảng thời gian so sánh"
-        removed: "Gỡ bỏ khỏi chế độ xem trong khoảng thời gian so sánh"
+        added: "Đã thêm vào chế độ xem trong khoảng thời gian so sánh"
+        removed: "Đã xóa khỏi chế độ xem trong khoảng thời gian so sánh"
         changed: "Duy trì với các thay đổi"
     forms:
       submit_success_message: "Biểu mẫu đã được gửi thành công"

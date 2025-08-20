@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -61,7 +63,7 @@ RSpec.describe "Upload attachment to documents",
     it "can upload an image" do
       visit new_project_document_path(project)
 
-      expect(page).to have_css("#new_document", wait: 10)
+      expect(page).to have_css('[data-test-selector="new-document"]', wait: 10)
       SeleniumHubWaiter.wait
       select(category.name, from: "Category")
       fill_in "Title", with: "New documentation"

@@ -31,6 +31,17 @@
 module CustomFields
   class DetailsForm < ApplicationForm
     form do |details_form|
+      if model.new_record?
+        details_form.hidden(
+          name: :type,
+          scope_name_to_model: false
+        )
+
+        details_form.hidden(
+          name: :field_format
+        )
+      end
+
       details_form.text_field(
         name: :name,
         label: I18n.t(:label_name),

@@ -68,6 +68,7 @@ import { combineLatest } from 'rxjs';
     DragAndDropService,
     CausedUpdatesService,
   ],
+  standalone: false,
 })
 export class WorkPackageListViewComponent extends UntilDestroyedMixin implements OnInit {
   text = {

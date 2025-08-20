@@ -47,6 +47,7 @@ import { populateInputsFromDataset } from 'core-app/shared/components/dataset-in
     ></op-wp-split-view>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class WorkPackageSplitViewEntryComponent {
   @Input() workPackageId:string;

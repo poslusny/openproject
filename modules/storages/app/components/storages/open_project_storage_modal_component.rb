@@ -50,7 +50,6 @@ class Storages::OpenProjectStorageModalComponent < ViewComponent::Base
   def data
     @data ||= {
       controller:,
-      "application-target": "dynamic",
       "#{controller}-project-storage-open-url-value": project_storage_open_url,
       "#{controller}-redirect-url-value": redirect_url,
       "#{controller}-subtitle-timeout-text-value": subtitle_timeout_text
@@ -61,7 +60,7 @@ class Storages::OpenProjectStorageModalComponent < ViewComponent::Base
     href = OpenProject::Static::Links[:storage_docs][:health_status][:href]
     I18n.t(
       "storages.open_project_storage_modal.timeout.subtitle",
-      storages_health_link: render(Primer::Beta::Link.new(href:, target: "_blank")) do
+      storages_health_link: render(Primer::Beta::Link.new(href:, target: "_blank", underline: true)) do
         I18n.t("storages.open_project_storage_modal.timeout.link_text")
       end
     )

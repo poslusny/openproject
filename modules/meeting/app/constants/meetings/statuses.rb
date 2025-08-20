@@ -41,5 +41,9 @@ module Meetings
       IN_PROGRESS,
       CLOSED
     ].freeze
+
+    def self.find_by_id(id)
+      AVAILABLE.find { |status| status.id == id }
+    end
   end
 end

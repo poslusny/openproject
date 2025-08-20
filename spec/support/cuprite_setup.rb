@@ -86,7 +86,17 @@ def register_better_cuprite(language, name: :"better_cuprite_#{language}")
       lang: language,
       "accept-lang": language,
       "no-sandbox": nil,
-      "disable-smooth-scrolling": true
+      "disable-smooth-scrolling": true,
+      # Disable timers being throttled in background pages/tabs. Useful for
+      # parallel test runs.
+      "disable-background-timer-throttling": nil,
+      # Normally, Chrome will treat a 'foreground' tab instead as backgrounded
+      # if the surrounding window is occluded (aka visually covered) by another
+      # window. This flag disables that. Useful for parallel test runs.
+      "disable-backgrounding-occluded-windows": nil,
+      # This disables non-foreground tabs from getting a lower process priority.
+      # Useful for parallel test runs.
+      "disable-renderer-backgrounding": nil
     }
 
     if ENV["OPENPROJECT_TESTING_AUTO_DEVTOOLS"].present?

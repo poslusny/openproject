@@ -103,7 +103,7 @@ id:
             item_0:
               name: Project plan
             item_1:
-              name: Tahapan pencapaian
+              name: Pencapaian
             item_2:
               name: Tugas
             item_3:
@@ -147,7 +147,7 @@ id:
                   name: Paket-Penugasan
               item_6:
                 options:
-                  name: Tahapan pencapaian
+                  name: Pencapaian
         demo-planning-constructing-project:
           name: "(Demo) Perencanaan & konstruksi"
           status_explanation: Seluruh tugas berjalan sesuai jadwal. Orang-orang yang terlibat memahami tugas mereka. Sistem sudah diatur sepenuhnya.
@@ -165,7 +165,7 @@ id:
             item_0:
               name: Project plan
             item_1:
-              name: Tahapan pencapaian
+              name: Pencapaian
             item_2:
               name: Tugas
             item_3:
@@ -202,7 +202,7 @@ id:
                   name: Paket-Penugasan
               item_6:
                 options:
-                  name: Tahapan pencapaian
+                  name: Pencapaian
           work_packages:
             item_0:
               subject: Project kick off construction project
@@ -419,7 +419,7 @@ id:
             item_0:
               name: Project plan
             item_1:
-              name: Tahapan pencapaian
+              name: Pencapaian
             item_2:
               name: Tugas
             item_3:
@@ -459,7 +459,7 @@ id:
                   name: Paket-Penugasan
               item_6:
                 options:
-                  name: Tahapan pencapaian
+                  name: Pencapaian
           work_packages:
             item_0:
               subject: Project kick off creating BIM model
@@ -692,7 +692,7 @@ id:
             item_4:
               name: Project plan
             item_5:
-              name: Tahapan pencapaian
+              name: Pencapaian
             item_6:
               name: Tugas
             item_7:

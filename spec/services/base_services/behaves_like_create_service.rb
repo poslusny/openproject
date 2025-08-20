@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -46,15 +48,15 @@ RSpec.shared_examples "BaseServices create service" do
   let(:set_attributes_success) do
     true
   end
+  let!(:model_instance) { build_stubbed(factory) }
   let(:set_attributes_errors) do
-    double("set_attributes_errors")
+    ActiveModel::Errors.new(model_instance)
   end
   let(:set_attributes_result) do
     ServiceResult.new result: model_instance,
                       success: set_attributes_success,
                       errors: set_attributes_errors
   end
-  let!(:model_instance) { build_stubbed(factory) }
   let!(:set_attributes_service) do
     # Do not stub the SetAttributesService when the model is not stubbed
     next unless stub_model_instance

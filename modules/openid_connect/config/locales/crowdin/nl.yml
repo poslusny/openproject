@@ -6,14 +6,18 @@ nl:
     U bent uitgelogd. De inhoud van uw formulier kan verloren gaan. Alstublieft [log in].
   activerecord:
     attributes:
+      openid_connect/group_link:
+        oidc_group_name: OpenID group identifier
       openid_connect/provider:
         name: Naam
         slug: Unique identifier
         display_name: Weergavenaam
         client_id: Client ID
         client_secret: Client secret
+        groups_claim: Groups claim
         secret: Geheim
         scope: Scope
+        sync_groups: Synchronize groups
         grant_types_supported: Ondersteunde subsidietypen
         limit_self_registration: Zelfregistratie beperken
         authorization_endpoint: Autorisatie eindpunt
@@ -52,9 +56,14 @@ nl:
   openid_connect:
     menu_title: OpenID aanbieders
     delete_title: "OpenID Connect provider verwijderen"
+    group_links_heading: OpenID Connect group links
     instructions:
       redirect_url: This is the redirect URL that the OpenID Connect provider should use to redirect back to OpenProject after a successful login.
       endpoint_url: De endpoint URL die u van de OpenID Connect provider heeft gekregen
+      group_regexes: One regular expression pattern per line. Please read [the documentation](docs_url) for more information on how to do this.
+      group_regexes_detail: Define patterns using regular expressions to match group names from the groups claim. For example, entering a pattern like <code>^Level1/Level2/([\w/]+)$</code> will extract the group “Groupname/SubGroup” from a response including “Level1/Level2/GroupName/SubGroup”.
+      group_sync: Automatically extract and synchronise group membership information from the identity provider.
+      groups_claim: Specify the name of the claim that's expected to indicate the group names that the user is a member of.
       metadata_none: Ik heb deze informatie niet
       metadata_url: Ik heb een URL voor een zoekeindpunt
       client_id: Dit is de client-ID die u van uw OpenID Connect provider hebt gekregen
@@ -91,12 +100,15 @@ nl:
         name: Microsoft Entra
       custom:
         name: Aangepast
-      upsale:
+      upsell:
+        title: "Single Sign-On (SSO) with OpenID connect"
         description: OpenProject verbinden met een OpenID connect identity provider
       label_add_new: Voeg een nieuwe OpenID provider toe
       label_edit: OpenID provider %{name} bewerken
       label_empty_title: Er zijn nog geen OpenID providers geconfigureerd.
       label_empty_description: Voeg een provider toe om ze hier te zien.
+      label_group_mapping: Group mapping
+      label_group_regexes: Pattern (regular expression)
       label_metadata: OpenID Connect Discovery Eindpunt
       label_automatic_configuration: Automatische configuratie
       label_optional_configuration: Optionele configuratie
@@ -109,6 +121,7 @@ nl:
       plural: OpenID aanbieders
       singular: OpenID aanbieders
       section_texts:
+        group_mapping: Map group names provided by the identity provider to groups in OpenProject.
         metadata: Configuratie vooraf invullen met behulp van een OpenID Connect discovery eindpunt URL
         metadata_form_banner: Het bewerken van het zoekeindpunt kan bestaande, vooraf ingevulde metadatawaarden overschrijven.
         metadata_form_title: OpenID Connect Discovery eindpunt
@@ -118,6 +131,9 @@ nl:
         display_name: De weergavenaam die zichtbaar is voor gebruikers.
         attribute_mapping: Configureer de koppeling van attributen tussen OpenProject en de OpenID Connect-provider.
         claims: Vraag extra claims aan voor de ID-token of gebruikersinfo reactie.
+      side_panel:
+        information_component:
+          backchannel_logout_url: Backchannel logout URL
     setting_instructions:
       limit_self_registration: >
         If enabled users can only register using this provider if the self registration setting allows for it.

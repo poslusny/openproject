@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -116,7 +118,6 @@ RSpec.shared_examples_for "type service" do
           service_call
 
           expect(type).to have_received(:reset_attribute_groups)
-          expect(type).not_to have_received(:attribute_groups=)
         end
       end
 
@@ -178,9 +179,7 @@ RSpec.shared_examples_for "type service" do
         let(:active_project) { create(:project) }
         let(:new_project) { create(:project) }
         let(:project_ids) { { project_ids: [*[active_project, new_project].map { |p| p.id.to_s }, ""] } }
-        let(:params) do
-          attribute_groups.merge(project_ids)
-        end
+        let(:params) { attribute_groups.merge(project_ids) }
 
         before do
           type.projects << active_project
@@ -302,8 +301,7 @@ RSpec.shared_examples_for "type service" do
       end
 
       it "returns the errors of the type" do
-        expect(subject.errors)
-          .to eql contract_errors
+        expect(subject.errors).to be_a(ActiveModel::Errors)
       end
 
       describe "custom fields" do

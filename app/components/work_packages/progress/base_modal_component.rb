@@ -33,6 +33,7 @@ module WorkPackages
     # rubocop:disable OpenProject/AddPreviewForViewComponent
     class BaseModalComponent < ApplicationComponent
       # rubocop:enable OpenProject/AddPreviewForViewComponent
+      include OpTurbo::Streamable
 
       FIELD_MAP = {
         "estimatedTime" => :estimated_hours,

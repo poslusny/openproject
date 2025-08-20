@@ -26,18 +26,18 @@
 // See COPYRIGHT and LICENSE files for more details.
 //++
 
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { BcfRestApi } from 'core-app/features/bim/bcf/bcf-constants.const';
 import { I18nService } from 'core-app/core/i18n/i18n.service';
 import { imagePath } from 'core-app/shared/helpers/images/path-helper';
 
 // The key used in the I18n files to distinguish between versions.
-const OpVersionI18n = '15_5';
+const OpVersionI18n = '16_3';
 // The key used to identify the svg representing the central feature in the version.
 // This might be different to OpVersionI18n for a while since the teaser text is often ready
 // before the image is.
-const OpVersionImage = '15_5';
+const OpVersionImage = '16_3';
 
 const OpReleaseURL = 'https://www.openproject.org/docs/release-notes';
 
@@ -64,6 +64,7 @@ const featureTeaserImage = `${OpVersionImage}_features.svg`;
   selector: 'opce-homescreen-new-features-block',
   styleUrls: ['./new-features.component.sass'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 
 /**
@@ -72,6 +73,8 @@ const featureTeaserImage = `${OpVersionImage}_features.svg`;
  * Locals (js-en.yml), Styles (new-features.component.sass), HTML (above), TS (below)
  */
 export class HomescreenNewFeaturesBlockComponent {
+  readonly i18n = inject(I18nService);
+  readonly domSanitizer = inject(DomSanitizer);
   public isStandardEdition:boolean;
 
   /** Set to true if BIM has its own changes */
@@ -86,10 +89,7 @@ export class HomescreenNewFeaturesBlockComponent {
     learnAbout: this.i18n.t('js.homescreen.blocks.new_features.learn_about'),
   };
 
-  constructor(
-    readonly i18n:I18nService,
-    readonly domSanitizer:DomSanitizer,
-  ) {
+  constructor() {
     this.isStandardEdition = window.OpenProject.isStandardEdition;
   }
 

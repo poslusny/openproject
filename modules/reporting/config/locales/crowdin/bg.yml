@@ -27,7 +27,7 @@ bg:
   comments: "Коментар"
   cost_reports_title: "Време и разходи"
   label_cost_report: "Доклад за разходите"
-  label_cost_report_plural: "Доклад за разходите"
+  label_cost_report_plural: "Отчети за разходите"
   description_drill_down: "Покажи подробности"
   description_filter_selection: "Избор"
   description_multi_select: "Показване на мултиизбор"
@@ -81,7 +81,7 @@ bg:
   load_query_question: "Отчетът ще съдържа клетки от таблицата %{size} и може да отнеме известно време за визуализиране. Все още ли искате да опитате да го визуализирате?"
   permission_save_cost_reports: "Запазване на публични отчети за разходите"
   permission_save_private_cost_reports: "Запазване на частни отчети за разходите"
-  project_module_reporting_module: "Отчети за разходите"
+  project_module_reporting_module: "Доклад за разходите"
   text_costs_are_rounded_note: "Показаните стойности са закръглени. Всички изчисления се основават на незакръглените стойности."
   toggle_multiselect: "активиране/деактивиране на мултиизбор"
   units: "Единици"
@@ -93,7 +93,9 @@ bg:
       button: "Export PDF timesheet"
       timesheet: "Timesheet"
       time: "Час"
-      sum_hours: Сума
+      sums_hours: Sums
+      overview_per_user_total: "Overview: Total hours per user"
+      overview_per_user_day: "Overview: Hours per user per day"
     cost_reports:
       title: "Вашият износ на отчети за разходите XLS"
       start_time: "Начален час"

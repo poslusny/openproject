@@ -15,13 +15,14 @@ import { ConfigurationService } from 'core-app/core/config/configuration.service
   templateUrl: './notification-settings-table.component.html',
   styleUrls: ['./notification-settings-table.component.sass'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class NotificationSettingsTableComponent implements OnInit {
   @Input() userId:string;
 
   @Input() settings:UntypedFormArray;
 
-  public eeShowBanners = false;
+  public eeAvailable = false;
 
   public availableTimes = [
     {
@@ -81,7 +82,7 @@ export class NotificationSettingsTableComponent implements OnInit {
   ) {}
 
   ngOnInit():void {
-    this.eeShowBanners = this.bannersService.eeShowBanners;
+    this.eeAvailable = this.bannersService.allowsTo('date_alerts');
   }
 
   projectLink(href:string) {

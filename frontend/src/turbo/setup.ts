@@ -1,14 +1,15 @@
-import '../typings/shims.d.ts';
 import * as Turbo from '@hotwired/turbo';
 import TurboPower from 'turbo_power';
 import { registerDialogStreamAction } from './dialog-stream-action';
 import { addTurboEventListeners } from './turbo-event-listeners';
 import { registerFlashStreamAction } from './flash-stream-action';
+import { registerLiveRegionStreamAction } from './live-region-stream-action';
 import { registerInputCaptionStreamAction } from './input-caption-stream-action';
 import { addTurboGlobalListeners } from './turbo-global-listeners';
 import { applyTurboNavigationPatch } from './turbo-navigation-patch';
 import { debugLog, whenDebugging } from 'core-app/shared/helpers/debug_output';
 import { TURBO_EVENTS } from './constants';
+import { StreamActions } from '@hotwired/turbo';
 
 Turbo.session.drive = true;
 Turbo.setProgressBarDelay(100);
@@ -30,7 +31,12 @@ addTurboEventListeners();
 addTurboGlobalListeners();
 registerDialogStreamAction();
 registerFlashStreamAction();
+registerLiveRegionStreamAction();
 registerInputCaptionStreamAction();
+
+StreamActions.reloadPage = function reloadPage() {
+  window.location.reload();
+};
 
 // Apply navigational patch
 // https://github.com/hotwired/turbo/issues/1300

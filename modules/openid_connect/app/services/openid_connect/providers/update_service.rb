@@ -50,7 +50,7 @@ module OpenIDConnect
         @fetch_metadata = fetch_metadata
       end
 
-      def after_validate(_params, call)
+      def after_validate(call)
         model = call.result
         metadata_url = get_metadata_url(model)
         return call if metadata_url.blank? || !@fetch_metadata

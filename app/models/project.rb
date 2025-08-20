@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -88,10 +90,9 @@ class Project < ApplicationRecord
   has_many :storages, through: :project_storages
   has_many :phases, class_name: "Project::Phase", dependent: :destroy
   has_many :available_phases,
-           -> { visible.eager_load(:definition).order(position: :asc) },
+           -> { visible.order_by_position },
            class_name: "Project::Phase",
-           inverse_of: :project,
-           dependent: :destroy
+           inverse_of: :project
 
   has_many :recurring_meetings, dependent: :destroy
 
@@ -99,6 +100,7 @@ class Project < ApplicationRecord
   validates_associated :available_phases, on: :saving_phases
 
   store_attribute :settings, :deactivate_work_package_attachments, :boolean
+  store_attribute :settings, :enabled_internal_comments, :boolean
 
   acts_as_favorable
 
@@ -139,6 +141,7 @@ class Project < ApplicationRecord
                 datetime: :created_at
 
   register_journal_formatted_fields "active", formatter_key: :active_status
+  register_journal_formatted_fields "cause", formatter_key: :cause
   register_journal_formatted_fields "templated", formatter_key: :template
   register_journal_formatted_fields "identifier", "name", formatter_key: :plaintext
   register_journal_formatted_fields "status_explanation", "description", formatter_key: :diff
@@ -155,7 +158,7 @@ class Project < ApplicationRecord
             presence: true,
             length: { maximum: 255 }
 
-  before_validation :remove_white_spaces_from_project_name
+  normalizes :name, with: ->(name) { name.squish }
 
   # TODO: we temporarily disable this validation because it leads to failed tests
   # it implicitly assumes a db:seed-created standard type to be present and currently
@@ -203,6 +206,7 @@ class Project < ApplicationRecord
   scope :archived, -> { where(active: false) }
   scope :with_member, ->(user = User.current) { where(id: user.memberships.select(:project_id)) }
   scope :without_member, ->(user = User.current) { where.not(id: user.memberships.select(:project_id)) }
+  scope :templated, -> { where(templated: true) }
 
   scopes :activated_time_activity,
          :visible_with_activated_time_activity
@@ -303,9 +307,5 @@ class Project < ApplicationRecord
     @allowed_actions ||= allowed_permissions.flat_map do |permission|
       OpenProject::AccessControl.allowed_actions(permission)
     end
-  end
-
-  def remove_white_spaces_from_project_name
-    self.name = name.squish unless name.nil?
   end
 end

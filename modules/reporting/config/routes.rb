@@ -48,7 +48,7 @@ Rails.application.routes.draw do
 
   resources :cost_reports, except: :create do
     collection do
-      match :index, via: %i[get post]
+      match :index, via: %i[get post], as: :global
       post :save_as, action: :create
       get :drill_down
       match :available_values, via: %i[get post]

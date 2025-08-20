@@ -29,6 +29,7 @@
  */
 
 import { Controller } from '@hotwired/stimulus';
+import dragula from 'dragula';
 
 export default class CustomFieldsController extends Controller {
   static targets = [
@@ -55,11 +56,13 @@ export default class CustomFieldsController extends Controller {
 
   static values = {
     formatConfig: Array,
-    enterpriseEdition: Boolean,
+    hierarchyEnabled: Boolean,
+    format: String,
   };
 
   declare readonly formatConfigValue:[string, string, string[]][];
-  declare readonly enterpriseEditionValue:boolean;
+  declare readonly formatValue:string;
+  declare readonly hierarchyEnabledValue:boolean;
 
   declare readonly formatTarget:HTMLInputElement;
   declare readonly dragContainerTarget:HTMLElement;
@@ -88,11 +91,7 @@ export default class CustomFieldsController extends Controller {
       this.setupDragAndDrop();
     }
 
-    this.formatChanged();
-  }
-
-  formatChanged() {
-    this.toggleFormat(this.formatTarget.value);
+    this.adaptInputsToFormat(this.formatValue);
   }
 
   moveRowUp(event:{ target:HTMLElement }) {
@@ -207,7 +206,6 @@ export default class CustomFieldsController extends Controller {
 
   private setupDragAndDrop() {
     // Make custom fields draggable
-    // eslint-disable-next-line no-undef
     const drake = dragula([this.dragContainerTarget], {
       isContainer: () => false,
       moves: (el, source, handle:HTMLElement) => handle.classList.contains('dragula-handle'),
@@ -250,16 +248,13 @@ export default class CustomFieldsController extends Controller {
     });
   }
 
-  private toggleFormat(format:string) {
+  private adaptInputsToFormat(format:string) {
     if (this.hasSubmitButtonTarget) {
-      this.submitButtonTarget.disabled = format === 'hierarchy' && !this.enterpriseEditionValue;
+      this.submitButtonTarget.disabled = format === 'hierarchy' && !this.hierarchyEnabledValue;
     }
 
     this.formatConfigValue.forEach(([targetsName, operator, formats]) => {
-      let active = operator === 'only' ? formats.includes(format) : !formats.includes(format);
-      if (targetsName === 'enterpriseBanner' && this.enterpriseEditionValue) {
-        active = false;
-      }
+      const active = operator === 'only' ? formats.includes(format) : !formats.includes(format);
 
       const targets = this[`${targetsName}Targets` as keyof typeof this] as HTMLElement[];
       if (targets) {

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -66,7 +68,7 @@ module OpenProject::TextFormatting::Matchers
       end
 
       def render_document
-        if document = Document.visible.find_by_id(oid)
+        if document = Document.visible.find_by(id: oid)
           link_to document.title,
                   { only_path: context[:only_path],
                     controller: "/documents",
@@ -77,7 +79,7 @@ module OpenProject::TextFormatting::Matchers
       end
 
       def render_meeting
-        meeting = Meeting.find_by_id(oid)
+        meeting = Meeting.find_by(id: oid)
         if meeting&.visible?(User.current)
           link_to meeting.title,
                   { only_path: context[:only_path],

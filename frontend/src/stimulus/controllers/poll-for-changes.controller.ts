@@ -76,6 +76,7 @@ export default class PollForChangesController extends ApplicationController {
     void fetch(`${this.urlValue}?reference=${this.buildReference()}`, {
       headers: {
         Accept: 'text/vnd.turbo-stream.html',
+        'X-Authentication-Scheme': 'Session',
       },
     }).then(async (r) => {
       if (r.status === 200) {

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -33,6 +35,7 @@ module WorkPackages
         include ApplicationHelper
         include OpPrimer::ComponentHelpers
         include OpTurbo::Streamable
+        include WorkPackages::ActivitiesTab::StimulusControllers
 
         def initialize(journal:, grouped_emoji_reactions:)
           super
@@ -73,7 +76,7 @@ module WorkPackages
         def wrapper_uniq_by = journal.id
 
         def current_user_can_react?
-          User.current.allowed_in_work_package?(:add_work_package_notes, work_package)
+          User.current.allowed_in_work_package?(:add_work_package_comments, work_package)
         end
 
         def current_user_cannot_react? = !current_user_can_react?

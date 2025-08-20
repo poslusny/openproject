@@ -3,6 +3,7 @@ nl:
   js:
     team_planner:
       add_existing: 'Bestaande toevoegen'
+      label_team_planner_plural: 'Team planners'
       add_existing_title: 'Bestaande werkpakketten toevoegen'
       create_label: 'Team planner'
       create_title: 'Maak een nieuwe teamplanner'

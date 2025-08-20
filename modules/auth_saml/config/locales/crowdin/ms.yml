@@ -64,7 +64,8 @@ ms:
         Medan berikut mengawal atribut yang disediakan oleh pembekal identiti SAML digunakan untuk menyediakan atribut pengguna dalam OpenProject
       metadata:
         dialog: "Ini ialah URL tempat metadata SAML OpenProject tersedia. Gunakan pilihan ini untuk mengkonfigurasi pembekal identiti anda:"
-      upsale:
+      upsell:
+        title: "Daftar Masuk Sehala ( SSO ) melalui SAML"
         description: Sambungkan OpenProject kepada pembekal identiti SAML
       request_attributes:
         title: 'Atribut yang diminta'
@@ -86,10 +87,10 @@ ms:
         encryption_form: "Anda mungkin mahu menyulitkan respons penegasan atau meminta permintaan daripada OpenProject ditandatangani."
         mapping: "Laraskan pemetaan secara manual antara respons SAML dan atribut pengguna dalam OpenProject."
         requested_attributes: "Tentukan set atribut yang akan diminta dalam permintaan SAML yang dihantar kepada pembekal identiti anda."
-      seeded_from_env: "Pembekal ini telah dipilih daripada konfigurasi persekitaran. Ia tidak boleh diedit."
+      seeded_from_env: "Pembekal ini telah dipilih daripada konfigurasi persekitaran. Ia tidak boleh disunting."
     settings:
       metadata_none: "Saya tidak mempunyai metadata"
-      metadata_url: "Metadata URL"
+      metadata_url: "URL metadata"
       metadata_xml: "Metadata XML"
     instructions:
       documentation_link: >
@@ -103,7 +104,7 @@ ms:
       metadata_xml: >
         Pembekal identiti anda menyediakan muat turun XML metadata.
       limit_self_registration: >
-        Jika didayakan pengguna hanya boleh mendaftar menggunakan pembekal ini jika tetapan pendaftaran sendiri membenarkannya.
+        Jika pengguna yang dibenarkan hanya boleh mendaftar menggunakan penyediaan ini jika tetapan pendaftaran sendiri dibenarkan.
       sp_entity_id: >
         ID entiti pembekal perkhidmatan (SP). Kadang-kadang juga dirujuk sebagai Khalayak. Ini ialah pengecam pelanggan unik bagi contoh OpenProject.
       idp_sso_service_url: >
@@ -137,7 +138,7 @@ ms:
       authn_requests_signed: >
         Jika ditandakan, OpenProject akan menandatangani SAML AuthnRequest. Anda perlu memberikan sijil tandatangan dan kunci peribadi menggunakan medan di bawah.
       want_assertions_signed: >
-        If checked, OpenProject will required signed responses from the identity provider using its own certificate keypair. OpenProject will verify the signature against the certificate from the basic configuration section.
+        Jika ditandakan, OpenProject akan memerlukan respon bertanda daripada pembekal identiti menggunakan sijil pasangan kunci sendiri. OpenProject akan mengesahkan tandatangan terhadap sijil tersebut melalui bahagian konfigurasi asas. 
       want_assertions_encrypted: >
         Jika didayakan, minta pembekal identiti menyulitkan respons penegasan menggunakan pasangan sijil yang anda berikan.
       certificate: >

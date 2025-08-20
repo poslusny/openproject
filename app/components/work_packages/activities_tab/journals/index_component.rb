@@ -71,7 +71,7 @@ module WorkPackages
           API::V3::Activities::ActivityEagerLoadingWrapper.wrap(
             work_package
               .journals
-              .restricted_visible
+              .internal_visible
               .includes(:user, :customizable_journals, :attachable_journals, :storable_journals, :notifications)
               .reorder(version: journal_sorting)
               .with_sequence_version
@@ -124,7 +124,8 @@ module WorkPackages
         end
 
         def wp_journals_grouped_emoji_reactions
-          @wp_journals_grouped_emoji_reactions ||= Journal.grouped_work_package_journals_emoji_reactions(work_package)
+          @wp_journals_grouped_emoji_reactions ||=
+            EmojiReactions::GroupedQueries.grouped_work_package_journals_emoji_reactions_by_reactable(work_package)
         end
 
         def empty_state?

@@ -50,6 +50,22 @@ RSpec.describe WorkPackageRelationsTab::IndexComponent, type: :component do
     end
   end
 
+  context "with parent relation" do
+    shared_let_work_packages(<<~TABLE)
+      hierarchy      | MTWTFSS | scheduling mode |
+      parent         | XX      | automatic       |
+        work_package | XX      | manual          |
+    TABLE
+
+    it "renders the relations group with the parent work package in it" do
+      expect(render_component).to have_test_selector("op-relation-group-parent")
+      expect(render_component).to have_list "Parent"
+
+      list = page.find(:list, "Parent")
+      expect(list).to have_list_item count: 1, text: /parent/
+    end
+  end
+
   context "with child relations" do
     shared_let_work_packages(<<~TABLE)
       hierarchy      | MTWTFSS | scheduling mode |

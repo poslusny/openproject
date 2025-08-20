@@ -47,8 +47,18 @@ Rails.application.routes.draw do
     get "/time_entries/dialog" => "time_entries#dialog"
   end
 
-  scope "my" do
-    get "/timer" => "my/timer#show", as: "my_timers"
+  namespace "my" do
+    get "/timer" => "timer#show", as: "timers"
+
+    get "/time-tracking/(:mode-:view_mode)(/:date)" => "time_tracking#index",
+        as: :time_tracking,
+        constraints: {
+          mode: /day|week|workweek|month/,
+          view_mode: /list|calendar/,
+          date: /(\d{4}-\d{2}-\d{2}|today)/
+        }
+    get "/time-tracking/refresh" => "time_tracking#refresh",
+        as: :time_tracking_refresh
   end
 
   scope "projects/:project_id", as: "project", module: "projects" do
@@ -91,5 +101,10 @@ Rails.application.routes.draw do
              only: %i[show update],
              controller: "costs_settings",
              as: "costs_settings"
+
+    resource :time,
+             only: %i[show update],
+             controller: "time_settings",
+             as: "time_settings"
   end
 end

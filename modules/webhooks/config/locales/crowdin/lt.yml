@@ -31,6 +31,8 @@ lt:
       events:
         created: "Sukurta"
         updated: "Atnaujinta"
+        comment: "Comment"
+        internal_comment: "Internal comment"
       explanation:
         text: >
           Atsitikus įvykiui, tokiam kaip darbų paketo sukūrimui ar projekto pakeitimui, OpenProject išsiųs POST užklausą nurodytoms jungtims. Dažnai įvykis siunčiamas po %{link} praėjimo.

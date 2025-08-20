@@ -42,6 +42,7 @@ import { WorkPackageResource } from 'core-app/features/hal/resources/work-packag
 @Component({
   templateUrl: './wp-tab-wrapper.html',
   selector: 'op-wp-tab',
+  standalone: false,
 })
 export class WpTabWrapperComponent implements OnInit {
   workPackage:WorkPackageResource;

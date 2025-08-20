@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -77,55 +79,6 @@ module Redmine::MenuManager::MenuHelper
     items.select { |item| item.children.empty? }
   end
 
-  ##
-  # Render a dropdown menu item with the given MenuItem children.
-  # Caller may add additional items through the optional block.
-  # Remaining options are passed through to +render_menu_dropdown+.
-  def render_menu_dropdown_with_items(label:, label_options:, items:, options: {}, project: nil)
-    selected = any_item_selected?(items)
-    label_node = render_drop_down_label_node(label, selected, label_options)
-
-    options[:drop_down_class] = "op-menu #{options.fetch(:drop_down_class, '')}"
-    render_menu_dropdown(label_node, options) do
-      items.each do |item|
-        concat render_menu_node(item, project)
-      end
-
-      concat(yield) if block_given?
-    end
-  end
-
-  ##
-  # Render a dropdown menu item with arbitrary content.
-  # As these are not menu-items, the whole dropdown may never be marked selected.
-  # Available options:
-  # menu_item_class: Additional classes for the menu item li wrapper
-  # drop_down_class: Additional classes for the hidden drop down
-  def render_menu_dropdown(label_node, options = {}, &)
-    content_tag :li, class: "op-app-menu--item op-app-menu--item_has-dropdown #{options[:menu_item_class]}" do
-      concat(label_node)
-      concat(content_tag(:ul,
-                         style: "display:none",
-                         id: options[:drop_down_id],
-                         class: "op-app-menu--dropdown #{options.fetch(:drop_down_class, '')}",
-                         &))
-    end
-  end
-
-  def render_drop_down_label_node(label, selected, options = {})
-    options[:title] ||= selected ? t(:description_current_position) + label : label
-    options[:aria] = { haspopup: "true" }
-    options[:class] = "op-app-menu--item-action #{options[:class]} #{selected ? 'selected' : ''}"
-    options[:span_class] = "op-app-menu--item-title #{options[:span_class]}"
-
-    link_to("#", options) do
-      concat(op_icon(options[:icon])) if options[:icon]
-      concat(you_are_here_info(selected).html_safe)
-      concat(content_tag(:span, label, class: options[:span_class]))
-      concat('<i class="op-app-menu--item-dropdown-indicator button--dropdown-indicator"></i>'.html_safe) unless options.key?(:icon)
-    end
-  end
-
   def render_menu_node(node, project = nil)
     return "" unless allowed_node?(node, User.current, project)
 
@@ -152,7 +105,7 @@ module Redmine::MenuManager::MenuHelper
     html_id = node.html_options[:id] || node.name
     content_tag(:div, class: "main-item-wrapper", id: "#{html_id}-wrapper") do
       concat render_single_menu_node(node, project)
-      concat render_menu_toggler(node.name)
+      concat render_menu_toggler(node)
     end
   end
 
@@ -163,13 +116,14 @@ module Redmine::MenuManager::MenuHelper
     end
   end
 
-  def render_menu_toggler(node_name)
+  def render_menu_toggler(node)
     content_tag(:button,
                 class: "toggler main-menu-toggler",
                 type: :button,
+                "aria-label": I18n.t(:label_go_forward, module: node.html_options[:title]),
                 data: {
                   action: "menus--main#descend",
-                  test_selector: "main-menu-toggler--#{node_name}"
+                  test_selector: "main-menu-toggler--#{node.name}"
                 }) do
       render(Primer::Beta::Octicon.new("arrow-right", size: :small))
     end
@@ -212,11 +166,14 @@ module Redmine::MenuManager::MenuHelper
     content_tag(
       :a,
       render(Primer::Beta::Octicon.new("arrow-left", size: :small)),
-      title: I18n.t("js.label_up"),
+      href: "#",
+      tabindex: "0",
+      "aria-label": I18n.t(:label_go_back),
       class: "main-menu--arrow-left-to-project",
       data: {
-        action: "menus--main#ascend",
-        "tour-selector": "main-menu--arrow-left_#{node.name}"
+        action: "menus--main#ascend keydown.enter->menus--main#ascend",
+        "tour-selector": "main-menu--arrow-left_#{node.name}",
+        "test-selector": "main-menu--arrow-left-to-project"
       }
     )
   end
@@ -229,7 +186,7 @@ module Redmine::MenuManager::MenuHelper
     link_text = "".html_safe
 
     if item.icon(project).present?
-      link_text << render(Primer::Beta::Octicon.new(
+      link_text += render(Primer::Beta::Octicon.new(
                             icon: item.icon,
                             mr: shown_in_main_menu ? 3 : 0,
                             size: shown_in_main_menu ? :small : :medium
@@ -238,20 +195,20 @@ module Redmine::MenuManager::MenuHelper
 
     badge_class = item.badge(project:).present? ? " #{menu_class}--item-title_has-badge" : ""
 
-    link_text << content_tag(:span,
+    link_text += content_tag(:span,
                              class: "#{menu_class}--item-title#{badge_class}",
                              lang: menu_item_locale(item)) do
       title_text = "".html_safe + content_tag(:span, caption, class: "ellipsis") + badge_for(item)
       if item.enterprise_feature.present? && !EnterpriseToken.allows_to?(item.enterprise_feature)
-        title_text << ("".html_safe + render(Primer::Beta::Octicon.new(icon: "op-enterprise-addons",
-                                                                       classes: "upsale-colored",
+        title_text += ("".html_safe + render(Primer::Beta::Octicon.new(icon: "op-enterprise-addons",
+                                                                       classes: "upsell-colored",
                                                                        ml: 2)))
       end
       title_text
     end
 
     if item.icon_after.present?
-      link_text << ("".html_safe + render(Primer::Beta::Octicon.new(icon: item.icon_after, classes: "trailing-icon")))
+      link_text += ("".html_safe + render(Primer::Beta::Octicon.new(icon: item.icon_after, classes: "trailing-icon")))
     end
 
     html_options = item.html_options(selected:)
@@ -295,7 +252,7 @@ module Redmine::MenuManager::MenuHelper
   def render_unattached_children_menu(node, project)
     return nil unless node.child_menus
 
-    "".tap do |child_html|
+    (+"").tap do |child_html|
       unattached_children = node.child_menus.call(project)
       # Tree nodes support #each so we need to do object detection
       if unattached_children.is_a? Array

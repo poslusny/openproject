@@ -3,12 +3,12 @@
     [context]="context"
     [content]="initialContent"
     (initializeDone)="setup($event)"
-    (contentChanged)="syncToTextarea()"
+    (contentChanged)="updateContent($event)"
     (saveRequested)="saveForm()"
     (editorEscape)="editorEscape.emit()"
     (editorKeyup)="editorKeyup.emit()"
-    (editorBlur)="editorBlur.emit()"
-    (editorFocus)="editorFocus.emit()"
+    (editorBlur)="editorBlurred()"
+    (editorFocus)="editorFocused()"
   ></op-ckeditor>
 </div>
 

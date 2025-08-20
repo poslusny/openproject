@@ -1,6 +1,6 @@
 <% content_for :header_tags do %>
   <meta name="custom_fields_sidebar_enabled" data-enabled="<%= @custom_fields_sidebar_enabled %>">
-  <meta name="life_cycles_sidebar_enabled" data-enabled="<%= @life_cycles_sidebar_enabled %>">
+  <meta name="life_cycle_sidebar_enabled" data-enabled="<%= @life_cycle_sidebar_enabled %>">
 <% end -%>
 
 <%=
@@ -8,7 +8,7 @@
     header.with_title(variant: :medium) { t("overviews.label") }
     header.with_breadcrumbs(
       [
-        { href: project_path(@project), text: @project.name },
+        { href: project_path(@project), text: @project.name, skip_for_mobile: true },
         t("overviews.label")
       ]
     )
@@ -28,7 +28,7 @@
 
     header.with_action_menu(
       menu_arguments: { anchor_align: :end },
-      button_arguments: { icon: "op-kebab-vertical", "aria-label": t(:label_menu) }
+      button_arguments: { icon: "kebab-horizontal", "aria-label": t(:label_menu) }
     ) do |menu|
       if User.current.allowed_in_project?(:select_project_custom_fields, @project)
         menu.with_item(

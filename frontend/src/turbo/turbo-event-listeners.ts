@@ -19,9 +19,8 @@ export function addTurboEventListeners() {
       if (dialog) {
         if (dialog.dataset.keepOpenOnSubmit !== 'true') {
           dialog.close('close-event-already-dispatched');
+          document.dispatchEvent(new CustomEvent('dialog:close', { detail: { dialog, submitted: true } }));
         }
-
-        document.dispatchEvent(new CustomEvent('dialog:close', { detail: { dialog, submitted: true } }));
       }
     }
   });
@@ -32,6 +31,7 @@ export function addTurboEventListeners() {
     const headers = event.detail.fetchOptions.headers as Record<string, string>;
     headers['Turbo-Referrer'] = window.location.href;
     headers['X-Turbo-Nonce'] = document.getElementsByName('csp-nonce')[0]?.getAttribute('content') || '';
+    headers['X-Authentication-Scheme'] = 'Session';
   });
 
   // Turbo adds nonces to all scripts, even though we want to explicitly pass nonces

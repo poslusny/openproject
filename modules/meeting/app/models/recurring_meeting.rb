@@ -34,6 +34,7 @@ class RecurringMeeting < ApplicationRecord
   # Magical maximum of interval, derived from other calendars
   MAX_INTERVAL = 100
   include ::Meeting::VirtualStartTime
+  include ::Meeting::MeetingUid
   include Redmine::I18n
 
   belongs_to :project
@@ -98,12 +99,14 @@ class RecurringMeeting < ApplicationRecord
       .merge(Project.allowed_to(args.first || User.current, :view_meetings))
   }
 
-  # Keep location and duration as a virtual attribute
-  # so it can be passed to the template on save
+  # Virtual attributes that can be passed on to the template on save
   virtual_attribute :location do
     nil
   end
   virtual_attribute :duration do
+    nil
+  end
+  virtual_attribute :notify do
     nil
   end
 
@@ -113,6 +116,10 @@ class RecurringMeeting < ApplicationRecord
 
   def has_ended?
     will_end? && last_occurrence < Time.zone.now
+  end
+
+  def notify?
+    template&.notify?
   end
 
   def human_frequency
@@ -142,9 +149,15 @@ class RecurringMeeting < ApplicationRecord
     super&.in_time_zone(time_zone)
   end
 
+  def time_zone_differs?
+    time_zone != User.current.time_zone
+  end
+
   def time_zone
-    time_zone_string = super || Setting.user_default_timezone.presence || "Etc/UTC"
-    ActiveSupport::TimeZone[time_zone_string]
+    time_zone_string = super
+    zone = ActiveSupport::TimeZone[time_zone_string] if time_zone_string.present?
+
+    zone || User.current.time_zone
   end
 
   def schedule
@@ -193,9 +206,11 @@ class RecurringMeeting < ApplicationRecord
   end
 
   def human_frequency_schedule
+    formatted_time = format_time(start_time, time_zone:, include_date: false)
+    time = time_zone_differs? ? "#{formatted_time} (#{friendly_timezone_name(time_zone)})" : formatted_time
     I18n.t("recurring_meeting.in_words.frequency",
            base: base_schedule,
-           time: format_time(start_time, include_date: false))
+           time:)
   end
 
   def reschedule_required?(previous: false)

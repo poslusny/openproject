@@ -21,7 +21,7 @@
 #++
 ms:
   js:
-    label_meetings: 'Mesyuarat'
+    label_meetings: 'Mesyuarat-mesyuarat'
     work_packages:
       tabs:
-        meetings: 'Mesyuarat'
+        meetings: 'Mesyuarat-mesyuarat'

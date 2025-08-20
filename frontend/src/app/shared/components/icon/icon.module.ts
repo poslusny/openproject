@@ -27,12 +27,12 @@ import {
   OpViewThreedIconComponent,
   PackageIconComponent,
   PersonIconComponent,
+  QuestionIconComponent,
   ScreenFullIconComponent,
   ShareAndroidIconComponent,
   StarFillIconComponent,
   StarIconComponent,
   XIconComponent,
-  BellFillIconComponent,
   OpGitlabIssueClosedIconComponent,
   OpGitlabLabelsIconComponent,
   OpGitlabIssueOpenIconComponent,
@@ -52,10 +52,11 @@ import {
   OpGitlabPipelineStatusSuccessIconComponent,
   OpGitlabPipelineStatusWaitingIconComponent,
   XCircleIconComponent,
-  OpKebabVerticalIconComponent,
+  KebabHorizontalIconComponent,
   ReadIconComponent,
   EyeIconComponent,
   EyeClosedIconComponent,
+  ArrowLeftIconComponent,
 } from '@openproject/octicons-angular';
 
 @NgModule({
@@ -87,12 +88,12 @@ import {
     OpViewThreedIconComponent,
     PackageIconComponent,
     PersonIconComponent,
+    QuestionIconComponent,
     ScreenFullIconComponent,
     ShareAndroidIconComponent,
     StarFillIconComponent,
     StarIconComponent,
     XIconComponent,
-    BellFillIconComponent,
 
     OpGitlabIssueClosedIconComponent,
     OpGitlabLabelsIconComponent,
@@ -115,10 +116,11 @@ import {
 
     XCircleIconComponent,
 
-    OpKebabVerticalIconComponent,
+    KebabHorizontalIconComponent,
     ReadIconComponent,
     EyeIconComponent,
     EyeClosedIconComponent,
+    ArrowLeftIconComponent,
   ],
   declarations: [
     OpIconComponent,
@@ -152,12 +154,12 @@ import {
     OpViewThreedIconComponent,
     PackageIconComponent,
     PersonIconComponent,
+    QuestionIconComponent,
     ScreenFullIconComponent,
     ShareAndroidIconComponent,
     StarFillIconComponent,
     StarIconComponent,
     XIconComponent,
-    BellFillIconComponent,
 
     OpGitlabIssueOpenIconComponent,
     OpGitlabIssueClosedIconComponent,
@@ -179,10 +181,11 @@ import {
     OpGitlabPipelineStatusWaitingIconComponent,
     XCircleIconComponent,
 
-    OpKebabVerticalIconComponent,
+    KebabHorizontalIconComponent,
     ReadIconComponent,
     EyeIconComponent,
     EyeClosedIconComponent,
+    ArrowLeftIconComponent,
   ],
 })
 export class IconModule {}

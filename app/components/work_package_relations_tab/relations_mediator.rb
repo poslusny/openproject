@@ -37,15 +37,11 @@ class WorkPackageRelationsTab::RelationsMediator
     end
 
     def count
-      visible_relations.count + ghost_relations.count
+      [visible_relations, ghost_relations].sum(&:count)
     end
 
     def any?
       visible_relations.any? || ghost_relations.any?
-    end
-
-    def all_relations
-      visible_relations + ghost_relations
     end
 
     def all_relation_items
@@ -86,10 +82,11 @@ class WorkPackageRelationsTab::RelationsMediator
   #   relation
   RelationItem = Data.define(:type, :work_package, :related, :relation, :visibility, :closest) do
     def initialize(type:, work_package:, relation:, visibility: :visible, closest: false)
+      type = ActiveSupport::StringInquirer.new(type.to_s)
       if relation.is_a?(Relation)
         related = relation.other_work_package(work_package)
       else
-        related = relation # for parent-child relations, `relation` parameter holds the child work package
+        related = relation # for parent-child relations, `relation` parameter holds the child or parent work package
         relation = nil
       end
       super(type:, work_package:, related:, relation:, visibility:, closest:)
@@ -114,12 +111,20 @@ class WorkPackageRelationsTab::RelationsMediator
     @visible_relations ||= work_package.relations.visible.includes(:to, :from).load
   end
 
+  def visible_parents
+    @visible_parents ||= work_package.parent_id && work_package.parent.visible? ? [work_package.parent] : []
+  end
+
   def visible_children
     @visible_children ||= work_package.children.visible.load
   end
 
   def ghost_relations
     @ghost_relations ||= work_package.relations.includes(:to, :from).where.not(id: visible_relations.select(:id)).load
+  end
+
+  def ghost_parents
+    @ghost_parents ||= work_package.parent_id && !work_package.parent.visible? ? [work_package.parent] : []
   end
 
   def ghost_children
@@ -132,7 +137,15 @@ class WorkPackageRelationsTab::RelationsMediator
   end
 
   def relation_group(type)
-    if type == Relation::TYPE_CHILD
+    case type
+    when Relation::TYPE_PARENT
+      RelationGroup.new(
+        type:,
+        work_package:,
+        visible_relations: visible_parents,
+        ghost_relations: ghost_parents
+      )
+    when Relation::TYPE_CHILD
       RelationGroup.new(
         type:,
         work_package:,
@@ -150,7 +163,11 @@ class WorkPackageRelationsTab::RelationsMediator
   end
 
   def all_relations_count
-    visible_relations.count + ghost_relations.count + visible_children.count + ghost_children.count
+    [
+      visible_relations, ghost_relations,
+      visible_parents, ghost_parents,
+      visible_children, ghost_children
+    ].sum(&:count)
   end
 
   private

@@ -52,6 +52,7 @@ import { compareByHref } from 'core-app/shared/helpers/angular/tracking-function
   selector: 'op-filter-toggled-multiselect-value',
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './filter-toggled-multiselect-value.component.html',
+  standalone: false,
 })
 export class FilterToggledMultiselectValueComponent implements OnInit, AfterViewInit {
   @Input() public shouldFocus = false;

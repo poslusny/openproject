@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "doorkeeper/grape/authorization_decorator"
 
 module OpenProject
@@ -12,10 +14,10 @@ module OpenProject
           def valid?
             access_token = ::Doorkeeper::OAuth::Token
                              .from_request(decorated_request, *Doorkeeper.configuration.access_token_methods)
-            
+
             # No access token found, so invalid strategy.
             return false if access_token.blank?
-            
+
             # We don't want JWT as our OAuth Bearer token
             JWT.decode(access_token, nil, false)
             false
@@ -26,25 +28,22 @@ module OpenProject
           def authenticate!
             access_token = ::Doorkeeper::OAuth::Token.authenticate(decorated_request,
                                                                    *Doorkeeper.configuration.access_token_methods)
-            return fail_with_header!(error: "invalid_token") if access_token.blank?
-            return fail_with_header!(error: "invalid_token") if access_token.expired? || access_token.revoked?
+            return fail_with_header!(error: "invalid_token") if access_token_invalid?(access_token)
             return fail_with_header!(error: "insufficient_scope") if !access_token.includes_scope?(scope)
 
-            if access_token.resource_owner_id.nil?
-              user_id = ::Doorkeeper::Application
-                          .where(id: access_token.application_id)
-                          .where.not(client_credentials_user_id: nil)
-                          .pick(:client_credentials_user_id)
-              authenticate_user(user_id) if user_id
-            else
-              authenticate_user(access_token.resource_owner_id)
-            end
+            user_id = access_token.resource_owner_id || access_token.application.client_credentials_user_id
+            authenticate_user(user_id) if user_id
           end
 
           private
 
+          def access_token_invalid?(access_token)
+            access_token.blank? || access_token.expired? || access_token.revoked? || !access_token.application.enabled?
+          end
+
           def authenticate_user(id)
-            user = User.find_by(id:)
+            # ServiceAccount is found explicitly because ServiceAccount is builtin, but User.active excludes builtin entities.
+            user = id && User.active.where(id:).or(ServiceAccount.where(id:, status: ServiceAccount.statuses[:active])).first
             if user
               success!(user)
             else

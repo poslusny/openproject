@@ -54,6 +54,7 @@ import { FilterOperator } from 'core-app/shared/helpers/api-v3/api-v3-filter-bui
 
 @Component({
   templateUrl: './wp-relation-inline-add-existing.component.html',
+  standalone: false,
 })
 export class WpRelationInlineAddExistingComponent {
   public selectedWpId:string;

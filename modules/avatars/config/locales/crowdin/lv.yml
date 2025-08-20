@@ -7,7 +7,7 @@ lv:
   label_avatar: "Avatārs"
   label_avatar_plural: "Avatāri"
   label_current_avatar: "Pašreizējais avatārs"
-  label_choose_avatar: "Izvēlieties Avatar no faila"
+  label_choose_avatar: "Izvēlieties avataru no faila"
   message_avatar_uploaded: "Avatārs veiksmīgi mainīts."
   error_image_upload: "Kļūda, saglabājot attēlu."
   error_image_size: "Attēls ir pārāk liels."

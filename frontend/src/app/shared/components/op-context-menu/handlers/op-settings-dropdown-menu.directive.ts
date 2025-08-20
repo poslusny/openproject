@@ -64,6 +64,7 @@ import { TurboRequestsService } from 'core-app/core/turbo/turbo-requests.service
 
 @Directive({
   selector: '[opSettingsContextMenu]',
+  standalone: false,
 })
 export class OpSettingsMenuDirective extends OpContextMenuTrigger {
   @Input('opSettingsContextMenu-query') public query:QueryResource;

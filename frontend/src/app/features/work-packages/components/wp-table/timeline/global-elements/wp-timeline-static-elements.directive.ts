@@ -41,7 +41,8 @@ import { TodayLineElement } from './wp-timeline.today-line';
 
 @Component({
   selector: 'wp-timeline-static-elements',
-  template: '<div class="wp-table-timeline--static-elements"></div>'
+  template: '<div class="wp-table-timeline--static-elements"></div>',
+  standalone: false,
 })
 export class WorkPackageTableTimelineStaticElements implements OnInit {
   public $element:HTMLElement;

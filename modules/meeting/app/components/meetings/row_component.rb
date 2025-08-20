@@ -39,18 +39,19 @@ module Meetings
 
     def title
       if recurring?
-        link_to model.title, project_recurring_meeting_path(project, model)
+        render(Primer::Beta::Link.new(href: project_recurring_meeting_path(project, model), font_weight: :bold)) { model.title }
       elsif recurring_meeting.present?
         occurrence_title
       else
-        link_to model.title, project_meeting_path(project, model)
+        render(Primer::Beta::Link.new(href: project_meeting_path(project, model), font_weight: :bold)) { model.title }
       end
     end
 
     def occurrence_title
       safe_join(
-        [(link_to model.title, project_meeting_path(project, model)),
-         (link_to recurring_label, project_recurring_meeting_path(project, recurring_meeting))], "  "
+        [(render(Primer::Beta::Link.new(href: project_meeting_path(project, model), font_weight: :bold)) { model.title }),
+         (render(Primer::Beta::Link.new(href: project_recurring_meeting_path(project, recurring_meeting))) { recurring_label })],
+        "  "
       )
     end
 
@@ -58,7 +59,13 @@ module Meetings
       if recurring?
         helpers.format_time(model.start_time, include_date: false)
       else
-        safe_join([helpers.format_date(model.start_time), helpers.format_time(model.start_time, include_date: false)], " ")
+        safe_join(
+          [
+            helpers.format_date(model.start_time),
+            helpers.format_time(model.start_time, include_date: false)
+          ],
+          " "
+        )
       end
     end
 
@@ -122,7 +129,6 @@ module Meetings
                      href: copy_project_meeting_path(project, model),
                      content_arguments: {
                        data: {
-                         turbo: model.is_a?(StructuredMeeting),
                          turbo_stream: true
                        }
                      }) do |item|

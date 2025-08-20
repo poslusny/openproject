@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Flash
   module Expectations
     def expect_flash(message:, type: :success, wait: 20)

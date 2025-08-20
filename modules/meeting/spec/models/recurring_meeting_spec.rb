@@ -235,4 +235,12 @@ RSpec.describe RecurringMeeting,
       expect(recurring_meeting.upcoming_instantiated_meetings).to eq [ongoing_meeting]
     end
   end
+
+  describe "uid" do
+    it "assigns a uid on create" do
+      series = build(:recurring_meeting)
+      expect(series.uid).to be_present
+      expect(series.uid).to include "@#{Setting.host_name}"
+    end
+  end
 end

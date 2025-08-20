@@ -53,6 +53,13 @@ module Pages
       visit path(tab)
     end
 
+    def select_from_context_menu(item)
+      find("button[wpsinglecontextmenu]").click
+      within(".op-context-menu--overlay") do
+        click_link item
+      end
+    end
+
     def relations_tab
       Components::WorkPackages::Relations.new(work_package)
     end
@@ -90,6 +97,7 @@ module Pages
     end
 
     def wait_for_activity_tab
+      wait_for_network_idle
       wait_for { page }.to have_test_selector("op-wp-activity-tab")
       # ensure stimulus controller is mounted
       expect(page).to have_css('[data-stimulus-controller-connected="true"]')

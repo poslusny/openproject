@@ -38,5 +38,25 @@ module Meetings
       @meeting = meeting
       @project = meeting.project
     end
+
+    private
+
+    def show_page_data_attributes
+      {
+        turbo: true,
+        controller: "meetings--check-unsaved",
+        "meetings--check-unsaved-unsaved-changes-confirmation-message-value": unsaved_changes_confirmation_message
+      }
+    end
+
+    def main_content_data_attributes
+      {
+        controller: "meetings--drag-and-drop meetings--add-params"
+      }
+    end
+
+    def unsaved_changes_confirmation_message
+      I18n.t("activities.work_packages.activity_tab.unsaved_changes_confirmation_message")
+    end
   end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -28,8 +30,8 @@
 module WorkPackage::Exports
   module Formatters
     class CompoundHours < ::Exports::Formatters::Default
-      def self.apply?(name, _export_format)
-        name.to_sym == key
+      def self.apply?(name, export_format)
+        name.to_sym.in?(%i[estimated_hours remaining_hours]) && export_format == :pdf
       end
 
       def format(work_package, **)
@@ -44,10 +46,6 @@ module WorkPackage::Exports
       end
 
       private
-
-      def attribute
-        self.class.key
-      end
 
       def total_prefix(value)
         value && "· Σ #{value}"

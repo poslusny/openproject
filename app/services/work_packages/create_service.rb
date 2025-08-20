@@ -40,8 +40,11 @@ class WorkPackages::CreateService < BaseServices::BaseCallable
     @contract_class = contract_class
   end
 
-  def perform(work_package: WorkPackage.new, send_notifications: nil, **attributes)
-    in_user_context(send_notifications:) do
+  def perform
+    attributes = params.except(:send_notifications, :work_package)
+    work_package = params[:work_package] || WorkPackage.new
+
+    in_user_context(send_notifications: params[:send_notifications]) do
       create(attributes, work_package)
     end
   end
@@ -85,7 +88,11 @@ class WorkPackages::CreateService < BaseServices::BaseCallable
   end
 
   def reschedule_related(work_package)
-    result = WorkPackages::SetScheduleService.new(user:, work_package:).call
+    # Force work package to keep its scheduling mode if it's automatic.
+    # This is necessary in bulk duplicate scenarios.
+    switching_to_automatic_mode = []
+    switching_to_automatic_mode << work_package if work_package.schedule_automatically?
+    result = WorkPackages::SetScheduleService.new(user:, work_package:, switching_to_automatic_mode:).call
 
     result.self_and_dependent.each do |r|
       unless r.result.save

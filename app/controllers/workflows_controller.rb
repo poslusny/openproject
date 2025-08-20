@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -91,10 +93,6 @@ class WorkflowsController < ApplicationController
         redirect_to action: "copy", source_type_id: @source_type, source_role_id: @source_role
       end
     end
-  end
-
-  def show_local_breadcrumb
-    false
   end
 
   private

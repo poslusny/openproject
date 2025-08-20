@@ -26,7 +26,7 @@ Boards support Agile project management methodologies, such as Scrum or Kanban. 
 | [Manage boards](#manage-boards)                           | How to manage permissions for boards.                        |
 | [Examples for Agile boards](#agile-boards-examples)       | Best practices for using the basic board and status, assignee and version board. |
 
-<video src="https://openproject-docs.s3.eu-central-1.amazonaws.com/videos/OpenProject-Agile-Boards.mp4" type="video/mp4" controls="" style="width:100%"></video>
+<video src="https://openproject-docs.s3.eu-central-1.amazonaws.com/videos/OpenProject-Agile-Boards.mp4"></video>
 
 
 ## Agile boards in OpenProject

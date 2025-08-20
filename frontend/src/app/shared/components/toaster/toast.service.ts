@@ -80,8 +80,7 @@ export class ToastService {
 
     this.stack.doModify((current) => {
       const nextValue = [toast].concat(current);
-      _.remove(nextValue, (n, i) => i > 0 && this.removeOnAdd(n));
-      return nextValue;
+      return [nextValue[0]].concat(nextValue.slice(1).filter((n, i) => !this.removeOnAdd(n)));
     });
 
     // auto-hide if success
@@ -168,8 +167,7 @@ export class ToastService {
 
   public remove(toast:IToast):void {
     this.stack.doModify((current) => {
-      _.remove(current, (n) => n === toast);
-      return current;
+      return current.filter((n) => n !== toast);
     });
   }
 

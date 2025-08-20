@@ -41,12 +41,25 @@ module RecurringMeetings
       @project = meeting.project
     end
 
-    def render_create_button?
+    def edit_meeting?
       if @project
-        User.current.allowed_in_project?(:create_meetings, @project)
+        User.current.allowed_in_project?(:edit_meetings, @project)
       else
-        User.current.allowed_in_any_project?(:create_meetings)
+        User.current.allowed_in_any_project?(:edit_meetings)
       end
+    end
+
+    def end_meeting?
+      !@meeting.has_ended? && @meeting.start_time.to_date < Time.zone.today && edit_meeting?
+    end
+
+    def delete_meeting?
+      User.current.allowed_in_project?(:delete_meetings, @project)
+    end
+
+    def send_emails?
+      @meeting.notify? &&
+        User.current.allowed_in_project?(:send_meeting_invites_and_outcomes, @meeting.project)
     end
 
     def dynamic_path
@@ -83,18 +96,12 @@ module RecurringMeetings
     end
 
     def breadcrumb_items
-      [parent_element,
-       { href: @project.present? ? project_meetings_path(@project.id) : meetings_path,
-         text: I18n.t(:label_meeting_plural) },
-       page_title(true)]
-    end
-
-    def parent_element
-      if @project.present?
-        { href: project_overview_path(@project.id), text: @project.name }
-      else
-        { href: home_path, text: I18n.t(:label_home) }
-      end
+      [
+        ({ href: project_overview_path(@project.id), text: @project.name } if @project.present?),
+        { href: @project.present? ? project_meetings_path(@project.id) : meetings_path,
+          text: I18n.t(:label_meeting_plural) },
+        page_title(true)
+      ].compact
     end
   end
 end

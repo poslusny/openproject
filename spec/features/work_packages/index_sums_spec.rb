@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -90,7 +92,7 @@ RSpec.describe "Work package index sums", :js do
   let!(:time_entry) do
     create(:time_entry,
            user:,
-           work_package: work_package1,
+           entity: work_package1,
            project:,
            hours: 1.50)
   end
@@ -104,7 +106,7 @@ RSpec.describe "Work package index sums", :js do
   end
   let!(:cost_entry) do
     create(:cost_entry,
-           work_package: work_package1,
+           entity: work_package1,
            project:,
            units: 2.50,
            cost_type:,
@@ -254,14 +256,14 @@ RSpec.describe "Work package index sums", :js do
     let!(:time_entry2) do
       create(:time_entry,
              user:,
-             work_package: work_package3,
+             entity: work_package3,
              project:,
              hours: 2.50)
     end
     # unit costs
     let!(:cost_entry2) do
       create(:cost_entry,
-             work_package: work_package3,
+             entity: work_package3,
              project:,
              units: 3.50,
              cost_type:,

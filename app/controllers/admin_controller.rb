@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -88,12 +90,6 @@ class AdminController < ApplicationController
     @checklist += jemalloc_active_checks
 
     @storage_information = OpenProject::Storage.mount_information
-  end
-
-  def default_breadcrumb; end
-
-  def show_local_breadcrumb
-    false
   end
 
   private

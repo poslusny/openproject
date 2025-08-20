@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # -- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -76,8 +78,6 @@ module Accounts::Authorization
     @project = Project.find(params[:project_id]) if params[:project_id].present?
 
     do_authorize({ controller: controller_path, action: action_name }, global: params[:project_id].blank?)
-  rescue ActiveRecord::RecordNotFound
-    render_404
   end
 
   # Deny access if user is not allowed to do the specified action.
@@ -214,8 +214,6 @@ module Accounts::Authorization
       before_action(**args) do
         @project = Project.find(params[:project_id]) if params[:project_id].present?
         do_authorize(permission, global: params[:project_id].blank?)
-      rescue ActiveRecord::RecordNotFound
-        render_404
       end
     end
   end

@@ -33,7 +33,6 @@ module Admin
     module Hierarchy
       class ItemsController < ApplicationController
         include OpTurbo::ComponentStream
-        include OpTurbo::DialogStreamHelper
 
         layout :admin_or_frame_layout
         model_object CustomField
@@ -146,8 +145,6 @@ module Admin
         def find_model_object
           @object = CustomField.hierarchy_root_and_children.find(params[:custom_field_id])
           @custom_field = @object
-        rescue ActiveRecord::RecordNotFound
-          render_404
         end
 
         def find_active_item
@@ -156,8 +153,6 @@ module Admin
                          else
                            @object.hierarchy_root
                          end
-        rescue ActiveRecord::RecordNotFound
-          render_404
         end
       end
     end

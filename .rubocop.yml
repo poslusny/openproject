@@ -142,7 +142,7 @@ Naming/ClassAndModuleCamelCase:
 Naming/FileName:
   Enabled: false
 
-Naming/PredicateName:
+Naming/PredicatePrefix:
   ForbiddenPrefixes:
     - is_
 
@@ -175,8 +175,7 @@ RSpec/IndexedLet:
 
 # The http verbs in Rack::Test do not accept named parameters (params: params)
 Rails/HttpPositionalArguments:
-  Exclude:
-    - 'spec/requests/api/v3/**/*.rb'
+  Enabled: false
 
 # require_dependency is an obsolete method for Rails applications running in Zeitwerk mode.
 Rails/RequireDependency:
@@ -203,6 +202,10 @@ RSpec/DescribeClass:
   Exclude:
     - 'spec/features/**/*.rb'
     - 'modules/*/spec/features/**/*.rb'
+
+# Nothing wrong with `include_examples` when used properly.
+RSpec/IncludeExamples:
+  Enabled: false
 
 # Allow number HTTP status codes in specs
 RSpecRails/HttpStatus:

@@ -112,6 +112,7 @@ import {
   templateUrl: './storage.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [{ provide: OpUploadService, useClass: StorageUploadService }],
+  standalone: false,
 })
 export class StorageComponent extends UntilDestroyedMixin implements OnInit, OnDestroy {
   @Input() public resource:HalResource;
@@ -216,7 +217,7 @@ export class StorageComponent extends UntilDestroyedMixin implements OnInit, OnD
   };
 
   public get openStorageLink() {
-    return this.projectStorage._links.openWithConnectionEnsured?.href || this.projectStorage._links.open?.href;
+    return this.projectStorage._links.open?.href;
   }
 
   constructor(

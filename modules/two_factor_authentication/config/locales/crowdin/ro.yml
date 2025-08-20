@@ -82,7 +82,7 @@ ro:
       text_2fa_enabled: "Upon every login, this user will be requested to enter a OTP token from their default 2FA device."
       text_2fa_disabled: "The user did not set up a 2FA device through their 'My account page'"
       only_sms_allowed: "Only SMS delivery can be set up for other users."
-    upsale:
+    upsell:
       title: "Autentificare doi factori"
       description: "Consolidarea securității instanței OpenProject prin oferirea (sau impunerea) autentificării cu doi factori pentru toți membrii proiectului."
     backup_codes:
@@ -123,7 +123,7 @@ ro:
       2fa_from_webauthn: Please provide the WebAuthn device <strong>%{device_name}</strong>. If it is USB based make sure to plug it in and touch it. Then click the sign in button.
       webauthn:
         title: "WebAuthn"
-        description: Register a FIDO2 device (like YubiKey) or the secure encalve of your mobile device.
+        description: Register a FIDO2 device (like YubiKey) or the secure enclave of your mobile device.
         further_steps: After you have chosen a name, you can click the Continue button. Your browser will prompt you to present your WebAuthn device. When you have done so, you are done registering the device.
       totp:
         title: "App-based authenticator"
@@ -184,7 +184,7 @@ ro:
   notice_phone_number_format: "Te rog să introduci numărul în următorul format: +XX XXXXXXXX."
   text_otp_not_receive: "Alte metode de verificare"
   text_send_otp_again: "Retrimite parola unică prin:"
-  button_resend_otp_form: "Retrimitere"
+  button_resend_otp_form: "Retrimite"
   button_otp_by_voice: "Apel vocal"
   button_otp_by_sms: "SMS"
   label_otp_channel: "Canalul de livrare"

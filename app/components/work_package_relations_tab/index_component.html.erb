@@ -12,8 +12,8 @@
         action_bar.with_column(flex_shrink: 0, ml: 2) do
           render(
             Primer::Alpha::ActionMenu.new(
-              test_selector: NEW_RELATION_ACTION_MENU,
-              menu_id: NEW_RELATION_ACTION_MENU
+              test_selector: ADD_RELATION_ACTION_MENU,
+              menu_id: ADD_RELATION_ACTION_MENU
             )
           ) do |menu|
             menu.with_show_button do |button|
@@ -22,21 +22,14 @@
               t(:label_relation)
             end
 
-            render_child_menu_items(menu)
+            render_add_relations_menu_items(menu, FIRST_LEVEL_RELATION_MENU_TYPES)
 
             if should_render_add_relations?
-              Relation::TYPES.each do |relation_type, type_configuration_hash|
-                label_key = "#{I18N_NAMESPACE}.relations.#{type_configuration_hash[:name]}_singular"
-                menu.with_item(
-                  label: t(label_key).upcase_first,
-                  href: new_relation_path(relation_type:),
-                  test_selector: new_button_test_selector(relation_type:),
-                  content_arguments: {
-                    data: { turbo_stream: true }
-                  }
-                ) do |item|
-                  item.with_description.with_content(t("#{I18N_NAMESPACE}.relations.#{relation_type}_description"))
-                end
+              menu.with_sub_menu_item(
+                label: t("#{I18N_NAMESPACE}.relations.label_other_relations"),
+                menu_id: ADD_RELATION_SUB_MENU
+              ) do |sub_menu|
+                render_add_relations_menu_items(sub_menu, SECOND_LEVEL_RELATION_MENU_TYPES)
               end
             end
           end
@@ -62,7 +55,7 @@
         end
       else
         flex.with_row do
-          render Primer::Beta::Blankslate.new(border: true) do |component|
+          render Primer::Beta::Blankslate.new(border: true, data: { test_selector: "no-relations-blankslate" }) do |component|
             component.with_visual_icon(icon: "package-dependents")
             component.with_heading(tag: :h4).with_content(t("#{I18N_NAMESPACE}.index.blankslate_heading"))
             component.with_description { t("#{I18N_NAMESPACE}.index.blankslate_description") }

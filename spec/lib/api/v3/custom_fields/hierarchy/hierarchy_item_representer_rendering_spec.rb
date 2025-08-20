@@ -30,7 +30,7 @@
 
 require "spec_helper"
 
-RSpec.describe API::V3::CustomFields::Hierarchy::HierarchyItemRepresenter, "rendering" do
+RSpec.describe API::V3::CustomFields::Hierarchy::HierarchyItemRepresenter, "rendering", with_ee: [:custom_field_hierarchies] do
   include API::V3::Utilities::PathHelper
 
   let(:custom_field) { create(:custom_field, field_format: "hierarchy", hierarchy_root: nil) }

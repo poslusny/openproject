@@ -8,6 +8,7 @@ import { I18nService } from 'core-app/core/i18n/i18n.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './select-input.component.html',
   styleUrls: ['./select-input.component.scss'],
+  standalone: false,
 })
 export class SelectInputComponent extends FieldType {
   constructor(

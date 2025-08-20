@@ -59,6 +59,7 @@
     [searchFn]="searchFn"
     [labelForId]="labelForId"
     [inputAttrs]="inputAttrs"
+    [ariaLabel]="ariaLabel"
     [tabIndex]="tabIndex"
     [readonly]="readonly"
     [searchWhileComposing]="searchWhileComposing"
@@ -144,7 +145,7 @@
   </ng-container>
 
   <ng-container *ngSwitchCase="resource === 'work_packages' || resource === 'parent-child'">
-    <div class="op-autocompleter--option-wrapper">
+    <div class="op-autocompleter--option-wrapper" title="{{ item.subject }}">
       <op-principal
         class="op-autocompleter--option-principal"
         *ngIf="item.author && item.author.href"

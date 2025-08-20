@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -91,7 +93,7 @@ RSpec.describe "Lost password" do
 
   context "when user has identity_url" do
     let!(:provider) { create(:saml_provider, slug: "saml", display_name: "The SAML provider") }
-    let!(:user) { create(:user, identity_url: "saml:foobar") }
+    let!(:user) { create(:user, authentication_provider: provider) }
 
     it "sends an email with external auth info" do
       visit account_lost_password_path

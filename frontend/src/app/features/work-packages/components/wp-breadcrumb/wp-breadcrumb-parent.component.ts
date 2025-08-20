@@ -37,6 +37,7 @@ import { WorkPackageNotificationService } from 'core-app/features/work-packages/
 @Component({
   templateUrl: './wp-breadcrumb-parent.html',
   selector: 'wp-breadcrumb-parent',
+  standalone: false,
 })
 export class WorkPackageBreadcrumbParentComponent {
   @Input('workPackage') workPackage:WorkPackageResource;

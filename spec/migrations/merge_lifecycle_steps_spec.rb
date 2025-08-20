@@ -30,6 +30,7 @@
 
 require "spec_helper"
 require Rails.root.join("db/migrate/20250324161229_merge_lifecycle_steps.rb")
+require Rails.root.join("db/migrate/20250403150639_link_wp_to_project_phase_definition.rb")
 
 RSpec.describe MergeLifecycleSteps, type: :model do
   shared_let(:colors) { create_list(:color, 3) }
@@ -38,6 +39,10 @@ RSpec.describe MergeLifecycleSteps, type: :model do
 
   before do
     ActiveRecord::Migration.suppress_messages do
+      # This tested migration depends on the existence of the
+      # project_phase_id column in the work_packages table.
+      # That is why the migration renaming it needs to be rolled back first.
+      LinkWpToProjectPhaseDefinition.new.migrate(:down)
       described_class.new.migrate(:down)
     end
 

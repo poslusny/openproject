@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -75,6 +77,8 @@ RSpec.describe "my", :js do
           click_on "Save"
 
           expect(page).to have_select "pref_time_zone", selected: "(UTC+01:00) Paris"
+          wait_for_network_idle
+          user.reload
           expect(user.pref.time_zone).to eq "Europe/Paris"
         end
       end

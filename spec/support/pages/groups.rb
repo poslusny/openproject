@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -50,18 +52,8 @@ module Pages
       group(group_name).add_user! user_name
     end
 
-    def delete_group!(name)
-      accept_alert do
-        find_group(name).find("a[data-method=delete]").click
-      end
-    end
-
-    def find_group(name)
-      find("tr", text: name)
-    end
-
     def has_group?(name)
-      has_selector? "tr", text: name
+      has_selector? ".op-border-box-grid--row-item", text: name
     end
 
     def group(group_name)

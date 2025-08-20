@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -125,8 +127,6 @@ class ForumsController < ApplicationController
 
   def find_forum
     @forum = @project.forums.find(params[:id])
-  rescue ActiveRecord::RecordNotFound
-    render_404
   end
 
   def new_forum

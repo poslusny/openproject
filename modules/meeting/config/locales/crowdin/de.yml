@@ -45,7 +45,7 @@ de:
       meeting_agenda_item:
         title: "Titel"
         author: "Autor"
-        duration_in_minutes: "Min."
+        duration_in_minutes: "Dauer"
         description: "Anmerkungen"
         presenter: "Referent"
       meeting_section:
@@ -70,11 +70,9 @@ de:
         invalid_time_format: "ist keine gültige Zeit. Erforderliches Format: HH:MM"
     models:
       recurring_meeting: "Wiederkehrende Besprechung"
-      structured_meeting: "Einmalige Besprechung"
-      meeting: "Besprechung"
+      meeting: "Einmalige Besprechung"
       meeting_agenda_item: "Tagesordnungspunkt"
       meeting_agenda: "Agenda"
-      meeting_minutes: "Protokoll"
       meeting_section: "Abschnitt"
   activity:
     filter:
@@ -101,6 +99,7 @@ de:
     meeting_agenda_opened: Agenda geöffnet
     meeting_minutes: Protokoll bearbeitet
     meeting_minutes_created: Protokoll erstellt
+  error_notification: "Die Benachrichtigung konnte nicht gesendet werden."
   error_notification_with_errors: "Benachrichtigungversenden fehlgeschlagen. Folgende Empfänger konnten nicht benachrichtigt werden: %{recipients}"
   label_meeting: "Besprechung"
   label_meeting_plural: "Besprechungen"
@@ -120,6 +119,7 @@ de:
   label_meeting_date_time: "Datum/Uhrzeit"
   label_meeting_date_and_time: "Datum und Zeit"
   label_meeting_diff: "Differenz"
+  label_meeting_send_updates: "E-Mail-Kalender-Aktualisierungen senden"
   label_recurring_meeting: "Wiederkehrende Besprechung"
   label_recurring_meeting_part_of: "Teil einer Terminserie"
   label_recurring_meeting_new: "Neue Terminserie"
@@ -184,6 +184,7 @@ de:
       agenda_items: "Tagesordnungspunkte kopieren"
       agenda_text: "Tagesordnung der alten Besprechung kopieren"
       participants: "Liste der Teilnehmer kopieren"
+      to_clipboard: "In Zwischenablage kopieren"
     email:
       send_emails: "E-Mail an Teilnehmer"
       send_invitation_emails: >
@@ -215,11 +216,8 @@ de:
         body: "Die Besprechung '%{title}' wurde durch %{actor} verschoben."
         old_date_time: "Alte(s) Datum/Zeit"
         new_date_time: "Neue(s) Datum/Zeit"
-    label_mail_all_participants: "E-Mail an alle Teilnehmer senden"
+    label_mail_all_participants: "E-Mail-Kalendereinladung an alle Teilnehmer"
     types:
-      classic: "Klassisch (nicht unterstützt)"
-      classic_text: "Hinweis: Klassische Meetings werden in der nächsten Version von OpenProject entfernt."
-      structured: "Dynamisch"
       one_time: "Einmalig"
       recurring: "Terminserie"
       recurring_text: "Erstellen Sie eine Terminserie mit einer dynamischen Vorlage und wiederkehrenden Besprechungen."
@@ -241,12 +239,79 @@ de:
     blankslate:
       title: "Keine Besprechungen anzuzeigen"
       desc: "Es gibt keine Besprechungen, die die Kriterien des aktiven Filters erfüllen."
+    label_export_pdf: "PDF exportieren"
+    export:
+      your_meeting_export: "Besprechung wird exportiert"
+    export_pdf_dialog:
+      title: PDF exportieren
+      description: Erstellen Sie eine druckbare PDF-Datei dieser Besprechung im aktuellen Zustand.
+      include_participants:
+        label: Liste der Teilnehmer einfügen
+        caption: Eine Liste der Teilnehmer wird oberhalb der Agenda ausgegeben.
+      include_attachments:
+        label: Liste der Anhänge einfügen
+        caption: Eine Liste mit den Dateinamen von Anhängen wird am Ende angehängt.
+      include_backlog:
+        label: Backlog einfügen
+        caption: Einträge im Backlog der Besprechung sind standardmäßig nicht Teil des Exports, aber Sie können sie optional einbinden.
+      include_outcomes:
+        label: Ergebnisse einfügen
+        caption: Wenn Ihre Ergebnisse vertrauliche Informationen enthalten, können Sie wählen, diese nicht in den Export aufzunehmen.
+      footer_text:
+        label: Text in der Fußzeile
+        caption: Dieser Text wird auf jeder Seite in der Mitte der Fußzeile angezeigt.
+      submit_button: Download
+    notifications:
+      sidepanel:
+        title: "E-Mail-Kalender-Aktualisierungen"
+        state:
+          disabled: "Deaktiviert."
+          enabled: "Aktiviert."
+        description:
+          disabled: "Die Teilnehmer erhalten keine E-Mail bei Änderungen an der Besprechung."
+          enabled: "Alle Teilnehmenden erhalten aktualisierte Kalendereinladungen per E-Mail bei wesentlichen Änderungen der Besprechung."
+          change_via_template: "Bearbeiten Sie die Vorlage der Terminserie, um diese Einstellung zu ändern."
+        button:
+          disable: "Deaktivieren"
+          enable: "Aktivieren"
+      dialog:
+        title:
+          enable: "E-Mail-Kalender-Aktualisierungen aktivieren?"
+          disable: "E-Mail-Kalender-Aktualisierungen deaktivieren?"
+        message:
+          enable: >
+            Alle Teilnehmenden erhalten aktualisierte Kalendereinladungen per E-Mail, wenn sich das Datum, die Uhrzeit, der Ort oder die Teilnehmenden der Besprechung geändert haben. Sobald die Funktion aktiviert ist, wird sofort eine E-Mail an alle Teilnehmenden gesendet.
+          disable: >
+            Die Teilnehmer erhalten keine aktualisierten Kalendereinladungen mehr per E-Mail, wenn sich das Datum, die Uhrzeit, der Ort oder die Teilnehmer der Besprechung geändert haben. Wenn sie bereits eine Einladung für diese Besprechung hatten, wird diese nicht mehr aktualisiert und könnte veraltete Informationen anzeigen.
+        confirm_label:
+          enable: "E-Mail-Aktualisierungen aktivieren"
+          disable: "E-Mail-Aktualisierungen deaktivieren"
+      banner:
+        onetime:
+          enabled: >
+            Alle Teilnehmenden erhalten aktualisierte Kalendereinladungen per E-Mail durch Ihre Änderungen an der Besprechung.
+          disabled: >
+            E-Mail-Kalenderaktualisierungen sind deaktiviert. Die Teilnehmenden erhalten keine E-Mail, die sie über Ihre Änderungen informiert.
+        occurrence:
+          enabled: >
+            E-Mail-Kalenderaktualisierungen sind für die Terminserie aktiviert. Alle Teilnehmenden erhalten aktualisierte Kalendereinladungen, die sie über Ihre Änderungen an dieser Besprechung informieren.
+          disabled: >
+            E-Mail-Kalenderaktualisierungen sind für die Terminserie deaktiviert. Die Teilnehmenden erhalten keine E-Mail, die sie über Ihre Änderungen informiert.
+        template:
+          enabled: >
+            E-Mail-Kalenderaktualisierungen sind für die Terminserie aktiviert. Alle Teilnehmenden erhalten aktualisierte Kalendereinladungen, die sie über Ihre Änderungen an dieser Vorlage oder an einzelnen Ereignissen vornehmen.
+          disabled: >
+            E-Mail-Kalenderaktualisierungen sind für die Terminserie deaktiviert. Die Teilnehmenden erhalten keine E-Mail, die sie über Ihre Änderungen an dieser Vorlage oder Ereignisse der Serie informiert.
   meeting_section:
     untitled_title: "Unbenannter Abschnitt"
     delete_confirmation: "Wenn Sie den Abschnitt löschen, werden auch alle zugehörigen Tagesordnungspunkte gelöscht. Möchten Sie fortfahren?"
     placeholder_title: "Neuer Abschnitt"
     empty_text: "Neue Agendapunkte hierhin bewegen oder neu erstellen"
   recurring_meeting:
+    time_zone_difference_banner:
+      title: "Unterschiedliche Zeitzone"
+      description: >
+        Die unten stehenden Daten beziehen sich auf die Zeitzone der Terminserie (%{actual_zone}), nicht auf Ihre lokale Zeitzone (%{user_zone}).
     ended_blankslate:
       title: "Terminserie beendet"
       message: "Diese Terminserie ist beendet. Es finden keine weiteren Ereignisse statt. "
@@ -292,7 +357,7 @@ de:
       full_past: "%{base} um %{time}, endet am %{end_date}"
       never_ending: "%{base} um %{time}"
     open:
-      title: "Tagesordnung geöffnet"
+      title: "Tagesordnung eröffnet"
       subtitle: >
         Offene Besprechungen haben Tagesordnungen, die bearbeitet werden können und im Bereich "Meine Meetings" der Teilnehmer angezeigt werden. Änderungen an der Vorlage für Besprechungsserien wirken sich nicht mehr auf diese bereits geöffneten Besprechungen aus.
       blankslate:
@@ -324,23 +389,17 @@ de:
       confirm_button: "Besprechung absagen"
     end_series_dialog:
       title: "Terminserie beenden"
-  notice_successful_notification: "Benachrichtigung erfolgreich gesendet"
+  notice_successful_notification: "E-Mail-Kalendereinladung an alle Teilnehmer gesendet"
   notice_timezone_missing: Keine Zeitzone eingestellt und daher %{zone} angenommen. Um Ihre Zeitzone einzustellen, klicken Sie bitte hier.
   notice_meeting_updated: "Diese Seite wurde von einem anderen Benutzer verändert. Laden Sie neu, um die Änderungen zu sehen."
   permission_create_meetings: "Besprechungen erstellen"
   permission_edit_meetings: "Besprechungen bearbeiten"
   permission_delete_meetings: "Besprechungen löschen"
   permission_view_meetings: "Besprechungen ansehen"
-  permission_create_meeting_agendas: "Agendapunkte erstellen"
-  permission_create_meeting_agendas_explanation: "Ermöglicht das Bearbeiten des Inhalts der klassischen Meetings."
   permission_manage_agendas: "Agenden anlegen/bearbeiten"
-  permission_manage_agendas_explanation: "Ermöglicht das Bearbeiten des Inhalts der dynamischen Meetings."
-  permission_close_meeting_agendas: "Agenden schließen"
-  permission_send_meeting_agendas_notification: "Benachrichtigungen für Agenden verschicken"
-  permission_create_meeting_minutes: "Protokolle anlegen/bearbeiten"
-  permission_send_meeting_minutes_notification: "Benachrichtigungen für Protokolle verschicken"
-  permission_meetings_send_invite: "Benutzer zu Besprechungen einladen"
-  permission_send_meeting_agendas_icalendar: "Besprechungsagenda als Kalendereintrag senden"
+  permission_manage_agendas_explanation: "Ermöglicht das Erstellen, Bearbeiten und Entfernen von Tagesordnungspunkten"
+  permission_manage_outcomes: "Ergebnisse verwalten"
+  permission_send_meeting_invites_and_outcomes: "Besprechungseinladungen und -ergebnisse an Teilnehmer senden"
   project_module_meetings: "Besprechungen"
   text_duration_in_hours: "Dauer in Stunden"
   text_in_hours: "in Stunden"
@@ -352,8 +411,8 @@ de:
   text_meeting_minutes_for_meeting: 'das Protokoll für die Besprechung "%{meeting}"'
   text_notificiation_invited: "Diese Email enthält einen ics Eintrag für die untenstehende Besprechung:"
   text_meeting_empty_heading: "Ihre Besprechung ist leer"
-  text_meeting_empty_description_1: "Beginnen Sie unten mit dem Hinzufügen von Tagesordnungspunkten. Jeder Eintrag kann zunächst nur aus einem Titel bestehen. Optional können Sie zusätzliche Details wie Dauer und Notizen hinzufügen."
-  text_meeting_empty_description_2: 'Sie können auch Verweise auf bestehende Arbeitspakete hinzufügen. So werden angehängte Notizen automatisch auch im "Besprechungen"-Tab des Arbeitspakets angezeigt.'
+  text_meeting_empty_description1: "Beginnen Sie unten mit dem Hinzufügen von Tagesordnungspunkten. Jeder Eintrag kann zunächst nur aus einem Titel bestehen. Optional können Sie zusätzliche Details wie Dauer und Notizen hinzufügen."
+  text_meeting_empty_description2: 'Sie können auch Verweise auf bestehende Arbeitspakete hinzufügen. So werden angehängte Notizen automatisch auch im "Besprechungen"-Tab des Arbeitspakets angezeigt.'
   label_meeting_empty_action: "Tagesordnungspunkt hinzufügen"
   label_meeting_actions: "Aktionen der Besprechung"
   label_meeting_edit_title: "Besprechungstitel bearbeiten"
@@ -367,23 +426,47 @@ de:
   label_meeting_index_later: "Nächste Woche und später"
   label_agenda_items: "Tagesordnungspunkte"
   label_agenda_items_reordered: "neu geordnet"
-  label_agenda_item_remove: "Von der Tagesordnung entfernen"
+  label_agenda_item_add: "Tagesordnungspunkt hinzufügen"
+  label_agenda_item_remove_from_agenda: "Von der Tagesordnung entfernen"
+  label_agenda_item_remove_from_backlog: "Aus dem Backlog entfernen"
   label_agenda_item_undisclosed_wp: "Arbeitspaket #%{id} ist nicht sichtbar"
   label_agenda_item_deleted_wp: "Referenz auf ein gelöschtes Arbeitspaket"
   label_agenda_item_actions: "Aktionen zu Tagesordnungspunkten"
+  label_agenda_item_move_to_next_title: "Move to next meeting?"
+  label_agenda_item_move: "Move"
   label_agenda_item_move_to_next: "Zur nächsten Besprechung verschieben"
+  label_agenda_item_move_to_backlog: "In Backlog verschieben"
+  label_agenda_item_move_to_current_meeting: "Zur aktuellen Besprechung verschieben"
   label_agenda_item_move_to_top: "Nach ganz oben verschieben"
   label_agenda_item_move_to_bottom: "Nach ganz unten verschieben"
   label_agenda_item_move_up: "Nach oben verschieben"
   label_agenda_item_move_down: "Nach unten verschieben"
   label_agenda_item_add_notes: "Notiz hinzufügen"
   label_agenda_item_add_outcome: "Ergebnis hinzufügen"
+  label_agenda_item_work_package_add: "Arbeitspaket hinzufügen"
   label_agenda_item_work_package: "Tagesordnungspunkt Arbeitspaket"
+  label_section_rename: "Abschnitt umbenennen"
   label_agenda_outcome: "Ergebnis"
   label_agenda_outcome_actions: "Aktionen für die Ergebnisse von Agendapunkten"
   label_agenda_outcome_edit: "Ergebnis bearbeiten"
   label_agenda_outcome_delete: "Ergebnis entfernen"
   text_outcome_not_editable_anymore: "Dieses Ergebnis ist nicht mehr bearbeitbar."
+  text_outcome_cannot_be_added: "Ein Ergebnis kann nicht mehr hinzugefügt werden."
+  label_backlog_clear: "Backlog leeren"
+  label_backlog_clear_button: "Eingabe löschen"
+  text_backlog_clear_error: "Ein oder mehrere Fehler trat auf beim Versuch, den Backlog zu leeren."
+  label_agenda_backlog: "Agenda-Backlog"
+  text_agenda_backlog: >
+    Dieser Backlog gehört nur dieser einmaligen Besprechung. Sie können Elemente einfügen um sie aus der Besprechungsagenda hinzuzufügen oder zu entfernen.
+  label_agenda_backlog_clear_title: "Backlog leeren?"
+  text_agenda_backlog_clear_description: >
+    Sind Sie sicher, dass Sie alle aktuellen Einträge entfernen möchten? Diese Aktion kann nicht rückgängig gemacht werden.
+  label_series_backlog: "Backlog der Terminserie"
+  text_series_backlog: >
+    Der Backlog wird mit allen Vorkommnissen dieser Terminserie geteilt. Sie können Elemente hin- und herziehen um sie aus einer bestimmten Besprechung hinzuzufügen oder zu entfernen.
+  label_series_backlog_clear_title: "Backlog der Terminserie leeren?"
+  text_series_backlog_clear_description: >
+    Dadurch werden alle Elemente des Backlogs entfernt, die mit allen Besprechungen in der Terminserie geteilt werden. Sind Sie sicher, dass Sie fortfahren möchten? Diese Aktion kann nicht rückgängig gemacht werden.
   text_agenda_item_title: 'Tagesordnungspunkt „%{title}“'
   text_agenda_work_package_deleted: 'Tagesordnungspunkt für gelöschtes Arbeitspaket'
   text_deleted_agenda_item: 'Gelöschter Tagesordnungspunkt'
@@ -421,9 +504,12 @@ de:
   text_add_work_package_to_meeting_description: "Ein Arbeitspaket kann zu mehreren Besprechungen hinzugefügt werden."
   text_agenda_item_no_notes: "Keine Notizen angegeben."
   text_agenda_item_not_editable_anymore: "Dieser Tagesordnungspunkt kann nicht mehr bearbeitet werden."
-  text_agenda_item_move_next_meeting: "Sind Sie sicher, dass sie diesen Agendapunkt zur nächsten Besprechung am %{date} um %{time} durchführen wollen?"
+  text_agenda_item_move_next_meeting: "This item will be moved to the next meeting on %{date} at %{time}."
   text_agenda_item_moved_to_next_meeting: "Tagesordnungspunkt zur nächsten Besprechung am %{date} verschoben"
   text_work_package_has_no_upcoming_meeting_agenda_items: "Dieses Arbeitspaket ist bisher in keiner anstehenden Besprechung enthalten."
   text_agenda_item_move_next_meeting_cancelled: "Der Tagesordnungspunkt konnte nicht in die nächste Besprechung verschoben werden da diese abgesagt wurde."
   text_work_package_add_to_meeting_hint: 'Über den Button "Zur Besprechung hinzufügen" können Sie dieses Arbeitspaket zu einer zukünftigen Besprechung hinzuzufügen.'
   text_work_package_has_no_past_meeting_agenda_items: "Dieses Arbeitspaket wurde in keinen früheren Besprechungen erwähnt."
+  text_email_updates_muted: "E-Mail-Kalenderaktualisierungen sind deaktiviert. Die Teilnehmer erhalten keine aktualisierten Einladungen per E-Mail, wenn Sie Änderungen vornehmen."
+  text_email_updates_enabled: "E-Mail-Kalenderaktualisierungen sind aktiviert. Alle Teilnehmenden erhalten aktualisierte Einladungen per E-Mail, wenn Sie Änderungen vornehmen."
+

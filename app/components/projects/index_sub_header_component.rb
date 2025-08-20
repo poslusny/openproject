@@ -53,7 +53,6 @@ module Projects
     def sub_header_data_attributes
       {
         controller: "filter--filters-form",
-        "application-target": "dynamic",
         "filter--filters-form-perform-turbo-requests-value": true,
         "filter--filters-form-clear-button-id-value": clear_button_id
       }

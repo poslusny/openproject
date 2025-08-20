@@ -27,7 +27,7 @@ it:
       budget:
         author: "Autore"
         available: "Disponibile"
-        budget: "Pianificato"
+        budget: "Pianificata"
         budget_ratio: "Speso (tasso)"
         description: "Descrizione"
         spent: "Speso"
@@ -54,7 +54,7 @@ it:
   caption_labor: "Lavoro"
   caption_labor_costs: "Costo del lavoro effettivo"
   caption_material_costs: "Costi effettivi unitari"
-  budgets_title: "Bilanci"
+  budgets_title: "Budget"
   events:
     budget: "Bilancio modificato"
   help_click_to_edit: "Clicca qui per modificare."
@@ -62,7 +62,7 @@ it:
   help_override_rate: "Immettere qui un valore per ignorare la tariffa di default."
   label_budget: "Bilancio"
   label_budget_new: "Nuovo budget"
-  label_budget_plural: "Bilanci"
+  label_budget_plural: "Budget"
   label_budget_id: "Budget #%{id}"
   label_deliverable: "Bilancio"
   label_example_placeholder: 'es. %{decimal}'
@@ -72,7 +72,7 @@ it:
   notice_no_budgets_available: "Nessun budget disponibile."
   permission_edit_budgets: "Modifica budget"
   permission_view_budgets: "Visualizza budget"
-  project_module_budgets: "Bilanci"
+  project_module_budgets: "Budget"
   text_budget_reassign_to: "Riassegnali a questo valore:"
   text_budget_delete: "Elimina il budget da tutti i pacchetti di lavoro"
   text_budget_destroy_assigned_wp: "Ci sono %{count} pacchetti di lavoro assegnati a questo budget. Cosa vuoi fare?"

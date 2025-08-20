@@ -40,6 +40,7 @@ import { JobStatusModalService } from 'core-app/features/job-status/job-status-m
   selector: 'opce-backup',
   templateUrl: './backup.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class BackupComponent implements AfterViewInit {
   public text = {

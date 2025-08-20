@@ -37,6 +37,7 @@ import {
   templateUrl: './activity-tab.html',
   selector: 'wp-activity-tab',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class WorkPackageActivityTabComponent extends ActivityPanelBaseController {
   @Input() public workPackage:WorkPackageResource;

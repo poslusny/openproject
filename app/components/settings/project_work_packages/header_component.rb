@@ -31,20 +31,15 @@
 module Settings
   module ProjectWorkPackages
     class HeaderComponent < ApplicationComponent
-      def initialize(project, selected:)
+      def initialize(project)
         super
         @project = project
-        @selected = selected
       end
 
       def breadcrumbs_items
         [{ href: project_overview_path(@project.id), text: @project.name },
          { href: project_settings_general_path(@project.id), text: I18n.t("label_project_settings") },
          t(:label_work_package_plural)]
-      end
-
-      def selected?(key)
-        @selected == key
       end
 
       def show_types?
@@ -58,6 +53,58 @@ module Settings
       def show_custom_fields?
         User.current.allowed_in_project?(:select_custom_fields, @project)
       end
+
+      def internal_comments_title
+        unless EnterpriseToken.allows_to?(:internal_comments)
+          return render(Primer::Beta::Octicon.new(
+                          icon: "op-enterprise-addons",
+                          classes: "upsell-colored",
+                          ml: 2
+                        )) + internal_comments_translation
+        end
+
+        internal_comments_translation
+      end
+
+      def tabs
+        tabs = []
+
+        if show_types?
+          tabs << {
+            name: "types",
+            path: project_settings_work_packages_types_path,
+            label: t("label_type_plural")
+          }
+        end
+
+        if show_categories?
+          tabs << {
+            name: "categories",
+            path: project_settings_work_packages_categories_path,
+            label: t("documents.label_categories")
+          }
+        end
+
+        if show_custom_fields?
+          tabs << {
+            name: "custom_fields",
+            path: project_settings_work_packages_custom_fields_path,
+            label: t("attributes.custom_values")
+          }
+        end
+
+        tabs << {
+          name: "internal_comments",
+          path: project_settings_work_packages_internal_comments_path,
+          label: internal_comments_title
+        }
+
+        tabs
+      end
+
+      private
+
+      def internal_comments_translation = t("ee.features.internal_comments").html_safe
     end
   end
 end

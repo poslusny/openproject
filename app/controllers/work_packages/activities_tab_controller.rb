@@ -139,18 +139,18 @@ class WorkPackages::ActivitiesTabController < ApplicationController
     respond_with_turbo_streams
   end
 
+  def sanitize_internal_mentions
+    render plain: sanitized_journal_notes
+  rescue StandardError => e
+    handle_internal_server_error(e)
+    respond_with_turbo_streams
+  end
+
   def toggle_reaction # rubocop:disable Metrics/AbcSize
-    emoji_reaction_service =
-      if @journal.emoji_reactions.exists?(user: User.current, reaction: params[:reaction])
-        EmojiReactions::DeleteService
-         .new(user: User.current,
-              model: @journal.emoji_reactions.find_by(user: User.current, reaction: params[:reaction]))
-         .call
-      else
-        EmojiReactions::CreateService
-         .new(user: User.current)
-         .call(user: User.current, reactable: @journal, reaction: params[:reaction])
-      end
+    emoji_reaction_service = EmojiReactions::ToggleEmojiReactionService
+      .call(user: User.current,
+            reactable: @journal,
+            reaction: params[:reaction])
 
     emoji_reaction_service.on_success do
       update_via_turbo_stream(
@@ -214,15 +214,19 @@ class WorkPackages::ActivitiesTabController < ApplicationController
   end
 
   def set_filter
-    @filter = params[:filter]&.to_sym || :all
+    @filter = (params[:filter] || params.dig(:journal, :filter))&.to_sym || :all
   end
 
   def journal_sorting
     User.current.preference&.comments_sorting || OpenProject::Configuration.default_comment_sort_order
   end
 
+  def sanitized_journal_notes
+    WorkPackages::ActivitiesTab::InternalCommentMentionsSanitizer.sanitize(@work_package, journal_params[:notes])
+  end
+
   def journal_params
-    params.expect(journal: %i[notes restricted])
+    params.expect(journal: %i[notes internal])
   end
 
   def handle_successful_create_call(call)
@@ -249,8 +253,12 @@ class WorkPackages::ActivitiesTabController < ApplicationController
   end
 
   def perform_update_streams_from_last_update_timestamp
-    if params[:last_update_timestamp].present? && (last_updated_at = Time.zone.parse(params[:last_update_timestamp]))
-      generate_time_based_update_streams(last_updated_at)
+    last_update_timestamp = params[:last_update_timestamp] || params.dig(:journal, :last_update_timestamp)
+    editing_journals = params[:editing_journals]&.split(",")&.map(&:to_i) || []
+
+    if last_update_timestamp.present?
+      last_updated_at = Time.zone.parse(last_update_timestamp)
+      generate_time_based_update_streams(last_updated_at, editing_journals)
       generate_work_package_journals_emoji_reactions_update_streams
     else
       @turbo_status = :bad_request
@@ -295,12 +303,15 @@ class WorkPackages::ActivitiesTabController < ApplicationController
   end
 
   def create_journal_service_call
+    internal = to_boolean(journal_params[:internal], false)
+    notes = internal ? sanitized_journal_notes : journal_params[:notes]
+
     AddWorkPackageNoteService
       .new(user: User.current,
            work_package: @work_package)
-      .call(journal_params[:notes],
+      .call(notes,
             send_notifications: to_boolean(params[:notify], true),
-            restricted: to_boolean(journal_params[:restricted], false))
+            internal:)
   end
 
   def to_boolean(value, default)
@@ -308,26 +319,26 @@ class WorkPackages::ActivitiesTabController < ApplicationController
   end
 
   def update_journal_service_call
-    Journals::UpdateService.new(model: @journal, user: User.current).call(
-      notes: journal_params[:notes]
-    )
+    notes = @journal.internal? ? sanitized_journal_notes : journal_params[:notes]
+    Journals::UpdateService.new(model: @journal, user: User.current).call(notes:)
   end
 
-  def generate_time_based_update_streams(last_update_timestamp)
+  def generate_time_based_update_streams(last_update_timestamp, editing_journals)
     journals = @work_package
                  .journals
+                 .internal_visible
                  .with_sequence_version
 
     if @filter == :only_comments
       journals = journals.where.not(notes: "")
     end
 
-    grouped_emoji_reactions = Journal.grouped_emoji_reactions_by_reactable(
+    grouped_emoji_reactions = EmojiReactions::GroupedQueries.grouped_emoji_reactions_by_reactable(
       reactable_id: journals.pluck(:id), reactable_type: "Journal"
     )
 
-    rerender_updated_journals(journals, last_update_timestamp, grouped_emoji_reactions)
-    rerender_journals_with_updated_notification(journals, last_update_timestamp, grouped_emoji_reactions)
+    rerender_updated_journals(journals, last_update_timestamp, grouped_emoji_reactions, editing_journals)
+    rerender_journals_with_updated_notification(journals, last_update_timestamp, grouped_emoji_reactions, editing_journals)
     append_or_prepend_journals(journals, last_update_timestamp, grouped_emoji_reactions)
 
     if journals.present?
@@ -337,7 +348,8 @@ class WorkPackages::ActivitiesTabController < ApplicationController
   end
 
   def generate_work_package_journals_emoji_reactions_update_streams
-    wp_journal_emoji_reactions = Journal.grouped_work_package_journals_emoji_reactions(@work_package)
+    wp_journal_emoji_reactions =
+      EmojiReactions::GroupedQueries.grouped_work_package_journals_emoji_reactions_by_reactable(@work_package)
     @work_package.journals.each do |journal|
       update_via_turbo_stream(
         component: WorkPackages::ActivitiesTab::Journals::ItemComponent::Reactions.new(
@@ -348,13 +360,15 @@ class WorkPackages::ActivitiesTabController < ApplicationController
     end
   end
 
-  def rerender_updated_journals(journals, last_update_timestamp, grouped_emoji_reactions)
+  def rerender_updated_journals(journals, last_update_timestamp, grouped_emoji_reactions, editing_journals)
     journals.where("updated_at > ?", last_update_timestamp).find_each do |journal|
+      next if editing_journals.include?(journal.id)
+
       update_item_show_component(journal:, grouped_emoji_reactions: grouped_emoji_reactions.fetch(journal.id, {}))
     end
   end
 
-  def rerender_journals_with_updated_notification(journals, last_update_timestamp, grouped_emoji_reactions)
+  def rerender_journals_with_updated_notification(journals, last_update_timestamp, grouped_emoji_reactions, editing_journals)
     # Case: the user marked the journal as read somewhere else and expects the bubble to disappear
     #
     # below code stopped working with the introduction of the sequence_version query
@@ -381,6 +395,8 @@ class WorkPackages::ActivitiesTabController < ApplicationController
       .where(recipient_id: User.current.id)
       .where("notifications.updated_at > ?", last_update_timestamp)
       .find_each do |notification|
+      next if editing_journals.include?(notification.journal_id)
+
       update_item_show_component(
         journal: journals.find(notification.journal_id), # take the journal from the journals querried with sequence_version!
         grouped_emoji_reactions: grouped_emoji_reactions.fetch(notification.journal_id, {})
@@ -452,7 +468,8 @@ class WorkPackages::ActivitiesTabController < ApplicationController
   end
 
   def grouped_emoji_reactions_for_journal
-    Journal.grouped_journal_emoji_reactions(@journal).fetch(@journal.id, {})
+    EmojiReactions::GroupedQueries
+      .grouped_emoji_reactions_by_reactable(reactable: @journal)[@journal.id]
   end
 
   def allowed_to_edit?(journal)

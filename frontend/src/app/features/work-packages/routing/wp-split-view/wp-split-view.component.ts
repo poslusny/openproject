@@ -63,6 +63,7 @@ import { TabComponent } from 'core-app/features/work-packages/components/wp-tabs
     WpSingleViewService,
     { provide: HalResourceNotificationService, useClass: WorkPackageNotificationService },
   ],
+  standalone: false,
 })
 export class WorkPackageSplitViewComponent extends WorkPackageSingleViewBase implements OnInit {
   hasState:boolean = !!this.$state.current;

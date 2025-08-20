@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -45,6 +47,7 @@ FactoryBot.define do
 
       global_roles { [] }
       global_permissions { [] }
+      identity_url { nil }
     end
 
     callback(:after_build) do |_principal, evaluator|
@@ -71,6 +74,13 @@ FactoryBot.define do
     end
 
     callback(:after_create) do |principal, evaluator|
+      if evaluator.identity_url.present?
+        slug, external_id = evaluator.identity_url.split(":", 2)
+        raise "slug or external_id is blank" if slug.blank? || external_id.blank?
+
+        auth_provider = AuthProvider.find_by(slug:) || create(:oidc_provider, slug:)
+        principal.user_auth_provider_links.create!(auth_provider:, external_id:)
+      end
       evaluator.member_with_permissions.each do |object, permissions|
         if object.is_a?(Project)
           role = create(:project_role, permissions:)

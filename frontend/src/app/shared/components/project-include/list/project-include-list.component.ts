@@ -50,6 +50,7 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './project-include-list.component.html',
   styleUrls: ['./project-include-list.component.sass'],
+  standalone: false,
 })
 export class OpProjectIncludeListComponent {
   @HostBinding('class.spot-list') classNameList = true;

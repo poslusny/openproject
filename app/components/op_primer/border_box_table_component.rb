@@ -89,6 +89,7 @@ module OpPrimer
     def header_classes(column)
       classes = [heading_class]
       classes << "op-border-box-grid--main-column" if main_column?(column)
+      classes << "op-border-box-grid--heading-action" if column == :actions
 
       classes.join(" ")
     end
@@ -135,6 +136,10 @@ module OpPrimer
     end
 
     def blank_icon
+      nil
+    end
+
+    def action_row_header_content
       nil
     end
 

@@ -84,10 +84,8 @@ For the events that should be triggered by the webhook, please select the follow
 - Merge request events
 - Pipeline events 
 
-
 > [!NOTE] 
 > Please note that the *Pipeline events* part of the integration is still in the early stages. If you have any feedback on the *Pipeline events*, please let us know [here](https://community.openproject.org/wp/54574).
-
 
 > [!TIP] 
 > If you are in a local network you might need to allow requests to the local network in your GitLab instance. You can find this settings in the **Outbound requests** section when you navigate to **Admin area -> Settings -> Network**.

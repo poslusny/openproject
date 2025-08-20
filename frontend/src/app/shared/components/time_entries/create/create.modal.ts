@@ -10,6 +10,7 @@ import { TimeEntryBaseModal } from '../shared/modal/base.modal';
   providers: [
     HalResourceEditingService,
   ],
+  standalone: false,
 })
 export class TimeEntryCreateModalComponent extends TimeEntryBaseModal {
   public createdEntry:TimeEntryResource;

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -27,8 +29,6 @@
 #++
 
 class Enumeration < ApplicationRecord
-  include SubclassRegistry
-
   default_scope { order("#{Enumeration.table_name}.position ASC") }
 
   belongs_to :project, optional: true

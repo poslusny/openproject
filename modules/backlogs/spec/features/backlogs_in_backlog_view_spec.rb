@@ -130,11 +130,11 @@ RSpec.describe "Backlogs in backlog view", :js,
       .expect_story_not_in_sprint(sprint_story1, sprint)
 
     # The backlogs can be folded by default
-    visit my_settings_path
+    visit my_interface_path
 
     check "Show versions folded"
 
-    click_button "Save"
+    click_button "Update backlogs module"
 
     backlogs_page.visit!
 

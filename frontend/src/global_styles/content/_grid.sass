@@ -9,7 +9,7 @@ $grid--widget-padding: 20px 20px 20px 20px
   display: grid
 
 body.widget-grid-layout
-  #content
+  #content, page-header
     background-color: var(--grid-background-color)
 
 .grid--container
@@ -71,6 +71,7 @@ body.widget-grid-layout
 
   .op-widget-box--header
     display: flex
+    gap: var(--base-size-6)
 
   icon-triggered-context-menu
     visibility: hidden
@@ -108,7 +109,7 @@ body.widget-grid-layout
   margin-left: -19px
   padding-right: 1px
   padding-top: 4px
-  margin-top: 5px
+  margin-top: 4px
   opacity: 0
   cursor: grab
   float: left

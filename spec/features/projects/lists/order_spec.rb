@@ -273,7 +273,7 @@ RSpec.describe "Projects lists ordering", :js, with_settings: { login_required?:
     projects_page.expect_project_at_place(project, 1)
   end
 
-  context "when sorting by project phase", with_flag: { stages_and_gates: true } do
+  context "when sorting by project phase" do
     let(:stage_def) { create(:project_phase_definition) }
     let(:stage) do
       create(:project_phase,

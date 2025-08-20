@@ -64,7 +64,8 @@ it:
         I seguenti campi controllano quali attributi forniti dal fornitore di identità SAML vengono utilizzati per fornire attributi utente in OpenProject
       metadata:
         dialog: "Questo è l'URL dove sono disponibili i metadati di OpenProject SAML. Usalo opzionalmente per configurare il tuo fornitore di identità:"
-      upsale:
+      upsell:
+        title: "Single Sign-On (SSO) con SAML"
         description: Connetti OpenProject a un fornitore di identità SAML
       request_attributes:
         title: 'Attributi richiesti'

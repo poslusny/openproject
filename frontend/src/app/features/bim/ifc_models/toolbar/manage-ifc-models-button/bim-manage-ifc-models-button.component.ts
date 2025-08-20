@@ -44,6 +44,7 @@ import { IfcModelsDataService } from 'core-app/features/bim/ifc_models/pages/vie
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'op-bcf-manage-ifc-button',
+  standalone: false,
 })
 export class BimManageIfcModelsButtonComponent {
   text = {

@@ -7,11 +7,11 @@
       data: {
         turbo: true,
         controller: [
-          "meetings--form",
           "show-when-value-selected",
+          "show-when-checked",
           @meeting.is_a?(RecurringMeeting) ? "recurring-meetings--form" : nil
         ].compact.join(" "),
-        "application-target": "dynamic"
+        "recurring-meetings--form-persisted-value": @meeting.persisted?
       },
       html: {
         id: "meeting-form"
@@ -115,10 +115,6 @@
               end
             end
           end
-        else
-          modal_body.with_row do
-            render(Meeting::Type.new(f))
-          end
         end
 
         if @copy_from
@@ -137,9 +133,42 @@
           modal_body.with_row(mt: 3) do
             render(Meeting::CopyAttachments.new(f))
           end
+        end
 
+        if @meeting.is_a?(RecurringMeeting) && @meeting.persisted?
           modal_body.with_row(mt: 3) do
-            render(Meeting::EmailParticipants.new(f))
+            render(Meetings::EmailUpdatesBannerComponent.new(@meeting))
+          end
+        end
+
+        if (@meeting.is_a?(RecurringMeeting) && !@meeting.persisted?) || @meeting.is_a?(Meeting)
+          modal_body.with_row(mt: 3) do
+            render(Meeting::SendEmailUpdates.new(f, meeting: @meeting, copy_from: @copy_from))
+          end
+
+          modal_body.with_row(
+            mt: 3,
+            data: {
+              "show-when-checked-target-name": "notification-banner",
+              "show-when-checked-target": "effect",
+              "show-when": "checked",
+              visibility_class: "d-none"
+            }
+          ) do
+            render(Meetings::EmailUpdatesBannerComponent.new(@meeting, override: :enabled))
+          end
+
+          modal_body.with_row(
+            mt: 3,
+            classes: "d-none",
+            data: {
+              "show-when-checked-target-name": "notification-banner",
+              "show-when-checked-target": "effect",
+              "show-when": "unchecked",
+              visibility_class: "d-none"
+            }
+          ) do
+            render(Meetings::EmailUpdatesBannerComponent.new(@meeting, override: :disabled))
           end
         end
       end

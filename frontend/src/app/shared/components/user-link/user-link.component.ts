@@ -46,6 +46,7 @@ import { PathHelperService } from 'core-app/core/path-helper/path-helper.service
     <ng-container>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class UserLinkComponent {
   @Input() user:UserResource;

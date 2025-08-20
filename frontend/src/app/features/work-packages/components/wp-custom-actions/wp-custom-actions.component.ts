@@ -40,6 +40,7 @@ import { BannersService } from 'core-app/core/enterprise/banners.service';
   selector: 'wp-custom-actions',
   templateUrl: './wp-custom-actions.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class WpCustomActionsComponent extends UntilDestroyedMixin implements OnInit {
   @Input() workPackage:WorkPackageResource;
@@ -47,6 +48,8 @@ export class WpCustomActionsComponent extends UntilDestroyedMixin implements OnI
   trackByHref = trackByHref;
 
   actions:CustomActionResource[] = [];
+
+  available = this.bannersService.allowsTo('custom_actions');
 
   constructor(
     readonly apiV3Service:ApiV3Service,

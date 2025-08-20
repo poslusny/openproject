@@ -37,6 +37,10 @@ See COPYRIGHT and LICENSE files for more details.
                asset_path("logo_openproject_white_big.png")
              end
 
+  logo_icon_url = asset_path("icon_logo.svg")
+
+  logo_icon_white_url = asset_path("icon_logo_white.svg")
+
   high_contrast_logo_url = if isRu
                              asset_path("logo-black-bg-ua.png")
                            else
@@ -51,7 +55,7 @@ See COPYRIGHT and LICENSE files for more details.
     elsif CustomStyle.current.theme_logo.present?
       logo_url = asset_path(CustomStyle.current.theme_logo)
     end
-    
+
     if isRu && logo_url == asset_path("logo_openproject.png")
       logo_url = asset_path("logo-black-bg-ua.png")
     end
@@ -60,6 +64,14 @@ See COPYRIGHT and LICENSE files for more details.
 
   .op-logo--link {
     background-image: url(<%= logo_url %>);
+  }
+
+  .op-logo--icon {
+    background-image: url(<%= logo_icon_url %>);
+  }
+
+  .op-logo--icon_white {
+    background-image: url(<%= logo_icon_white_url %>);
   }
 
   .op-logo--link_high_contrast {

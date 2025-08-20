@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -51,7 +53,7 @@ module OpenProject::TextFormatting::Formats
         resource = context.fetch(:resource, {})
         helpers.angular_component_tag "opce-ckeditor-augmented-textarea",
                                       inputs: {
-                                        textareaSelector: "##{field_id}",
+                                        textAreaId: field_id,
                                         editorType: context[:editor_type] || "full",
                                         previewContext: context[:preview_context],
                                         resource:,

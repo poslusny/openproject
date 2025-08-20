@@ -7,7 +7,7 @@ module.exports = {
   },
   parser: "@typescript-eslint/parser",
   parserOptions: {
-    project: "./src/tsconfig.app.json",
+    project: "./tsconfig.app.json",
     tsconfigRootDir: __dirname,
     sourceType: "module",
     createDefaultProgram: true,
@@ -22,7 +22,7 @@ module.exports = {
       files: ["*.ts"],
       parser: "@typescript-eslint/parser",
       parserOptions: {
-        project: "./src/tsconfig.app.json",
+        project: "./tsconfig.app.json",
         tsconfigRootDir: __dirname,
         sourceType: "module",
         createDefaultProgram: true,
@@ -50,6 +50,8 @@ module.exports = {
           {"type": "element", "prefix": ["op", "opce"], "style": "kebab-case"},
         ],
         "@angular-eslint/component-class-suffix": ["error", {"suffixes": ["Component", "Example"]}],
+
+        "@angular-eslint/prefer-standalone": "off",
 
         // Warn when new components are being created without OnPush
         "change-detection-strategy/on-push": "error",

@@ -69,9 +69,8 @@ OpenProject recommends these authentication mechanisms:
 
 **References**
 
-https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html
-
-https://guides.rubyonrails.org/security.html
+- https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html
+- https://guides.rubyonrails.org/security.html
 
 ### Session Management
 
@@ -109,7 +108,7 @@ As OpenProject is a web application, the web session is the central mechanism of
 
 **References**
 
-https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html
+- https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html
 
 ## Authorization and Access Control
 
@@ -131,9 +130,8 @@ At its core, permissions in OpenProject are the central key to determine who can
 
 **References**
 
-https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html
-
-https://guides.rubyonrails.org/security.html
+- https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html
+- https://guides.rubyonrails.org/security.html
 
 ## User Input Validation
 
@@ -158,13 +156,10 @@ OpenProject is a form-driven application, meaning that users input a lot of data
 
 **References**
 
-https://guides.rubyonrails.org/security.html#injection
-
-https://owasp.org/www-community/Types_of_Cross-Site_Scripting#stored-xss-aka-persistent-or-type-i
-
-https://cheatsheetseries.owasp.org/cheatsheets/Injection_Prevention_Cheat_Sheet.html
-
-https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html
+- https://guides.rubyonrails.org/security.html#injection
+- https://owasp.org/www-community/Types_of_Cross-Site_Scripting#stored-xss-aka-persistent-or-type-i
+- https://cheatsheetseries.owasp.org/cheatsheets/Injection_Prevention_Cheat_Sheet.html
+- https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html
 
 ## Virus and Malware protection
 
@@ -214,9 +209,8 @@ Inconsiderate use of error handling, logging, and monitoring mechanisms of a web
 
 **References**
 
-https://cheatsheetseries.owasp.org/cheatsheets/Error_Handling_Cheat_Sheet.html
-
-https://cheatsheetseries.owasp.org/cheatsheets/Logging_Cheat_Sheet.html
+- https://cheatsheetseries.owasp.org/cheatsheets/Error_Handling_Cheat_Sheet.html
+- https://cheatsheetseries.owasp.org/cheatsheets/Logging_Cheat_Sheet.html
 
 ## External dependencies
 
@@ -243,7 +237,7 @@ OpenProject includes a number of external dependencies both in Ruby as well as i
 
 **References**
 
-https://cheatsheetseries.owasp.org/cheatsheets/Vulnerable_Dependency_Management_Cheat_Sheet.html
+- https://cheatsheetseries.owasp.org/cheatsheets/Vulnerable_Dependency_Management_Cheat_Sheet.html
 
 ## Packaging and containerization
 

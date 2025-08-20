@@ -42,12 +42,11 @@ See COPYRIGHT and LICENSE files for more details.
     render(Primer::OpenProject::SubHeader.new) do |subheader|
       subheader.with_action_button(
         scheme: :primary,
-        aria: { label: t(:label_document_new) },
-        title: t(:label_document_new),
+        leading_icon: :plus,
+        label: I18n.t(:label_document_new),
         tag: :a,
         href: url_for({ controller: "/documents", action: "new", project_id: @project })
-      ) do |button|
-        button.with_leading_visual_icon(icon: :plus)
+      ) do
         t("activerecord.models.document")
       end
     end
@@ -59,7 +58,7 @@ See COPYRIGHT and LICENSE files for more details.
 <% end %>
 
 <% @grouped.keys.sort.each do |group| %>
-  <%= augmented_collapsible_section title: group do %>
+  <%= augmented_collapsible_section(title: group.to_s) do %>
     <div class="document-category--inner-section">
       <div class="form--field document-category-elements">
         <%= render partial: "documents/document", collection: @grouped[group] %>

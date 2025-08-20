@@ -67,6 +67,20 @@ div.autocomplete
     .ng-select-container
       border-color: var(--content-form-error-color)
 
+  &.ng-select-disabled
+    .ng-select-container,
+    .ng-select-container .ng-value-container input
+      background-color: var(--control-bgColor-disabled) !important
+      border-color: var(--control-borderColor-disabled) !important
+      box-shadow: none !important
+      color: var(--control-fgColor-disabled) !important
+      cursor: not-allowed !important
+      opacity: 1
+      -webkit-text-fill-color: var(--control-fgColor-disabled)
+
+    &.ng-select-searchable .ng-select-container .ng-value-container .ng-input
+      opacity: 0
+
   .ng-value-container
     min-height: 2rem
     width: calc(100% - 30px)

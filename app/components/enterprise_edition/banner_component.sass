@@ -28,41 +28,111 @@
  / ++
  /
 
-$op-ee-banner--shield-width: 32px
+$op-enterprise-banner-fixed-height-medium: 220px
+$op-enterprise-banner-fixed-height-large: 320px
 
-// This is not named op-enterprise-banner because as of now, there is still a legacy angular component that uses that block name.
-.op-ee-banner
+.op-enterprise-banner-container
+  container-name: banner
+  container-type: inline-size
+
+// Hide the medium banner image when the container is smaller than 1000px
+@container banner (max-width: 1000px)
+  .op-enterprise-banner.op-enterprise-banner_medium
+    grid-template-columns: 1fr
+    height: auto
+
+  .op-enterprise-banner--image
+    background-image: none !important
+
+@container banner (max-width: 1300px)
+  .op-enterprise-banner .op-enterprise-banner--image
+    background-size: cover
+
+.op-enterprise-banner
   display: grid
-  grid-template-columns: $op-ee-banner--shield-width auto auto
-  grid-template-areas: "icon-container title-container" "icon-container description-container" "icon-container link-container"
-  grid-column-gap: 0.5rem
-  justify-content: left
-  @media screen and (min-width: $breakpoint-md)
-    grid-template-areas: "icon-container title-container title-container" "icon-container description-container link-container"
+  grid-auto-flow: column
+  grid-template-areas: "visual content dismiss"
+  grid-template-columns: min-content 1fr min-content
+  grid-template-rows: min-content
+  border: var(--borderWidth-thin) solid var(--borderColor-severe-muted)
+  border-radius: var(--borderRadius-medium)
+  background: var(--body-background)
+  padding: var(--base-size-8)
+  overflow: hidden
 
-  &--icon-container
-    @extend .upsale-colored
-    align-self: start
-    justify-self: center
+  &_medium
+    position: relative
+    padding: 0
+    grid-template-areas: "content graphic"
+    grid-template-columns: 2fr 1fr
+    height: $op-enterprise-banner-fixed-height-medium
 
-  &--shield
-    @extend .upsale-border-colored
-    width: $op-ee-banner--shield-width
-    height: 42px
-    border-width: 10px 5px 10px 5px
-    border-radius: 0 0 10px 10px
-    border-style: solid
+  &_medium &
+    padding: 0
+    grid-template-areas: "content graphic"
+    grid-template-columns: 1fr 1fr
+
+    &--content
+      height: $op-enterprise-banner-fixed-height-medium
+      z-index: 1
+      align-self: center
+      padding: var(--base-size-16)
+
+  &_large
+    position: relative
+    padding: 0
     display: flex
-    align-items: center
     justify-content: center
+    grid-template-areas: "content"
+    grid-template-columns: 100%
+
+  &_large &
+    &--title-wrapper
+      justify-content: center
+
+    &--description
+      text-align: center
+
+  &--image
+    @include upsell-image
+
+  &--video-control
+    display: block
+    margin: 0 auto
+    max-width: 50vw
+    object-fit: contain
+    box-shadow: var(--shadow-floating-small)
+    border-radius: 25px
+    border: 1px solid var(--borderColor-default)
+
+    @media screen and (max-width: $breakpoint-md)
+      max-width: unset
+      width: 100%
+      border-radius: 15px
+
+  &--visual
+    display: grid
+    align-self: start
+    padding: var(--base-size-6) var(--base-size-8)
 
   &--icon
-    width: $op-ee-banner--shield-width
-    height: $op-ee-banner--shield-width
+    color: var(--enterprise-upsell-color)
+    margin-block: var(--base-size-2)
 
-  &--title-container
-    @extend .upsale-colored
-    font-weight: bold
+  &--close-icon
+    .Button-visual
+    color: var(--enterprise-upsell-color)
 
-  &--link-container
-    align-self: end
+    &_hovering
+      position: absolute
+      top: var(--base-size-24)
+      right: var(--base-size-24)
+
+  &--description
+    flex-grow: 1
+
+  &--content
+    padding: var(--base-size-6) var(--base-size-8)
+
+  &--dismiss
+    margin-left: var(--controlStack-medium-gap-condensed)

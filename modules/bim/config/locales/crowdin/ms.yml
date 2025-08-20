@@ -135,7 +135,7 @@ ms:
       upload_successful: 'Muat naik berjaya. Akan diproses dan sedia untuk digunakan dalam masa beberapa minit.'
     conversion:
       missing_commands: "Arahan converter IFC berikut tidak dijumpai dari sistem ini: %{names}"
-  project_module_ifc_models: "Model IFC"
+  project_module_ifc_models: "Model-model IFC"
   permission_view_ifc_models: "Paparkan model IFC"
   permission_manage_ifc_models: "Import dan urus model IFC"
   extraction:

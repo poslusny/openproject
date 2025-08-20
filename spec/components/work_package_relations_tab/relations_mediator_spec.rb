@@ -40,17 +40,21 @@ RSpec.describe WorkPackageRelationsTab::RelationsMediator do
   subject(:mediator) { described_class.new(work_package:) }
 
   context "with a work package having multiple kind of relations" do
-    let_work_packages(<<~TABLE)
+    shared_let_work_packages(<<~TABLE)
       hierarchy         | predecessors | relates to
       predecessor       |              |
       related 1         |              |
       related 2         |              | work package
       successor         | work package |
-      work package      | predecessor  | related 1
-        child           |              |
+      parent            |              |
+        work package    | predecessor  | related 1
+          child         |              |
     TABLE
 
     it "returns all relations of the work package" do
+      expect(mediator.relation_group(Relation::TYPE_PARENT).all_relation_items).to contain_exactly(
+        have_attributes(class: described_class::RelationItem, type: Relation::TYPE_PARENT, related: parent, visibility: :visible)
+      )
       expect(mediator.relation_group(Relation::TYPE_CHILD).all_relation_items).to contain_exactly(
         have_attributes(class: described_class::RelationItem, type: Relation::TYPE_CHILD, related: child, visibility: :visible)
       )
@@ -68,6 +72,55 @@ RSpec.describe WorkPackageRelationsTab::RelationsMediator do
         have_attributes(class: described_class::RelationItem, type: Relation::TYPE_RELATES, related: related2,
                         visibility: :visible)
       )
+    end
+
+    describe "#all_relations_count" do
+      it "returns the total number of relations" do
+        expect(mediator.all_relations_count).to eq 6
+      end
+    end
+
+    context "when the related work packages are not visible by the user " \
+            "because they are in a project the user does not have access to" do
+      let(:other_project) { create(:project) }
+      let(:user) { create(:user, member_with_permissions: { other_project => %i[view_work_packages] }) }
+
+      current_user { user }
+
+      before do
+        work_package.project = other_project
+        work_package.save!
+      end
+
+      it "returns all relations of the work package as ghost relations (not visible)" do
+        expect(mediator.relation_group(Relation::TYPE_PARENT).all_relation_items).to contain_exactly(
+          have_attributes(class: described_class::RelationItem, type: Relation::TYPE_PARENT, related: parent,
+                          visibility: :ghost)
+        )
+        expect(mediator.relation_group(Relation::TYPE_CHILD).all_relation_items).to contain_exactly(
+          have_attributes(class: described_class::RelationItem, type: Relation::TYPE_CHILD, related: child, visibility: :ghost)
+        )
+        expect(mediator.relation_group(Relation::TYPE_PRECEDES).all_relation_items).to contain_exactly(
+          have_attributes(class: described_class::RelationItem, type: Relation::TYPE_PRECEDES, related: successor,
+                          visibility: :ghost)
+        )
+        expect(mediator.relation_group(Relation::TYPE_FOLLOWS).all_relation_items).to contain_exactly(
+          have_attributes(class: described_class::RelationItem, type: Relation::TYPE_FOLLOWS, related: predecessor,
+                          visibility: :ghost)
+        )
+        expect(mediator.relation_group(Relation::TYPE_RELATES).all_relation_items).to contain_exactly(
+          have_attributes(class: described_class::RelationItem, type: Relation::TYPE_RELATES, related: related1,
+                          visibility: :ghost),
+          have_attributes(class: described_class::RelationItem, type: Relation::TYPE_RELATES, related: related2,
+                          visibility: :ghost)
+        )
+      end
+
+      describe "#all_relations_count" do
+        it "returns the total number of relations" do
+          expect(mediator.all_relations_count).to eq 6
+        end
+      end
     end
   end
 

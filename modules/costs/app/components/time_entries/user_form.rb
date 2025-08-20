@@ -30,6 +30,8 @@
 
 module TimeEntries
   class UserForm < ApplicationForm
+    include Redmine::I18n
+
     def initialize(visible: true)
       super()
       @visible = visible
@@ -43,6 +45,7 @@ module TimeEntries
           name: :user_id,
           id: "time_entry_user_id",
           label: TimeEntry.human_attribute_name(:user),
+          caption: caption,
           required: true,
           autocomplete_options: {
             defaultData: true,
@@ -83,6 +86,14 @@ module TimeEntries
       end
 
       filters
+    end
+
+    def caption
+      if model.user.time_zone == User.current.time_zone
+        nil
+      else
+        I18n.t("notice_different_time_zones", tz: friendly_timezone_name(model.user.time_zone))
+      end
     end
   end
 end

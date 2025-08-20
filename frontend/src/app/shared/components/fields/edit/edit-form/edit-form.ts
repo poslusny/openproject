@@ -42,6 +42,7 @@ import { HalResourceNotificationService } from 'core-app/features/hal/services/h
 import { ErrorResource } from 'core-app/features/hal/resources/error-resource';
 import isNewResource from 'core-app/features/hal/helpers/is-new-resource';
 import { HalError } from 'core-app/features/hal/services/hal-error';
+import { FormResource } from 'core-app/features/hal/resources/form-resource';
 
 export const activeFieldContainerClassName = 'inline-edit--active-field';
 export const activeFieldClassName = 'inline-edit--field';
@@ -145,14 +146,18 @@ export abstract class EditForm<T extends HalResource = HalResource> {
   /**
    * Activate all fields that are returned in validation errors
    */
-  public activateMissingFields() {
-    this.change.getForm().then((form:any) => {
-      _.each(form.validationErrors, (val:any, key:string) => {
+  public async activateMissingFields():Promise<unknown[]> {
+    return this.change.getForm().then((form:FormResource) => {
+      const activateFields:Promise<unknown>[] = [];
+
+      _.each(form.validationErrors, (_:ErrorResource, key:string) => {
         if (key === 'id') {
           return;
         }
-        this.activateWhenNeeded(key);
+        activateFields.push(this.activateWhenNeeded(key));
       });
+
+      return Promise.all(activateFields);
     });
   }
 

@@ -59,12 +59,13 @@ tr:
       plural: SAML kimlik sağlayıcıları
       singular: SAML kimlik sağlayıcısı
       requested_attributes: Talep edilen nitelikler
-      attribute_mapping: Nitelik ilişkilendirme
+      attribute_mapping: Öznitelik eşlemesi
       attribute_mapping_text: >
         The following fields control which attributes provided by the SAML identity provider are used to provide user attributes in OpenProject
       metadata:
         dialog: "This is the URL where the OpenProject SAML metadata is available. Optionally use it to configure your identity provider:"
-      upsale:
+      upsell:
+        title: "Single Sign-On (SSO) with SAML"
         description: OpenProject'i bir SAML kimlik sağlayıcısına bağlama
       request_attributes:
         title: 'Talep edilen nitelikler'
@@ -74,7 +75,7 @@ tr:
         format: 'Attribute format'
       section_headers:
         configuration: "Birincil yapılandırma"
-        attributes: "Öznitelikler"
+        attributes: "Özellikler"
       section_texts:
         display_name: "SAML sağlayıcısının görünen adını değiştir."
         metadata: "Pre-fill configuration using a metadata URL or by pasting metadata XML"

@@ -21,7 +21,7 @@ Baseline comparison can be enabled on any work package table view:
 
 1. Click on the **Baseline** button in the main toolbar.
 
-2. Pick a comparison point by choosing one of the a preset options or inputting specific dates and times.
+2. Pick a comparison point by choosing one of the preset options or inputting specific dates and times.
 
 3. Click on **Apply** to enable Baseline.
 

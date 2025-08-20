@@ -37,7 +37,7 @@ class CustomFields::Inputs::MultiSelectList < CustomFields::Inputs::Base::Autoco
       **input_attributes,
       scope_name_to_model: false,
       name: "#{@object.model_name.element}[custom_field_values][#{input_attributes[:name]}][]",
-      value:
+      value: nil
     )
 
     custom_value_form.autocompleter(**input_attributes) do |list|
@@ -64,7 +64,7 @@ class CustomFields::Inputs::MultiSelectList < CustomFields::Inputs::Base::Autoco
         {
           label: item.ancestry_path,
           value: item.id,
-          selected: @custom_values.pluck(:value).map(&:to_i).include?(item.id)
+          selected: custom_values.pluck(:value).map(&:to_i).include?(item.id)
         }
       end
     else
@@ -85,8 +85,8 @@ class CustomFields::Inputs::MultiSelectList < CustomFields::Inputs::Base::Autoco
   end
 
   def selected?(custom_option)
-    if @custom_values.any?
-      @custom_values.pluck(:value).map { |value| value&.to_i }.include?(custom_option.id)
+    if custom_values.any?
+      custom_values.pluck(:value).map { |value| value&.to_i }.include?(custom_option.id)
     else
       custom_option.default_value?
     end

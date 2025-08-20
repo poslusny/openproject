@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -54,6 +56,11 @@ module CustomStylesHelper
     # Apply custom styles either if EE allows OR we are on a BIM edition with the BIM theme active.
     CustomStyle.current.present? &&
       (EnterpriseToken.allows_to?(:define_custom_style) || skip_ee_check)
+  end
+
+  def custom_logo?
+    CustomStyle.current.present? &&
+      (CustomStyle.current.logo.present? || CustomStyle.current.theme_logo.present?)
   end
 
   # The default favicon and touch icons are both the same for normal OP and BIM.

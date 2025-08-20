@@ -30,7 +30,6 @@
 
 class Admin::CustomFields::CustomFieldProjectsController < ApplicationController
   include OpTurbo::ComponentStream
-  include OpTurbo::DialogStreamHelper
   include FlashMessagesOutputSafetyHelper
 
   layout "admin"
@@ -87,12 +86,6 @@ class Admin::CustomFields::CustomFieldProjectsController < ApplicationController
     end
 
     respond_to_with_turbo_streams(status: delete_service.success? ? :ok : :unprocessable_entity)
-  end
-
-  def default_breadcrumb; end
-
-  def show_local_breadcrumb
-    false
   end
 
   private

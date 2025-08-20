@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -74,12 +76,6 @@ class Admin::BackupsController < ApplicationController
     flash[:info] = t("backup.text_token_deleted")
 
     redirect_to action: "show"
-  end
-
-  def default_breadcrumb; end
-
-  def show_local_breadcrumb
-    false
   end
 
   def check_enabled

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -33,6 +35,7 @@ module WorkPackages
         include ApplicationHelper
         include OpPrimer::ComponentHelpers
         include OpTurbo::Streamable
+        include WorkPackages::ActivitiesTab::StimulusControllers
 
         def initialize(journal:, filter:)
           super
@@ -48,6 +51,12 @@ module WorkPackages
 
         def wrapper_uniq_by
           journal.id
+        end
+
+        def wrapper_data_attributes
+          {
+            internal_comment_stimulus_controller("-is-internal-value") => journal.internal?
+          }
         end
       end
     end

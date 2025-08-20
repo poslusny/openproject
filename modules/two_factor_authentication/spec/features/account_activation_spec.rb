@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative "../spec_helper"
 require_relative "shared_two_factor_examples"
 
@@ -55,7 +57,7 @@ RSpec.describe "activating an invited account",
       expect_flash(message: "Developer strategy generated the following one-time password:")
 
       fill_in I18n.t(:field_otp), with: sms_token
-      click_button I18n.t(:button_login)
+      click_button I18n.t(:button_login), type: "submit"
       wait_for_network_idle
 
       visit my_account_path
@@ -68,7 +70,7 @@ RSpec.describe "activating an invited account",
       expect_flash(message: "Developer strategy generated the following one-time password:")
 
       fill_in I18n.t(:field_otp), with: "asdf" # faulty token
-      click_button I18n.t(:button_login)
+      click_button I18n.t(:button_login), type: "submit"
 
       expect(page).to have_current_path signin_path
       expect(page).to have_content(I18n.t(:notice_account_otp_invalid))

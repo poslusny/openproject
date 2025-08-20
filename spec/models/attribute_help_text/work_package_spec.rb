@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -192,6 +194,14 @@ RSpec.describe AttributeHelpText::WorkPackage do
         expect(subject.errors[:attribute_name].first)
           .to eql(I18n.t("activerecord.errors.messages.inclusion"))
       end
+    end
+  end
+
+  describe "normalization" do
+    it "normalizes attribute_name" do
+      expect(subject).to normalize(:attribute_name).from("category_id").to("category")
+      expect(subject).to normalize(:attribute_name).from("status_id").to("status")
+      expect(subject).to normalize(:attribute_name).from("author_id").to("author")
     end
   end
 

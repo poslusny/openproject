@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -47,21 +49,12 @@ RSpec.describe CustomStylesController do
 
       context "when no active token exists" do
         before do
-          allow(EnterpriseToken).to receive(:current).and_return(nil)
+          allow(EnterpriseToken).to receive(:active_tokens).and_return([])
         end
 
-        it "redirects to #upsale" do
-          expect(subject).to redirect_to action: :upsale
+        it "renders show" do
+          expect(subject).to redirect_to action: :show, tab: "interface"
         end
-      end
-    end
-
-    describe "#upsale" do
-      subject { get :upsale }
-
-      it "renders upsale" do
-        expect(subject).to be_successful
-        expect(subject).to render_template "upsale"
       end
     end
 
@@ -96,6 +89,24 @@ RSpec.describe CustomStylesController do
           expect(response).to have_http_status(:unprocessable_entity)
           expect(response).to render_template "custom_styles/show"
         end
+      end
+    end
+
+    describe "#create", with_ee: false do
+      let(:custom_style) { CustomStyle.new }
+      let(:params) do
+        {
+          custom_style: { logo: "foo", favicon: "bar", icon_touch: "yay" }
+        }
+      end
+
+      before do
+        post :create, params:
+      end
+
+      it "renders a 403" do
+        expect(response).to have_http_status(:forbidden)
+        expect(flash[:error][:message]).to match /You need the basic enterprise plan to perform this action/
       end
     end
 

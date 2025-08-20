@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # -- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -51,7 +53,7 @@ module WorkPackages
 
     def query_path(query_params)
       if query_params[:show_enterprise_icon].present?
-        return ee_upsale_path(query_params)
+        return ee_upsell_path(query_params)
       end
 
       if project.present?
@@ -76,8 +78,8 @@ module WorkPackages
         params[:on_work_package_path] == "true"
     end
 
-    def ee_upsale_path(query_params)
-      share_upsale_work_packages_path({ name: query_params[:name] })
+    def ee_upsell_path(query_params)
+      share_upsell_work_packages_path({ name: query_params[:name] })
     end
 
     def check_for_redirected_urls(query_params)

@@ -2,24 +2,15 @@
 
 .op-baseline
   &--header
-    display: flex
-    justify-content: space-between
-    align-items: flex-start
-    flex-direction: column
     width: 280px
     margin: $spot-spacing-1 $spot-spacing-1 0 $spot-spacing-1
     color: var(--fgColor-muted)
 
+    &_banner-active
+      width: 450px
+
     &:has(+ .op-baseline--body_ranged)
       width: auto
-
-  &--enterprise-title
-    color: $spot-color-feedback-warning-dark
-    @include spot-body-small (bold)
-    display: flex
-    flex-direction: row
-    align-items: center
-    gap: $spot-spacing-1 $spot-spacing-0_25
 
   &--info-button
     display: flex
@@ -32,7 +23,6 @@
     margin-top: 0 !important
 
     @media screen and #{$spot-mq-drop-modal-in-context}
-      width: 316px
       max-height: 70vh
 
     &_ranged

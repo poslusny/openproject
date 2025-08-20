@@ -13,6 +13,7 @@ import { UntilDestroyedMixin } from 'core-app/shared/helpers/angular/until-destr
   selector: 'opce-spot-drop-modal-portal',
   template: '<ng-container *ngTemplateOutlet="template"></ng-container>',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class SpotDropModalPortalComponent extends UntilDestroyedMixin implements OnInit {
   @HostBinding('class.spot-drop-modal-portal') className = true;

@@ -31,7 +31,7 @@
             Primer::Beta::Link.new(
               href: work_package_path(@meeting_agenda_item.work_package), underline: false,
               test_selector: "op-meeting-agenda-title",
-              font_size: :normal, font_weight: :bold, target: "_blank"
+              font_size: :normal, font_weight: :bold
             )
           ) do
             @meeting_agenda_item.work_package.subject
@@ -56,34 +56,42 @@
       end
 
       grid.with_area(:actions, tag: :div, justify_self: :end, classes: "hide-when-print") do
-        if edit_enabled?
-          render(Primer::Alpha::ActionMenu.new) do |menu|
-            menu.with_show_button(
-              icon: "kebab-horizontal",
-              "aria-label": I18n.t(:label_agenda_item_actions),
-              scheme: :invisible,
-              ml: 2,
-              test_selector: "op-meeting-agenda-actions"
-            )
-            edit_action_item(menu) if @meeting_agenda_item.editable?
-            add_note_action_item(menu) if @meeting_agenda_item.editable? && @meeting_agenda_item.notes.blank?
-            menu.with_divider if add_outcome_action?
-            add_outcome_action_item(menu) if add_outcome_action?
-            unless first? && last?
-              menu.with_divider
-              move_actions(menu)
-            end
-            
-            if move_to_next_meeting_enabled?
-              menu.with_divider
-              move_to_next_meeting_action_item(menu)
-            end
-            
-            menu.with_divider
+        render(Primer::Alpha::ActionMenu.new) do |menu|
+          menu.with_show_button(
+            icon: "kebab-horizontal",
+            "aria-label": I18n.t(:label_agenda_item_actions),
+            scheme: :invisible,
+            ml: 2,
+            test_selector: "op-meeting-agenda-actions"
+          )
+
+          edit_action_item(menu)
+          if !in_backlog?
             copy_action_item(menu)
-            menu.with_divider
-            delete_action_item(menu)
           end
+
+          menu.with_divider if note_or_outcome_action_added? && editable?
+
+          add_note_action_item(menu) if add_note_action?
+          add_outcome_action_item(menu) if add_outcome_action?
+
+          unless first? && last?
+            menu.with_divider if editable?
+            move_actions(menu)
+          end
+
+          menu.with_divider if move_to_different_section_or_meeting_action_added?
+
+          if !in_template? || in_backlog?
+            move_to_current_meeting_action_item(menu) if in_backlog?
+            move_to_backlog_action_item(menu) if !in_backlog?
+          end
+          if move_to_next_meeting_enabled?
+            move_to_next_meeting_action_item(menu)
+          end
+
+          menu.with_divider if editable?
+          delete_action_item(menu)
         end
       end
 

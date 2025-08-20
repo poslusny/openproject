@@ -1,5 +1,6 @@
-.op-header-project-select
-  max-width: 100%
+.op-project-select
+  flex: 1
+  overflow: hidden
 
   &--no-favorites
     display: flex
@@ -15,5 +16,18 @@
     font-size: 0.9rem
     color: var(--fgColor-muted, var(--color-fg-subtle))
 
-  .op-app-menu--item-action
-    padding: 0 8px
+  &--trigger-button
+    display: flex
+    align-items: center
+    height: var(--control-medium-size)
+    color: var(--main-menu-font-color)
+    font-weight: var(--base-text-weight-semibold)
+    padding: 0 var(--main-menu-x-spacing)
+    border: 1px solid transparent
+    border-radius: var(--borderRadius-medium)
+    background-color: transparent
+    width: 100%
+
+    .button--dropdown-indicator
+      &:before
+        margin-left: var(--base-size-8)

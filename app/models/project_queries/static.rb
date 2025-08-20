@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # -- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -27,13 +29,13 @@
 # ++
 
 class ProjectQueries::Static
-  ACTIVE = "active".freeze
-  MY = "my".freeze
-  FAVORED = "favored".freeze
-  ARCHIVED = "archived".freeze
-  ON_TRACK = "on_track".freeze
-  OFF_TRACK = "off_track".freeze
-  AT_RISK = "at_risk".freeze
+  ACTIVE = "active"
+  MY = "my"
+  FAVORED = "favored"
+  ARCHIVED = "archived"
+  ON_TRACK = "on_track"
+  OFF_TRACK = "off_track"
+  AT_RISK = "at_risk"
 
   DEFAULT = ACTIVE
 

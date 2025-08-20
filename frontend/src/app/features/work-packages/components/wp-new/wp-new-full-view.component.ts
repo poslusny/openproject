@@ -34,7 +34,29 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   host: { class: 'work-packages-page--ui-view' },
   templateUrl: './wp-new-full-view.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class WorkPackageNewFullViewComponent extends WorkPackageCreateComponent {
   public successState = this.$state.current.data.successState as string;
+
+  breadcrumbItems() {
+    const items = [];
+    items.push({
+      href: this.pathHelper.homePath(),
+      text: this.titleService.appTitle,
+    });
+    if (this.currentProjectService?.identifier) {
+      items.push({
+        href: this.pathHelper.projectPath(this.currentProjectService.identifier),
+        text: this.currentProjectService.name,
+      });
+    }
+    items.push({
+      href: this.pathHelper.workPackagesPath(this.currentProjectService.identifier as string),
+      text: this.I18n.t('js.label_work_package_plural'),
+    });
+    items.push(I18n.t('js.label_create_work_package'));
+
+    return items;
+  }
 }

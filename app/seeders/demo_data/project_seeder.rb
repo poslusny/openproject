@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 
 # OpenProject is an open source project management software.
@@ -33,7 +35,8 @@ module DemoData
 
     self.needs = WorkPackageSeeder.needs + [
       BasicData::ProjectRoleSeeder,
-      BasicData::GlobalRoleSeeder
+      BasicData::GlobalRoleSeeder,
+      BasicData::ProjectPhaseDefinitionSeeder
     ]
 
     def seed_data!
@@ -52,12 +55,17 @@ module DemoData
     # override to add additional seeders
     def project_content_seeder_classes
       [
+        DemoData::ProjectPhaseSeeder,
         DemoData::WikiSeeder,
         DemoData::WorkPackageSeeder,
         DemoData::WorkPackageBoardSeeder,
         ::Meetings::DemoData::MeetingSeriesSeeder,
         ::Meetings::DemoData::MeetingAgendaItemsSeeder
       ]
+    end
+
+    def all_required_references
+      [:default_role_project_admin] + types_seed_data
     end
 
     private
@@ -94,7 +102,7 @@ module DemoData
     def set_types
       print_status "   -Assigning types."
 
-      project.types = seed_data.find_references(project_data.lookup("types"))
+      project.types = seed_data.find_references(types_seed_data)
     end
 
     def seed_categories
@@ -140,6 +148,10 @@ module DemoData
         seeder = seeder_class.new(project, project_data)
         seeder.seed!
       end
+    end
+
+    def types_seed_data
+      seed_data.lookup("types") || []
     end
 
     def project_attributes

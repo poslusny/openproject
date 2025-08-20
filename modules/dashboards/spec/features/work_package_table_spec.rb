@@ -30,7 +30,7 @@ require "spec_helper"
 
 require_relative "../support/pages/dashboard"
 
-RSpec.describe "Arbitrary WorkPackage query table widget dashboard", :js, :selenium do
+RSpec.describe "Arbitrary WorkPackage query table widget dashboard", :js do
   let!(:type) { create(:type) }
   let!(:other_type) { create(:type) }
   let!(:priority) { create(:default_priority) }
@@ -96,11 +96,20 @@ RSpec.describe "Arbitrary WorkPackage query table widget dashboard", :js, :selen
     it "can add the widget and see the work packages of the filtered for types" do
       # This one always exists by default.
       # Using it here as a safeguard to govern speed.
+      dashboard_page.expect_and_dismiss_toaster(message: "Successful update.")
+
       wp_area = Components::Grids::GridArea.new(".grid--area.-widgeted:nth-of-type(1)")
       expect(wp_area)
         .to have_css(".subject", text: type_work_package.subject)
 
       dashboard_page.add_widget(1, 1, :row, "Work packages table")
+
+      # Actually there are two success messages displayed currently. One for the grid getting updated and one
+      # for the query assigned to the new widget being created. A user will not notice it but the automated
+      # browser can get confused. Therefore we wait.
+      sleep(1)
+
+      dashboard_page.expect_and_dismiss_toaster(message: "Successful update.")
 
       filter_area = Components::Grids::GridArea.new(".grid--area.-widgeted:nth-of-type(2)")
 

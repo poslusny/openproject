@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -109,8 +111,8 @@ RSpec.describe "Invite user modal", :js do
     before do
       wp_page.visit!
 
-      find(".op-app-menu--item-action.op-quick-add-menu--button").click
-      find(".invite-user-menu-item.op-menu--item-action", text: "Invite user", wait: 5).click
+      page.find_test_selector("quick-add-menu-button").click
+      page.find_test_selector("quick-add-menu-item", text: "Invite user", wait: 5).click
     end
 
     it "does show you all users email address" do

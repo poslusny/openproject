@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Toasts
   module Expectations
     def expect_toast(message:, type: :success, wait: 20)

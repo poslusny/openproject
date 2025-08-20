@@ -27,7 +27,7 @@ Additionally you can:
 It is also possible to automatically create dedicated [project folders](../../projects/project-settings/files/#project-folders), which makes documentation structure clearer and makes navigation more intuitive.
 
 > [!NOTE]
-> To be able to use Nextcloud as a file storage in your project, the administrator of your instance should first have completed the [Nextcloud integration setup](../../../system-admin-guide/integrations/nextcloud). 
+> To be able to use Nextcloud as a file storage in your project, the administrator of your instance should first have completed the [Nextcloud integration setup](../../../system-admin-guide/integrations/nextcloud).
 
 | Topic                                                                                               | Description                                                                               |
 |-----------------------------------------------------------------------------------------------------|:------------------------------------------------------------------------------------------|
@@ -45,6 +45,10 @@ This video will give you a complete overview of how to set-up and work with the 
 ![Nextcloud integration complete user guide and admin guide](https://openproject-docs.s3.eu-central-1.amazonaws.com/videos/OpenProject-NextCloud-integration.mp4)
 
 ## Connect your OpenProject and Nextcloud accounts
+
+> [!NOTE]
+> Certain storage configurations don't require you to explicitly connect your account. If you don't see a login button in the first
+> step, but instead the storage integration seems to be working right away, you don't have to perform any additional configuration.
 
 To begin using this integration, you will need to first connect your OpenProject and Nextcloud accounts. To do this, open any work package in a project where a Nextcloud file storage has been added and enabled by an administrator and follow these steps:
 
@@ -106,16 +110,16 @@ You will then be prompted to select a file (or multiple files) on your computer 
 
 Alternatively, you can also simply drag a file or folder from your computer to the drag zone that will appear under the name of your Nextcloud file storage.
 
-Once you have selected or dropped the files you would like to upload, you will need to select a folder on Nextcloud to which they should be added. 
+Once you have selected or dropped the files you would like to upload, you will need to select a folder on Nextcloud to which they should be added.
 
 > [!TIP]
 > The default project that opens in the location picker is defined by the project administrators in the [File storages settings](../../projects/project-settings/files/).
 
 ![Select the destination folder on Nextcloud](NC_12.5-selectLocationToUploadTo.png)
 
-You can click on folders you see to navigate to them. A helpful breadcrumb shows you where you are in the folder hierarchy. 
+You can click on folders you see to navigate to them. A helpful breadcrumb shows you where you are in the folder hierarchy.
 
-You can also directly create a new folder by clicking the **New folder** button on the left. 
+You can also directly create a new folder by clicking the **New folder** button on the left.
 
 To navigate one level up or to go back to the root, simply click on the relevant parent in the breadcrumb.
 

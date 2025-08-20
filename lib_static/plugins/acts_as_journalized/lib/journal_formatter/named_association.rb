@@ -53,17 +53,15 @@ module JournalFormatter
       klass = class_from_field(key)
 
       values.map do |value|
-        if klass && value
-          record = associated_object(klass, value.to_i, cache:)
-          if record
-            if record.respond_to? :name
-              record.name
-            else
-              record.subject
-            end
-          end
-        end
+        next unless klass && value
+
+        record = associated_object(klass, value.to_i, cache:)
+        associated_object_name(record)
       end
+    end
+
+    def associated_object_name(object)
+      object&.name
     end
 
     def associated_object(klass, id, cache:)

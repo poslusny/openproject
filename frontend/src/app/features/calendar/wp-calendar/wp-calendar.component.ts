@@ -45,7 +45,7 @@ import {
 } from '@fullcalendar/core';
 import { FullCalendarComponent } from '@fullcalendar/angular';
 import dayGridPlugin from '@fullcalendar/daygrid';
-import * as moment from 'moment';
+import moment from 'moment';
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
@@ -102,6 +102,7 @@ import { TimezoneService } from 'core-app/core/datetime/timezone.service';
     OpWorkPackagesCalendarService,
     OpCalendarService,
   ],
+  standalone: false,
 })
 export class WorkPackagesCalendarComponent extends UntilDestroyedMixin implements OnInit {
   @ViewChild(FullCalendarComponent) ucCalendar:FullCalendarComponent;

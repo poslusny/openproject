@@ -26,7 +26,7 @@ pt-PT:
       work_packages:
         tab_name: "GitLab"
       tab_header_issue:
-        title: "Problema"
+        title: "Problemas"
       tab_header_mr:
         title: "Pedidos de fusão"
         create_mr:
@@ -34,7 +34,7 @@ pt-PT:
           description: Crie Pedido de Fusão
         copy_menu:
           label: Fragmentos de código Git
-          description: Copiar pedaços de código git para área de transferência
+          description: Copiar trechos de código git para área de transferência
         git_actions:
           branch_name: Nome do ramo
           commit_message: Mensagem de confirmação

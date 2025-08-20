@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ::TwoFactorAuthentication
   module My
     class TwoFactorDevicesController < ::TwoFactorAuthentication::BaseController
@@ -110,10 +112,6 @@ module ::TwoFactorAuthentication
 
       def index_path
         url_for action: :index
-      end
-
-      def show_local_breadcrumb
-        false
       end
 
       def registration_success_path

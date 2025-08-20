@@ -35,7 +35,7 @@ class MeetingAgendaItem::MeetingForm < ApplicationForm
       name: :meeting_id,
       required: true,
       include_blank: false,
-      label: Meeting.model_name.human,
+      label: I18n.t("label_meeting"),
       caption: I18n.t("label_meeting_selection_caption"),
       autocomplete_options: {
         multiple: false,

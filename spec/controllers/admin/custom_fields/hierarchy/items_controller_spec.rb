@@ -31,7 +31,7 @@
 
 require "spec_helper"
 
-RSpec.describe Admin::CustomFields::Hierarchy::ItemsController do
+RSpec.describe Admin::CustomFields::Hierarchy::ItemsController, with_ee: [:custom_field_hierarchies] do
   let(:user) { create(:admin) }
   let(:custom_field) { create(:custom_field, field_format: "hierarchy", hierarchy_root: nil) }
   let(:service) { CustomFields::Hierarchy::HierarchicalItemService.new }

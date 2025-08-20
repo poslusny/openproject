@@ -18,6 +18,7 @@ import { UrlParamsService } from 'core-app/core/navigation/url-params.service';
   styleUrls: ['./in-app-notification-entry.component.sass'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
+  standalone: false,
 })
 export class InAppNotificationEntryComponent implements OnInit {
   @HostBinding('class.op-ian-item') className = true;

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -92,10 +94,24 @@ RSpec.describe "Favorite projects", :js, :selenium do
         top_menu.expect_result other_project.name
       end
 
+      top_menu.expect_current_mode "All"
       top_menu.switch_mode "Favorites"
+      top_menu.expect_current_mode "Favorites"
 
       top_menu.expect_result project.name
       top_menu.expect_no_result other_project.name
+
+      # It should keep the display mode selection
+      visit home_path
+
+      retry_block do
+        top_menu.toggle unless top_menu.open?
+        top_menu.expect_open
+      end
+
+      top_menu.expect_current_mode "Favorites"
+      top_menu.switch_mode "All"
+      top_menu.expect_current_mode "All"
     end
 
     context "when project is favored" do
@@ -149,6 +165,12 @@ RSpec.describe "Favorite projects", :js, :selenium do
   end
 
   context "as an Anonymous User with not login required", with_settings: { login_required: false } do
+    before do
+      # anonymous user needs to have the permission to view the project or they
+      # will be redirected to login page despite the project being public
+      ProjectRole.anonymous.update permissions: [:view_project]
+    end
+
     it "does not shows favored projects" do
       visit project_path(project)
 

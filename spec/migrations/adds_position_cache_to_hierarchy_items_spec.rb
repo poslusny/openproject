@@ -31,7 +31,7 @@
 require "spec_helper"
 require Rails.root.join("db/migrate/20250102161733_adds_position_cache_to_hierarchy_items.rb")
 
-RSpec.describe AddsPositionCacheToHierarchyItems, type: :model do
+RSpec.describe AddsPositionCacheToHierarchyItems, type: :model, with_ee: [:custom_field_hierarchies] do
   let(:custom_field) { create(:hierarchy_wp_custom_field, hierarchy_root: nil) }
   let(:service) { CustomFields::Hierarchy::HierarchicalItemService.new }
 

@@ -38,6 +38,7 @@ import { populateInputsFromDataset } from 'core-app/shared/components/dataset-in
                              [configuration]="configuration">
     </wp-embedded-table-entry>
   `,
+  standalone: false,
 })
 export class EmbeddedTablesMacroComponent {
   @Input() public queryProps:object;

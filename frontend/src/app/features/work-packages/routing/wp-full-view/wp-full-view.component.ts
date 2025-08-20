@@ -56,6 +56,7 @@ import { Observable, of } from 'rxjs';
     { provide: HalResourceNotificationService, useExisting: WorkPackageNotificationService },
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class WorkPackagesFullViewComponent extends WorkPackageSingleViewBase implements OnInit {
   // Watcher properties

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 require "features/page_objects/notification"
 require "support/components/autocompleter/ng_select_autocomplete_helpers"

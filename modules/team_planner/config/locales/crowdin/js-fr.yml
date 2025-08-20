@@ -3,6 +3,7 @@ fr:
   js:
     team_planner:
       add_existing: 'Ajouter existant'
+      label_team_planner_plural: 'Planificateurs d''équipe'
       add_existing_title: 'Ajouter des lots de travaux existants'
       create_label: 'Planificateur d''équipe'
       create_title: 'Créer un nouveau planificateur d''équipe'

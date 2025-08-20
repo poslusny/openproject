@@ -28,7 +28,8 @@
 
 import { debugLog } from 'core-app/shared/helpers/debug_output';
 import { ErrorReporterBase, ErrorTags, MessageSeverity } from 'core-app/core/errors/error-reporter-base';
-import type { Appsignal, Span } from './appsignal-dependency';
+import type { Appsignal } from './appsignal-dependency';
+import { Span } from '@appsignal/javascript';
 
 export class AppsignalReporter extends ErrorReporterBase {
   private client:Appsignal;

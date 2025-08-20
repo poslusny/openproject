@@ -19,6 +19,7 @@ import { IOPFormlyTemplateOptions } from 'core-app/shared/components/dynamic-for
       multi: true,
     },
   ],
+  standalone: false,
 })
 export class FormattableControlComponent implements ControlValueAccessor, OnInit {
   @Input() templateOptions:IOPFormlyTemplateOptions;

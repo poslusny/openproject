@@ -54,8 +54,16 @@ export class PathHelperService {
     return `${this.staticBase}/attachments/${attachmentIdentifier}/content`;
   }
 
+  public attributeHelpTextsShowDialogPath(id:string|number) {
+    return `${this.staticBase}/attribute_help_texts/${id}/show_dialog`;
+  }
+
   public fileLinksPath():string {
     return `${this.api.v3.apiV3Base}/file_links`;
+  }
+
+  public bannerFramePath(feature:string, dismissable:boolean):string {
+    return `${this.staticBase}/my/banner?feature_key=${feature}&dismissable=${dismissable}`;
   }
 
   public ifcModelsPath(projectIdentifier:string) {
@@ -152,6 +160,21 @@ export class PathHelperService {
     return `${this.projectPath(projectId)}/calendars`;
   }
 
+  public projectTeamplannerPath(projectId:string) {
+    return `${this.projectPath(projectId)}/team_planners`;
+  }
+
+  public ganttChartsPath(projectId:string|null) {
+    if (projectId) {
+      return `${this.projectPath(projectId)}/gantt`;
+    }
+    return `${this.staticBase}/gantt`;
+  }
+
+  public projectBCFPath(projectId:string) {
+    return `${this.projectPath(projectId)}/bcf`;
+  }
+
   public projectMembershipsPath(projectId:string) {
     return `${this.projectPath(projectId)}/members`;
   }
@@ -169,15 +192,18 @@ export class PathHelperService {
   }
 
   public projectWorkPackagePath(projectId:string, wpId:string|number) {
-    return `${this.projectWorkPackagesPath(projectId)}/${wpId}`;
+    return `${this.workPackagesPath(projectId)}/${wpId}`;
   }
 
-  public projectWorkPackagesPath(projectId:string) {
-    return `${this.projectPath(projectId)}/work_packages`;
+  public workPackagesPath(projectId:string|null) {
+    if (projectId) {
+      return `${this.projectPath(projectId)}/work_packages`;
+    }
+    return `${this.staticBase}/work_packages`;
   }
 
   public projectWorkPackageNewPath(projectId:string) {
-    return `${this.projectWorkPackagesPath(projectId)}/new`;
+    return `${this.workPackagesPath(projectId)}/new`;
   }
 
   public boardsPath(projectIdentifier:string|null) {
@@ -252,10 +278,6 @@ export class PathHelperService {
     return `${this.staticBase}/versions/${id}`;
   }
 
-  public workPackagesPath() {
-    return `${this.staticBase}/work_packages`;
-  }
-
   public workPackagePath(id:string|number) {
     return `${this.staticBase}/work_packages/${id}`;
   }
@@ -273,7 +295,7 @@ export class PathHelperService {
       return `${this.projectWorkPackagePath(projectIdentifier, workPackageId)}/details/${tab}`;
     }
 
-    return `${this.projectWorkPackagesPath(projectIdentifier)}/details/${workPackageId}`;
+    return `${this.workPackagesPath(projectIdentifier)}/details/${workPackageId}`;
   }
 
   public workPackageDetailsCopyPath(projectIdentifier:string, workPackageId:string|number) {
@@ -294,7 +316,7 @@ export class PathHelperService {
 
   public workPackageProgressModalPath(workPackageId:string|number) {
     if (workPackageId === 'new') {
-      return `${this.workPackagePath(workPackageId)}/progress/new`;
+      return `${this.workPackagesPath(null)}/progress/new`;
     }
 
     return `${this.workPackagePath(workPackageId)}/progress/edit`;
@@ -310,28 +332,28 @@ export class PathHelperService {
 
   public workPackageDatepickerDialogContentPath(workPackageId:string|number):string {
     if (workPackageId === 'new') {
-      return `${this.workPackagePath(workPackageId)}/datepicker_dialog_content/new`;
+      return `${this.workPackagesPath(null)}/date_picker/new`;
     }
 
-    return `${this.workPackagePath(workPackageId)}/datepicker_dialog_content`;
+    return `${this.workPackagePath(workPackageId)}/date_picker`;
   }
 
   // Work Package Bulk paths
 
   public workPackagesBulkEditPath() {
-    return `${this.workPackagesPath()}/bulk/edit`;
+    return `${this.workPackagesPath(null)}/bulk/edit`;
   }
 
   public workPackagesBulkMovePath() {
-    return `${this.workPackagesPath()}/move/new`;
+    return `${this.workPackagesPath(null)}/move/new`;
   }
 
-  public workPackagesBulkCopyPath() {
+  public workPackagesBulkDuplicatePath() {
     return `${this.workPackagesBulkMovePath()}?copy=true`;
   }
 
   public workPackagesBulkDeletePath() {
-    return `${this.workPackagesPath()}/bulk`;
+    return `${this.workPackagesPath(null)}/bulk`;
   }
 
   public textFormattingHelp() {
@@ -364,5 +386,17 @@ export class PathHelperService {
 
   public timeEntryProjectDialog(projectId:string) {
     return `${this.projectPath(projectId)}/time_entries/dialog`;
+  }
+
+  public timeEntryUpdate(timeEntryId:string) {
+    return `${this.staticBase}/time_entries/${timeEntryId}`;
+  }
+
+  public myTimeTrackingRefresh(date:string, viewMode:string, mode:string) {
+    return `${this.staticBase}/my/time-tracking/refresh?date=${date}&view_mode=${viewMode}&mode=${mode}`;
+  }
+
+  public homePath() {
+    return `${this.staticBase}/`;
   }
 }

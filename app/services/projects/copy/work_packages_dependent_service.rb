@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -87,6 +89,7 @@ module Projects::Copy
         .new(user:,
              work_package: source_work_package,
              contract_class: WorkPackages::CopyProjectContract)
+        .with_state(bulk_duplicate_in_progress: true)
         .call(
           copy_attachments: copy_attachments?,
           copy_share_members: copy_shares?,

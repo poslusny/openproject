@@ -30,7 +30,8 @@
 
 class CustomField < ApplicationRecord
   include CustomField::OrderStatements
-  scope :required, -> { where(is_required: true) }
+  include CustomField::CalculatedValue
+
   has_many :custom_values, dependent: :delete_all
   # WARNING: the inverse_of option is also required in order
   # for the 'touch: true' option on the custom_field association in CustomOption
@@ -49,6 +50,7 @@ class CustomField < ApplicationRecord
           inverse_of: "custom_field"
 
   scope :hierarchy_root_and_children, -> { includes(hierarchy_root: { children: :children }) }
+  scope :required, -> { where(is_required: true) }
 
   acts_as_list scope: [:type]
 
@@ -68,8 +70,7 @@ class CustomField < ApplicationRecord
     errors.add(:name, :taken) if name.in?(taken_names)
   end
 
-  validates :field_format, inclusion: { in: -> { OpenProject::CustomFieldFormat.available_formats } }
-
+  validate :validate_field_format_inclusion
   validate :validate_default_value
   validate :validate_regex
 
@@ -102,6 +103,17 @@ class CustomField < ApplicationRecord
     else
       val = read_attribute :default_value
       cast_value val
+    end
+  end
+
+  def validate_field_format_inclusion
+    available = OpenProject::CustomFieldFormat.available_formats
+    # When creating a new custom field, only the available formats are allowed.
+    # But you can edit and update existing custom fields, even if they have a field format that is disabled.
+    allowed = new_record? ? available : (available + OpenProject::CustomFieldFormat.disabled_formats).uniq
+
+    unless allowed.include?(field_format)
+      errors.add(:field_format, :inclusion)
     end
   end
 
@@ -299,6 +311,10 @@ class CustomField < ApplicationRecord
     field_format == "hierarchy"
   end
 
+  def field_format_calculated_value?
+    field_format == "calculated_value"
+  end
+
   def multi_value_possible?
     OpenProject::CustomFieldFormat.find_by(name: field_format)&.multi_value_possible?
   end
@@ -373,7 +389,7 @@ class CustomField < ApplicationRecord
     if project&.persisted?
       project.shared_versions
     elsif options[:scope] == :visible
-      Version.visible.or(Version.systemwide)
+      Version.visible
     else
       Version.systemwide
     end

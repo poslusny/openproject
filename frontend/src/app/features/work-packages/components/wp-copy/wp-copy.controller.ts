@@ -81,7 +81,7 @@ export class WorkPackageCopyController extends WorkPackageCreateComponent {
   }
 
   protected setTitle() {
-    this.titleService.setFirstPart(this.I18n.t('js.work_packages.copy.title'));
+    this.titleService.setFirstPart(this.I18n.t('js.work_packages.duplicate.title'));
   }
 
   private createCopyFrom(wp:WorkPackageResource) {

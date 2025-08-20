@@ -3,7 +3,7 @@ da:
     attributes:
       saml/provider:
         display_name: Navn
-        identifier: Identifikator
+        identifier: ID
         secret: Hemmelighed
         scope: Omfang
         assertion_consumer_service_url: ACS (Assertion consumer service) URL
@@ -59,12 +59,13 @@ da:
       plural: SAML-identitetsudbydere
       singular: SAML-identitetsudbyder
       requested_attributes: Anmodede attributter
-      attribute_mapping: Attributkortlægning
+      attribute_mapping: Attribut kortlægning
       attribute_mapping_text: >
         Flg. felter kontrollerer, hvilke af SAML-identitetsudbyderens leverede attributter, som bruges til at angive brugerattributter i OpenProject
       metadata:
         dialog: "Dette er URL'en, hvor OpenProject SAML-metadataene er tilgængelige. Brug den evt. til opsætning af identitetsudbyderen:"
-      upsale:
+      upsell:
+        title: "Single Sign-On (SSO) with SAML"
         description: Forbind OpenProject til en SAML-identitetsudbyder
       request_attributes:
         title: 'Anmodede attributter'
@@ -74,7 +75,7 @@ da:
         format: 'Attributformat'
       section_headers:
         configuration: "Primær opsætning"
-        attributes: "Attributter"
+        attributes: "Egenskaber"
       section_texts:
         display_name: "Opsæt visningsnavnet på SAML-udbyderen."
         metadata: "Forudfyld opsætning vha. en metadata-URL eller ved at indsætte metadata-XML"

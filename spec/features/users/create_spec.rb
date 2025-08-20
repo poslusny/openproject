@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -38,6 +40,7 @@ RSpec.describe "create users" do
   end
   let(:mail_body) { mail.body.parts.first.body.to_s }
   let(:token) { mail_body.scan(/token=(.*)$/).first.first.strip }
+  let(:user_menu) { Components::UserMenu.new }
 
   before do
     allow(User).to receive(:current).and_return current_user
@@ -91,7 +94,7 @@ RSpec.describe "create users" do
 
           # landed on the 'my page'
           expect(page).to have_text "Welcome, your account has been activated. You are logged in now."
-          expect(page).to have_link "bobfirst boblast"
+          user_menu.expect_user_shown "bobfirst boblast"
         end
       end
     end
@@ -149,11 +152,11 @@ RSpec.describe "create users" do
 
           fill_in "password", with: "dummy" # accepted by DummyAuthSource
 
-          click_button "Sign in"
+          click_button "Sign in", type: "submit"
 
           expect(page).to have_text "OpenProject"
           expect(page).to have_current_path "/", ignore_query: true
-          expect(page).to have_link "bobfirst boblast"
+          user_menu.expect_user_shown "bobfirst boblast"
         end
       end
     end
@@ -196,7 +199,7 @@ RSpec.describe "create users" do
 
             # landed on the 'my page'
             expect(page).to have_text "Welcome, your account has been activated. You are logged in now."
-            expect(page).to have_link "bobfirst boblast"
+            user_menu.expect_user_shown "bobfirst boblast"
           end
         end
       end

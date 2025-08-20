@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -61,8 +63,6 @@ module WorkPackagesControllerHelper
       request.format = "html"
       render_400(message: @query.errors.full_messages.join(". "))
     end
-  rescue ActiveRecord::RecordNotFound
-    render_404
   end
 
   def atom_list

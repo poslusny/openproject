@@ -6,14 +6,18 @@ ko:
     로그아웃되었습니다. 제출한 양식의 내용이 손실될 수 있습니다. [로그인]하십시오.
   activerecord:
     attributes:
+      openid_connect/group_link:
+        oidc_group_name: OpenID 그룹 식별자
       openid_connect/provider:
         name: 이름
         slug: 고유 식별자
         display_name: 표시 이름
         client_id: 클라이언트 ID
         client_secret: 클라이언트 비밀번호
+        groups_claim: 그룹 클레임
         secret: 비밀번호
         scope: 범위
+        sync_groups: 그룹 동기화
         grant_types_supported: 지원되는 인증 유형
         limit_self_registration: 자체 등록 제한
         authorization_endpoint: 권한 부여 엔드포인트
@@ -52,9 +56,14 @@ ko:
   openid_connect:
     menu_title: OpenID 공급자
     delete_title: "OpenID Connect 공급자 삭제"
+    group_links_heading: OpenID Connect 그룹 링크
     instructions:
       redirect_url: 로그인 성공 후 OpenID Connect 공급자가 OpenProject로 다시 리디렉션할 때 사용해야 하는 리디렉션 URL입니다.
       endpoint_url: OpenID Connect 공급자가 귀하에게 제공한 엔드포인트 URL
+      group_regexes: 라인별로 하나의 정규 표현식 패턴을 사용하세요. 작업 방법에 대한 자세한 내용은 [설명서](docs_url)를 참조하세요.
+      group_regexes_detail: 정규 표현식을 사용하여 그룹 클레임의 그룹 이름과 일치하는 패턴을 정의합니다. 예를 들어, <code>^Level1/Level2/([\w/]+)$</code> 같은 패턴을 입력하면 응답에서 “Level1/Level2/GroupName/SubGroup”을 포함한 “Groupname/SubGroup” 그룹이 추출됩니다.
+      group_sync: ID 공급자로부터 그룹 멤버십 정보를 자동으로 추출하고 동기화합니다.
+      groups_claim: 사용자가 속한 그룹 이름을 나타내는 클레임의 이름을 지정합니다.
       metadata_none: 이 정보가 없습니다
       metadata_url: 검색 엔드포인트 URL이 있습니다
       client_id: OpenID Connect 공급자가 귀하에게 제공한 클라이언트 ID입니다
@@ -91,12 +100,15 @@ ko:
         name: Microsoft Entra
       custom:
         name: 사용자 지정
-      upsale:
+      upsell:
+        title: "SSO(Single Sign-On)와 OpenID Connect"
         description: OpenID Connect ID 공급자에 OpenProject 연결
       label_add_new: 새로운 OpenID 공급자 추가
       label_edit: OpenID 공급자 %{name} 편집
       label_empty_title: 아직 구성된 OpenID 공급자가 없습니다.
       label_empty_description: 여기에서 보려면 공급자를 추가합니다.
+      label_group_mapping: 그룹 매핑
+      label_group_regexes: 패턴(정규 표현식)
       label_metadata: OpenID Connect 검색 엔드포인트
       label_automatic_configuration: 자동 구성
       label_optional_configuration: 옵션 구성
@@ -109,6 +121,7 @@ ko:
       plural: OpenID 공급자
       singular: OpenID 공급자
       section_texts:
+        group_mapping: ID 공급자에 의해 제공된 그룹 이름을 OpenProject의 그룹에 매핑합니다.
         metadata: OpenID Connect 검색 엔드포인트 URL을 사용하여 구성 미리 채우기
         metadata_form_banner: 검색 엔드포인트를 편집하면 미리 채워진 기존 메타데이터 값이 재정의될 수 있습니다.
         metadata_form_title: OpenID Connect 검색 엔드포인트
@@ -118,6 +131,9 @@ ko:
         display_name: 사용자에게 표시되는 표시 이름입니다.
         attribute_mapping: OpenProject와 OpenID Connect 공급자 간의 특성 매핑을 구성합니다.
         claims: ID 토큰 또는 사용자 정보 응답에 대한 추가 클레임을 요청합니다.
+      side_panel:
+        information_component:
+          backchannel_logout_url: 백채널 로그아웃 URL
     setting_instructions:
       limit_self_registration: >
         활성화되면, 사용자는 자체 등록 설정에서 허용하는 경우에만 이 공급자를 사용하여 등록할 수 있습니다.

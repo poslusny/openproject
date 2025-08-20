@@ -24,6 +24,7 @@ import { SchemaResource } from 'core-app/features/hal/resources/schema-resource'
   selector: 'te-form',
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class TimeEntryFormComponent extends UntilDestroyedMixin implements OnInit, OnDestroy {
   @Input() changeset:ResourceChangeset<TimeEntryResource>;

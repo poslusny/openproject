@@ -69,7 +69,7 @@ RSpec.describe "Delete ProjectStorage with FileLinks", :js, :webmock do
     visit external_file_storages_project_settings_project_storages_path(project)
 
     # The list of enabled file storages should now contain Storage 1
-    expect(page).to have_css("h1", text: "Files")
+    expect(page).to have_heading "Files"
     expect(page).to have_text("Storage 1")
 
     # Press Delete icon to remove the storage from the project

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -35,8 +37,6 @@ class Users::MembershipsController < ApplicationController
 
   def find_individual_principal
     @individual_principal = User.find(params[:user_id])
-  rescue ActiveRecord::RecordNotFound
-    render_404
   end
 
   def redirected_to_tab(membership)

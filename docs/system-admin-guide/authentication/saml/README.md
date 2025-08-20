@@ -1,7 +1,7 @@
 ---
 sidebar_navigation:
   title: SAML single sign-on
-  priority: 100
+  priority: 700
 description: How to set up SAML integration for SSO with OpenProject.
 keywords: SAML, SSO, single sign-on, authentication
 ---
@@ -201,7 +201,7 @@ The OpenProject username is taken by default from the `email` attribute if no ex
 
 
 
-```bash
+```shell
 OPENPROJECT_SAML_SAML_ATTRIBUTE__STATEMENTS_EMAIL="[mail]"
 OPENPROJECT_SAML_SAML_ATTRIBUTE__STATEMENTS_LOGIN="[mail]"
 OPENPROJECT_SAML_SAML_ATTRIBUTE__STATEMENTS_FIRST__NAME="[givenName]"
@@ -223,7 +223,7 @@ To configure assertion encryption, you need to provide the certificate to send i
 > [!IMPORTANT]
 > Example is ONLY for OpenProject version 11 and older and needs to be redesigned for ENV configuration
 
-```bash
+```shell
 OPENPROJECT_SAML_SAML_CERTIFICATE="-----BEGIN CERTIFICATE-----\n .... certificate contents ....\n-----END CERTIFICATE--""
 OPENPROJECT_SAML_SAML_PRIVATE__KEY="-----BEGIN PRIVATE KEY-----\n .... private key contents ....\n-----END PRIVATE KEY-----"
 ```
@@ -232,7 +232,7 @@ Request signing means that the service provider (OpenProject in this case) uses 
 
 For request signing and assertion encryption, these attributes are available
 
-```bash
+```shell
 # When true, OpenProject will sign AuthnRequests using the above certificate and private key pair
 OPENPROJECT_SAML_SAML_SECURITY_AUTHN__REQUESTS__SIGNED="false"
 # When true, OpenProject will require assertions to be signed using a private key matching the provided IDP__CERT
@@ -250,11 +250,11 @@ OPENPROJECT_SAML_SAML_SECURITY_DIGEST__METHOD="http://www.w3.org/2000/09/xmldsig
 
 #### Optional: Restrict who can automatically self-register
 
-You can configure OpenProject to restrict which users can register on the system with the [authentication self-registration setting](../authentication-settings)
+You can configure OpenProject to restrict which users can register on the system with the [authentication self-registration setting](../login-registration-settings/)
 
  By default, users returning from a SAML idP will be automatically created. If you'd like for the SAML integration to respect the configured self-registration option, please use this setting:
 
-```bash
+```shell
 OPENPROJECT_SAML_SAML_LIMIT__SELF__REGISTRATION="true"
 ```
 
@@ -264,7 +264,7 @@ There are a number of name identifier formats that are relevant, so if you have 
 
 The default behavior would be to use the email Address like so:
 
-```bash
+```shell
 OPENPROJECT_SAML_SAML_NAME__IDENTIFIER__FORMAT="urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress"
 ```
 
@@ -304,11 +304,11 @@ When you return from the authentication provider, you might be shown one of thes
 
 Once created, you can assign this SAML provider to become the direct login provider. Users will be directed to the login page of the provider without seeing a login form in OpenProject. [Read more](../../../installation-and-operations/configuration/#omniauth-direct-login-provider).
 
-In the user interface, you can assign this through [Administration > Authentication > Settings](../authentication-settings/).
+In the user interface, you can assign this through [Administration > Authentication > Settings](../login-registration-settings/).
 
 Using environment variables, you could also set this in the following way
 
-```bash
+```shell
 OPENPROJECT_OMNIAUTH__DIRECT__LOGIN__PROVIDER="saml" # This value should be the 'name' property of your configuration
 ```
 
@@ -320,7 +320,7 @@ In the following, we will provide configuration values for common SAML providers
 
 ### ADFS
 
-For ADFS, you need add OpenProject as a "relying part trust" entry within the ADFS management screen. Please follow this guide to be guided through the steps: https://learn.microsoft.com/en-us/windows-server/identity/ad-fs/operations/create-a-relying-party-trust
+For ADFS, you need add OpenProject as a "relying part trust" entry within the ADFS management screen. Please follow this [guide](https://learn.microsoft.com/en-us/windows-server/identity/ad-fs/operations/create-a-relying-party-trust) to be guided through the steps.
 
 #### Add OpenProject as a Relying Trust Party
 
@@ -339,7 +339,7 @@ For ADFS, you need add OpenProject as a "relying part trust" entry within the AD
 
 A new wizard will pop up. If you missed this step, you can right click on the new party to select "Edit Claim Issuance Policy". In there, you will need to create attribute mappings from LDAP for OpenProject to access user data such as login, email address, names etc.
 
-You can also follow this guide to add the LDAP claim rules: https://learn.microsoft.com/en-us/windows-server/identity/ad-fs/operations/create-a-rule-to-send-ldap-attributes-as-claims
+You can also follow this [guide](https://learn.microsoft.com/en-us/windows-server/identity/ad-fs/operations/create-a-rule-to-send-ldap-attributes-as-claims) to add the LDAP claim rules:
 
 - Click on "Add Rule..."
 - Select "Send LDAP Attributes as Claims" and click Next

@@ -70,6 +70,7 @@ import { WorkPackageViewOutputs } from 'core-app/features/work-packages/routing/
     DragAndDropService,
     WorkPackageCardDragAndDropService,
   ],
+  standalone: false,
 })
 export class WorkPackagesGridComponent implements WorkPackageViewOutputs {
   @Input() public configuration:WorkPackageTableConfiguration;

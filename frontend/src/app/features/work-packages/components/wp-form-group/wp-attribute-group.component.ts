@@ -41,6 +41,7 @@ import {
   templateUrl: './wp-attribute-group.template.html',
   styleUrls: ['./wp-attribute-group.component.sass'],
   encapsulation: ViewEncapsulation.None,
+  standalone: false,
 })
 export class WorkPackageFormAttributeGroupComponent extends UntilDestroyedMixin {
   @HostBinding('class.wp-attribute-group') className = true;

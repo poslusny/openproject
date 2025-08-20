@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -97,10 +99,6 @@ class WorkPackages::MovesController < ApplicationController
     end
   end
 
-  def default_breadcrumb
-    I18n.t(:label_move_work_package)
-  end
-
   # Check if project is unique before bulk operations
   def check_project_uniqueness
     unless @project
@@ -130,7 +128,7 @@ class WorkPackages::MovesController < ApplicationController
       hierarchies = WorkPackageHierarchy
                       .includes(:ancestor)
                       .where(ancestor_id: @work_packages.select(:id))
-      Type.where(id: hierarchies.map { _1.ancestor.type_id })
+      Type.where(id: hierarchies.map { it.ancestor.type_id })
           .select("distinct id")
           .pluck(:id)
           .difference(@types.pluck(:id))

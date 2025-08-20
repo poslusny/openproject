@@ -82,6 +82,14 @@ module OpenProject
         end
       end
 
+      def enterprise_chargebee_site
+        if Rails.env.production?
+          self["enterprise_chargebee_site"]
+        else
+          "openproject-enterprise-test"
+        end
+      end
+
       def file_storage?
         attachments_storage == :file
       end
@@ -172,6 +180,10 @@ module OpenProject
 
       def web_wait_timeout
         Integer(ENV["RACK_TIMEOUT_WAIT_TIMEOUT"].presence || web["wait_timeout"].presence)
+      end
+
+      def term_on_timeout
+        Integer(ENV["RACK_TIMEOUT_TERM_ON_TIMEOUT"].presence || web["term_on_timeout"].presence)
       end
 
       def web_min_threads

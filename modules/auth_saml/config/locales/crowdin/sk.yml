@@ -4,13 +4,13 @@ sk:
       saml/provider:
         display_name: Názov
         identifier: Identifikátor
-        secret: Secret
-        scope: Scope
+        secret: Tajné
+        scope: Rozsah
         assertion_consumer_service_url: ACS (Assertion consumer service) URL
-        limit_self_registration: Limit self registration
+        limit_self_registration: Obmedzenie vlastnej registrácie
         sp_entity_id: Service entity ID
         metadata_url: Identity provider metadata URL
-        name_identifier_format: Name identifier format
+        name_identifier_format:
         idp_sso_service_url: Identity provider login endpoint
         idp_slo_service_url: Identity provider logout endpoint
         idp_cert: Public certificate of identity provider
@@ -64,7 +64,8 @@ sk:
         The following fields control which attributes provided by the SAML identity provider are used to provide user attributes in OpenProject
       metadata:
         dialog: "This is the URL where the OpenProject SAML metadata is available. Optionally use it to configure your identity provider:"
-      upsale:
+      upsell:
+        title: "Single Sign-On (SSO) with SAML"
         description: Connect OpenProject to a SAML identity provider
       request_attributes:
         title: 'Requested attributes'

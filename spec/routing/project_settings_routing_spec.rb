@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -34,6 +36,13 @@ RSpec.describe Projects::SettingsController do
       expect(get("/projects/123/settings/general"))
         .to route_to(
           controller: "projects/settings/general", action: "show", project_id: "123"
+        )
+    end
+
+    it do
+      expect(patch("/projects/123/settings/general"))
+        .to route_to(
+          controller: "projects/settings/general", action: "update", project_id: "123"
         )
     end
 
@@ -104,6 +113,20 @@ RSpec.describe Projects::SettingsController do
       expect(patch("/projects/123/settings/work_packages/types"))
         .to route_to(
           controller: "projects/settings/work_packages/types", action: "update", project_id: "123"
+        )
+    end
+
+    it do
+      expect(get("/projects/123/settings/work_packages/internal_comments"))
+        .to route_to(
+          controller: "projects/settings/work_packages/internal_comments", action: "show", project_id: "123"
+        )
+    end
+
+    it do
+      expect(patch("/projects/123/settings/work_packages/internal_comments"))
+        .to route_to(
+          controller: "projects/settings/work_packages/internal_comments", action: "update", project_id: "123"
         )
     end
   end

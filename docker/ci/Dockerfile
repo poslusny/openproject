@@ -2,11 +2,11 @@
 ARG RUBY_VERSION
 FROM ruby:${RUBY_VERSION}-bookworm
 
-ENV NODE_VERSION="20.9.0"
+ENV NODE_VERSION="22.15.0"
 ENV DEBIAN_FRONTEND=noninteractive
 ENV BUNDLE_WITHOUT="development:production:docker"
 
-ENV PGVERSION=13
+ENV PGVERSION=17
 RUN wget --quiet -O- https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - && \
   echo "deb http://apt.postgresql.org/pub/repos/apt bookworm-pgdg main" > /etc/apt/sources.list.d/pgdg.list
 

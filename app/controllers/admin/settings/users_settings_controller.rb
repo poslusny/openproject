@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -35,10 +37,6 @@ module Admin::Settings
       @options[:user_format] = User::USER_FORMATS_STRUCTURE.keys.map { |f| [User.current.name(f), f.to_s] }
 
       respond_to :html
-    end
-
-    def show_local_breadcrumb
-      false
     end
 
     def settings_params

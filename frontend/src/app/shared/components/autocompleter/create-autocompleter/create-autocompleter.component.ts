@@ -59,6 +59,7 @@ export interface CreateAutocompleterValueOption {
   selector: 'create-autocompleter',
   changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ['./create-autocompleter.component.sass'],
+  standalone: false,
 })
 export class CreateAutocompleterComponent extends UntilDestroyedMixin implements AfterViewInit {
   @Input() public availableValues:CreateAutocompleterValueOption[];

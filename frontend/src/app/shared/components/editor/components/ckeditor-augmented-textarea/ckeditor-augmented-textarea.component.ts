@@ -54,18 +54,23 @@ import {
   ICKEditorContext,
   ICKEditorInstance,
 } from 'core-app/shared/components/editor/components/ckeditor/ckeditor.types';
-import { fromEvent } from 'rxjs';
+import { fromEvent, Subscription } from 'rxjs';
 import { AttachmentCollectionResource } from 'core-app/features/hal/resources/attachment-collection-resource';
 import { populateInputsFromDataset } from 'core-app/shared/components/dataset-inputs';
 import { navigator } from '@hotwired/turbo';
-
+import { uniqueId } from 'lodash';
 
 @Component({
   templateUrl: './ckeditor-augmented-textarea.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class CkeditorAugmentedTextareaComponent extends UntilDestroyedMixin implements OnInit {
-  @Input() public textareaSelector:string;
+  // Track form submission "in-flight" state per form, to prevent multiple
+  // submissions from multiple CKEditor instances on the same form.
+  private static inFlight = new WeakMap<HTMLFormElement, boolean>();
+
+  @Input() public textAreaId:string;
 
   @Input() public previewContext:string;
 
@@ -105,8 +110,6 @@ export class CkeditorAugmentedTextareaComponent extends UntilDestroyedMixin impl
   // Remember if the user changed
   public changed = false;
 
-  public inFlight = false;
-
   public initialContent:string;
 
   public readOnly = false;
@@ -119,10 +122,14 @@ export class CkeditorAugmentedTextareaComponent extends UntilDestroyedMixin impl
     attachments: this.I18n.t('js.label_attachments'),
   };
 
+  private focused = false;
+
   // Reference to the actual ckeditor instance component
   @ViewChild(OpCkeditorComponent, { static: true }) private ckEditorInstance:OpCkeditorComponent;
 
   private attachments:HalResource[];
+
+  private labelClickSubscription:Subscription;
 
   constructor(
     readonly elementRef:ElementRef<HTMLElement>,
@@ -142,8 +149,10 @@ export class CkeditorAugmentedTextareaComponent extends UntilDestroyedMixin impl
     // Parse the resource if any exists
     this.halResource = this.resource ? this.halResourceService.createHalResource(this.resource, true) : undefined;
 
-    this.formElement = this.element.closest<HTMLFormElement>('form') as HTMLFormElement;
-    this.wrappedTextArea = this.formElement.querySelector(this.textareaSelector) as HTMLTextAreaElement;
+    this.formElement = this.element.closest('form')!;
+
+    this.wrappedTextArea = document.getElementById(this.textAreaId) as HTMLTextAreaElement;
+
     this.wrappedTextArea.style.display = 'none';
     this.wrappedTextArea.required = false;
     this.initialContent = this.wrappedTextArea.value;
@@ -168,7 +177,7 @@ export class CkeditorAugmentedTextareaComponent extends UntilDestroyedMixin impl
   private registerFormSubmitListener():void {
     fromEvent(this.formElement, 'submit')
       .pipe(
-        filter(() => !this.inFlight),
+        filter(() => !CkeditorAugmentedTextareaComponent.inFlight.has(this.formElement)),
         this.untilDestroyed(),
       )
       .subscribe((evt:SubmitEvent) => {
@@ -177,12 +186,25 @@ export class CkeditorAugmentedTextareaComponent extends UntilDestroyedMixin impl
       });
   }
 
+  public editorFocused():void {
+    this.focused = true;
+    this.editorFocus.emit();
+  }
+
+  public editorBlurred():void {
+    this.focused = false;
+    this.editorBlur.emit();
+  }
+
   public async saveForm(evt?:SubmitEvent):Promise<void> {
-    this.saveRequested.emit(); // Provide a hook for the parent component to do something before the form is submitted
-    this.inFlight = true;
+    if (CkeditorAugmentedTextareaComponent.inFlight.has(this.formElement)) {
+      return;
+    }
+
+    CkeditorAugmentedTextareaComponent.inFlight.set(this.formElement, true);
 
     this.syncToTextarea();
-    window.OpenProject.pageIsSubmitted = true;
+    window.OpenProject.pageState = 'submitted';
 
     setTimeout(() => {
       if (evt?.submitter) {
@@ -197,14 +219,12 @@ export class CkeditorAugmentedTextareaComponent extends UntilDestroyedMixin impl
       } else {
         this.formElement.requestSubmit(evt?.submitter);
       }
+
+      CkeditorAugmentedTextareaComponent.inFlight.delete(this.formElement);
     });
   }
 
   public setup(editor:ICKEditorInstance) {
-    // Have a hacky way to access the editor from outside of angular.
-    // This is e.g. employed to set the text from outside to reuse the same editor for different languages.
-    jQuery(this.element).data('editor', editor);
-
     this.setupMarkingReadonlyWhenTextareaIsDisabled(editor);
 
     if (this.halResource?.attachments) {
@@ -212,13 +232,29 @@ export class CkeditorAugmentedTextareaComponent extends UntilDestroyedMixin impl
       this.setupAttachmentRemovalSignal(editor);
     }
 
+    // Set initial label
     this.setLabel();
+
+    // Use focusTracker to maintain aria-labelledby as CKEditor re-renders aria-label on every focus/blur event
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
+    editor.ui.focusTracker.on('change:isFocused', (_evt:unknown, _name:string, _isFocused:boolean) => {
+      this.setLabel();
+    });
+
     return editor;
   }
 
-  public syncToTextarea() {
-    window.OpenProject.pageWasEdited = true;
+  public updateContent(value:string) {
+    // Update the page state to edited
+    // but only if we're focused in the editor
+    if (this.focused) {
+      window.OpenProject.pageState = 'edited';
+    }
 
+    this.wrappedTextArea.value = value;
+  }
+
+  public syncToTextarea() {
     try {
       this.wrappedTextArea.value = this.ckEditorInstance.getTransformedContent(true);
     } catch (e) {
@@ -285,16 +321,29 @@ export class CkeditorAugmentedTextareaComponent extends UntilDestroyedMixin impl
   }
 
   private setLabel() {
-    const textareaId = this.textareaSelector.substring(1);
-    const label = jQuery(`label[for=${textareaId}]`);
+    const label = document.querySelector<HTMLLabelElement>(`label[for=${this.textAreaId}]`);
+    if (!label) {
+      console.error(`Please provide a label for the textarea with id ${this.textAreaId}`);
+      return;
+    }
 
-    const ckContent = this.element.querySelector('.ck-content') as HTMLElement;
+    const ckContent = this.element.querySelector<HTMLElement>('.ck-content')!;
+
+    let labelId;
+    if (label.hasAttribute('id')) {
+      labelId = label.getAttribute('id')!;
+    } else {
+      labelId = uniqueId('label-');
+      label.setAttribute('id', labelId);
+    }
 
     ckContent.removeAttribute('aria-label');
-    ckContent.setAttribute('aria-labelledby', textareaId);
+    ckContent.setAttribute('aria-labelledby', labelId);
 
-    fromEvent(label, 'click')
-      .pipe(this.untilDestroyed())
-      .subscribe(() => ckContent.focus());
+    if (!this.labelClickSubscription) {
+      this.labelClickSubscription = fromEvent(label, 'click')
+        .pipe(this.untilDestroyed())
+        .subscribe(() => ckContent.focus());
+    }
   }
 }

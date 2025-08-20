@@ -41,6 +41,7 @@ import { MAGIC_FILTER_AUTOCOMPLETE_PAGE_SIZE } from 'core-app/core/apiv3/helpers
   selector: 'op-filter-searchable-multiselect-value',
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './filter-searchable-multiselect-value.component.html',
+  standalone: false,
 })
 export class FilterSearchableMultiselectValueComponent extends UntilDestroyedMixin implements OnInit {
   @Input() public filter:QueryFilterInstanceResource;

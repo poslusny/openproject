@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -158,10 +160,6 @@ class GroupsController < ApplicationController
     current_user.admin? ||
       current_user.allowed_in_any_project?(:manage_members) ||
       Group.in_project(Project.allowed_to(current_user, :view_members)).exists?
-  end
-
-  def show_local_breadcrumb
-    false
   end
 
   def respond_membership_altered(service_call)

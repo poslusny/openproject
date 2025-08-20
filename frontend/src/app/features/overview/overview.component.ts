@@ -36,6 +36,7 @@ import { GRID_PROVIDERS } from 'core-app/shared/components/grids/grid/grid.compo
   templateUrl: '../../shared/components/grids/grid/page/grid-page.component.html',
   styleUrls: ['../../shared/components/grids/grid/page/grid-page.component.sass'],
   providers: GRID_PROVIDERS,
+  standalone: false,
 })
 export class OverviewComponent extends GridPageComponent {
   showToolbar = false;
@@ -45,7 +46,7 @@ export class OverviewComponent extends GridPageComponent {
   }
 
   protected isTurboFrameSidebarEnabled():boolean {
-    return this.isCustomFieldsSidebarEnabled() || this.isLifeCyclesSidebarEnabled();
+    return this.isCustomFieldsSidebarEnabled() || this.isLifeCycleSidebarEnabled();
   }
 
   protected isCustomFieldsSidebarEnabled():boolean {
@@ -54,18 +55,18 @@ export class OverviewComponent extends GridPageComponent {
     return customFieldsSidebarEnabledTag?.dataset.enabled === 'true';
   }
 
-  protected isLifeCyclesSidebarEnabled():boolean {
-    const lifeCyclesSidebarEnabledTag:HTMLMetaElement|null = document.querySelector('meta[name="life_cycles_sidebar_enabled"]');
+  protected isLifeCycleSidebarEnabled():boolean {
+    const lifeCycleSidebarEnabledTag:HTMLMetaElement|null = document.querySelector('meta[name="life_cycle_sidebar_enabled"]');
 
-    return lifeCyclesSidebarEnabledTag?.dataset.enabled === 'true';
+    return lifeCycleSidebarEnabledTag?.dataset.enabled === 'true';
   }
 
-  protected lifeCyclesSidebarSrc():string {
-    return `${this.pathHelper.staticBase}/projects/${this.currentProject.identifier ?? ''}/project_life_cycles_sidebar`;
+  protected lifeCycleSidebarSrc():string {
+    return `${this.pathHelper.staticBase}/projects/${this.currentProject.identifier ?? ''}/project_life_cycle_sidebar`;
   }
 
-  protected lifeCyclesSidebarId():string {
-    return 'project-life-cycles-sidebar';
+  protected lifeCycleSidebarId():string {
+    return 'project-life-cycle-sidebar';
   }
 
   protected projectCustomFieldsSidebarSrc():string {

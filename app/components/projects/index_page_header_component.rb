@@ -112,8 +112,7 @@ class Projects::IndexPageHeaderComponent < ApplicationComponent
 
   def breadcrumb_items
     [
-      { href: home_path, text: helpers.organization_name },
-      { href: projects_path, text: t(:label_project_plural) },
+      { href: projects_path, text: t(:label_project_plural), skip_for_mobile: first_menu_item? },
       current_breadcrumb_element
     ]
   end
@@ -134,6 +133,11 @@ class Projects::IndexPageHeaderComponent < ApplicationComponent
     @current_section = Projects::Menu
       .new(controller_path:, params:, current_user:)
       .selected_menu_group
+  end
+
+  def first_menu_item?
+    current_item = current_section&.children&.select { |x| x.selected == true }&.first
+    current_item&.title == ::ProjectQueries::Static.query(ProjectQueries::Static::DEFAULT).name
   end
 
   def header_save_action(header:, message:, label:, href:, method: nil)

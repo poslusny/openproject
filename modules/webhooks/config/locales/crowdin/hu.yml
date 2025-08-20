@@ -31,6 +31,8 @@ hu:
       events:
         created: "Létrehoz"
         updated: "Frissítve"
+        comment: "Comment"
+        internal_comment: "Internal comment"
       explanation:
         text: >
           Olyan események előfordulása esetén, mint például munkacsomag létrehozása vagy projekt frissítése, az OpenProject egy POST kérést küld a bekonfigurált webes végpontoknak. Az esemény gyakran %{link} elteltével érkezik.

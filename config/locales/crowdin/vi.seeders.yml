@@ -103,26 +103,26 @@ vi:
       projects:
         demo-project:
           name: Dự án demo
-          status_explanation: Tất cả các nhiệm vụ đang đúng tiến độ. Những người liên quan đều biết nhiệm vụ của mình. Hệ thống đã được thiết lập hoàn chỉnh.
+          status_explanation: Tất cả các nhiệm vụ đang theo đúng tiến độ. Những người liên quan biết nhiệm vụ của họ. Hệ thống đã được thiết lập hoàn chỉnh.
           description: Đây là tóm tắt ngắn gọn về mục tiêu của dự án demo này.
           news:
             item_0:
-              title: Chào mừng bạn đến với dự án demo của bạn
+              title: Chào mừng đến với dự án mẫu của bạn
               summary: |
                 Chúng tôi rất vui vì bạn đã tham gia.
-                Trong mô-đun này, bạn có thể thông báo tin tức dự án cho các thành viên trong nhóm của bạn.
+                Trong mô-đun này, bạn có thể truyền đạt tin tức dự án đến các thành viên trong nhóm của bạn.
               description: Tin tức hiện tại
           categories:
-            item_0: Danh mục 1 (để thay đổi trong Cài đặt Dự án)
+            item_0: Danh mục 1 (cần thay đổi trong cài đặt Dự án)
           queries:
             item_0:
               name: Kế hoạch dự án
             item_1:
-              name: Các cột mốc
+              name: Các mốc thời gian
             item_2:
               name: Nhiệm vụ
             item_3:
-              name: Lập kế hoạch nhóm
+              name: Lịch trình nhóm
           boards:
             kanban:
               name: Bảng Kanban
@@ -168,7 +168,7 @@ vi:
                   name: Nhiệm vụ
               item_6:
                 options:
-                  name: Các cột mốc
+                  name: Các mốc thời gian
           work_packages:
             item_0:
               subject: Bắt đầu dự án
@@ -221,14 +221,14 @@ vi:
             Thêm thông tin: [https://www.openproject.org/docs/user-guide/wiki/](https://www.openproject.org/docs/user-guide/wiki/)
         scrum-project:
           name: Dự án Scrum
-          status_explanation: Tất cả các nhiệm vụ đang đúng tiến độ. Những người liên quan đều biết nhiệm vụ của mình. Hệ thống đã được thiết lập hoàn chỉnh.
+          status_explanation: Tất cả các nhiệm vụ đang theo đúng tiến độ. Những người liên quan biết nhiệm vụ của họ. Hệ thống đã được thiết lập hoàn chỉnh.
           description: Đây là tóm tắt ngắn gọn về mục tiêu của dự án Scrum demo này.
           news:
             item_0:
               title: Chào mừng bạn đến với dự án Scrum demo của bạn
               summary: |
                 Chúng tôi rất vui vì bạn đã tham gia.
-                Trong mô-đun này, bạn có thể thông báo tin tức dự án cho các thành viên trong nhóm của bạn.
+                Trong mô-đun này, bạn có thể truyền đạt tin tức dự án đến các thành viên trong nhóm của bạn.
           versions:
             item_0:
               name: Danh sách lỗi
@@ -287,7 +287,7 @@ vi:
             item_3:
               name: Sprint 2
           categories:
-            item_0: Danh mục 1 (để thay đổi trong Cài đặt Dự án)
+            item_0: Danh mục 1 (cần thay đổi trong cài đặt Dự án)
           queries:
             item_0:
               name: Kế hoạch dự án

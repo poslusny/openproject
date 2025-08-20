@@ -53,10 +53,9 @@ RB.EditableInplace = (function ($) {
       j = $(this).parents('.model').first();
       that = j.data('this');
 
-      // 13 is the key code of Enter, 27 of ESC.
-      if (e.which === 13) {
+      if (e.key === 'Enter') {
         that.saveEdits();
-      } else if (e.which === 27) {
+      } else if (e.key === 'Escape') {
         that.cancelEdit();
       } else {
         return true;

@@ -29,10 +29,10 @@
 #++
 
 class WorkPackage::PDFExport::DocumentGenerator < Exports::Exporter
-  include WorkPackage::PDFExport::Common::Common
-  include WorkPackage::PDFExport::Common::Attachments
-  include WorkPackage::PDFExport::Common::Logo
-  include WorkPackage::PDFExport::Common::Macro
+  include Exports::PDF::Common::Common
+  include Exports::PDF::Common::Attachments
+  include Exports::PDF::Common::Logo
+  include Exports::PDF::Common::Macro
   include WorkPackage::PDFExport::Generator::Generator
 
   attr_accessor :pdf
@@ -65,7 +65,8 @@ class WorkPackage::PDFExport::DocumentGenerator < Exports::Exporter
 
   def render_doc
     generate_doc!(
-      apply_markdown_field_macros(work_package.description || "", work_package),
+      apply_markdown_field_macros(work_package.description || "",
+                                  { work_package:, project: work_package.project, user: User.current }),
       "contracts.yml"
     )
   end

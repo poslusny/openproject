@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -31,7 +33,7 @@ class Queries::Projects::Filters::ProjectStatusFilter < Queries::Projects::Filte
 
   def allowed_values
     @allowed_values ||= Project.status_codes.map do |code, id|
-      [project_status_name_for_code(code), id.to_s]
+      [project_status_name(code), id.to_s]
     end
   end
 

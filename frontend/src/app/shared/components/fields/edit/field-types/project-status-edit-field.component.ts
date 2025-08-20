@@ -47,6 +47,7 @@ interface ProjectStatusOption {
 @Component({
   templateUrl: './project-status-edit-field.component.html',
   styleUrls: ['./project-status-edit-field.component.sass'],
+  standalone: false,
 })
 export class ProjectStatusEditFieldComponent extends EditFieldComponent implements OnInit {
   @ViewChild(NgSelectComponent, { static: true }) public ngSelectComponent:NgSelectComponent;

@@ -12,6 +12,7 @@ import { TimezoneService } from 'core-app/core/datetime/timezone.service';
 @Component({
   templateUrl: './time-entries-current-user.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class WidgetTimeEntriesCurrentUserComponent extends AbstractWidgetComponent {
   public entries:TimeEntryResource[] = [];

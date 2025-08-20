@@ -309,7 +309,7 @@ RSpec.describe AccountController, :skip_2fa_stage do
       end
 
       context "with a user with an SSO provider attached" do
-        let(:user) { build_stubbed(:user, login: "bob", identity_url: "saml:foo") }
+        let(:user) { build_stubbed(:user, login: "bob", authentication_provider: sso_provider) }
         let(:slo_callback) { nil }
         let(:sso_provider) do
           { name: "saml", single_sign_out_callback: slo_callback }
@@ -1049,10 +1049,12 @@ RSpec.describe AccountController, :skip_2fa_stage do
 
   describe "registering through auth source" do
     context "when not providing all required fields" do
-      let(:omniauth_strategy) { double("Google Strategy", name: "google") } # rubocop:disable RSpec/VerifiedDoubles
+      let(:slug) { "google" }
+      let(:omniauth_strategy) { double("Google Strategy", name: slug) } # rubocop:disable RSpec/VerifiedDoubles
+      let!(:oidc_google) { create(:oidc_provider_google, slug:) }
       let(:omniauth_hash) do
         OmniAuth::AuthHash.new(
-          provider: "google",
+          provider: slug,
           strategy: omniauth_strategy,
           uid: "123545",
           info: { name: "foo",

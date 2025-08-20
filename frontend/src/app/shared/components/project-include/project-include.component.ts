@@ -73,6 +73,7 @@ import { calculatePositions } from 'core-app/shared/components/project-include/c
   providers: [
     SearchableProjectListService,
   ],
+  standalone: false,
 })
 export class OpProjectIncludeComponent extends UntilDestroyedMixin implements OnInit {
   @HostBinding('class.op-project-include') className = true;

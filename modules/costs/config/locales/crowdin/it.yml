@@ -31,6 +31,9 @@ it:
         spent: "Trascorso"
         spent_on: "Data"
         logged_by: "Registrato da"
+        entity: Registrato per
+        entity_id: Registrato per
+        entity_gid: Registrato per
       cost_type:
         unit: "Nome dell'unità"
         unit_plural: "Nome unità pluralizzato"
@@ -50,12 +53,17 @@ it:
         project: Progetto
         user: Utente
         work_package: Macro-attività
+        subject: Soggetto
         hours: Ore
         comments: Commento
         activity: Attività
         spent_on: Data
         start_time: Ora di inizio
         end_time: Ora di fine
+        time: Ora
+        entity: Registrato per
+        entity_id: Registrato per
+        entity_gid: Registrato per
     models:
       time_entry:
         one: "Voce tempo"
@@ -75,6 +83,7 @@ it:
         time_entry:
           invalid_time: "deve essere compresa tra le 00:00 e le 23:59."
           cannot_log_for_this_work_package: "Impossibile registrare il tempo per questa macro-attività."
+          duplicate_ongoing: "Per questo utente esiste già una voce temporale in corso."
         work_package:
           is_not_a_valid_target_for_cost_entries: "La macro-attività (work package) #%{id} non è una destinazione valida per riassegnare le entrate del costo."
           nullify_is_not_valid_for_cost_entries: "Voci di costo non possono essere assegnate a un progetto."
@@ -91,6 +100,8 @@ it:
   button_log_costs: "Registra unità di costo"
   button_log_time: "Registra"
   button_add_activity: "Attività"
+  button_add_time_entry: "Registra l'orario effettuato"
+  button_stop_timer: "Ferma il timer"
   caption_booked_on_project: "Prenotato su progetto"
   caption_default: "Predefinito"
   caption_default_rate_history_for: "Cronologia tariffe predefinite per %{user}"
@@ -150,12 +161,34 @@ it:
   label_cost: "Costo"
   label_costs: "Costi"
   label_mandatory_fields: "Campi obbligatori"
+  label_my_time_tracking: "Il mio monitoraggio dei tempi"
+  label_no_time: "Nessun tempo tracciato"
+  label_next_day: "Giorno successivo"
+  label_next_week: "Prossima settimana"
+  label_next_workweek: "Prossima settimana lavorativa"
+  label_next_month: "Prossimo mese"
+  label_previous_day: "Giorno precedente"
+  label_previous_workweek: "Settimana lavorativa precedente"
+  label_previous_week: "Settimana precedente"
+  label_previous_month: "Mese precedente"
+  label_specific_day: "Giorno %{day}"
+  label_specific_week: "Settimana %{week} del calendario"
+  label_specific_month: "Mese %{month}"
+  label_list: "Elenca"
+  label_month: "Mese"
+  label_workweek: "Settimana lavorativa"
+  label_day: "Giorno"
+  label_today_capitalized: "Oggi"
+  label_view_mode_switcher: "Cambia vista"
+  label_timer_since: "Iniziato ore %{time}"
   placeholder_activity_select_work_package_first: Prima è necessario selezionare la macro-attività
   notice_something_wrong: "Qualcosa è andato storto. Si prega di riprovare."
   notice_successful_restore: "Ripristino eseguito con successo."
   notice_successful_lock: "Bloccato con successo."
   notice_cost_logged_successfully: "Costo unitario registrato con successo."
   notice_different_time_zones: "Questo utente ha un fuso orario diverso (%{tz}). L'ora verrà registrata utilizzando il suo fuso orario."
+  notice_time_entry_update_failed: "Impossibile aggiornare la voce oraria. Errori: %{errors}"
+  notice_time_entry_delete_failed: "Impossibile eliminare la voce oraria. Errori: %{errors}"
   permission_edit_cost_entries: "Modifica unità di costo riservate"
   permission_edit_own_cost_entries: "Modifica le proprie unità di costo riservate"
   permission_edit_hourly_rates: "Modifica tariffe orarie"
@@ -170,10 +203,13 @@ it:
   permission_view_own_hourly_rate: "Visualizza propria tariffa oraria"
   permission_view_own_time_entries: "Visualizzare il proprio tempo trascorso"
   project_module_costs: "Tempi e costi"
-  setting_allow_tracking_start_and_end_times: "Consentire agli utenti di tenere traccia dell'ora di inizio e di fine nelle registrazioni temporali"
+  setting_allow_tracking_start_and_end_times: "Consenti orari di inizio e fine"
   setting_costs_currency: "Valuta"
   setting_costs_currency_format: "Formato della valuta"
-  setting_enforce_tracking_start_and_end_times: "Forza gli utenti a impostare l'ora di inizio e di fine nelle registrazioni temporali"
+  setting_enforce_tracking_start_and_end_times: "Richiede orari di inizio e di fine"
+  setting_enforce_without_allow: "Non è possibile richiedere orari di inizio e fine senza consentirli"
+  setting_allow_tracking_start_and_end_times_caption: "Consente di inserire gli orari di inizio e di fine durante la registrazione dell'orario."
+  setting_enforce_tracking_start_and_end_times_caption: "Rende obbligatorio inserire i tempi di inizio e di fine durante la registrazione dell'orario."
   text_assign_time_and_cost_entries_to_project: "Assegna orari e costi segnalati al progetto"
   text_destroy_cost_entries_question: "%{cost_entries} sono stati segnalati per la macro-attività (work package) che si sta per eliminare. Che cosa vuoi fare?"
   text_destroy_time_and_cost_entries: "Elimina orari e costi riportati"
@@ -181,7 +217,18 @@ it:
   text_reassign_time_and_cost_entries: "Riassegna orari e costi segnalati a questa macro-attività (work package):"
   text_warning_hidden_elements: "Alcune voci potrebbero essere state escluse dall'aggregazione."
   week: "settimana"
+  total_times:
+    workweek: "Totale settimana lavorativa: %{hours}"
+    week: "Totale settimana: %{hours}"
+    month: "Totale mese: %{hours}"
+    day: "Totale giorno: %{hours}"
   api_v3:
     errors:
       validation:
         start_time_different_date: "La parte data di startTime (%{start_time}) deve essere uguale alla data di spentOn (%{spent_on})."
+  ee:
+    features:
+      time_entry_time_restrictions: Richiedi il tracciamento esatto dell'orario
+    upsell:
+      time_entry_time_restrictions:
+        description: "Migliora il monitoraggio del tempo richiedendo orari di inizio e fine esatti quando registri il tempo."

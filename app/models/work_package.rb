@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -55,14 +57,12 @@ class WorkPackage < ApplicationRecord
   belongs_to :assigned_to, class_name: "Principal", optional: true
   belongs_to :responsible, class_name: "Principal", optional: true
   belongs_to :version, optional: true
-  belongs_to :project_phase, class_name: "Project::Phase", optional: true
+  belongs_to :project_phase_definition, class_name: "Project::PhaseDefinition", optional: true
   belongs_to :priority, class_name: "IssuePriority"
   belongs_to :category, class_name: "Category", optional: true
 
-  has_many :time_entries, dependent: :delete_all
-
+  has_many :time_entries, dependent: :delete_all, inverse_of: :entity, as: :entity
   has_many :file_links, dependent: :delete_all, class_name: "Storages::FileLink", as: :container
-
   has_many :storages, through: :project
 
   has_and_belongs_to_many :changesets, -> { # rubocop:disable Rails/HasAndBelongsToMany
@@ -127,7 +127,7 @@ class WorkPackage < ApplicationRecord
     where(author_id: author.id)
   }
 
-  scopes :covering_dates_and_days_of_week,
+  scopes :covering_dates_or_days_of_week,
          :allowed_to,
          :for_scheduling,
          :include_derived_dates,
@@ -215,6 +215,14 @@ class WorkPackage < ApplicationRecord
     Setting.work_package_done_ratio == "field"
   end
 
+  def self.work_weighted_average_mode?
+    Setting.total_percent_complete_mode == "work_weighted_average"
+  end
+
+  def self.simple_average_mode?
+    Setting.total_percent_complete_mode == "simple_average"
+  end
+
   def self.complete_on_status_closed?
     Setting.percent_complete_on_status_closed == "set_100p"
   end
@@ -243,10 +251,7 @@ class WorkPackage < ApplicationRecord
   end
 
   def add_time_entry(attributes = {})
-    attributes.reverse_merge!(
-      project:,
-      work_package: self
-    )
+    attributes.reverse_merge!(project:, entity: self)
     time_entries.build(attributes)
   end
 
@@ -269,7 +274,7 @@ class WorkPackage < ApplicationRecord
   end
 
   def to_s
-    "#{type.is_standard ? '' : type.name} ##{id}: #{subject}"
+    "#{type.name unless type.is_standard} ##{id}: #{subject}"
   end
 
   # Return true if the work_package is closed, otherwise false
@@ -335,7 +340,16 @@ class WorkPackage < ApplicationRecord
   end
 
   def duration_in_hours
-    duration ? duration * 24 : nil
+    duration * 24 if duration
+  end
+
+  def project_phase
+    # This might look less efficient than using
+    # ProjectPhase.find_by(definition_id: project_phase_definition_id, project_id: project_id)
+    # as more phases are loaded.
+    # However, the expected number of phases per project is rather small and this way, a project
+    # loaded for multiple work packages can be reused.
+    project&.phases&.detect { |phase| phase.definition_id == project_phase_definition_id }
   end
 
   # aliasing subject to name
@@ -382,12 +396,12 @@ class WorkPackage < ApplicationRecord
   # check if user is allowed to edit WorkPackage Journals.
   # see Acts::Journalized::Permissions#journal_editable_by
   def journal_editable_by?(journal, user)
-    if journal.restricted?
-      user.allowed_in_project?(:edit_others_comments_with_restricted_visibility, project) ||
-        (user.allowed_in_project?(:edit_own_comments_with_restricted_visibility, project) && journal.user_id == user.id)
+    if journal.internal?
+      user.allowed_in_project?(:edit_others_internal_comments, project) ||
+        (user.allowed_in_project?(:edit_own_internal_comments, project) && journal.user_id == user.id)
     else
-      user.allowed_in_project?(:edit_work_package_notes, project) ||
-        (user.allowed_in_work_package?(:edit_own_work_package_notes, self) && journal.user_id == user.id)
+      user.allowed_in_project?(:edit_work_package_comments, project) ||
+        (user.allowed_in_work_package?(:edit_own_work_package_comments, self) && journal.user_id == user.id)
     end
   end
 

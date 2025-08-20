@@ -122,7 +122,7 @@ pt-PT:
             item_2:
               name: Tarefas
             item_3:
-              name: Planeador de equipa
+              name: Planificador de equipas
           boards:
             kanban:
               name: Quadro Kanban
@@ -165,7 +165,7 @@ pt-PT:
                     Informe-nos se tiver alguma dúvida ou precisar de apoio. Contacte-nos: [support[at]openproject.com](mailto:support@openproject.com).
               item_5:
                 options:
-                  name: Tarefas
+                  name: Pacotes de trabalho
               item_6:
                 options:
                   name: Marcos
@@ -292,7 +292,7 @@ pt-PT:
             item_0:
               name: Plano do projeto
             item_1:
-              name: Lista de acumulados de produto
+              name: Backlog do produto
             item_2:
               name: Sprint 1
             item_3:
@@ -336,7 +336,7 @@ pt-PT:
                     Informe-nos se tiver alguma dúvida ou precisar de apoio. Contacte-nos: [support[at]openproject.com](mailto:support@openproject.com).
               item_5:
                 options:
-                  name: Tarefas
+                  name: Pacotes de trabalho
               item_6:
                 options:
                   name: Plano do projeto

@@ -50,6 +50,7 @@ import { HalEventsService } from 'core-app/features/hal/services/hal-events.serv
   selector: 'wp-relations',
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './wp-relations.template.html',
+  standalone: false,
 })
 export class WorkPackageRelationsComponent extends UntilDestroyedMixin implements OnInit, AfterViewInit, OnDestroy {
   @Input() public workPackage:WorkPackageResource;
@@ -87,7 +88,7 @@ export class WorkPackageRelationsComponent extends UntilDestroyedMixin implement
       .events$
       .pipe(
         filter((e) => e.eventType === 'association' || e.eventType === 'updated'),
-        throttleTime(1000),
+        throttleTime(1000, undefined, { leading: true, trailing: true }),
         this.untilDestroyed(),
       )
       .subscribe(() => {
@@ -115,7 +116,10 @@ export class WorkPackageRelationsComponent extends UntilDestroyedMixin implement
 
   private async updateFrontendData(event:CustomEvent) {
     if (event) {
-      const form = event.target as HTMLFormElement;
+      // A turbo:submit-end event *has* a `formSubmission` property, but I do not
+      // know how to avoid the eslint type warning. Please if you know, fix it.
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      const form = event.detail.formSubmission.formElement as HTMLFormElement;
       const updateWorkPackage = !!form.dataset?.updateWorkPackage;
 
       if (updateWorkPackage) {

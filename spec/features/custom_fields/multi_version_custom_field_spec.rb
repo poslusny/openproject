@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 require "support/pages/work_packages/abstract_work_package"
 
@@ -35,6 +37,7 @@ RSpec.describe "multi version custom field", :js do
     login_as current_user
     wp_page.visit!
     wp_page.ensure_page_loaded
+    wait_for_network_idle
   end
 
   it "is shown and allowed to be updated" do
@@ -99,7 +102,7 @@ RSpec.describe "multi version custom field", :js do
       expect(page).to have_text "Version Old"
       expect(page).to have_text "Version Current"
 
-      page.find(".inline-edit--display-field", text: "Version Old").click
+      cf_edit_field.activate!
       cf_edit_field.unset_value "Version Old", multi: true
 
       expect_ng_option(cf_edit_field, version_old, grouping: project.name, results_selector: "body")

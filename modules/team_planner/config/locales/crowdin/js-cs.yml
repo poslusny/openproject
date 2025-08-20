@@ -3,6 +3,7 @@ cs:
   js:
     team_planner:
       add_existing: 'Přidat existující'
+      label_team_planner_plural: 'Team planners'
       add_existing_title: 'Přidat existující pracovní balíčky'
       create_label: 'Týmový plánovač'
       create_title: 'Vytvořit nový týmový plánovač'

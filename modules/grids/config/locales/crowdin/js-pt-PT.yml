@@ -4,9 +4,6 @@ pt-PT:
       add_widget: 'Adicionar widget'
       remove: 'Remover o widget'
       configure: 'Configurar widget'
-      upsale:
-        text: "Alguns widgets, como o widget gráfico do pacote de trabalho, estão disponíveis apenas na edição Enterprise."
-        link: 'Edição Enterprise.'
       widgets:
         missing_permission: "Não tem as permissões necessárias para visualizar este widget."
         custom_text:
@@ -51,7 +48,7 @@ pt-PT:
         work_packages_accountable:
           title: "Pacotes de trabalho pelos quais sou responsável"
         work_packages_assigned:
-          title: 'Tarefas atribuídas a mim'
+          title: 'Pacotes de trabalho atribuídos a mim'
         work_packages_created:
           title: 'Pacotes de trabalho criados por mim'
         work_packages_watched:
@@ -61,7 +58,7 @@ pt-PT:
         work_packages_graph:
           title: 'Gráfico de pacotes de trabalho'
         work_packages_calendar:
-          title: 'Calendário'
+          title: 'Calendários'
         work_packages_overview:
           title: 'Visão geral dos pacotes de trabalho'
           placeholder: 'Clique para editar...'

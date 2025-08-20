@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -147,10 +149,6 @@ class RolesController < ApplicationController
 
   def roles_scope
     Role.visible.ordered_by_builtin_and_position
-  end
-
-  def show_local_breadcrumb
-    false
   end
 
   def new_params

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -85,6 +87,13 @@ RSpec.describe EmojiReaction do
 
     it "returns nil if no reaction exists with given name" do
       expect(described_class.emoji("rock_on")).to be_nil
+    end
+  end
+
+  describe "#emoji" do
+    it "returns the emoji for the reaction" do
+      emoji_reaction = build_stubbed(:emoji_reaction, reaction: :thumbs_up)
+      expect(emoji_reaction.emoji).to eq("👍")
     end
   end
 end

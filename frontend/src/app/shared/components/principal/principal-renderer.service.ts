@@ -129,7 +129,7 @@ export class PrincipalRendererService {
     const userInitials = this.getInitials(principal.name);
     const colorMode = this.colors.colorMode();
     const text = `${principal.id}${principal.name}`;
-    const colorCode = this.colors.toHsl(text, colorMode);
+    const colorCode = this.colors.toHsl(text);
 
     const fallback = document.createElement('div');
     fallback.classList.add('op-principal--avatar');

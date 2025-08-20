@@ -120,7 +120,7 @@ ka:
             item_1:
               name: ნიშანსვეტები
             item_2:
-              name: დავალებები
+              name: ამოცანები
             item_3:
               name: გუნდის მგეგმავი
           boards:
@@ -296,7 +296,7 @@ ka:
             item_2:
               name: სპრინტი 1
             item_3:
-              name: დავალებები
+              name: ამოცანები
           boards:
             kanban:
               name: კანბანის დაფა

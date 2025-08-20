@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -101,7 +103,7 @@ RSpec.describe "Emoji reactions on work package activity", :js, :with_cuprite do
     end
   end
 
-  context "when a user has `add_work_package_notes` permission" do
+  context "when a user has `add_work_package_comments` permission" do
     current_user { viewer_with_commenting_permission }
 
     before do
@@ -202,7 +204,7 @@ RSpec.describe "Emoji reactions on work package activity", :js, :with_cuprite do
   def create_user_as_project_member
     member_role = create(:project_role,
                          permissions: %i[view_work_packages edit_work_packages add_work_packages work_package_assigned
-                                         add_work_package_notes])
+                                         add_work_package_comments])
     create(:user, firstname: "A", lastname: "Member",
                   member_with_roles: { project => member_role })
   end
@@ -217,8 +219,8 @@ RSpec.describe "Emoji reactions on work package activity", :js, :with_cuprite do
 
   def create_user_with_view_and_commenting_permission
     viewer_role_with_commenting_permission = create(:project_role,
-                                                    permissions: %i[view_work_packages add_work_package_notes
-                                                                    edit_own_work_package_notes])
+                                                    permissions: %i[view_work_packages add_work_package_comments
+                                                                    edit_own_work_package_comments])
     create(:user,
            firstname: "A",
            lastname: "Viewer",

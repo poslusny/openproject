@@ -36,10 +36,11 @@ import { Component, Input } from '@angular/core';
          [attr.title]="iconTitle || undefined"
          aria-hidden="true"></i>
       <span
-        class="hidden-for-sighted"
+        class="sr-only"
         [textContent]="iconTitle"
         *ngIf="iconTitle"></span>
     `,
+  standalone: false,
 })
 export class OpIconComponent {
   @Input('icon-classes') iconClasses:string;

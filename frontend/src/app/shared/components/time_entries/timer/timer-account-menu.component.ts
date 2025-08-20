@@ -42,6 +42,7 @@ export const timerAccountSelector = 'op-timer-account-menu';
   encapsulation: ViewEncapsulation.None,
   providers: [TimeEntryEditService,
     HalResourceEditingService],
+  standalone: false,
 })
 export class TimerAccountMenuComponent extends UntilDestroyedMixin implements OnInit {
   @HostBinding('class.op-timer-account-menu') className = true;

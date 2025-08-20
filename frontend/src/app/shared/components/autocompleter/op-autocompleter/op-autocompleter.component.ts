@@ -84,6 +84,7 @@ export interface IAutocompleterTemplateComponent {
       multi: true,
     },
   ],
+  standalone: false,
 })
 // It is component that you can use whenever you need an autocompleter
 // it has all inputs and outputs of ng-select
@@ -168,6 +169,7 @@ export class OpAutocompleterComponent<T extends IAutocompleteItem = IAutocomplet
   @Input() public placeholder:string = this.I18n.t('js.autocompleter.placeholder');
   @Input() public notFoundText:string = this.I18n.t('js.autocompleter.notFoundText');
   @Input() public addTagText?:string;
+  @Input() public ariaLabel?:string = this.I18n.t('js.autocompleter.search');
 
   @Input() public loadingText:string = this.I18n.t('js.ajax.loading');
 
@@ -343,25 +345,25 @@ export class OpAutocompleterComponent<T extends IAutocompleteItem = IAutocomplet
         });
     }
 
-    this.ngZone.runOutsideAngular(() => {
-      setTimeout(() => {
-        this.results$ = merge(
-          this.items$,
-          this.autocompleteInputStream(),
-        );
+    setTimeout(() => {
+      this.results$ = merge(
+        this.items$,
+        this.autocompleteInputStream(),
+      );
 
-        if (this.fetchDataDirectly) {
-          this.typeahead?.next('');
-        }
+      if (this.fetchDataDirectly) {
+        this.typeahead?.next('');
+      }
 
-        if (this.openDirectly) {
-          this.ngSelectInstance.open();
-          this.ngSelectInstance.focus();
-        } else if (this.focusDirectly) {
-          this.ngSelectInstance.focus();
-        }
-      }, 25);
-    });
+      if (this.openDirectly) {
+        this.ngSelectInstance.open();
+        this.ngSelectInstance.focus();
+      } else if (this.focusDirectly) {
+        this.ngSelectInstance.focus();
+      }
+
+      this.cdRef.detectChanges();
+    }, 25);
   }
 
   public get mappedInputValue():string|string[] {
@@ -370,7 +372,7 @@ export class OpAutocompleterComponent<T extends IAutocompleteItem = IAutocomplet
     }
 
     if (Array.isArray(this.model)) {
-      return this.model.map((el) => el[this.inputBindValue as 'id'] as string);
+      return this.model.map((el) => (_.isObject(el) ? el[this.inputBindValue as 'id'] : el) as string);
     }
 
     return this.model[this.inputBindValue as 'id'] as string;

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # JavaScript: HTML5 File attachments handling
 # requires a (hidden) input file field
 module Components

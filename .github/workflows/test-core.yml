@@ -25,17 +25,15 @@ jobs:
     name: Units + Features
     if: github.repository == 'opf/openproject'
     runs-on:
-      labels:
-        - runs-on
-        - runner=32cpu-linux-x64
-        - family=m7+c7+r7+i7
-        - ram=128
-        - run-id=${{ github.run_id }}
+      labels: "runs-on=${{ github.run_id }}/runner=32cpu-linux-x64/family=m7+c7+r7+i7/ram=128"
     timeout-minutes: 40
     env:
       DOCKER_BUILDKIT: 1
       CI_RETRY_COUNT: 3
     steps:
+    - uses: runs-on/action@v2
+      with:
+        metrics: cpu,memory,disk,io,network
     - uses: actions/checkout@v4
     - name: Cache DOCKER
       id: cache_docker

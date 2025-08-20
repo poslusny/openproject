@@ -47,11 +47,11 @@ dnf install -y epel-release
 dnf install -y clamav clamd clamav-update
 ```
 
-For these distributions, you need to manually create the configuration files for `freshclam` and `clamd`.  For more information, see https://docs.clamav.net/manual/Installing.html#rpm-packages-for-centos-redhat-fedora-suse-etc
+For these distributions, you need to manually create the configuration files for `freshclam` and `clamd`.  [More information](https://docs.clamav.net/manual/Installing.html#rpm-packages-for-centos-redhat-fedora-suse-etc)
 
 ### Docker
 
-To run ClamAV in Docker, follow this guide: https://docs.clamav.net/manual/Installing/Docker.html.
+To run ClamAV in Docker, follow this [guide](https://docs.clamav.net/manual/Installing/Docker.html).
 
 As a quick-start, you can use this command to start clamav with local volume mounts for the virus database:
 

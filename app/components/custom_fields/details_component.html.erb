@@ -1,7 +1,7 @@
 <%=
   component_wrapper do
     flex_layout do |content|
-      if has_no_items_or_projects?
+      if persisted_cf_has_no_items_or_projects?
         content.with_row(mb: 3) do
           render Primer::Alpha::Banner.new(
             scheme: :default,
@@ -15,12 +15,12 @@
       end
 
       content.with_row do
-        admin_settings_primer_form_with(
+        settings_primer_form_with(
           model:,
           scope: :custom_field,
           id: "custom_field_form",
-          url: custom_field_path(model),
-          method: :put
+          url: form_url,
+          method: form_method
         ) { |form| render CustomFields::DetailsForm.new(form) }
       end
     end

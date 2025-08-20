@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -848,14 +850,23 @@ RSpec.describe "Show project custom fields on project overview page", :js do
       create :project_help_text,
              attribute_name: boolean_project_custom_field.attribute_name
     end
-    let(:modal) { Components::AttributeHelpTextModal.new(instance) }
 
     it "displays when active" do
       overview_page.visit_page
+
       # Open help text modal
-      modal.open!
-      expect(modal.modal_container).to have_text "Attribute help text"
-      modal.expect_edit(editable: true)
+      page.find("[data-qa-help-text-for='#{instance.attribute_name.camelize(:lower)}']").click
+
+      within_modal "Boolean field" do
+        expect(page).to have_text "Attribute help text"
+
+        expect(page).to have_button "Close"
+        expect(page).to have_link "Edit"
+
+        click_on "Close"
+      end
+
+      expect(page).to have_no_modal "Boolean field"
     end
   end
 end

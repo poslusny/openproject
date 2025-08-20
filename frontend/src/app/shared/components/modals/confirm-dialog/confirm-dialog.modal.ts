@@ -66,6 +66,7 @@ export interface ConfirmDialogOptions {
   templateUrl: './confirm-dialog.modal.html',
   styleUrls: ['./confirm-dialog.modal.sass'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class ConfirmDialogModalComponent extends OpModalComponent {
   public showClose:boolean;

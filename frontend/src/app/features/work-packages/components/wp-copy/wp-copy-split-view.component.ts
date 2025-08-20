@@ -33,6 +33,7 @@ import { WorkPackageCopyController } from 'core-app/features/work-packages/compo
   selector: 'wp-copy-split-view',
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: '../wp-new/wp-new-split-view.html',
+  standalone: false,
 })
 export class WorkPackageCopySplitViewComponent extends WorkPackageCopyController {
 }

@@ -35,6 +35,7 @@ import {
 } from 'core-app/shared/helpers/chronic_duration';
 import { TurboRequestsService } from 'core-app/core/turbo/turbo-requests.service';
 import { PathHelperService } from 'core-app/core/path-helper/path-helper.service';
+import { useMeta } from 'stimulus-use';
 
 export default class TimeEntryController extends Controller {
   static targets = ['startTimeInput', 'endTimeInput', 'hoursInput', 'form'];
@@ -47,15 +48,21 @@ export default class TimeEntryController extends Controller {
   declare readonly hoursInputTarget:HTMLInputElement;
   declare oldWorkPackageId:string;
 
+  static metaNames = ['csrf-token'];
+
+  declare readonly csrfToken:string;
+
   private turboRequests:TurboRequestsService;
   private pathHelper:PathHelperService;
 
   async connect() {
+    useMeta(this, { suffix: false });
+
     const context = await window.OpenProject.getPluginContext();
     this.turboRequests = context.services.turboRequests;
     this.pathHelper = context.services.pathHelperService;
 
-    const workPackageAutocompleter = document.querySelector('opce-autocompleter[data-input-name*="time_entry[work_package_id]"]');
+    const workPackageAutocompleter = document.querySelector('opce-autocompleter[data-input-name*="time_entry[entity_id]"]');
     if (workPackageAutocompleter) {
       this.oldWorkPackageId = (workPackageAutocompleter as HTMLElement).dataset.inputValue || '';
     }
@@ -69,7 +76,7 @@ export default class TimeEntryController extends Controller {
     );
   }
 
-  workPackageChanged(event:InputEvent) {
+  entityChanged(event:InputEvent) {
     const target = event.currentTarget as HTMLInputElement;
     const newValue = target.value;
 
@@ -77,14 +84,13 @@ export default class TimeEntryController extends Controller {
       this.oldWorkPackageId = newValue;
 
       const url = this.formTarget.dataset.refreshFormUrl as string;
-      const csrfToken = document.querySelector<HTMLMetaElement>('meta[name="csrf-token"]')?.content || '';
       const formData = new FormData(this.formTarget);
       formData.delete('_method'); // remove the override method as this will submit to the wrong action
       void this.turboRequests.request(url, {
         method: 'post',
         body: formData,
         headers: {
-          'X-CSRF-Token': csrfToken,
+          'X-CSRF-Token': this.csrfToken,
         },
       });
     }
@@ -171,6 +177,12 @@ export default class TimeEntryController extends Controller {
     // Parse input through our chronic duration parser and then reformat as hours that can be nicely parsed on the
     // backend
     const hours = this.parsedHourInput();
+
+    if (hours === 0) {
+      this.hoursInputTarget.value = '';
+      return;
+    }
+
     this.hoursInputTarget.value = outputChronicDuration(hours, { format: 'hours_only' }) || '';
 
     this.datesChanged(this.hoursInputTarget);

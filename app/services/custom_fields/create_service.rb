@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -38,7 +40,7 @@ module CustomFields
       nil
     end
 
-    def perform(params)
+    def perform
       super
     rescue StandardError => e
       ServiceResult.failure(message: e.message)

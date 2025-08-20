@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 require "support/edit_fields/edit_field"
 require "features/work_packages/work_packages_page"

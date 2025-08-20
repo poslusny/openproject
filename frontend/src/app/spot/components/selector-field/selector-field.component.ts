@@ -14,6 +14,7 @@ import {
 @Component({
   selector: 'spot-selector-field',
   templateUrl: './selector-field.component.html',
+  standalone: false,
 })
 export class SpotSelectorFieldComponent {
   @HostBinding('class.spot-form-field') className = true;

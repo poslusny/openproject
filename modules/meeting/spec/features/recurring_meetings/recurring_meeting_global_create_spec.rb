@@ -29,8 +29,7 @@
 
 require "spec_helper"
 
-require_relative "../../support/pages/meetings/new"
-require_relative "../../support/pages/structured_meeting/show"
+require_relative "../../support/pages/meetings/show"
 require_relative "../../support/pages/recurring_meeting/show"
 require_relative "../../support/pages/meetings/index"
 
@@ -79,7 +78,7 @@ RSpec.describe "Recurring meetings global creation",
       meetings_page.click_create
       wait_for_network_idle
 
-      expect(page).to have_css("h1", text: "Some title")
+      expect(page).to have_heading "Some title"
       meeting = Meeting.last
       expect(meeting.title).to eq "Some title"
       expect(meeting.project).to eq project
@@ -106,7 +105,7 @@ RSpec.describe "Recurring meetings global creation",
       meetings_page.click_create
       wait_for_network_idle
 
-      expect(page).to have_css("h1", text: "Some title (Template)")
+      expect(page).to have_heading "Some title (Template)"
       meeting = Meeting.last
       expect(meeting.title).to eq "Some title"
       expect(meeting.project).to eq project

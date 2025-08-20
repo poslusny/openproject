@@ -22,6 +22,7 @@ Additionally, in your OpenProject work package, the GitHub integration supports 
 ![Git snippets dropdown menu under GitHub tab in OpenProject work package](openproject-system-guide-github-integation-github-git-snippets.png)
 
 Pull request activities will also appear in the Activity tab when the pull request is:
+
 * first referenced (usually when opened)
 * marked ready for review
 * merged

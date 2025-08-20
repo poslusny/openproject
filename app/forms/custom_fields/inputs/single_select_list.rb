@@ -80,6 +80,18 @@ class CustomFields::Inputs::SingleSelectList < CustomFields::Inputs::Base::Autoc
   end
 
   def selected?(custom_option)
-    custom_option.id == @custom_value.value&.to_i || custom_option.id == @custom_field.default_value&.to_i
+    custom_option.id == selected_id
+  end
+
+  ##
+  # Returns the ID of the selected CustomOption,
+  # the default option ID if none is selected, or
+  # nil if there is no default.
+  def selected_id
+    if @custom_value.value.present?
+      @custom_value.value.to_i
+    else
+      @custom_field.default_value&.to_i
+    end
   end
 end

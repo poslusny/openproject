@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ::TwoFactorAuthentication
   module ForcedRegistration
     class TwoFactorDevicesController < ::TwoFactorAuthentication::BaseController
@@ -62,10 +64,6 @@ module ::TwoFactorAuthentication
 
       def target_user
         @authenticated_user
-      end
-
-      def show_local_breadcrumb
-        false
       end
 
       def index_path

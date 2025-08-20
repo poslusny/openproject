@@ -56,6 +56,7 @@ import { firstValueFrom } from 'rxjs';
   providers: [
     HalResourceEditingService,
   ],
+  standalone: false,
 })
 export class AttributeLabelMacroComponent implements OnInit {
   // Whether the value could not be loaded

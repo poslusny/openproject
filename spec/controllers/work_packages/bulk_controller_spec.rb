@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -81,7 +83,7 @@ RSpec.describe WorkPackages::BulkController, with_settings: { journal_aggregatio
            principal: user,
            roles: [role])
   end
-  shared_let(:work_package1) do
+  shared_let(:work_package1, refind: true) do
     create(:work_package,
            author: user,
            assigned_to: user,
@@ -91,7 +93,7 @@ RSpec.describe WorkPackages::BulkController, with_settings: { journal_aggregatio
            custom_field_values: { custom_field1.id => custom_field_value },
            project: project1)
   end
-  shared_let(:work_package2) do
+  shared_let(:work_package2, refind: true) do
     create(:work_package,
            author: user,
            assigned_to: user,
@@ -101,7 +103,7 @@ RSpec.describe WorkPackages::BulkController, with_settings: { journal_aggregatio
            custom_field_values: { custom_field1.id => custom_field_value },
            project: project1)
   end
-  shared_let(:work_package3) do
+  shared_let(:work_package3, refind: true) do
     create(:work_package,
            author: user,
            type:,
@@ -641,6 +643,24 @@ RSpec.describe WorkPackages::BulkController, with_settings: { journal_aggregatio
         send_destroy_request
         expect(WorkPackage.count).to eq(0)
         expect(response).to redirect_to(project_work_packages_path(work_package1.project))
+      end
+    end
+
+    context "with children work packages following each other" do
+      before_all do
+        work_package1.update(subject: "parent", schedule_manually: false)
+        work_package2.update(subject: "predecessor child", parent: work_package1, schedule_manually: true)
+        work_package3.update(subject: "successor child", parent: work_package1, schedule_manually: false)
+        create(:follows_relation, predecessor: work_package2, successor: work_package3)
+      end
+
+      let(:params) { { "ids" => [work_package1.id, work_package2.id, work_package3.id] } }
+
+      it "deletes them all without errors" do
+        expect { send_destroy_request }.not_to raise_error
+
+        expect(WorkPackage.count).to eq(0)
+        expect(response).to redirect_to(project_work_packages_path(project1))
       end
     end
   end

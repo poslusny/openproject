@@ -21,7 +21,9 @@
 #++
 ro:
   js:
-    text_are_you_sure: "Sunteți sigur?"
+    text_are_you_sure: "Ești sigur?"
+    myTimeTracking:
+      noSpecificTime: "No specific time"
     work_packages:
       property_groups:
         costs: "Costuri"

@@ -45,7 +45,7 @@ ca:
       meeting_agenda_item:
         title: "Títol"
         author: "Autor/a"
-        duration_in_minutes: "min"
+        duration_in_minutes: "Duration"
         description: "Notes"
         presenter: "Presentador"
       meeting_section:
@@ -70,11 +70,9 @@ ca:
         invalid_time_format: "no és una hora vàlida. El format requerit és: HH:MM"
     models:
       recurring_meeting: "Recurring meeting"
-      structured_meeting: "One-time meeting"
-      meeting: "Reunió"
+      meeting: "One-time meeting"
       meeting_agenda_item: "Element d'agenda"
       meeting_agenda: "Agenda"
-      meeting_minutes: "Acta"
       meeting_section: "Secció"
   activity:
     filter:
@@ -101,6 +99,7 @@ ca:
     meeting_agenda_opened: Agenda de la reunió oberta
     meeting_minutes: Acta de la reunió editada
     meeting_minutes_created: Acta de la reunió creada
+  error_notification: "Failed to send notification."
   error_notification_with_errors: "Error en enviar la notificació. Els següents recipients no han pogut ser notificats: %{recipients}"
   label_meeting: "Reunió"
   label_meeting_plural: "Reunions"
@@ -120,6 +119,7 @@ ca:
   label_meeting_date_time: "Data/Hora"
   label_meeting_date_and_time: "Data i hora"
   label_meeting_diff: "Diferència"
+  label_meeting_send_updates: "Send email calendar updates"
   label_recurring_meeting: "Recurring meeting"
   label_recurring_meeting_part_of: "Part of a meeting series"
   label_recurring_meeting_new: "New recurring meeting"
@@ -184,6 +184,7 @@ ca:
       agenda_items: "Copy agenda items"
       agenda_text: "Copia l'agenda de l'antiga reunió"
       participants: "Copy list of participants"
+      to_clipboard: "Copy to clipboard"
     email:
       send_emails: "Email participants"
       send_invitation_emails: >
@@ -215,11 +216,8 @@ ca:
         body: "The meeting '%{title}' has been rescheduled by %{actor}."
         old_date_time: "Data/hora antiga"
         new_date_time: "Data/hora nova"
-    label_mail_all_participants: "Envia un correu a tots els participants"
+    label_mail_all_participants: "Email calendar invite to all participants"
     types:
-      classic: "Classic (unsupported)"
-      classic_text: "Note: Classic meetings will be removed in the next version of OpenProject."
-      structured: "Structured"
       one_time: "One-time"
       recurring: "Recurring"
       recurring_text: "Create meeting series with dynamic template for each occurrence."
@@ -241,12 +239,79 @@ ca:
     blankslate:
       title: "No meetings to display"
       desc: "There are no meetings that meet the active filter criteria."
+    label_export_pdf: "Export PDF"
+    export:
+      your_meeting_export: "Meeting is being exported"
+    export_pdf_dialog:
+      title: Export PDF
+      description: Generate a printable PDF file of this meeting at the current state.
+      include_participants:
+        label: Include list of participants
+        caption: A list of participants will be preset above the meeting agenda.
+      include_attachments:
+        label: Include list of attachments
+        caption: A list containing the filenames of attachments will be appended at the end.
+      include_backlog:
+        label: Include backlog
+        caption: Backlog elements are not normally considered part of a meeting occurrence but you can choose to include them.
+      include_outcomes:
+        label: Include agenda outcomes
+        caption: If your agenda outcomes contain confidential information, you can choose to not include them in the export.
+      footer_text:
+        label: Footer text
+        caption: This text will appear on every page at the center of the footer.
+      submit_button: Download
+    notifications:
+      sidepanel:
+        title: "Email calendar updates"
+        state:
+          disabled: "Disabled."
+          enabled: "Enabled."
+        description:
+          disabled: "Participants will not receive an email informing them of changes."
+          enabled: "All participants will receive updated calendar invites via email informing them of changes."
+          change_via_template: "To change this, edit the series template."
+        button:
+          disable: "Disable"
+          enable: "Enable"
+      dialog:
+        title:
+          enable: "Enable email calendar updates?"
+          disable: "Disable email calendar updates?"
+        message:
+          enable: >
+            All participants will receive updated calendar invites via email every time there is a change to the meeting date, time, location or participants. Once enabled, an email will be sent out immediately to all participants.
+          disable: >
+            Participants will no longer receive updated calendar invites via email when there are changes to the meeting date, time, location or participants. If they already had an invite for this meeting, it might no longer be accurate.
+        confirm_label:
+          enable: "Enable email updates"
+          disable: "Disable email updates"
+      banner:
+        onetime:
+          enabled: >
+            All participants will receive updated calendar invites via email informing them of your changes.
+          disabled: >
+            Email calendar updates are disabled. Participants will not receive an email informing them of your changes.
+        occurrence:
+          enabled: >
+            Email calendar updates are enabled for the meeting series. All participants will receive updated calendar invites informing them of your changes to this occurrence.
+          disabled: >
+            Email calendar updates are disabled for the meeting series. Participants will not receive an email informing them of your changes to this occurrence.
+        template:
+          enabled: >
+            Email calendar updates are enabled for the meeting series. All participants will receive updated calendar invites informing them of your changes to this template or to individual occurrences.
+          disabled: >
+            Email calendar updates are disabled for the meeting series. Participants will not receive an email informing them of your changes to this template or to individual occurrences.
   meeting_section:
     untitled_title: "Untitled section"
     delete_confirmation: "Deleting the section will also delete all of its agenda items. Are you sure you want to do this?"
     placeholder_title: "Nova secció"
     empty_text: "Arrossega els elements aquí o crea un de nou"
   recurring_meeting:
+    time_zone_difference_banner:
+      title: "Time zone difference"
+      description: >
+        The dates below are referencing the time zone of the meeting series (%{actual_zone}), not your local time zone (%{user_zone}).
     ended_blankslate:
       title: "Meeting series ended"
       message: "This meeting series has come to an end. There are no upcoming meetings. "
@@ -324,23 +389,17 @@ ca:
       confirm_button: "Cancel occurrence"
     end_series_dialog:
       title: "End meeting series"
-  notice_successful_notification: "Notificació enviada correctament"
+  notice_successful_notification: "Email calendar update sent to all participants"
   notice_timezone_missing: No s'ha configurat la zona horària i la %{zone} és assumida. Per seleccionar la teva zona horària, si us plau, fes clic aquí.
   notice_meeting_updated: "This page has been updated by someone else. Reload to view changes."
   permission_create_meetings: "Crea reunions"
   permission_edit_meetings: "Edita reunions"
   permission_delete_meetings: "Elimina reunions"
   permission_view_meetings: "Veure reunions"
-  permission_create_meeting_agendas: "Crea agendes de reunions"
-  permission_create_meeting_agendas_explanation: "Permet editar el contingut de l'agenda de la reunió clàssica."
   permission_manage_agendas: "Gestiona agendes"
-  permission_manage_agendas_explanation: "Permet gestionar els elements de l'agenda de la reunió dinàmica."
-  permission_close_meeting_agendas: "Tancar agendes"
-  permission_send_meeting_agendas_notification: "Enviar una notificació de revisió per agendes"
-  permission_create_meeting_minutes: "Administra actes"
-  permission_send_meeting_minutes_notification: "Enviar una notificació de revisió per actes"
-  permission_meetings_send_invite: "Convida usuaris a reunions"
-  permission_send_meeting_agendas_icalendar: "Envia una agenda de reunió com a entrada de calendari"
+  permission_manage_agendas_explanation: "Allows creating, editing and removing agenda items"
+  permission_manage_outcomes: "Manage outcomes"
+  permission_send_meeting_invites_and_outcomes: "Send meeting invites and outcomes to participants"
   project_module_meetings: "Reunions"
   text_duration_in_hours: "Duració en hores"
   text_in_hours: "en hores"
@@ -352,8 +411,8 @@ ca:
   text_meeting_minutes_for_meeting: 'actes per la reunió "%{meeting}"'
   text_notificiation_invited: "Aquest correu compte una entrada ICS per a reunió següent:"
   text_meeting_empty_heading: "La reunió està buida"
-  text_meeting_empty_description_1: "Comença afegint elements d'agenda a sota. Cada element pot ser tan simple com un títol, però també es pot afegir detalls extres com la duració o notes."
-  text_meeting_empty_description_2: 'També pots referenciar paquets de treball existents. En fer-ho, les notes relacionades apareixeran automàticament a la pestanya "Reunions" del paquet de treball.'
+  text_meeting_empty_description1: "Comença afegint elements d'agenda a sota. Cada element pot ser tan simple com un títol, però també es pot afegir detalls extres com la duració o notes."
+  text_meeting_empty_description2: 'També pots referenciar paquets de treball existents. En fer-ho, les notes relacionades apareixeran automàticament a la pestanya "Reunions" del paquet de treball.'
   label_meeting_empty_action: "Afegeix element d'agenda"
   label_meeting_actions: "Accions de la reunió"
   label_meeting_edit_title: "Edita el títol de la reunió"
@@ -367,23 +426,47 @@ ca:
   label_meeting_index_later: "Next week and later"
   label_agenda_items: "Punts de l'ordre del dia"
   label_agenda_items_reordered: "reordenat"
-  label_agenda_item_remove: "Suprimeix de l'agenda"
+  label_agenda_item_add: "Add agenda item"
+  label_agenda_item_remove_from_agenda: "Remove from agenda"
+  label_agenda_item_remove_from_backlog: "Remove from backlog"
   label_agenda_item_undisclosed_wp: "Paquet de treball #%{id} no visible"
   label_agenda_item_deleted_wp: "Referència de paquet de treball eliminada"
   label_agenda_item_actions: "Accions d'element de l'agenda"
+  label_agenda_item_move_to_next_title: "Move to next meeting?"
+  label_agenda_item_move: "Move"
   label_agenda_item_move_to_next: "Move to next meeting"
+  label_agenda_item_move_to_backlog: "Move to backlog"
+  label_agenda_item_move_to_current_meeting: "Move to current meeting"
   label_agenda_item_move_to_top: "Moure al principi"
   label_agenda_item_move_to_bottom: "Moure al final"
   label_agenda_item_move_up: "Mou amunt"
   label_agenda_item_move_down: "Mou avall"
   label_agenda_item_add_notes: "Afegir notes"
   label_agenda_item_add_outcome: "Add outcome"
+  label_agenda_item_work_package_add: "Add work package"
   label_agenda_item_work_package: "Paquet de treball d'elements de l'agenda"
+  label_section_rename: "Rename section"
   label_agenda_outcome: "Outcome"
   label_agenda_outcome_actions: "Agenda outcome actions"
   label_agenda_outcome_edit: "Edit outcome"
   label_agenda_outcome_delete: "Remove outcome"
   text_outcome_not_editable_anymore: "This outcome is not editable anymore."
+  text_outcome_cannot_be_added: "An outcome can no longer be added."
+  label_backlog_clear: "Clear backlog"
+  label_backlog_clear_button: "Esborra-ho tot"
+  text_backlog_clear_error: "One or more errors occurred while trying to clear the backlog."
+  label_agenda_backlog: "Agenda backlog"
+  text_agenda_backlog: >
+    This backlog is unique to this one-time meeting. You can drag items in and out to add or remove them from the meeting agenda.
+  label_agenda_backlog_clear_title: "Clear agenda backlog?"
+  text_agenda_backlog_clear_description: >
+    Are you sure you want to remove all items currently in the agenda backlog? This action is not reversible.
+  label_series_backlog: "Series backlog"
+  text_series_backlog: >
+    The backlog is shared with all occurrences of this series. You can drag items in and out to add or remove them from a particular meeting.
+  label_series_backlog_clear_title: "Clear series backlog?"
+  text_series_backlog_clear_description: >
+    This will remove all items in the series backlog, which is shared with all meetings in the series. Are you sure you want to continue? This action is not reversible.
   text_agenda_item_title: 'Punt de l''ordre del dia "%{title}"'
   text_agenda_work_package_deleted: 'Punt de l''ordre del dia per al paquet de treball suprimit'
   text_deleted_agenda_item: 'Punt de l''ordre del dia eliminat'
@@ -421,9 +504,12 @@ ca:
   text_add_work_package_to_meeting_description: "Un paquet de treball es pot afegir a una o múltiples reunions per a discussió. Qualsevol nota relacionada apareixerà aquí."
   text_agenda_item_no_notes: "Notes no proporcionades"
   text_agenda_item_not_editable_anymore: "Aquesta agenda ja no es pot editar."
-  text_agenda_item_move_next_meeting: "Are you sure you want to move this to the next meeting on %{date} at %{time}?"
+  text_agenda_item_move_next_meeting: "This item will be moved to the next meeting on %{date} at %{time}."
   text_agenda_item_moved_to_next_meeting: "Agenda item moved to the next meeting, on %{date}"
   text_work_package_has_no_upcoming_meeting_agenda_items: "Aquest paquet de treball encara no està planejat en cap agenda de reunió futura."
   text_agenda_item_move_next_meeting_cancelled: "Unable to move to the next meeting since it has been cancelled."
   text_work_package_add_to_meeting_hint: 'Utilitza el botó "Afegir a la reunió" per afegir aquest paquet de treball a una reunió futura.'
   text_work_package_has_no_past_meeting_agenda_items: "Aquest paquet de treball no s'ha mencionat en cap reunió passada."
+  text_email_updates_muted: "Email calendar updates are muted. Participants will not receive updated invites via email when you make changes."
+  text_email_updates_enabled: "Email calendar updates are enabled. All participants will receive updated invites via email when you make changes."
+

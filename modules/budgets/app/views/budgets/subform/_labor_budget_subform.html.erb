@@ -35,7 +35,6 @@ See COPYRIGHT and LICENSE files for more details.
 <fieldset id="labor_budget_items_fieldset"
           class="form--fieldset -collapsible"
           data-controller="costs--budget-subform"
-          data-application-target="dynamic"
           data-costs--budget-subform-item-count-value="<%= @budget.labor_budget_items.length %>"
           data-costs--budget-subform-update-url-value="<%= url_for(action: :update_labor_budget_item, project_id: @project.id) %>">
   <legend class="form--fieldset-legend"><%= Budget.human_attribute_name(:labor_budget) %></legend>

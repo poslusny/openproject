@@ -94,7 +94,7 @@ module Storages::Admin::Forms
     end
 
     def application_link_text_for(href, link_text)
-      render(Primer::Beta::Link.new(href:, target: "_blank")) { link_text }
+      render(Primer::Beta::Link.new(href:, target: "_blank", underline: true)) { link_text }
     end
   end
 end

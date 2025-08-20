@@ -6,14 +6,18 @@ fr:
     Vous avez été déconnecté. Le contenu de tout formulaire que vous soumettez peut être perdu. Veuillez [vous connecter].
   activerecord:
     attributes:
+      openid_connect/group_link:
+        oidc_group_name: Identifiant de groupe OpenID
       openid_connect/provider:
         name: Nom
         slug: Identifiant unique
         display_name: Nom d'affichage
         client_id: ID du client
         client_secret: Clé secrète du client
+        groups_claim: Revendication des groupes
         secret: Secret
         scope: Périmètre
+        sync_groups: Synchroniser les groupes
         grant_types_supported: Types d'autorisations pris en charge
         limit_self_registration: Limiter l'inscription automatique
         authorization_endpoint: Point de terminaison d'autorisation
@@ -52,9 +56,14 @@ fr:
   openid_connect:
     menu_title: Fournisseurs OpenID
     delete_title: "Supprimer le fournisseur OpenID Connect"
+    group_links_heading: Liens du groupe OpenID Connect
     instructions:
       redirect_url: C'est l'URL de redirection que le fournisseur OpenID Connect doit utiliser pour rediriger le client vers OpenProject après une connexion réussie.
       endpoint_url: L'URL du point de terminaison qui vous a été communiquée par le fournisseur OpenID Connect
+      group_regexes: Un motif d'expression régulière par ligne. Veuillez lire [la documentation](docs_url) pour en savoir plus sur la manière de procéder.
+      group_regexes_detail: Définissez des motifs à l'aide d'expressions régulières pour faire correspondre les noms de groupes à partir de la revendication de groupes. Par exemple, la saisie d'un motif tel que <code>^Level1/Level2/([\w/]+)$</code> permettra d'extraire le groupe « Groupname/SubGroup » d'une réponse comprenant « Level1/Level2/GroupName/SubGroup ».
+      group_sync: Extraire et synchroniser automatiquement les informations relatives à l'appartenance à un groupe à partir du fournisseur d'identité.
+      groups_claim: Indiquez le nom de la revendication censée indiquer les noms des groupes dont l'utilisateur est membre.
       metadata_none: Je ne dispose pas de cette information
       metadata_url: J'ai une URL de point de terminaison de découverte
       client_id: Il s'agit de l'ID de client qui vous a été attribué par votre fournisseur OpenID Connect
@@ -91,12 +100,15 @@ fr:
         name: Microsoft Entra
       custom:
         name: Personnalisé
-      upsale:
+      upsell:
+        title: "Authentification unique (SSO) avec connexion OpenID"
         description: Connecter OpenProject à un fournisseur d'identité OpenID Connect
       label_add_new: Ajouter un nouveau fournisseur OpenID
       label_edit: Modifier le fournisseur OpenID %{name}
       label_empty_title: Aucun fournisseur OpenID n'a encore été configuré.
       label_empty_description: Ajoutez un fournisseur pour le voir ici.
+      label_group_mapping: Mappage des groupes
+      label_group_regexes: Motif (expression régulière)
       label_metadata: Point de terminaison de découverte OpenID Connect
       label_automatic_configuration: Configuration automatique
       label_optional_configuration: Configuration facultative
@@ -109,6 +121,7 @@ fr:
       plural: Fournisseurs OpenID
       singular: Fournisseur OpenID
       section_texts:
+        group_mapping: Mettez en correspondance les noms de groupes fournis par le fournisseur d'identité avec les groupes d'OpenProject.
         metadata: Préremplir la configuration à l'aide d'une URL de point de découverte OpenID Connect
         metadata_form_banner: La modification du point de terminaison de découverte peut remplacer les valeurs de métadonnées préremplies existantes.
         metadata_form_title: Point de terminaison de découverte OpenID Connect
@@ -118,6 +131,9 @@ fr:
         display_name: Le nom d'affichage visible par les utilisateurs.
         attribute_mapping: Configurez le mappage des attributs entre OpenProject et le fournisseur OpenID Connect.
         claims: Demander des réclamations supplémentaires pour le jeton d'identification ou la réponse userinfo.
+      side_panel:
+        information_component:
+          backchannel_logout_url: URL de déconnexion du canal de retour
     setting_instructions:
       limit_self_registration: >
         Si cette option est activée, les utilisateurs ne peuvent s'inscrire en utilisant ce fournisseur que si le paramètre d'inscription automatique le permet.

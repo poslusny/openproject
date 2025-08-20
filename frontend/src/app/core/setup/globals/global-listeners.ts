@@ -91,27 +91,11 @@ export function initializeGlobalListeners():void {
       // This is very likely an invalid selector such as a Google Analytics tag.
       // We can safely ignore this and just not scroll in this case.
       // Still log the error so one can confirm the reason there is no scrolling.
-      console.log(`Could not scroll to given location hash: ${hash} ( ${e.message})`);
+      if (e instanceof Error) {
+        console.log(`Could not scroll to given location hash: ${hash} ( ${e.message})`);
+      }
     }
   }
-
-  // Global submitting hook,
-  // necessary to avoid a data loss warning on beforeunload
-  jQuery(document).on('submit', 'form', () => {
-    window.OpenProject.pageIsSubmitted = true;
-  });
-
-  // Global beforeunload hook
-  jQuery(window).on('beforeunload', (e:JQuery.TriggeredEvent) => {
-    const event = e.originalEvent as BeforeUnloadEvent;
-    if (window.OpenProject.pageWasEdited && !window.OpenProject.pageIsSubmitted) {
-      // Cancel the event
-      event.preventDefault();
-      // Chrome requires returnValue to be set
-      event.returnValue = I18n.t('js.work_packages.confirm_edit_cancel');
-    }
-  });
-
   // Disable global drag & drop handling, which results in the browser loading the image and losing the page
   jQuery(document.documentElement)
     .on('dragover drop', (evt:Event) => {

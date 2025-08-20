@@ -22,49 +22,4 @@ Rails.application.configure do
   # Show notes first, all other panels next
   config.lookbook.preview_inspector.drawer_panels = [:notes, "*"]
   config.lookbook.ui_theme = "blue"
-
-  SecureHeaders::Configuration.named_append(:lookbook) do
-    proxied =
-      if FrontendAssetHelper.assets_proxied?
-        ["ws://#{Setting.host_name}", "http://#{Setting.host_name}",
-         FrontendAssetHelper.cli_proxy.sub("http", "ws"), FrontendAssetHelper.cli_proxy]
-      else
-        []
-      end
-
-    {
-      script_src: proxied + %w('unsafe-eval' 'unsafe-inline' 'self'), # rubocop:disable Lint/PercentStringArray
-      script_src_elem: proxied + %w('unsafe-eval' 'unsafe-inline' 'self'), # rubocop:disable Lint/PercentStringArray
-      style_src: proxied + %w('self' 'unsafe-inline'), # rubocop:disable Lint/PercentStringArray
-      style_src_attr: proxied + %w('self' 'unsafe-inline') # rubocop:disable Lint/PercentStringArray
-    }
-  end
-
-  # rubocop:disable Lint/ConstantDefinitionInBlock
-  module LookbookCspExtender
-    extend ActiveSupport::Concern
-
-    included do
-      before_action do
-        use_content_security_policy_named_append :lookbook
-      end
-    end
-  end
-  # rubocop:enable Lint/ConstantDefinitionInBlock
-
-  Rails.application.reloader.to_prepare do
-    Lookbook.add_input_type(:octicon, "lookbook/previews/inputs/octicon")
-
-    [
-      Lookbook::ApplicationController,
-      Lookbook::PreviewController,
-      Lookbook::PreviewsController,
-      Lookbook::PageController,
-      Lookbook::PagesController,
-      Lookbook::InspectorController,
-      Lookbook::EmbedsController
-    ].each do |controller|
-      controller.include LookbookCspExtender
-    end
-  end
 end

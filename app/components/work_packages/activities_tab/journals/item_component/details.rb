@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -163,28 +165,19 @@ module WorkPackages
 
         def render_mobile_updated_time(container)
           container.with_column do
-            if OpenProject::FeatureDecisions.work_package_comment_id_url_active?
-              activity_anchor_link(journal) { journal_updated_at_formatted_time(journal) }
-            else
-              journal_updated_at_formatted_time(journal)
-            end
+            activity_anchor_link(journal)
           end
         end
 
         def render_updated_time(container)
           container.with_column(mr: 1, classes: "hidden-for-mobile") do
-            if OpenProject::FeatureDecisions.work_package_comment_id_url_active?
-              activity_anchor_link(journal) { journal_updated_at_formatted_time(journal) }
-            else
-              journal_updated_at_formatted_time(journal)
-            end
+            activity_anchor_link(journal)
           end
         end
 
         def render_header_end(header_container)
           header_container.with_column(flex_layout: true) do |header_end_container|
             render_notification_bubble(header_end_container) if has_unread_notifications
-            render_activity_link(header_end_container)
           end
         end
 
@@ -193,20 +186,9 @@ module WorkPackages
             render(Primer::Beta::Octicon.new(
                      :"dot-fill", # color is set via CSS as requested by UI/UX Team
                      classes: "work-packages-activities-tab-journals-item-component-details--notification-dot-icon",
-                     size: (OpenProject::FeatureDecisions.comments_with_restricted_visibility_active? ? :small : :medium),
+                     size: :small,
                      data: { test_selector: "op-journal-unread-notification", "op-ian-center-update-immediate": true }
                    ))
-          end
-        end
-
-        def render_activity_link(container)
-          return if OpenProject::FeatureDecisions.work_package_comment_id_url_active?
-
-          container.with_column(
-            pr: 3,
-            classes: "work-packages-activities-tab-journals-item-component-details--activity-link-container"
-          ) do
-            activity_anchor_link(journal)
           end
         end
 

@@ -24,6 +24,7 @@ import {
     BoardSubtasksActionService,
     QueryUpdatedService,
   ],
+  standalone: false,
 })
 export class BoardsRootComponent {
   constructor(readonly injector:Injector) {

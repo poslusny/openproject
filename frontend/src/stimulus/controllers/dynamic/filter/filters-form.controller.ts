@@ -228,9 +228,12 @@ export default class FiltersFormController extends Controller {
       const target = element.querySelector(selector) as HTMLElement;
 
       if (target) {
-        target.focus();
-        // We have found and focused our element, abort the iteration.
-        return true;
+        window.setTimeout(() => {
+          target.focus();
+
+          // We have found and focused our element, abort the iteration.
+          return true;
+        }, 250);
       }
 
       return false;

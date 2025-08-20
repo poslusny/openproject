@@ -39,6 +39,7 @@ import { OpContextMenuItem } from 'core-app/shared/components/op-context-menu/op
   selector: 'icon-triggered-context-menu',
   templateUrl: './icon-triggered-context-menu.component.html',
   styleUrls: ['./icon-triggered-context-menu.component.sass'],
+  standalone: false,
 })
 export class IconTriggeredContextMenuComponent extends OpContextMenuTrigger {
   constructor(

@@ -314,7 +314,7 @@ If in doubt on how you should start, you can also just [contact us](https://www.
 
 ### How can I receive support?
 
-We offer our Professional Support for Enterprise on-premises users and Enterprise cloud users. Please write an email to support@openproject.com.
+We offer our Professional Support for Enterprise on-premises users and Enterprise cloud users. Please write an email to [support@openproject.com](mailto:support@openproject.com).
 
 If you use the Community edition please feel free to use our [forums](https://community.openproject.org/projects/openproject/forums) for exchange with other users.
 

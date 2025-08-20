@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -36,6 +38,15 @@ RSpec.describe Project do
   let(:project) { create(:project, active:) }
   let(:build_project) { build_stubbed(:project, active:) }
   let(:user) { create(:user) }
+
+  describe ".templated" do
+    let!(:projects) { create_list(:project, 2) }
+    let!(:templated_projects) { create_list(:template_project, 1) }
+
+    it "returns templated projects only" do
+      expect(described_class.templated).to match_array(templated_projects)
+    end
+  end
 
   describe "#active?" do
     context "if active" do
@@ -156,10 +167,9 @@ RSpec.describe Project do
     let(:name) { "     Hello    World   " }
     let(:project) { described_class.new attributes_for(:project, name:) }
 
-    context "with white spaces in the name" do
-      it "trims the name" do
-        project.save
-        expect(project.name).to eql("Hello World")
+    context "with whitespace in the name" do
+      it "normalizes excess whitespace" do
+        expect(subject).to normalize(:name).from(name).to("Hello World")
       end
     end
 
@@ -387,8 +397,8 @@ RSpec.describe Project do
       expect(subject).to have_many(:available_phases)
                     .class_name("Project::Phase")
                     .inverse_of(:project)
-                    .dependent(:destroy)
-                    .order(position: :asc)
+                    .dependent(nil)
+                    .order("project_phase_definitions.position ASC")
     end
 
     it "checks for active flag" do

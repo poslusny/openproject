@@ -43,6 +43,7 @@ module Projects
         ::Projects::Copy::QueriesDependentService,
         ::Projects::Copy::BoardsDependentService,
         ::Projects::Copy::OverviewDependentService,
+        ::Projects::Copy::PhasesDependentService,
         ::Projects::Copy::StoragesDependentService
       ]
     end
@@ -57,6 +58,10 @@ module Projects
                { identifier: "file_links",
                  name_source: -> { I18n.t("projects.copy.work_package_file_links") },
                  count_source: ->(source, _) { source.work_packages.joins(:file_links).count("file_links.id") } }]
+    end
+
+    def initialize(contract_options: {}, **)
+      super(contract_options: contract_options.reverse_merge(validate_model: true), **)
     end
 
     protected
@@ -81,7 +86,7 @@ module Projects
         .merge(target_project_params)
     end
 
-    def before_perform(params, service_call)
+    def before_perform(service_call)
       super.tap do |super_call|
         # Retain values after the set attributes service
         retain_attributes(source, super_call.result)
@@ -100,10 +105,6 @@ module Projects
 
     def copy_activated_custom_fields(call)
       call.result.project_custom_field_ids = source.project_custom_field_ids
-    end
-
-    def contract_options
-      { copy_source: source, validate_model: true }
     end
 
     def retain_attributes(source, target)

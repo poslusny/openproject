@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -31,7 +33,10 @@ class NotificationsController < ApplicationController
 
   before_action :require_login
   before_action :filtered_query, only: :mark_all_read
-  no_authorization_required! :index, :split_view, :update_counter, :mark_all_read, :date_alerts, :share_upsale
+  no_authorization_required! :index, :split_view, :update_counter, :mark_all_read, :date_alerts, :share_upsell
+
+  before_action :check_filter, only: %i[index]
+  before_action :validate_query, only: %i[index]
 
   def index
     render_notifications_layout
@@ -63,15 +68,13 @@ class NotificationsController < ApplicationController
     render_notifications_layout
   end
 
-  def share_upsale
+  def share_upsell
     render_notifications_layout
   end
 
   private
 
   def split_view_base_route = notifications_path(request.query_parameters)
-
-  def default_breadcrumb; end
 
   def render_notifications_layout
     # Frontend will handle rendering
@@ -92,5 +95,22 @@ class NotificationsController < ApplicationController
     end
 
     @filtered_query = query
+  end
+
+  def check_filter
+    return if EnterpriseToken.allows_to?(:date_alerts)
+
+    if params[:filter] == "reason" && params[:name] == "dateAlert"
+      redirect_to notifications_date_alert_upsell_path
+    end
+  end
+
+  def validate_query
+    return if params[:filter].blank?
+
+    if %w[project reason].exclude?(params[:filter]) || !filtered_query.valid?
+      flash[:error] = I18n.t("notifications.query.invalid_filter")
+      redirect_to notifications_path
+    end
   end
 end

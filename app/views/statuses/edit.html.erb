@@ -44,10 +44,9 @@ See COPYRIGHT and LICENSE files for more details.
 <%= error_messages_for :status %>
 
 <%=
-  admin_settings_primer_form_with(
+  settings_primer_form_with(
     model: @status,
     data: {
-      application_target: "dynamic",
       controller: "admin--statuses"
     }
   ) do |f|

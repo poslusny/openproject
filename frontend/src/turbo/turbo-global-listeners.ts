@@ -15,7 +15,7 @@ import {
 } from 'core-app/core/setup/globals/global-listeners/setup-server-response';
 
 export function addTurboGlobalListeners() {
-  document.addEventListener('turbo:load', () => {
+  const runOnRenderAndLoad = () => {
     // Add to content if warnings displayed
     if (document.querySelector('.warning-bar--item')) {
       const content = document.querySelector('#content') as HTMLElement;
@@ -63,7 +63,9 @@ export function addTurboGlobalListeners() {
     focusFirstErroneousField();
     activateFlashNotice();
     activateFlashError();
-  });
+  };
+  document.addEventListener('turbo:render', runOnRenderAndLoad);
+  document.addEventListener('turbo:load', runOnRenderAndLoad);
 
   document.addEventListener('turbo:before-morph-element', (event) => {
     const element = event.target as HTMLElement;

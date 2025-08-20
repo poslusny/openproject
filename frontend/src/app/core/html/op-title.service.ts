@@ -21,6 +21,10 @@ export class OpTitleService {
     return this.current.split(titlePartsSeparator);
   }
 
+  public get appTitle():string {
+    return this.titleParts[this.titleParts.length - 1];
+  }
+
   public setFirstPart(value:string) {
     if (this.current.includes(this.base) && this.current.includes(titlePartsSeparator)) {
       const parts = this.titleParts;

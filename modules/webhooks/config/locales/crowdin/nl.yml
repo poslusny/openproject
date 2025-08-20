@@ -31,6 +31,8 @@ nl:
       events:
         created: "Gemaakt"
         updated: "Bijgewerkt"
+        comment: "Comment"
+        internal_comment: "Internal comment"
       explanation:
         text: >
           Bij het voorkomen van een gebeurtenis zoals het maken van een werkpakket of een update van een project OpenProject stuurt een POST-aanvraag naar de geconfigureerde webeindpunten. Vaak wordt de afspraak verzonden nadat de %{link} voorbij is.

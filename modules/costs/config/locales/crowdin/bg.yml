@@ -31,6 +31,9 @@ bg:
         spent: "Отменено"
         spent_on: "Дата"
         logged_by: "Влязъл от"
+        entity: Logged for
+        entity_id: Logged for
+        entity_gid: Logged for
       cost_type:
         unit: "Име на единица"
         unit_plural: "Плурализирано име на единица"
@@ -50,12 +53,17 @@ bg:
         project: Проект
         user: Потребител
         work_package: Работен пакет
+        subject: Заглавие
         hours: Часове
         comments: Коментар
         activity: Активност
         spent_on: Дата
         start_time: Начален час
         end_time: Finish time
+        time: Час
+        entity: Logged for
+        entity_id: Logged for
+        entity_gid: Logged for
     models:
       time_entry:
         one: "Time entry"
@@ -75,12 +83,13 @@ bg:
         time_entry:
           invalid_time: "must be between 00:00 and 23:59."
           cannot_log_for_this_work_package: "Cannot log time for this work package."
+          duplicate_ongoing: "An ongoing time entry already exists for this user."
         work_package:
           is_not_a_valid_target_for_cost_entries: "Работния пакет #%{id} не е валидна цел за преназначение на разходите."
           nullify_is_not_valid_for_cost_entries: "Вписванията за разходи не могат да бъдат зададени на проект."
   attributes:
     comment: "Коментар"
-    cost_type: "Тип разходи"
+    cost_type: "Тип разход"
     costs: "Разходи"
     current_rate: "Текуща ставка"
     hours: "Часове"
@@ -91,6 +100,8 @@ bg:
   button_log_costs: "Разходи за единична регистрация"
   button_log_time: "Log"
   button_add_activity: "Активност"
+  button_add_time_entry: "Отчетено време"
+  button_stop_timer: "Stop timer"
   caption_booked_on_project: "Разходи за единична регистрация"
   caption_default: "По подразбиране"
   caption_default_rate_history_for: "История на тарифите по подразбиране за %{user}"
@@ -150,12 +161,34 @@ bg:
   label_cost: "Cost"
   label_costs: "Разходи"
   label_mandatory_fields: "Mandatory fields"
+  label_my_time_tracking: "My time tracking"
+  label_no_time: "No time tracked"
+  label_next_day: "Next day"
+  label_next_week: "Следващата седмица"
+  label_next_workweek: "Next work week"
+  label_next_month: "Next month"
+  label_previous_day: "Previous day"
+  label_previous_workweek: "Previous work week"
+  label_previous_week: "Предишната седмица"
+  label_previous_month: "Previous month"
+  label_specific_day: "Day %{day}"
+  label_specific_week: "Calendar week %{week}"
+  label_specific_month: "Month %{month}"
+  label_list: "Списък"
+  label_month: "Месец"
+  label_workweek: "Work week"
+  label_day: "Ден"
+  label_today_capitalized: "Днес"
+  label_view_mode_switcher: "Change view"
+  label_timer_since: "Started at %{time}"
   placeholder_activity_select_work_package_first: Work package selection is required first
   notice_something_wrong: "Нещо се обърка. Моля, опитайте отново."
   notice_successful_restore: "Успешно възстановяване."
   notice_successful_lock: "Заключено успешно."
   notice_cost_logged_successfully: "Единичната цена е регистрирана успешно."
   notice_different_time_zones: "This user has a different time zone (%{tz}). Time will be logged using their time zone."
+  notice_time_entry_update_failed: "Failed to update time entry. Errors: %{errors}"
+  notice_time_entry_delete_failed: "Failed to delete time entry. Errors: %{errors}"
   permission_edit_cost_entries: "Редактирайте резервираните единични разходи"
   permission_edit_own_cost_entries: "Редактирайте собствените резервирани единични разходи"
   permission_edit_hourly_rates: "Редактирайте почасовите ставки"
@@ -170,10 +203,13 @@ bg:
   permission_view_own_hourly_rate: "Вижте собствената почасова ставка"
   permission_view_own_time_entries: "Вижте собственото си отработено време"
   project_module_costs: "Време и разходи"
-  setting_allow_tracking_start_and_end_times: "Allow users to track start and end time on time records"
+  setting_allow_tracking_start_and_end_times: "Allow start and finish times"
   setting_costs_currency: "Валута"
   setting_costs_currency_format: "Формат на валутата"
-  setting_enforce_tracking_start_and_end_times: "Force users to set start and end time on time records"
+  setting_enforce_tracking_start_and_end_times: "Require start and finish times"
+  setting_enforce_without_allow: "Requiring start and finish times is not possible without allowing them"
+  setting_allow_tracking_start_and_end_times_caption: "Enables entering start and finish times when logging time."
+  setting_enforce_tracking_start_and_end_times_caption: "Makes entering start and finish times mandatory when logging time."
   text_assign_time_and_cost_entries_to_project: "Присвойте отчетени часове и разходи на проекта"
   text_destroy_cost_entries_question: "%{cost_entries} бяха отчетени в работните пакети, които ще изтриете. Какво искаш да правиш?"
   text_destroy_time_and_cost_entries: "Изтрийте отчетените часове и разходи"
@@ -181,7 +217,18 @@ bg:
   text_reassign_time_and_cost_entries: "Преназначете отчетените часове и разходи към този работен пакет:"
   text_warning_hidden_elements: "Някои записи могат да бъдат изключени от обобщаването."
   week: "седмица"
+  total_times:
+    workweek: "Workweek Total: %{hours}"
+    week: "Week Total: %{hours}"
+    month: "Month Total: %{hours}"
+    day: "Day Total: %{hours}"
   api_v3:
     errors:
       validation:
         start_time_different_date: "Date part of startTime (%{start_time}) must be the same as the spentOn (%{spent_on}) date."
+  ee:
+    features:
+      time_entry_time_restrictions: Require exact time tracking
+    upsell:
+      time_entry_time_restrictions:
+        description: "Improve your time tracking by requiring exact start and finish times when logging time."

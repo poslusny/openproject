@@ -29,7 +29,7 @@
  */
 
 import { Controller } from '@hotwired/stimulus';
-import { ICKEditorInstance } from 'core-app/shared/components/editor/components/ckeditor/ckeditor.types';
+import { retrieveCkEditorInstance } from 'core-app/shared/helpers/ckeditor-helpers';
 
 export default class extends Controller {
   static values = { autofocus: Boolean };
@@ -46,14 +46,6 @@ export default class extends Controller {
 
   focusInput():void {
     this.element.scrollIntoView({ block: 'center' });
-
-    const ckeditorField = this.editorTarget.querySelector('op-ckeditor') as HTMLElement;
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-    void jQuery(ckeditorField)
-      .data('editor')
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      .then((editor:ICKEditorInstance) => {
-        editor.editing.view.focus();
-      });
+    retrieveCkEditorInstance(this.editorTarget)?.editing.view.focus();
   }
 }

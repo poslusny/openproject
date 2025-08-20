@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -82,6 +84,12 @@ module WorkPackages
     attribute :parent_id,
               permission: :manage_subtasks
 
+    attribute :project_phase_definition_id,
+              permission: :view_project_phases do
+      validate_phase_active_in_project
+    end
+    attribute_alias :project_phase_definition_id, :project_phase_id
+
     attribute :assigned_to_id do
       next unless model.project
 
@@ -162,12 +170,6 @@ module WorkPackages
 
     validate :validate_duration_and_dates_are_not_derivable
 
-    def initialize(work_package, user, options: {})
-      super
-
-      @can = WorkPackagePolicy.new(user)
-    end
-
     def assignable_statuses(include_default: false)
       # Do not allow skipping statuses without intermediately saving the work package.
       # We therefore take the original status of the work_package, while preserving all
@@ -203,6 +205,18 @@ module WorkPackages
       IssuePriority.active
     end
 
+    def assignable_project_phases
+      if model.project
+        model
+          .project
+          .phases
+          .active
+          .order_by_position
+      else
+        Project::Phase.none
+      end
+    end
+
     def assignable_versions(only_open: true)
       model.try(:assignable_versions, only_open:) if model.project
     end
@@ -225,8 +239,6 @@ module WorkPackages
     def valid?(context = :saving_custom_fields) = super
 
     private
-
-    attr_reader :can
 
     def validate_after_soonest_start(date_attribute)
       return if model.schedule_manually?
@@ -276,6 +288,7 @@ module WorkPackages
 
     def validate_parent_not_self
       if model.parent == model
+        errors.delete(:parent_id) # remove the error added by closure_tree's cycle detection
         errors.add :parent, :cannot_be_self_assigned
       end
     end
@@ -291,9 +304,20 @@ module WorkPackages
       if model.parent_id_changed? &&
          model.parent_id &&
          errors.exclude?(:parent) &&
-         WorkPackage.relatable(model, Relation::TYPE_PARENT).where(id: model.parent_id).empty?
+         current_parent_unrelatable?
+        # closure_tree adds an error on :parent_id because of the cycle
+        # detection, and active_record sees the error when saving the children
+        # association and adds an error on :children as well. We need to remove
+        # them.
+        errors.delete(:parent_id) # remove the error added by closure_tree
+        errors.delete(:children) # remove the error added by active_record
+        # add our own error
         errors.add :parent, :cant_link_a_work_package_with_a_descendant
       end
+    end
+
+    def current_parent_unrelatable?
+      WorkPackage.relatable(model, Relation::TYPE_PARENT).where(id: model.parent_id).empty?
     end
 
     def validate_status_exists
@@ -532,6 +556,15 @@ module WorkPackages
       end
     end
 
+    def validate_phase_active_in_project
+      if model.project.present? &&
+        model.project_phase_definition_id.present? &&
+        model.project_phase_definition_changed? &&
+        !project_definition_assignable?
+        errors.add :project_phase_id, :inclusion
+      end
+    end
+
     def dates_derivation_impossible?
       model.errors[:duration].any?
     end
@@ -581,7 +614,7 @@ module WorkPackages
     end
 
     def category_not_of_project?
-      model.category && model.project.categories.exclude?(model.category)
+      model.category && (model.project.nil? || model.project.categories.exclude?(model.category))
     end
 
     def status_changed?
@@ -602,6 +635,10 @@ module WorkPackages
 
     def type_inexistent?
       model.type.is_a?(Type::InexistentType)
+    end
+
+    def project_definition_assignable?
+      assignable_project_phases.exists?(definition_id: model.project_phase_definition_id)
     end
 
     # Returns a scope of status the user is able to apply

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -34,7 +35,7 @@ RSpec.describe "Meeting requests",
                type: :rails_request do
   shared_let(:project) { create(:project, enabled_module_names: %i[meetings]) }
   shared_let(:user) { create(:user, member_with_permissions: { project => %i[view_meetings create_meetings edit_meetings] }) }
-  shared_let(:meeting) { create(:structured_meeting, project:, author: user) }
+  shared_let(:meeting) { create(:meeting, project:, author: user) }
 
   before do
     meeting.participants.delete_all
@@ -51,98 +52,48 @@ RSpec.describe "Meeting requests",
     end
   end
 
-  describe "update with a new particpant" do
-    let(:other_user) { create(:user, member_with_permissions: { project => %i[view_meetings] }) }
-    let(:params) do
-      {
-        send_notifications:,
-        title: "Updated meeting",
-        meeting: {
-          participants_attributes: [
-            { user_id: user.id, invited: true },
-            { user_id: other_user.id, invited: true }
-          ]
-        }
-
-      }
-    end
-
-    subject do
-      meeting.reload
-    end
-
-    context "with send_notifications" do
-      let(:send_notifications) { "1" }
-
-      it "sends an invitation mail to the invited users" do
-        patch(project_meeting_path(project, meeting), params:)
-
-        expect(subject.participants.count).to eq(2)
-
-        perform_enqueued_jobs
-
-        expect(ActionMailer::Base.deliveries.size).to eq(2)
-      end
-    end
-
-    context "with send_notifications false" do
-      let(:send_notifications) { "0" }
-
-      it "sends an invitation mail to the invited users" do
-        patch(project_meeting_path(project, meeting), params:)
-
-        expect(subject.participants.count).to eq(2)
-
-        perform_enqueued_jobs
-
-        expect(ActionMailer::Base.deliveries.size).to eq(0)
-      end
-    end
-  end
-
   describe "copy" do
     let(:base_params) do
       {
-        copied_from_meeting_id: meeting.id,
         project_id: project.id,
         meeting: {
           title: "Copied meeting",
-          type: "StructuredMeeting"
+          type: "Meeting",
+          copied_from_meeting_id: meeting.id
         }
       }
     end
     let(:params) { {} }
-
-    subject do
-      post meetings_path(project),
-           params: base_params.merge(params)
-
-      Meeting.find_by(title: "Copied meeting")
-    end
 
     context "when copying agenda items" do
       let!(:agenda_item) { create(:meeting_agenda_item, meeting:, notes: "**foo**") }
       let(:params) { { copy_agenda: "1" } }
 
       it "copies the agenda items" do
-        subject
+        post meetings_path(project),
+             params: base_params.merge(params)
+
+        meeting = Meeting.find_by(title: "Copied meeting")
 
         expect(response).to be_redirect
 
-        expect(subject).to be_present
-        expect(subject.agenda_items.count).to eq(1)
-        expect(subject.agenda_items.first.notes).to eq("**foo**")
+        expect(meeting).to be_present
+        expect(meeting.agenda_items.count).to eq(1)
+        expect(meeting.agenda_items.first.notes).to eq("**foo**")
       end
     end
 
     describe "send_notifications" do
-      let(:params) { { send_notifications: } }
+      let(:params) { { notify: } }
 
       context "when enabled" do
-        let(:send_notifications) { "1" }
+        let(:notify) { "1" }
 
         before do
-          subject
+          post meetings_path(project),
+               params: base_params.deep_merge(meeting: params)
+
+          Meeting.find_by(title: "Copied meeting")
           perform_enqueued_jobs
         end
 
@@ -152,7 +103,7 @@ RSpec.describe "Meeting requests",
       end
 
       context "when disabled" do
-        let(:send_notifications) { "0" }
+        let(:notify) { "0" }
 
         it "sends out no emails" do
           expect(ActionMailer::Base.deliveries).to be_empty
@@ -162,12 +113,15 @@ RSpec.describe "Meeting requests",
 
     context "when copying without additional params" do
       it "copies the meeting, but not the agenda" do
-        subject
+        post meetings_path(project),
+             params: base_params.merge(params)
+
+        meeting = Meeting.find_by(title: "Copied meeting")
 
         expect(response).to be_redirect
 
-        expect(subject).to be_present
-        expect(subject.agenda_items).to be_empty
+        expect(meeting).to be_present
+        expect(meeting.agenda_items).to be_empty
       end
     end
 
@@ -176,7 +130,9 @@ RSpec.describe "Meeting requests",
       let(:meeting) { create(:meeting, project: other_project) }
 
       it "renders a 404" do
-        subject
+        post meetings_path(project),
+             params: base_params.merge(params)
+
         expect(response).to have_http_status(:not_found)
       end
     end

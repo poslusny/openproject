@@ -59,6 +59,7 @@ interface ColorItem {
   `,
   selector: 'opce-colors-autocompleter',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class ColorsAutocompleterComponent implements OnInit {
   public options:ColorItem[];

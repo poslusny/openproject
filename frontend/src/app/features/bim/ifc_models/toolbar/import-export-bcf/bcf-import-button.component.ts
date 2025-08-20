@@ -41,6 +41,7 @@ import { BcfPathHelperService } from 'core-app/features/bim/bcf/helper/bcf-path-
     </a>
   `,
   selector: 'bcf-import-button',
+  standalone: false,
 })
 export class BcfImportButtonComponent {
   public text = {

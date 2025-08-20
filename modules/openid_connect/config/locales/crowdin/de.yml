@@ -6,14 +6,18 @@ de:
     Sie wurden abgemeldet. Der Inhalt eines Formulars, das Sie uns übermitteln, kann verloren gehen. Bitte [einloggen].
   activerecord:
     attributes:
+      openid_connect/group_link:
+        oidc_group_name: OpenID Gruppenbezeichner
       openid_connect/provider:
         name: Name
         slug: Eindeutige Kennung
         display_name: Anzeigename
         client_id: Client-ID
         client_secret: Client-Secret
+        groups_claim: Gruppen-Claim
         secret: Secret
         scope: Scope
+        sync_groups: Gruppen synchronisieren
         grant_types_supported: Unterstützte Grant-Typen
         limit_self_registration: Selbstregistrierung begrenzen
         authorization_endpoint: Autorisierungsendpunkt
@@ -52,15 +56,20 @@ de:
   openid_connect:
     menu_title: OpenID-Anbieter
     delete_title: "OpenID Connect Anbieter löschen"
+    group_links_heading: OpenID Connect Gruppenverknüpfungen
     instructions:
       redirect_url: Dies ist die URL, die der OpenID Connect-Anbieter verwenden sollte, um nach einer erfolgreichen Anmeldung zurück zu OpenProject zu leiten.
       endpoint_url: Die Endpunkt-URL, die Sie vom OpenID Connect-Anbieter erhalten haben
+      group_regexes: Ein regulärer Ausdruck pro Zeile. Bitte lesen Sie [die Dokumentation](docs_url) für weitere Informationen hierzu.
+      group_regexes_detail: Sie können reguläre Ausdrücke benutzen, um Gruppennamen aus dem Gruppen-Claim zu extrahieren. Zum Beispiel wird ein Ausdruck wie <code>^Level1/Level2/([\w/]+)$</code> den Namen "Gruppe/Untergruppe" aus "Level1/Level2/Gruppe/Untergruppe" extrahieren.
+      group_sync: Gruppenzugehörigkeit von Benutzern automatisch vom Identitätsanbieter übertragen.
+      groups_claim: Geben Sie den Namen des Claims an, der die Namen von Gruppen enthält, bei denen der Nutzer Mitglied ist.
       metadata_none: Ich habe diese Informationen nicht
       metadata_url: Ich habe eine Discovery-Endpunkt-URL
       client_id: Dies ist die Client-ID, die Sie von Ihrem OpenID Connect-Anbieter erhalten haben
       client_secret: Dies ist das Client-Secret, die Sie von Ihrem OpenID Connect-Anbieter erhalten haben
       limit_self_registration: Wenn diese Option aktiviert ist, können sich Benutzer nur dann über diesen Anbieter registrieren, wenn die Konfiguration aufseiten des Anbieters dies zulässt.
-      display_name: Der Name des Anbieters. Dieser wird als Anmeldeschaltfläche und in der Liste der Anbieter angezeigt.
+      display_name: Der Name des Anbieters. Dieser wird in der Login-Schaltfläche und in der Liste der Anbieter angezeigt.
       tenant: 'Bitte ersetzen Sie den vorgegebenen Mandanten durch Ihren eigenen, falls zutreffend. Siehe <a href="https://learn.microsoft.com/de-de/entra/identity-platform/v2-protocols-oidc#find-your-apps-openid-configuration-document-uri">diese Dokumentation von Microsoft Entra</a>.'
       scope: Wenn Sie benutzerdefinierte Scopes anfordern möchten, können Sie hier einen oder mehrere durch Leerzeichen getrennte Werte hinzufügen. Weitere Informationen finden Sie in der [OpenID Connect Dokumentation](docs_url).
       post_logout_redirect_uri: Die URL, an die der OpenID Connect-Anbieter nach einer erfolgreichen Abmeldung weiterleiten soll.
@@ -91,12 +100,15 @@ de:
         name: Microsoft Entra
       custom:
         name: Benutzerdefiniert
-      upsale:
+      upsell:
+        title: "Single Sign-On (SSO) mit OpenID Connect"
         description: OpenProject mit einem OpenID Connect SSO-Anbieter verbinden
       label_add_new: Neuen OpenID-Anbieter hinzufügen
       label_edit: OpenID-Provider %{name} bearbeiten
       label_empty_title: Noch keine OpenID Connect-Anbieter konfiguriert.
       label_empty_description: Fügen Sie einen Anbieter hinzu, um sie hier zu sehen.
+      label_group_mapping: Gruppenzuordnung
+      label_group_regexes: Muster (regulärer Ausdruck)
       label_metadata: OpenID Connect Discovery Endpunkt
       label_automatic_configuration: Automatische Konfiguration
       label_optional_configuration: Optionale Konfiguration
@@ -109,6 +121,7 @@ de:
       plural: OpenID-Anbieter
       singular: OpenID-Anbieter
       section_texts:
+        group_mapping: Weisen Sie Gruppennamen des Identitätsanbieters Gruppen in OpenProject zu.
         metadata: Konfiguration unter Verwendung einer OpenID Connect Discovery Endpunkt-URL vorausfüllen
         metadata_form_banner: Durch die Bearbeitung des Discovery-Endpunkts werden möglicherweise vorhandene Konfigurationswerte überschrieben.
         metadata_form_title: OpenID Connect Discovery Endpunkt
@@ -118,6 +131,9 @@ de:
         display_name: Für alle Benutzer von OpenProject sichtbare Anzeigename.
         attribute_mapping: Konfigurieren Sie die Zuweisung der Attribute zwischen OpenProject und dem OpenID Connect-Anbieter.
         claims: Fordern Sie zusätzliche Ansprüche (Claims) für das ID-Token oder die Userinfo-Antwort an.
+      side_panel:
+        information_component:
+          backchannel_logout_url: Backchannel Logout URL
     setting_instructions:
       limit_self_registration: >
         Wenn aktiviert, können sich Benutzer nur dann mit diesem Anbieter registrieren, wenn die Einstellung zur Selbstregistrierung dies zulässt.

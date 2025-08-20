@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -104,10 +106,6 @@ class LdapAuthSourcesController < ApplicationController
       flash[:warning] = I18n.t(:label_seeded_from_env_warning)
       redirect_to action: :index
     end
-  end
-
-  def show_local_breadcrumb
-    false
   end
 
   def block_if_password_login_disabled

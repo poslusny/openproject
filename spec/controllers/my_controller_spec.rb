@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -228,17 +230,17 @@ RSpec.describe MyController do
     end
   end
 
-  describe "settings:auto_hide_popups" do
+  describe "interface:auto_hide_popups" do
     context "with render_views" do
       before do
         as_logged_in_user user do
-          get :settings
+          get :interface
         end
       end
 
       render_views
       it "renders auto hide popups checkbox" do
-        expect(response.body).to have_css("#my_account_form #pref_auto_hide_popups")
+        expect(response.body).to have_css("form #pref_auto_hide_popups")
       end
     end
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -35,7 +37,7 @@ module OpenProject
     let(:format) { "%d/%m/%Y" }
     let(:user) { build_stubbed(:user) }
 
-    describe "#format_time_as_date" do
+    describe "#format_date with time" do
       current_user { build_stubbed(:user, preferences: { time_zone: user_time_zone }) }
 
       describe "with user time zone" do
@@ -43,12 +45,12 @@ module OpenProject
 
         it "returns a date string in the user timezone for a utc timestamp" do
           time = ActiveSupport::TimeZone["UTC"].local(2013, 6, 30, 23, 59)
-          expect(format_time_as_date(time, format:)).to eq "01/07/2013"
+          expect(format_date(time, format:)).to eq "01/07/2013"
         end
 
         it "returns a date string in the user timezone for a non-utc timestamp" do
           time = ActiveSupport::TimeZone["Berlin"].local(2013, 6, 30, 23, 59)
-          expect(format_time_as_date(time, format:)).to eq "01/07/2013"
+          expect(format_date(time, format:)).to eq "01/07/2013"
         end
       end
 
@@ -57,12 +59,12 @@ module OpenProject
 
         it "returns a date string in the utc timezone for a utc timestamp" do
           time = ActiveSupport::TimeZone["UTC"].local(2013, 6, 30, 23, 59)
-          expect(format_time_as_date(time, format:)).to eq "30/06/2013"
+          expect(format_date(time, format:)).to eq "30/06/2013"
         end
 
         it "returns a date string in the utc timezone for a non-utc timestamp" do
           time = ActiveSupport::TimeZone["Berlin"].local(2013, 6, 30, 23, 59)
-          expect(format_time_as_date(time, format:)).to eq "30/06/2013"
+          expect(format_date(time, format:)).to eq "30/06/2013"
         end
       end
     end
@@ -186,13 +188,13 @@ module OpenProject
     describe "link_translation" do
       let(:locale) { :en }
       let(:urls) do
-        { url_1: "http://openproject.com/foobar", url_2: "/baz" }
+        { url_1: "http://openproject.com/foo", url_2: "/baz" }
       end
 
       before do
         allow(::I18n)
           .to receive(:t)
-          .with("translation_with_a_link", locale:)
+          .with("translation_with_a_link", locale: anything)
           .and_return("There is a [link](url_1) in this translation! Maybe even [two](url_2)?")
       end
 
@@ -200,8 +202,8 @@ module OpenProject
         translated = link_translate :translation_with_a_link, links: urls
 
         expect(translated).to eq(
-          "There is a <a href=\"http://openproject.com/foobar\">link</a> in this translation!" +
-          " Maybe even <a href=\"/baz\">two</a>?"
+          'There is a <a href="http://openproject.com/foo" data-view-component="true" class="Link Link--underline">link</a>' +
+          ' in this translation! Maybe even <a href="/baz" data-view-component="true" class="Link Link--underline">two</a>?'
         )
       end
 
@@ -212,8 +214,30 @@ module OpenProject
           translated = link_translate(:translation_with_a_link, links: urls, locale:)
 
           expect(translated).to eq(
-            "There is a <a href=\"http://openproject.com/foobar\">link</a> in this translation!" +
-            " Maybe even <a href=\"/baz\">two</a>?"
+            'There is a <a href="http://openproject.com/foo" data-view-component="true" class="Link Link--underline">link</a>' +
+            ' in this translation! Maybe even <a href="/baz" data-view-component="true" class="Link Link--underline">two</a>?'
+          )
+          expect(I18n).to have_received(:t).with(anything, locale:)
+        end
+      end
+
+      context "when passing URLs as a list of symbols" do
+        let(:urls) do
+          { url_1: [:a, :b], url_2: [:a, :c] }
+        end
+
+        before do
+          allow(OpenProject::Static::Links).to receive(:url_for).and_return("/no-args")
+          allow(OpenProject::Static::Links).to receive(:url_for).with(:a, :b).and_return("https://example.com/a-b")
+          allow(OpenProject::Static::Links).to receive(:url_for).with(:a, :c).and_return("/a-c")
+        end
+
+        it "resolves the links from static links" do
+          translated = link_translate :translation_with_a_link, links: urls
+
+          expect(translated).to eq(
+            'There is a <a href="https://example.com/a-b" data-view-component="true" class="Link Link--underline">link</a>' +
+            ' in this translation! Maybe even <a href="/a-c" data-view-component="true" class="Link Link--underline">two</a>?'
           )
         end
       end

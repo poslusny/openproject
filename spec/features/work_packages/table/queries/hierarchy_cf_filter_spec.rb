@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -28,7 +30,7 @@
 
 require "spec_helper"
 
-RSpec.describe "Work package filtering by hierarchy custom field", :js do
+RSpec.describe "Work package filtering by hierarchy custom field", :js, with_ee: [:custom_field_hierarchies] do
   let(:project) { create(:project) }
   let(:type) { project.types.first }
   let(:wp_table) { Pages::WorkPackagesTable.new(project) }

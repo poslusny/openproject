@@ -28,7 +28,10 @@ properties:
       - description: The work package description
   scheduleManually:
     type: boolean
-    description: If false (default) schedule automatically.
+    description: |-
+      Uses manual scheduling mode when true (default). Uses automatic scheduling
+      mode when false. Can be automatic only when predecessors or children are
+      present.
   readonly:
     type: boolean
     description: If true, the work package is in a readonly status so with the exception of the status, no other property can be altered.
@@ -423,6 +426,20 @@ properties:
               The project to which the work package belongs
 
               **Resource**: Project
+      projectPhase:
+        allOf:
+          - $ref: "./link.yml"
+          - description: |-
+              The project phase to which the work package belongs
+
+              **Resource**: ProjectPhase
+      projectPhaseDefinition:
+        allOf:
+          - $ref: "./link.yml"
+          - description: |-
+              The definition of the project phase the work package belongs to
+
+              **Resource**: ProjectPhaseDefinition
       responsible:
         allOf:
           - $ref: "./link.yml"

@@ -57,6 +57,7 @@ const ADD_FILTER_SELECT_INDEX = -1;
   selector: 'op-query-filters',
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './query-filters.component.html',
+  standalone: false,
 })
 export class QueryFiltersComponent extends UntilDestroyedMixin implements OnInit, OnChanges {
   @ViewChild(NgSelectComponent) public ngSelectComponent:NgSelectComponent;
@@ -70,7 +71,7 @@ export class QueryFiltersComponent extends UntilDestroyedMixin implements OnInit
     500,
   );
 
-  public remainingFilters:any[] = [];
+  public remainingFilters:QueryFilterResource[] = [];
 
   public focusElementIndex = 0;
 
@@ -141,7 +142,7 @@ export class QueryFiltersComponent extends UntilDestroyedMixin implements OnInit
 
   public deactivateFilter(removedFilter:QueryFilterInstanceResource) {
     const index = this.filters.indexOf(removedFilter);
-    _.remove(this.filters, (f) => f.id === removedFilter.id);
+    this.filters.splice(index, 1);
 
     this.filtersChanged.emit(this.filters);
 

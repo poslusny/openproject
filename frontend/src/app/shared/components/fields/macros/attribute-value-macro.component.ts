@@ -60,6 +60,7 @@ export const ATTRIBUTE_MACRO_CLASS = 'op-attribute-value-macro';
   providers: [
     HalResourceEditingService,
   ],
+  standalone: false,
 })
 export class AttributeValueMacroComponent implements OnInit {
   @ViewChild('displayContainer') private displayContainer:ElementRef<HTMLSpanElement>;

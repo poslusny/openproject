@@ -34,6 +34,7 @@ import { WorkPackageResource } from 'core-app/features/hal/resources/work-packag
   templateUrl: './wp-breadcrumb.html',
   styleUrls: ['./wp-breadcrumb.sass'],
   selector: 'wp-breadcrumb',
+  standalone: false,
 })
 export class WorkPackageBreadcrumbComponent {
   @Input('workPackage') workPackage:WorkPackageResource;

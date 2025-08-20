@@ -30,6 +30,7 @@
 
 class Meeting < ApplicationRecord
   include VirtualStartTime
+  include MeetingUid
   include ChronicDuration
   include OpenProject::Journal::AttachmentHelper
 
@@ -41,6 +42,10 @@ class Meeting < ApplicationRecord
   belongs_to :recurring_meeting, optional: true
   has_one :scheduled_meeting, inverse_of: :meeting
 
+  has_many :time_entries, dependent: :delete_all, inverse_of: :entity, as: :entity
+
+  # Legacy association to minutes, agendas, contents
+  # to be removed in 17.0
   has_one :agenda, dependent: :destroy, class_name: "MeetingAgenda"
   has_one :minutes, dependent: :destroy, class_name: "MeetingMinutes"
   has_many :contents, -> { readonly }, class_name: "MeetingContent"
@@ -50,8 +55,11 @@ class Meeting < ApplicationRecord
            class_name: "MeetingParticipant",
            after_add: :send_participant_added_mail
 
-  has_many :sections, dependent: :destroy, class_name: "MeetingSection"
-  has_many :agenda_items, dependent: :destroy, class_name: "MeetingAgendaItem"
+  has_many :agenda_items, dependent: :destroy, class_name: "MeetingAgendaItem", inverse_of: :meeting
+  has_many :sections, -> { where(backlog: false) }, dependent: :delete_all, class_name: "MeetingSection"
+  has_one :own_backlog, -> { where(backlog: true) }, dependent: :destroy, class_name: "MeetingSection"
+
+  accepts_nested_attributes_for :agenda_items
 
   scope :templated, -> { where(template: true) }
   scope :not_templated, -> { where(template: false) }
@@ -91,12 +99,12 @@ class Meeting < ApplicationRecord
 
   acts_as_searchable columns: [
                        "#{table_name}.title",
-                       "#{MeetingContent.table_name}.text",
                        "#{MeetingAgendaItem.table_name}.title",
-                       "#{MeetingAgendaItem.table_name}.notes"
+                       "#{MeetingAgendaItem.table_name}.notes",
+                       "#{MeetingOutcome.table_name}.notes"
                      ],
-                     include: %i[contents project agenda_items],
-                     references: %i[meeting_contents agenda_items],
+                     include: [:project, { agenda_items: :outcomes }],
+                     references: %i[agenda_items outcomes],
                      date_column: "#{table_name}.created_at"
 
   include Meeting::Journalized
@@ -125,16 +133,17 @@ class Meeting < ApplicationRecord
 
   ##
   # Cache key for detecting changes to be shown to the user
-  def changed_hash # rubocop:disable Metrics/AbcSize
+  def changed_hash
     parts = Meeting
-      .unscoped
-      .where(id:)
-      .left_joins(:agenda_items, :sections, agenda_items: :outcomes)
-      .pick(
-        MeetingAgendaItem.arel_table[:updated_at].maximum,
-        MeetingSection.arel_table[:updated_at].maximum,
-        MeetingOutcome.arel_table[:updated_at].maximum
-      )
+              .unscoped
+              .where(id:)
+              .joins("LEFT JOIN meeting_sections ON meeting_sections.meeting_id = meetings.id")
+              .left_joins(:agenda_items, agenda_items: %i[outcomes meeting_section])
+              .pick(
+                Arel.sql("MAX(CASE WHEN meeting_sections.backlog = FALSE THEN meeting_agenda_items.updated_at END)"),
+                Arel.sql("MAX(CASE WHEN meeting_sections.backlog = FALSE THEN meeting_sections.updated_at END)"),
+                Arel.sql("MAX(meeting_outcomes.updated_at)")
+              )
 
     parts << lock_version
 
@@ -157,12 +166,14 @@ class Meeting < ApplicationRecord
     title
   end
 
-  def text
-    agenda.text if agenda.present?
-  end
-
   def templated?
     !!template
+  end
+
+  # One-time meeting time zone
+  # is always in the user's time zone
+  def time_zone
+    User.current.time_zone
   end
 
   # Returns true if user or current user is allowed to view the meeting
@@ -172,6 +183,14 @@ class Meeting < ApplicationRecord
 
   def editable?(user = User.current)
     !closed? && user.allowed_in_project?(:edit_meetings, project)
+  end
+
+  def notify?
+    if recurring?
+      recurring_meeting.template.notify
+    else
+      notify
+    end
   end
 
   def invited_or_attended_participants
@@ -207,28 +226,6 @@ class Meeting < ApplicationRecord
     by_start_year_month_date
   end
 
-  def close_agenda_and_copy_to_minutes!
-    Meeting.transaction do
-      agenda.lock!
-
-      attachments = agenda.attachments.map { |a| [a, a.copy] }
-      original_text = String(agenda.text)
-      minutes = create_minutes(text: original_text,
-                               journal_notes: I18n.t("events.meeting_minutes_created"),
-                               attachments: attachments.map(&:last))
-
-      # substitute attachment references in text to use the respective copied attachments
-      updated_text = original_text.gsub(/(?<=\(\/api\/v3\/attachments\/)\d+(?=\/content\))/) do |id|
-        old_id = id.to_i
-        new_id = attachments.select { |a, _| a.id == old_id }.map { |_, a| a.id }.first
-
-        new_id || -1
-      end
-
-      minutes.update text: updated_text if updated_text != original_text
-    end
-  end
-
   alias :original_participants_attributes= :participants_attributes=
 
   def participants_attributes=(attrs)
@@ -249,6 +246,45 @@ class Meeting < ApplicationRecord
       .where(user_id: available_members)
   end
 
+  # triggered by MeetingAgendaItem#after_create/after_destroy/after_save
+  def calculate_agenda_item_time_slots
+    current_time = start_time
+    MeetingAgendaItem.transaction do
+      changed_items = agenda_items.includes(:meeting_section).order("meeting_sections.position", :position).map do |top|
+        start_time = current_time
+        current_time += top.duration_in_minutes&.minutes || 0.minutes
+        end_time = current_time
+        top.assign_attributes(start_time:, end_time:)
+        top
+      end
+
+      MeetingAgendaItem.upsert_all(
+        changed_items.map(&:attributes),
+        unique_by: :id
+      )
+    end
+  end
+
+  def agenda_items_sum_duration_in_minutes
+    agenda_items.sum(:duration_in_minutes)
+  end
+
+  def duration_exceeded_by_agenda_items?
+    agenda_items_sum_duration_in_minutes > (duration * 60)
+  end
+
+  def duration_exceeded_by_agenda_items_in_minutes
+    agenda_items_sum_duration_in_minutes - (duration * 60)
+  end
+
+  def backlog
+    if recurring? && !templated?
+      recurring_meeting.template.backlog
+    else
+      own_backlog
+    end
+  end
+
   private
 
   def add_new_participants_as_watcher
@@ -258,7 +294,7 @@ class Meeting < ApplicationRecord
   end
 
   def send_participant_added_mail(participant)
-    return if templated? || new_record?
+    return if templated? || new_record? || !notify?
 
     if Journal::NotificationConfiguration.active?
       MeetingMailer.invited(self, participant.user, User.current).deliver_later
@@ -266,7 +302,7 @@ class Meeting < ApplicationRecord
   end
 
   def send_rescheduling_mail
-    return if templated? || new_record?
+    return if templated? || new_record? || !notify?
 
     MeetingNotificationService
       .new(self)

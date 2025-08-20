@@ -45,11 +45,8 @@ module Meetings
     private
 
     def render?
-      if @project
-        User.current.allowed_in_project?(:create_meetings, @project)
-      else
-        User.current.allowed_in_any_project?(:create_meetings)
-      end
+      permission = @meeting.persisted? ? :edit_meetings : :create_meetings
+      @project ? User.current.allowed_in_project?(permission, @project) : User.current.allowed_in_any_project?(permission)
     end
 
     def title

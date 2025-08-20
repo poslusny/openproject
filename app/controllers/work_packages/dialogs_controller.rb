@@ -30,7 +30,6 @@
 
 class WorkPackages::DialogsController < ApplicationController
   include OpTurbo::ComponentStream
-  include OpTurbo::DialogStreamHelper
   layout false
 
   before_action :find_project_by_project_id
@@ -100,6 +99,4 @@ class WorkPackages::DialogsController < ApplicationController
       project: @project
     }
   end
-
-  def default_breadcrumb; end
 end

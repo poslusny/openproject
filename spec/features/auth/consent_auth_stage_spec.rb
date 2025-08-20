@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -266,6 +268,15 @@ RSpec.describe "Authentication Stages" do
 
         expect_flash(type: :error, message: "foo@example.org")
       end
+    end
+  end
+
+  context "when calling the consent page outside of the login process" do
+    it "redirects to the login page" do
+      visit "account/consent"
+
+      expect_flash message: "Consent failed, cannot proceed.", type: :error
+      expect(page).to have_current_path "/login"
     end
   end
 end

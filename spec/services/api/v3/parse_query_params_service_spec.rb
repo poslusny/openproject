@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -186,7 +188,7 @@ RSpec.describe API::V3::ParseQueryParamsService,
         end
 
         it "returns the error" do
-          message = 'unexpected token at \'faulty["status:desc"]\''
+          message = "unexpected token 'faulty[\"status:desc\"]' at line 1 column 1"
 
           expect(subject.errors.messages[:base].length)
             .to be(1)
@@ -264,8 +266,7 @@ RSpec.describe API::V3::ParseQueryParamsService,
           end
 
           it "returns the error" do
-            message = "unexpected token at " +
-                      "'faulty[{\"status\":{\"operator\":\"=\"'"
+            message = "unexpected token 'faulty[{\"status\":{\"operator\":\"=\"' at line 1 column 1"
 
             expect(subject.errors.messages[:base].length)
               .to be(1)

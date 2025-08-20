@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -86,7 +88,8 @@ module OpenProject::Documents
     additional_permitted_attributes search: %i(documents)
 
     config.to_prepare do
-      Enumeration.register_subclass(DocumentCategory)
+      # Load Enumeration descendants due to STI
+      DocumentCategory
     end
   end
 end

@@ -1,6 +1,7 @@
+# frozen_string_literal: true
+
 module ::TwoFactorAuthentication
   class TwoFactorSettingsController < ApplicationController
-    include EnterpriseTrialHelper
     before_action :require_admin
     before_action :check_enabled
     before_action :check_writable, only: :update
@@ -57,12 +58,6 @@ module ::TwoFactorAuthentication
 
     def manager
       ::OpenProject::TwoFactorAuthentication::TokenStrategyManager
-    end
-
-    def default_breadcrumb; end
-
-    def show_local_breadcrumb
-      false
     end
   end
 end

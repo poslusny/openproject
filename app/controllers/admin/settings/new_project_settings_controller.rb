@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
@@ -31,10 +33,6 @@ module Admin::Settings
     menu_item :new_project_settings
 
     before_action :validate_enabled_modules, only: :update # rubocop:disable Rails/LexicallyScopedActionFilter
-
-    def default_breadcrumb
-      t(:label_project_new)
-    end
 
     private
 

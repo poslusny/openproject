@@ -30,7 +30,6 @@
 
 class WorkPackageRelationsController < ApplicationController
   include OpTurbo::ComponentStream
-  include OpTurbo::DialogStreamHelper
 
   before_action :set_work_package
   before_action :set_relation, only: %i[edit update]

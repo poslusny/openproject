@@ -31,6 +31,7 @@ import { TurboRequestsService } from 'core-app/core/turbo/turbo-requests.service
     PathHelperService,
     TurboRequestsService,
   ],
+  standalone: false,
 })
 export class TriggerActionsEntryComponent {
   @InjectField() readonly apiv3Service:ApiV3Service;

@@ -83,6 +83,7 @@ export interface IUserAutocompleteItem {
   ],
   styleUrls: ['./user-autocompleter.component.sass'],
   encapsulation: ViewEncapsulation.None,
+  standalone: false,
 })
 export class UserAutocompleterComponent extends OpAutocompleterComponent<IUserAutocompleteItem> implements OnInit, ControlValueAccessor {
   @Input() public inviteUserToProject:string|undefined;
@@ -135,7 +136,7 @@ export class UserAutocompleterComponent extends OpAutocompleterComponent<IUserAu
         map((users) => {
           const mapped:IUserAutocompleteItem[] = users.map((user) => {
               return { id: user.id, name: user.name, href: user._links.self?.href, email: user.email };
-            });
+          });
 
           if (this.additionalOptions) {
             return this.additionalOptions.concat(mapped);

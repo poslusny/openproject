@@ -37,6 +37,7 @@ import { IAutocompleterTemplateComponent } from 'core-app/shared/components/auto
 @Component({
   templateUrl: './project-autocompleter-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class ProjectAutocompleterTemplateComponent implements IAutocompleterTemplateComponent {
   @ViewChild('optionTemplate') optionTemplate:TemplateRef<Element>;

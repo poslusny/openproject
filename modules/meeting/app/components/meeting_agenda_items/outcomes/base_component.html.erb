@@ -1,7 +1,7 @@
 <%=
   component_wrapper do
     if show_outcome?
-      grid_layout("op-meeting-outcome", tag: :div, id: "outcome-#{@meeting_agenda_item.id}", mt: 2) do |grid|
+      grid_layout("op-meeting-outcome", tag: :div, id: "outcome-#{@meeting_agenda_item.id}", mt: margin_top) do |grid|
         if @edit
           grid.with_area(:notes) do
             render(MeetingAgendaItems::Outcomes::InputComponent.new(meeting: @meeting, meeting_agenda_item: @meeting_agenda_item, meeting_outcome: @meeting_outcome))
