@@ -1754,6 +1754,7 @@ CHECKSUMS
   openproject-boards (1.0.0)
   openproject-calendar (1.0.0)
   openproject-documents (1.0.0)
+  openproject-example_plugin (0.0.1)
   openproject-gantt (1.0.0)
   openproject-github_integration (1.0.0)
   openproject-gitlab_integration (3.0.0)
